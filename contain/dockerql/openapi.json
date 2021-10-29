@@ -1,0 +1,232 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "dockerql",
+        "description": "A read-only SQL-like interface for docker registries. See below both API list and database schema.",
+        "license": {
+            "name": "MIT",
+            "url": "https://github.com/simplyCoders/dockerquery/blob/main/LICENSE"
+        },
+        "version": "0.0.1"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080/v1"
+        }
+    ],
+    "components": {
+        "schemas": {
+            "registries": {
+                "type": "object",
+                "properties": {
+                    "registry": {
+                        "type": "string",
+                        "description": "The name of the registry as defined in the $DOCKER_REGISTRIES_FILE."
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "The registry type. Currently dockerhub or gcr."
+                    },
+                    "host": {
+                        "type": "string",
+                        "description": "The default host to be used for queries against this registry. E.g 'hub.docker.com' or 'gcr.io'."
+                    },
+                    "namespace": {
+                        "type": "string",
+                        "description": "The default namespace to be used for queries against this registry. Namespaces have different use for each registry type. Dockerhub: namespaces are organizations. ECR: namespaces are regions. GCR. namespaces are project-ids."
+                    }
+                }
+            },
+            "namespaces": {
+                "type": "object",
+                "properties": {
+                    "registry": {
+                        "type": "string",
+                        "description": "The name of the registry."
+                    },
+                    "host": {
+                        "type": "string",
+                        "description": "The host."
+                    },
+                    "namespace": {
+                        "type": "string",
+                        "description": "The namespace."
+                    }
+                }
+            },
+            "repos": {
+                "type": "object",
+                "properties": {
+                    "registry": {
+                        "type": "string",
+                        "description": "The name of the registry."
+                    },
+                    "host": {
+                        "type": "string",
+                        "description": "The host."
+                    },
+                    "namespace": {
+                        "type": "string",
+                        "description": "The namespace."
+                    },
+                    "repo": {
+                        "type": "string",
+                        "description": "The name of the repo."
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "The repo description. Dockerhub only."
+                    },
+                    "isPrivate": {
+                        "type": "boolean",
+                        "description": "Is this repo private?. Dockerhub only."
+                    },
+                    "updated": {
+                        "type": "string",
+                        "description": "Last time repo was updated (simplified extended ISO 8601). Dockerhub only."
+                    },
+                    "pulls": {
+                        "type": "number",
+                        "description": "Dockerhub's pull_count. Dockerhub only."
+                    },
+                    "stars": {
+                        "type": "number",
+                        "description": "Dockerhub's stars_count. Dockerhub only."
+                    },
+                    "arn": {
+                        "type": "string",
+                        "description": "ECR's repositoryArn. ECR only."
+                    },
+                    "uri": {
+                        "type": "string",
+                        "description": "ECR's repositoryUri. ECR only."
+                    },
+                    "created": {
+                        "type": "number",
+                        "description": "ECR's createdAt. ECR only."
+                    },
+                    "imageImmutability": {
+                        "type": "string",
+                        "description": "ECR's imageTagMutability. ECR only."
+                    },
+                    "scanOnPush": {
+                        "type": "boolean",
+                        "description": "True if ECR's scanOnPush is enabled. ECR only."
+                    }
+                }
+            },
+            "images": {
+                "type": "object",
+                "properties": {
+                    "registry": {
+                        "type": "string",
+                        "description": "The name of the registry."
+                    },
+                    "host": {
+                        "type": "string",
+                        "description": "The host."
+                    },
+                    "namespace": {
+                        "type": "string",
+                        "description": "The namespace."
+                    },
+                    "repo": {
+                        "type": "string",
+                        "description": "The name of the repo."
+                    },
+                    "digest": {
+                        "type": "string",
+                        "description": "sha256 representing uniquely the image."
+                    },
+                    "tag": {
+                        "type": "string",
+                        "description": "Tag name if one was assigned to the image."
+                    },
+                    "size": {
+                        "type": "number",
+                        "description": "Size in bytes of the image."
+                    },
+                    "architecture": {
+                        "type": "string",
+                        "description": "Architecture, such as amd64. Dockerhub only."
+                    },
+                    "os": {
+                        "type": "string",
+                        "description": "OS type, such as linux. Dockerhub only."
+                    },
+                    "created": {
+                        "type": "string",
+                        "description": "Creation time of the image (simplified extended ISO 8601)."
+                    },
+                    "pushed": {
+                        "type": "string",
+                        "description": "Last time the image was pushed (simplified extended ISO 8601). Dockerhub only."
+                    },
+                    "pulled": {
+                        "type": "string",
+                        "description": "Last time the image was pulled (simplified extended ISO 8601). Dockerhub only."
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "/query": {
+            "get": {
+                "description": "Query endpoint, get SQL statemnent and returns array of records",
+                "operationId": "query",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "SQL like query string",
+                        "example": "SELECT * FROM repos WHERE registry = \"public-gcr\" and namespace = \"distroless\"",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "code": 200,
+                                    "message": "Query executed successfully.",
+                                    "count": 2,
+                                    "data": [
+                                        {
+                                            "registry": "public-gcr",
+                                            "host": "gcr.io",
+                                            "namespace": "distroless",
+                                            "repo": "base"
+                                        },
+                                        {
+                                            "registry": "public-gcr",
+                                            "host": "gcr.io",
+                                            "namespace": "distroless",
+                                            "repo": "base-debian10"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,1 @@
+npm audit | ggrep -oP '(?<=# Run..).+(?=..to resolve)' 

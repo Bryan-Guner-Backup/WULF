@@ -1,0 +1,14 @@
+var read = require('node-readability');
+var htmlmd = require('html-md');
+
+read('http://www.whale.to/b/silentweapon.html', function(err, article, meta) {
+
+    let md = htmlmd(article.content, {inline:true})
+    
+    // Move all headings up a knutch
+    md = md.replace(/^\#\#/g,"#");
+
+    console.log(md)
+    
+    article.close();
+});

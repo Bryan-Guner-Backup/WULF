@@ -1,0 +1,42 @@
+## Macro title: UML Sequence Diagram
+## Macro has a body: Y 
+## Body processing: Unrendered
+##
+## This macro allows use of js-sequence-diagrams from http://bramp.github.io/js-sequence-diagrams/ 
+##
+## Developed by: Greg MacLellan
+## Date created: 2015-09-15
+##   2015-09-21: Added suppor for displaying parse errors while rendering
+## Installed by: Greg MacLellan
+
+## @param Theme:title=Theme|type=enum|required=true|enumValues=Hand drawn,Simple
+
+#set( $id = $action.dateFormatter.calendar.timeInMillis)
+
+<div id="diagram$id" class="sequence-diagram" data-sequence-theme="$paramTheme"  style="font-family: monospace; white-space: pre;">$body</div>
+<script type="text/javascript">
+jQuery(function() {
+  if (typeof sequenceInitalized == "undefined") {
+    sequenceInitalized = true;
+    
+    jQuery.getScript("https://cdn.rawgit.com/bramp/js-sequence-diagrams/gh-pages/js/raphael-min.js", function() {
+      jQuery.getScript("https://cdn.rawgit.com/bramp/js-sequence-diagrams/gh-pages/js/sequence-diagram-min.js", function() {
+        jQuery(".sequence-diagram").each(function(e) {
+          var jqe = jQuery(this);
+          var theme = jqe.attr('data-sequence-theme') == "Simple" ? "simple" : "hand";
+          try {
+            jqe.sequenceDiagram({theme: theme});
+          } catch (err) {
+            console.log('Sequence error', err.message);
+            jqe
+              .css('border', '1px solid #999')
+              .append('<div class="error">'+err.message+'</div>');
+            throw err;
+          }
+        });
+      });
+    });
+  }
+
+});
+</script>

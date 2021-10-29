@@ -1,0 +1,28 @@
+/*http://www.heydonworks.com/article/on-writing-less-damn-code*/
+html {
+    font-size: calc(0.5em + 1vw);
+    max-width: 88ex;
+    margin: 1vw auto;
+    padding: 0em 2em;
+}
+body {
+    font-family: monospace;
+    margin: 0;
+}
+body * + * {
+    margin-top: 1.5rem;
+}
+h1, h5 {
+    text-align: center;
+}
+h5 {
+    font-style: italic;
+}
+pre{
+	padding: 16px;
+	overflow: auto;
+	font-size: 85%;
+	line-height: 1.45;
+	background-color: #f7f7f7;
+	border-radius: 3px;
+}

@@ -1,0 +1,72 @@
+SELECT 
+	REGEXP_EXTRACT((REGEXP_EXTRACT(stories.url,'http://([^/]+)/')),'([^\\.]+\\.[^\\.]+(?:\\.[a-zA-Z].)?)$') AS stories_url_domain,
+	COUNT(stories.id) AS stories_count,
+  COUNT(CASE WHEN stories.score <= 3 THEN 1 ELSE NULL END) AS storiescountscore_3_minus,
+	COUNT(CASE WHEN stories.score <= 3 THEN 1 ELSE NULL END) / COUNT(stories.id) *100 AS stories_percent_3_minus,
+FROM [fh-bigquery:hackernews.stories]
+ AS stories
+
+WHERE 
+	REGEXP_EXTRACT((REGEXP_EXTRACT(stories.url,'http://([^/]+)/')),'([^\\.]+\\.[^\\.]+(?:\\.[a-zA-Z].)?)$') NOT IN ('')
+GROUP EACH BY 1
+HAVING 
+      COUNT(stories.id) > 2500
+      AND stories_percent_3_minus > 60
+ORDER BY 4 aSC
+LIMIT 500
+
+
+Usergenerated	stories_url_domain	stories_count	storiescountscore_3_minus	stories_percent_3_minus
+1	blogspot.com	41721	33911	81%
+	techcrunch.com	30923	19800	64%
+	nytimes.com	28538	17732	62%
+1	youtube.com	17866	15016	84%
+1	wordpress.com	15339	11862	77%
+	arstechnica.com	13731	8616	63%
+	wired.com	12830	8296	65%
+	bbc.co.uk	11316	7878	70%
+	wsj.com	10660	7299	68%
+1	tumblr.com	8893	6591	74%
+	businessinsider.com	7829	5644	72%
+1	google.com	7661	5165	67%
+	forbes.com	7449	5508	74%
+	cnn.com	7201	5445	76%
+	venturebeat.com	7124	5334	75%
+	mashable.com	7086	5715	81%
+	theverge.com	6715	4824	72%
+	thenextweb.com	6700	4950	74%
+1	wikipedia.org	6534	5094	78%
+	cnet.com	5943	4634	78%
+	washingtonpost.com	5858	3826	65%
+	theatlantic.com	5765	3598	62%
+	readwriteweb.com	5601	4174	75%
+	gigaom.com	5356	3936	73%
+	theguardian.com	5136	3279	64%
+	economist.com	5109	3352	66%
+1	github.com	4893	2851	58%
+	reuters.com	4768	3523	74%
+	bloomberg.com	4715	3343	71%
+	yahoo.com	4708	3731	79%
+	guardian.co.uk	4406	3034	69%
+	zdnet.com	4360	3303	76%
+	engadget.com	4330	3365	78%
+1	bit.ly	4209	4208	100%
+1	typepad.com	4071	2743	67%
+	slate.com	3949	2560	65%
+	technologyreview.com	3906	2804	72%
+1	reddit.com	3808	2636	69%
+	theregister.co.uk	3777	2749	73%
+	posterous.com	3727	2473	66%
+1	stackoverflow.com	3550	2592	73%
+1	quora.com	3462	2570	74%
+	bbc.com	3456	2395	69%
+	gizmodo.com	3407	2505	74%
+	npr.org	3361	2324	69%
+	businessweek.com	3293	2288	69%
+	itworld.com	3096	2625	85%
+	fastcompany.com	2866	2098	73%
+1	youtu.be	2796	2711	97%
+1	stackexchange.com	2749	2100	76%
+	huffingtonpost.com	2710	2280	84%
+	telegraph.co.uk	2574	1877	73%
+	networkworld.com	2524	2193	87%

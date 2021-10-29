@@ -1,0 +1,1 @@
+for run in {1..1000}; do find -name \*.tmp  | wc -l ; sleep 5; done

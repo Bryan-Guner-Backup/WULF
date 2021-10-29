@@ -1,0 +1,1 @@
+env LC_CTYPE=C tr -dc "A-Z0-9" < /dev/urandom | fold -w 81 | head -n 1 > myIotaSeed.txt

@@ -1,0 +1,24 @@
+[
+  {
+    "symbol": "ABM",
+    "end_date": "2015-04-30",
+    "amend": "False",
+    "period_focus": "Q2",
+    "fiscal_year": 2015,
+    "doc_type": "10-Q",
+    "revenues": 1270100000,
+    "op_income": 30800000,
+    "net_income": 18300000,
+    "eps_basic": 0.32,
+    "eps_diluted": 0.32,
+    "dividend": 0.16,
+    "assets": 2205600000,
+    "cur_assets": 951800000,
+    "cur_liab": 511500000,
+    "cash": 30400000,
+    "equity": 1000200000,
+    "cash_flow_op": 39000000,
+    "cash_flow_inv": -13900000,
+    "cash_flow_fin": -31400000
+  }
+]

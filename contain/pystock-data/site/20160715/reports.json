@@ -1,0 +1,24 @@
+[
+  {
+    "symbol": "IGC",
+    "end_date": "2016-03-31",
+    "amend": "False",
+    "period_focus": "FY",
+    "fiscal_year": 2016,
+    "doc_type": "10-K",
+    "revenues": 6366550,
+    "op_income": -2905710,
+    "net_income": -2808244,
+    "eps_basic": -0.17,
+    "eps_diluted": -0.17,
+    "dividend": 0,
+    "assets": 18859182,
+    "cur_assets": 3841949,
+    "cur_liab": 3199061,
+    "cash": 1490693,
+    "equity": 13948071,
+    "cash_flow_op": -157702,
+    "cash_flow_inv": -183422,
+    "cash_flow_fin": 1011227
+  }
+]

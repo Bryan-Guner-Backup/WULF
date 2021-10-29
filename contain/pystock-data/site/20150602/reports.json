@@ -1,0 +1,24 @@
+[
+  {
+    "symbol": "AAP",
+    "end_date": "2015-04-25",
+    "amend": "False",
+    "period_focus": "Q1",
+    "fiscal_year": 2015,
+    "doc_type": "10-Q",
+    "revenues": 3038233000,
+    "op_income": 262528000,
+    "net_income": 148112000,
+    "eps_basic": 2.02,
+    "eps_diluted": 2,
+    "dividend": 0.06,
+    "assets": 8146695000,
+    "cur_assets": 4936865000,
+    "cur_liab": 3824478000,
+    "cash": 123821000,
+    "equity": 2146588000,
+    "cash_flow_op": 102211000,
+    "cash_flow_inv": -57176000,
+    "cash_flow_fin": -25307000
+  }
+]

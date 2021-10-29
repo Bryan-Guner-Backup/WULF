@@ -1,0 +1,16 @@
+
+<--- Last few GCs --->
+
+   83443 ms: Scavenge 1398.5 (1457.3) -> 1398.5 (1457.3) MB, 0.2 / 0 ms (+ 1.5 ms in 1 steps since last GC) [allocation failure] [incremental marking delaying mark-sweep].
+   84707 ms: Mark-sweep 1398.5 (1457.3) -> 1398.5 (1457.3) MB, 1263.7 / 0 ms (+ 2.4 ms in 2 steps since start of marking, biggest step 1.5 ms) [last resort gc].
+   85948 ms: Mark-sweep 1398.5 (1457.3) -> 1398.5 (1457.3) MB, 1240.9 / 0 ms [last resort gc].
+
+
+<--- JS stacktrace --->
+
+==== JS stack trace =========================================
+
+Security context: 0x2c89504b4629 <JS Object>
+    2: SerializeObject(aka SerializeObject) [native json.js:~75] [pc=0x2252471465b9] (this=0x2c89504041b9 <undefined>,u=0x3631dd3b8539 <an Object with map 0x1fdc6fe9cd69>,v=0x2c8950404101 <null>,w=0x338d1299ee29 <JS Array[2]>,x=0x338d1299ee09 <String[2]:   >,y=0x338d1299ee09 <String[2]:   >)
+    3: JSONSerialize(aka JSONSerialize) [native json.js:~120] [pc=0x22524778418c] (this=0x2c89504041b9 <...
+

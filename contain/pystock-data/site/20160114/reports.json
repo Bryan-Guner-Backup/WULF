@@ -1,0 +1,24 @@
+[
+  {
+    "symbol": "SKY",
+    "end_date": "2015-11-30",
+    "amend": "False",
+    "period_focus": "Q2",
+    "fiscal_year": 2016,
+    "doc_type": "10-Q",
+    "revenues": 58684000,
+    "op_income": 1827000,
+    "net_income": 1706000,
+    "eps_basic": 0.2,
+    "eps_diluted": 0.2,
+    "dividend": 0,
+    "assets": 52649000,
+    "cur_assets": 34034000,
+    "cur_liab": 16557000,
+    "cash": 6804000,
+    "equity": 24280000,
+    "cash_flow_op": 2079000,
+    "cash_flow_inv": -270000,
+    "cash_flow_fin": ""
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "symbol": "TPC",
+    "end_date": "2016-01-31",
+    "amend": "False",
+    "period_focus": "FY",
+    "fiscal_year": 2016,
+    "doc_type": "10-K",
+    "revenues": 358129000,
+    "op_income": -868183000,
+    "net_income": -822340000,
+    "eps_basic": -10.89,
+    "eps_diluted": -10.89,
+    "dividend": 0,
+    "assets": 753148000,
+    "cur_assets": 191487000,
+    "cur_liab": 217192000,
+    "cash": 115769000,
+    "equity": -264582000,
+    "cash_flow_op": 165034000,
+    "cash_flow_inv": -231834000,
+    "cash_flow_fin": 114698000
+  }
+]

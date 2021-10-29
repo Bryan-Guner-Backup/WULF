@@ -1,0 +1,24 @@
+[
+  {
+    "symbol": "EGHT",
+    "end_date": "2016-03-31",
+    "amend": "True",
+    "period_focus": "FY",
+    "fiscal_year": 2016,
+    "doc_type": "10-K",
+    "revenues": 209336000,
+    "op_income": -7074000,
+    "net_income": -5120000,
+    "eps_basic": -0.06,
+    "eps_diluted": -0.06,
+    "dividend": 0,
+    "assets": 313452000,
+    "cur_assets": 185900000,
+    "cur_liab": 34734000,
+    "cash": 33576000,
+    "equity": 275306000,
+    "cash_flow_op": 23567000,
+    "cash_flow_inv": -36295000,
+    "cash_flow_fin": -7248000
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "name": "pystock-data-raw",
+  "version": "0.1.0",
+  "description": "",
+  "main": "",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Lets trawl that data\"",
+    "release": "npm run unpack && npm run csv2json && npm run symbols2json && npm run build && surge -p stock-data.surge.sh",
+    "unpack": "for f in $(find . | sort | grep .tar.gz); do mkdir ${f%.tar.gz}; tar -xaf $f -C ${f%.tar.gz}; rm $f ; done",
+    "csv2json": "for f in $(find . | sort | grep .csv); do echo $f ; alasql \"select * from CSV('$f')\" > ${f%.csv}.json  ;  rm $f ; done",
+    "symbols2json": "for f in $(find . | sort | grep symbols.txt); do echo $f ; echo \"symbol\tname\" | cat - $f > /tmp/out && mv /tmp/out $f ; alasql \"select * from TSV('$f')\" > ${f%.txt}.json  ; rm $f ; done",
+    "build": "cd site  && echo \"<div style='width:500px;margin:1in auto;'><tt><h1>Pystock data raw</h1><br><i>Files:</i><br>\" > ./index.html && for f in $(find . -type f | sort -nr | grep .json); do echo \"<a href='${f%./site}'>${f%./}</a><br>\" >> ./index.html ; done"
+  },
+  "dependencies": {
+    "alasql": "^0.3.1",
+    "surge": "^0.18.0"
+  },
+  "author": "mathiasrw",
+  "license": "MIT"
+}

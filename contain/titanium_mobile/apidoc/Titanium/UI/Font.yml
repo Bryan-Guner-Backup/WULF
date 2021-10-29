@@ -1,0 +1,99 @@
+---
+name: Font
+summary: An abstract datatype for specifying a text font.
+description: |
+    Available fonts vary by platform and device. On iOS, font support depends on the OS
+    version. On Android, font support depends on the OS version **and** device manufacturer.
+
+    Note that to update the font used by a UI component, you must set the object's `font`
+    property, like this:
+
+        myLabel.font = {
+            fontSize: 24,
+            fontFamily: myFontName
+        }
+
+    Changing the `font` object after assigning it does not reliably affect the underlying UI
+    component:
+
+        // This may not work as expected
+        myLabel.font.fontSize = 24;
+
+    #### Custom Fonts
+
+    Custom TrueType (.ttf) or OpenType (.otf) fonts may be embedded in an application on iOS and
+    Android. (Note that you must have redistribution rights on the fonts you ship.)
+
+
+    In Alloy applications, custom fonts must be placed in a "fonts" folder in the platform-specific assets folder (<strong>app/assets/android/fonts</strong>, for example).
+    In classic Titanium applications, custom fonts must be placed in the **Resources/fonts** directory.
+
+    For an example of using custom fonts, see [Custom Fonts](http://docs.appcelerator.com/platform/#!/guide/Custom_Fonts).
+
+properties:
+  - name: fontFamily
+    summary: Specifies the font family or specific font to use.
+    description: |
+
+        This can be the name of a font family (for example, "Helvetica" or "DroidSans") the base
+        name of the font file (for example, "Droid_sans.ttf"), or the font's PostScript name. The
+        value you specify also depends on the platform you are targeting.
+
+        * On Android specify the font file name without its file extension (.otf or .ttf).
+        For example, if you were using the "Burnstown Dam" font whose file name is
+        named `burnstown_dam.ttf`, then you specify `fontFamily: 'burnstown_dam'`.
+
+        * On iOS you use the font's [PostScript name](http://docs.appcelerator.com/platform/latest/#!/guide/Custom_Fonts-section-29004935_CustomFonts-Findingafont%27sPostScriptname).
+        For example, the PostScript name for Burnstown Dam is "BurnstownDam-Regular so you'd specify: `fontFamily: 'BurnstownDam-Regular'`.
+
+        For an example of using a custom font, see [Custom Fonts](http://docs.appcelerator.com/platform/#!/guide/Custom_Fonts).
+
+        Notes:
+
+          * Available fonts differ by platform.
+          * If the requested family name does not match an existing font, the default font family is used.
+          * On Android, the generic names "sans-serif," "serif," and "monospace" (or "monospaced")
+            are mapped to system fonts. On iOS, only "monospace" is supported.
+
+    type: String
+    default: Uses the default system font.
+  - name: fontSize
+    summary: Font size, in platform-dependent units.
+    description: |
+        On iOS and Mobile Web, font sizes are always specified in typographical points
+        (not to be confused with the Apple "points" used for other measurements on iOS).
+
+        On Android the default font sizing is in pixels, but the size can also
+        include a unit specifier. Supported units and their specifiers are:
+
+        * pixels (px)
+        * typographical points (pt)
+        * density-independent pixels (dp or dip)
+        * millimeters (mm)
+        * inches (in)
+
+        For example, "16dp" specifies a size of 16 density-independent pixels.
+
+        iOS ignores any unit specifier after the size value.
+    type: [ Number, String ]
+    default: 15px
+  - name: fontWeight
+    summary: Font weight. Valid values are "bold" or "normal".
+    description: The "semibold" weight is recognized on iOS only.
+    type: String
+    default: normal
+  - name: fontStyle
+    summary: Font style. Valid values are "italic" or "normal".
+    type: String
+    platforms: [iphone, ipad]
+    default: normal
+  - name: textStyle
+    summary: The text style for the font.
+    description: |
+        Use one of the TEXT_STYLE constants from <Titanium.UI> to set the font to a predefined system font.
+        When this property is set to a valid value, all other font properties are ignored. Avaliable on iOS 7 and above.
+    type: String
+    constants: Titanium.UI.TEXT_STYLE_*
+    platforms: [iphone, ipad]
+    osver: {ios: {min: "7.0"}}
+    since: "3.2.0"

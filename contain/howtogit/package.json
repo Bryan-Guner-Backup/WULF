@@ -1,0 +1,13 @@
+{
+  "name": "travis-loves-surge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "s",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "cd trap && echo \"Love is in the air\""
+  },
+  "author": "mathiasrw",
+  "license": "MIT"
+}

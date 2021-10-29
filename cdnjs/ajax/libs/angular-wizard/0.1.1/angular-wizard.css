@@ -13,7 +13,7 @@
   position: absolute;
   height: 1px;
   background-color: #e6e6e6;
-  content: '';
+  content: "";
 }
 
 .steps-indicator.steps-2:before {
@@ -63,8 +63,8 @@
 
 .steps-indicator * {
   -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .steps-indicator li {
@@ -94,7 +94,7 @@
   height: 14px;
   background-color: #e6e6e6;
   border-radius: 100%;
-  content: '';
+  content: "";
   transition: 0.25s;
 }
 

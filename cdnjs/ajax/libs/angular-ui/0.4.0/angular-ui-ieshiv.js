@@ -20,15 +20,39 @@
 // <![endif]-->
 
 (function (exports) {
-
   var debug = window.ieShivDebug || false,
-      tags = [ "ngInclude", "ngPluralize", "ngView", "ngSwitch", "uiCurrency", "uiCodemirror", "uiDate", "uiEvent",
-                "uiKeypress", "uiKeyup", "uiKeydown", "uiMask", "uiMapInfoWindow", "uiMapMarker", "uiMapPolyline",
-                "uiMapPolygon", "uiMapRectangle", "uiMapCircle", "uiMapGroundOverlay", "uiModal", "uiReset",
-                "uiScrollfix", "uiSelect2", "uiShow", "uiHide", "uiToggle", "uiSortable", "uiTinymce"
-                ];
+    tags = [
+      "ngInclude",
+      "ngPluralize",
+      "ngView",
+      "ngSwitch",
+      "uiCurrency",
+      "uiCodemirror",
+      "uiDate",
+      "uiEvent",
+      "uiKeypress",
+      "uiKeyup",
+      "uiKeydown",
+      "uiMask",
+      "uiMapInfoWindow",
+      "uiMapMarker",
+      "uiMapPolyline",
+      "uiMapPolygon",
+      "uiMapRectangle",
+      "uiMapCircle",
+      "uiMapGroundOverlay",
+      "uiModal",
+      "uiReset",
+      "uiScrollfix",
+      "uiSelect2",
+      "uiShow",
+      "uiHide",
+      "uiToggle",
+      "uiSortable",
+      "uiTinymce",
+    ];
 
-  window.myCustomTags =  window.myCustomTags || []; // externally defined by developer using angular-ui directives
+  window.myCustomTags = window.myCustomTags || []; // externally defined by developer using angular-ui directives
   tags.push.apply(tags, window.myCustomTags);
 
   var toCustomElements = function (str) {
@@ -36,9 +60,9 @@
     var dashed = str.replace(/([A-Z])/g, function ($1) {
       return " " + $1.toLowerCase();
     });
-    var tokens = dashed.split(' ');
+    var tokens = dashed.split(" ");
     var ns = tokens[0];
-    var dirname = tokens.slice(1).join('-');
+    var dirname = tokens.slice(1).join("-");
 
     // this is finite list and it seemed senseless to create a custom method
     result.push(ns + ":" + dirname);
@@ -55,5 +79,4 @@
       document.createElement(customElement);
     }
   }
-
 })(window);

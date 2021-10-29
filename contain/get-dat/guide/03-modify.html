@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+  <title>Submarine</title>
+  <link rel="stylesheet" type="text/css" href="../static/css/style.css" />
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700' rel='stylesheet' type='text/css'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/default.min.css">
+</head>
+<body>
+  <div class="wrapper">
+
+      <section class="content">
+        <p><a href="index.html">table of contents</a></p>
+      <h1 id="editing-sharing-data">Editing &amp; sharing data</h1>
+<p>Now you have a copy of the files on your destination a folder called <code>try-dat</code>! But what happens if the contents of the files change? Let&#39;s find out.</p>
+<p>On the <strong>source</strong> create a new file called <code>welcome.txt</code> and open it in your favorite text editor app (such as TextEdit or Sublime Text). Make some changes to the text in the file. Once you&#39;ve edited it, save the file. The file on the source will no longer match the one on the destination. To rectify this and sync the new changes to the destination copy, run <code>dat share</code> again on the source.</p>
+<p>Type the following in the <strong>source</strong> terminal:</p>
+<pre><code>$ dat share
+</code></pre><p>This will create a link, that looks like <code>dat://...</code>.  Your output in the <strong>source</strong> terminal will look something like this:</p>
+<pre><code>$ dat share
+Created new dat
+dat://5a4575c632d1a573...
+</code></pre><p>Now lets switch to the <strong>destination</strong> terminal. <code>cd</code> into the <code>try-dat</code> folder, and run <code>dat sync</code>. </p>
+<p>Type the following in the <strong>destination terminal</strong>:</p>
+<pre><code>$ dat sync
+</code></pre><p>Your output should look like this:</p>
+<pre><code>$ dat sync
+dat v13.8.1
+Downloading dat: 2 files (2.7 MB)
+
+1 connection | Download 0 B/s Upload 0 B/s
+
+dat synced, waiting for updates.
+[==========================================] 100.00%
+</code></pre><p>Check the file on both sides - they should match.</p>
+
+        <div class="navlinks">
+          <a class="nextp button" href="04-live.html">OK, next! &raquo;</a>
+            <a class="lastp navlink" href="02-link.html">&laquo; back</a>
+        </div>
+    </section>
+  </div>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+</body>
+</html>

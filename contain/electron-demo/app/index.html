@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Eupry</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">  </head>
+  <body>
+
+    <div class="container">
+  <center>  <h1>Super temperatur tjekker</h1> 
+    
+  
+  
+    <div class="well center-block" style="max-width:400px"> <center>
+    <p><button class="btn btn-default" onclick="shell.exec('say www.dtu.dk'); shell.exec('open http://www.dtu.dk')">Open DTUs hjemmeside</button>
+    <p><button class="btn btn-default" onclick="shell.exec('say Kan du regne den ud?' ); shell.exec('open /Applications/Calculator.app/')">Åben regnemaskine</button>
+    <p><button class="btn btn-warning" onclick="shell.exec('say Ej altså - så dum er du vel ikke?')">Slet tilfældig mappe</button>
+    </div>
+    </div>
+  <script>
+    // You can also require other files to run in this process
+
+    shell = require('./shell.js')
+  </script>
+  </body>
+
+</html>

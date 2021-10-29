@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import {platformFor} from './platform';
-import {viewerFor} from './viewer';
-import {viewportFor} from './viewport';
-
+import { platformFor } from "./platform";
+import { viewerFor } from "./viewer";
+import { viewportFor } from "./viewport";
 
 /**
  * Installs "pull-to-refresh" (P2R) blocker if viewer has requested. P2R can
@@ -27,12 +26,10 @@ import {viewportFor} from './viewport';
  */
 export function installPullToRefreshBlocker(win) {
   // Only do when requested and don't even try it on Safari!
-  if (viewerFor(win).getParam('p2r') == '0' &&
-          platformFor(win).isChrome()) {
+  if (viewerFor(win).getParam("p2r") == "0" && platformFor(win).isChrome()) {
     new PullToRefreshBlocker(win.document, viewportFor(win));
   }
 }
-
 
 /**
  * Visible for testing only.
@@ -65,13 +62,13 @@ export class PullToRefreshBlocker {
     /** @private {!Function} */
     this.boundTouchCancel_ = this.onTouchCancel_.bind(this);
 
-    this.doc_.addEventListener('touchstart', this.boundTouchStart_, true);
+    this.doc_.addEventListener("touchstart", this.boundTouchStart_, true);
   }
 
   /** */
   cleanup() {
     this.stopTracking_();
-    this.doc_.removeEventListener('touchstart', this.boundTouchStart_, true);
+    this.doc_.removeEventListener("touchstart", this.boundTouchStart_, true);
   }
 
   /**
@@ -81,9 +78,11 @@ export class PullToRefreshBlocker {
   onTouchStart_(event) {
     // P2R won't trigger when document is scrolled. Also can ignore when we are
     // already tracking this touch and for non-single-touch events.
-    if (this.tracking_ ||
-          !(event.touches && event.touches.length == 1) ||
-          this.viewport_.getTop() > 0) {
+    if (
+      this.tracking_ ||
+      !(event.touches && event.touches.length == 1) ||
+      this.viewport_.getTop() > 0
+    ) {
       return;
     }
 
@@ -97,18 +96,18 @@ export class PullToRefreshBlocker {
   startTracking_(startPos) {
     this.tracking_ = true;
     this.startPos_ = startPos;
-    this.doc_.addEventListener('touchmove', this.boundTouchMove_, true);
-    this.doc_.addEventListener('touchend', this.boundTouchEnd_, true);
-    this.doc_.addEventListener('touchcancel', this.boundTouchCancel_, true);
+    this.doc_.addEventListener("touchmove", this.boundTouchMove_, true);
+    this.doc_.addEventListener("touchend", this.boundTouchEnd_, true);
+    this.doc_.addEventListener("touchcancel", this.boundTouchCancel_, true);
   }
 
   /** @private */
   stopTracking_() {
     this.tracking_ = false;
     this.startPos_ = 0;
-    this.doc_.removeEventListener('touchmove', this.boundTouchMove_, true);
-    this.doc_.removeEventListener('touchend', this.boundTouchEnd_, true);
-    this.doc_.removeEventListener('touchcancel', this.boundTouchCancel_, true);
+    this.doc_.removeEventListener("touchmove", this.boundTouchMove_, true);
+    this.doc_.removeEventListener("touchend", this.boundTouchEnd_, true);
+    this.doc_.removeEventListener("touchcancel", this.boundTouchCancel_, true);
   }
 
   /**

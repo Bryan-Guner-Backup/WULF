@@ -1,10 +1,10 @@
 body {
-    background: #171a1b;
-    font-size: 24px;
-    font-family: 'Hack', 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color: #eeeeec;
+  background: #171a1b;
+  font-size: 24px;
+  font-family: "Hack", "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #eeeeec;
 }
 
 img {
-	position: absolute;
+  position: absolute;
 }

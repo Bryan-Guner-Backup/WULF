@@ -5,7 +5,7 @@ description:
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://beakerbrowser.com" # the base hostname & protocol for your site
 twitter_username: pfrazee
-github_username:  pfrazee
+github_username: pfrazee
 
 # Build settings
 markdown: kramdown
@@ -14,8 +14,8 @@ include: [".well-known"]
 exclude: ["node_modules"]
 keep_files: [".dat"]
 gems:
- - jekyll-redirect-from
- - octopress-minify-html
+  - jekyll-redirect-from
+  - octopress-minify-html
 
 # Sass
 sass:
@@ -29,14 +29,12 @@ collections:
   docs:
     output: true
 defaults:
-  -
-    scope:
+  - scope:
       path: ""
       type: "docs"
     values:
       layout: "doc"
-  -
-    scope:
+  - scope:
       path: ""
       type: "releases"
     values:

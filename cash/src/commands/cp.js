@@ -1,34 +1,37 @@
-'use strict';
+"use strict";
 
-const _ = require('lodash');
-const fs = require('fs');
-const fsAutocomplete = require('vorpal-autocomplete-fs');
-const path = require('path');
-const os = require('os');
+const _ = require("lodash");
+const fs = require("fs");
+const fsAutocomplete = require("vorpal-autocomplete-fs");
+const path = require("path");
+const os = require("os");
 
-const expand = require('./../util/expand');
-const interfacer = require('./../util/interfacer');
+const expand = require("./../util/expand");
+const interfacer = require("./../util/interfacer");
 
 const cp = {
-
   exec(args, options) {
     const self = this;
     options = options || {};
 
-    args = (args === undefined) ? [] : args;
-    args = (_.isArray(args)) ? args : args.split(' ');
-    args = _.filter(args, arg => String(arg).trim() !== '');
+    args = args === undefined ? [] : args;
+    args = _.isArray(args) ? args : args.split(" ");
+    args = _.filter(args, (arg) => String(arg).trim() !== "");
 
-    options.noclobber = (options.force === true) ? false : options.noclobber;
-    options.recursive = (options.R === true) ? true : options.recursive;
+    options.noclobber = options.force === true ? false : options.noclobber;
+    options.recursive = options.R === true ? true : options.recursive;
 
     if (args.length < 1) {
-      this.log('cp: missing file operand\nTry \'cp --help\' for more information.');
+      this.log(
+        "cp: missing file operand\nTry 'cp --help' for more information."
+      );
       return 1;
     }
 
     if (args.length === 1) {
-      this.log(`cp: missing destination file operand after ${args[0]}\nTry 'cp --help' for more information.`);
+      this.log(
+        `cp: missing destination file operand after ${args[0]}\nTry 'cp --help' for more information.`
+      );
       return 1;
     }
 
@@ -54,14 +57,14 @@ const cp = {
 
     if (options.recursive) {
       sources.forEach(function (src, i) {
-        if (src[src.length - 1] === '/') {
-          sources[i] += '*';
+        if (src[src.length - 1] === "/") {
+          sources[i] += "*";
         } else if (fs.statSync(src).isDirectory() && !exists) {
-          sources[i] += '/*';
+          sources[i] += "/*";
         }
       });
       try {
-        fs.mkdirSync(dest, parseInt('0777', 8));
+        fs.mkdirSync(dest, parseInt("0777", 8));
       } catch (e) {
         // like Unix's cp, keep going even if we can't create dest dir
       }
@@ -86,7 +89,7 @@ const cp = {
             fs.mkdirSync(newDest, checkDir.mode);
           } catch (e) {
             /* istanbul ignore if */
-            if (e.code !== 'EEXIST') {
+            if (e.code !== "EEXIST") {
               throw new Error();
             }
           }
@@ -108,7 +111,7 @@ const cp = {
 
       copyFileSync.call(self, src, iDest);
     });
-  }
+  },
 };
 
 function cpdirSyncRecursive(sourceDir, destDir, options) {
@@ -122,7 +125,7 @@ function cpdirSyncRecursive(sourceDir, destDir, options) {
     fs.mkdirSync(destDir, checkDir.mode);
   } catch (e) {
     /* istanbul ignore if */
-    if (e.code !== 'EEXIST') {
+    if (e.code !== "EEXIST") {
       throw e;
     }
   }
@@ -136,7 +139,11 @@ function cpdirSyncRecursive(sourceDir, destDir, options) {
       cpdirSyncRecursive.call(self, srcFile, destFile, options);
     } else if (srcFileStat.isSymbolicLink()) {
       const symlinkFull = fs.readlinkSync(srcFile);
-      fs.symlinkSync(symlinkFull, destFile, os.platform() === 'win32' ? 'junction' : null);
+      fs.symlinkSync(
+        symlinkFull,
+        destFile,
+        os.platform() === "win32" ? "junction" : null
+      );
       // At this point, we've hit a file actually worth copying... so copy it on over.
     } else if (fs.existsSync(destFile) && options.noclobber) {
       // be silent
@@ -161,7 +168,7 @@ function copyFileSync(src, dest) {
   let fdw = null;
 
   try {
-    fdr = fs.openSync(src, 'r');
+    fdr = fs.openSync(src, "r");
   } catch (e) {
     /* istanbul ignore next */
     this.log(`cp: cannot open ${src}: ${e.code}`);
@@ -170,7 +177,7 @@ function copyFileSync(src, dest) {
   }
 
   try {
-    fdw = fs.openSync(dest, 'w');
+    fdw = fs.openSync(dest, "w");
   } catch (e) {
     /* istanbul ignore next */
     this.log(`cp: cannot write to destination file ${dest}: ${e.code}`);
@@ -195,11 +202,11 @@ module.exports = function (vorpal) {
   }
   vorpal.api.cp = cp;
   vorpal
-    .command('cp [args...]')
-    .option('-f, --force', 'do not prompt before overwriting')
-    .option('-n, --no-clobber', 'do not overwrite an existing file')
-    .option('-r, --recursive', 'copy directories recursively')
-    .option('-R', 'copy directories recursively')
+    .command("cp [args...]")
+    .option("-f, --force", "do not prompt before overwriting")
+    .option("-n, --no-clobber", "do not overwrite an existing file")
+    .option("-r, --recursive", "copy directories recursively")
+    .option("-R", "copy directories recursively")
     .autocomplete(fsAutocomplete())
     .action(function (args, callback) {
       args.options = args.options || {};
@@ -207,7 +214,7 @@ module.exports = function (vorpal) {
         command: cp,
         args: args.args,
         options: args.options,
-        callback
+        callback,
       });
     });
 };

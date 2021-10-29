@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-import {Timer} from '../../../../src/timer';
-import {adopt} from '../../../../src/runtime';
-import {createIframePromise, pollForLayout} from '../../../../testing/iframe';
-import {loadPromise} from '../../../../src/event-helper';
-import {resources} from '../../../../src/resources';
-require('../amp-iframe');
+import { Timer } from "../../../../src/timer";
+import { adopt } from "../../../../src/runtime";
+import { createIframePromise, pollForLayout } from "../../../../testing/iframe";
+import { loadPromise } from "../../../../src/event-helper";
+import { resources } from "../../../../src/resources";
+require("../amp-iframe");
 
 adopt(window);
 
-describe('amp-iframe', () => {
-
-  var iframeSrc = 'http://iframe.localhost:' + location.port +
-      '/base/test/fixtures/served/iframe.html';
+describe("amp-iframe", () => {
+  var iframeSrc =
+    "http://iframe.localhost:" +
+    location.port +
+    "/base/test/fixtures/served/iframe.html";
 
   var timer = new Timer(window);
   var ranJs = 0;
@@ -34,31 +35,31 @@ describe('amp-iframe', () => {
     ranJs = 0;
   });
 
-  window.onmessage = function(message) {
-    if (message.data == 'loaded-iframe') {
+  window.onmessage = function (message) {
+    if (message.data == "loaded-iframe") {
       ranJs++;
     }
   };
 
   function getAmpIframe(attributes, opt_top, opt_height, opt_translateY) {
-    return createIframePromise().then(function(iframe) {
-      var i = iframe.doc.createElement('amp-iframe');
+    return createIframePromise().then(function (iframe) {
+      var i = iframe.doc.createElement("amp-iframe");
       for (var key in attributes) {
         i.setAttribute(key, attributes[key]);
       }
       if (opt_height) {
         iframe.iframe.style.height = opt_height;
       }
-      var top = opt_top || '600px';
-      i.style.position = 'absolute';
+      var top = opt_top || "600px";
+      i.style.position = "absolute";
       i.style.top = top;
       if (opt_translateY) {
-        i.style.transform = 'translateY(' + opt_translateY + ')';
+        i.style.transform = "translateY(" + opt_translateY + ")";
       }
       iframe.doc.body.appendChild(i);
       // Wait an event loop for the iframe to be created.
       return pollForLayout(iframe.win, 1).then(() => {
-        var created = i.querySelector('iframe');
+        var created = i.querySelector("iframe");
         if (created) {
           // Wait for the iframe to load
           return loadPromise(created).then(() => {
@@ -67,7 +68,7 @@ describe('amp-iframe', () => {
               return {
                 container: i,
                 iframe: created,
-                scrollWrapper: i.querySelector('i-amp-scroll-container')
+                scrollWrapper: i.querySelector("i-amp-scroll-container"),
               };
             });
           });
@@ -76,21 +77,21 @@ describe('amp-iframe', () => {
         return {
           container: i,
           iframe: null,
-          error: i.textContent
+          error: i.textContent,
         };
       });
     });
   }
 
-  it('should render iframe', () => {
+  it("should render iframe", () => {
     return getAmpIframe({
       src: iframeSrc,
       width: 100,
-      height: 100
+      height: 100,
     }).then((amp) => {
       expect(amp.iframe).to.be.instanceof(Element);
       expect(amp.iframe.src).to.equal(iframeSrc);
-      expect(amp.iframe.getAttribute('sandbox')).to.equal('');
+      expect(amp.iframe.getAttribute("sandbox")).to.equal("");
       expect(amp.iframe.parentNode).to.equal(amp.scrollWrapper);
       return timer.promise(0).then(() => {
         expect(ranJs).to.equal(0);
@@ -98,15 +99,15 @@ describe('amp-iframe', () => {
     });
   });
 
-  it('should allow JS and propagate scrolling', () => {
+  it("should allow JS and propagate scrolling", () => {
     return getAmpIframe({
       src: iframeSrc,
-      sandbox: 'allow-scripts',
+      sandbox: "allow-scripts",
       width: 100,
       height: 100,
-      scrolling: 'no'
+      scrolling: "no",
     }).then((amp) => {
-      expect(amp.iframe.getAttribute('sandbox')).to.equal('allow-scripts');
+      expect(amp.iframe.getAttribute("sandbox")).to.equal("allow-scripts");
       return timer.promise(100).then(() => {
         expect(ranJs).to.equal(1);
         expect(amp.scrollWrapper).to.be.null;
@@ -114,74 +115,102 @@ describe('amp-iframe', () => {
     });
   });
 
-  it('should not render at the top', () => {
-    return getAmpIframe({
-      src: iframeSrc,
-      sandbox: 'allow-scripts',
-      width: 100,
-      height: 100
-    }, '599px', '1000px').then((amp) => {
-      expect(amp.iframe).to.be.null;
-    }).catch(() => {});
+  it("should not render at the top", () => {
+    return getAmpIframe(
+      {
+        src: iframeSrc,
+        sandbox: "allow-scripts",
+        width: 100,
+        height: 100,
+      },
+      "599px",
+      "1000px"
+    )
+      .then((amp) => {
+        expect(amp.iframe).to.be.null;
+      })
+      .catch(() => {});
   });
 
-  it('should respect translations', () => {
-    return getAmpIframe({
-      src: iframeSrc,
-      sandbox: 'allow-scripts',
-      width: 100,
-      height: 100
-    }, '650px', '1000px', '-100px').then((amp) => {
-      expect(amp.iframe).to.be.null;
-    }).catch(() => {});
+  it("should respect translations", () => {
+    return getAmpIframe(
+      {
+        src: iframeSrc,
+        sandbox: "allow-scripts",
+        width: 100,
+        height: 100,
+      },
+      "650px",
+      "1000px",
+      "-100px"
+    )
+      .then((amp) => {
+        expect(amp.iframe).to.be.null;
+      })
+      .catch(() => {});
   });
 
-  it('should render if further than 75% viewport away from top', () => {
-    return getAmpIframe({
-      src: iframeSrc,
-      sandbox: 'allow-scripts',
-      width: 100,
-      height: 100
-    }, '75px', '100px').then((amp) => {
+  it("should render if further than 75% viewport away from top", () => {
+    return getAmpIframe(
+      {
+        src: iframeSrc,
+        sandbox: "allow-scripts",
+        width: 100,
+        height: 100,
+      },
+      "75px",
+      "100px"
+    ).then((amp) => {
       expect(amp.iframe).to.be.not.null;
     });
   });
 
-  it('should deny http', () => {
+  it("should deny http", () => {
     return getAmpIframe({
       // ads. is not whitelisted for http iframes.
-      src: 'http://ads.localhost:' + location.port +
-          '/base/test/fixtures/served/iframe.html',
-      sandbox: 'allow-scripts',
+      src:
+        "http://ads.localhost:" +
+        location.port +
+        "/base/test/fixtures/served/iframe.html",
+      sandbox: "allow-scripts",
       width: 100,
-      height: 100
+      height: 100,
     }).then((amp) => {
       expect(amp.iframe).to.be.null;
     });
   });
 
-  it('should deny same origin', () => {
+  it("should deny same origin", () => {
     return getAmpIframeObject().then((amp) => {
       expect(() => {
-        amp.assertSource('https://google.com/fpp', 'https://google.com/abc',
-            'allow-same-origin');
+        amp.assertSource(
+          "https://google.com/fpp",
+          "https://google.com/abc",
+          "allow-same-origin"
+        );
       }).to.throw(/must not be equal to container/);
       expect(() => {
-        amp.assertSource('https://google.com/fpp', 'https://google.com/abc',
-            'allow-same-origin allow-scripts');
+        amp.assertSource(
+          "https://google.com/fpp",
+          "https://google.com/abc",
+          "allow-same-origin allow-scripts"
+        );
       }).to.throw(/must not be equal to container/);
       // Same origin, but sandboxed.
-      amp.assertSource('https://google.com/fpp', 'https://google.com/abc', '');
+      amp.assertSource("https://google.com/fpp", "https://google.com/abc", "");
       expect(() => {
-        amp.assertSource('http://google.com/', 'https://foo.com', '');
+        amp.assertSource("http://google.com/", "https://foo.com", "");
       }).to.throw(/Must start with https/);
       expect(() => {
-        amp.assertSource('./foo', 'https://foo.com', '');
+        amp.assertSource("./foo", "https://foo.com", "");
       }).to.throw(/Must start with https/);
 
-      amp.assertSource('http://iframe.localhost:123/foo',
-          'https://foo.com', '');
-      amp.assertSource('https://container.com', 'https://foo.com', '');
+      amp.assertSource(
+        "http://iframe.localhost:123/foo",
+        "https://foo.com",
+        ""
+      );
+      amp.assertSource("https://container.com", "https://foo.com", "");
     });
   });
 
@@ -189,7 +218,7 @@ describe('amp-iframe', () => {
     return getAmpIframe({
       src: iframeSrc,
       width: 100,
-      height: 100
+      height: 100,
     }).then((amp) => {
       return amp.container.implementation_;
     });

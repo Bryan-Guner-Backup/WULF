@@ -15,28 +15,28 @@ layout: default
 </main>
 
 <script>
-var $ = document.querySelector.bind(document)
-var $$ = function (selector) {
-  return Array.prototype.slice.call(document.querySelectorAll(selector))
-}
+  var $ = document.querySelector.bind(document);
+  var $$ = function (selector) {
+    return Array.prototype.slice.call(document.querySelectorAll(selector));
+  };
 </script>
 <script src="/js/anchor.min.js"></script>
 <script>
-anchors.add('h2, h3, h4')
+  anchors.add("h2, h3, h4");
 </script>
 
 <script>
-var mobileNav = document.getElementById('docs-nav-mobile')
-mobileNav.addEventListener('change', function (e) {
-  var select = e.target
-  window.location = select.selectedOptions[0].dataset.url
-})
+  var mobileNav = document.getElementById("docs-nav-mobile");
+  mobileNav.addEventListener("change", function (e) {
+    var select = e.target;
+    window.location = select.selectedOptions[0].dataset.url;
+  });
 </script>
 <script>
-[].forEach.call(document.querySelectorAll('img[data-src]'), function(img) {
-  img.setAttribute('src', img.getAttribute('data-src'))
-  img.onload = function() {
-    img.removeAttribute('data-src')
-  }
-})
+  [].forEach.call(document.querySelectorAll("img[data-src]"), function (img) {
+    img.setAttribute("src", img.getAttribute("data-src"));
+    img.onload = function () {
+      img.removeAttribute("data-src");
+    };
+  });
 </script>

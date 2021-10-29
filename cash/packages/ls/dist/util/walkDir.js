@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-var fs = require('fs');
-var path = require('path');
+var fs = require("fs");
+var path = require("path");
 
 /**
  * Walks a single directory calling
@@ -34,7 +34,7 @@ module.exports = function (currentDirPath, callback) {
       readFile(filePath, callback);
     });
   } catch (e) {
-    if (e.code === 'ENOTDIR') {
+    if (e.code === "ENOTDIR") {
       readFile(currentDirPath, callback);
     }
   }

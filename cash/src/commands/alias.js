@@ -1,18 +1,17 @@
-'use strict';
+"use strict";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
-const interfacer = require('./../util/interfacer');
+const interfacer = require("./../util/interfacer");
 
 const alias = {
-
   exec(args, options) {
     args = args || [];
     options = options || {};
     const vorpal = options.vorpal;
 
     if (!vorpal) {
-      throw new Error('Alias is not programatically supported.');
+      throw new Error("Alias is not programatically supported.");
     }
 
     vorpal._aliases = vorpal._aliases || [];
@@ -28,30 +27,30 @@ const alias = {
     // Parse incoming args. Accept either:
     // alias foo=bar, or
     // alias foo 'bar and so on'.
-    let key = args.join(' ');
+    let key = args.join(" ");
     let value;
-    if (String(key).indexOf('=') > -1) {
-      const parts = String(key).trim().split('=');
+    if (String(key).indexOf("=") > -1) {
+      const parts = String(key).trim().split("=");
       key = parts[0];
       value = parts[1] || value;
     } else {
-      const parts = String(key).trim().split(' ');
+      const parts = String(key).trim().split(" ");
       key = parts.shift();
-      value = parts.join(' ');
+      value = parts.join(" ");
     }
 
     // Remove wrapped quotes from value.
     if (value !== undefined) {
-      value = String(value).replace(/^[\"|\']|[\"|\']$/g, '');
+      value = String(value).replace(/^[\"|\']|[\"|\']$/g, "");
     }
 
     // Pull list of aliases
     let all;
     try {
-      all = JSON.parse(vorpal.localStorage.getItem('aliases') || []);
+      all = JSON.parse(vorpal.localStorage.getItem("aliases") || []);
     } catch (e) {
       all = [];
-      vorpal.localStorage.removeItem('aliases');
+      vorpal.localStorage.removeItem("aliases");
     }
 
     if (options.p) {
@@ -87,9 +86,9 @@ const alias = {
       vorpal._aliases = aliases;
     }
 
-    vorpal.localStorage.setItem('aliases', JSON.stringify(all));
+    vorpal.localStorage.setItem("aliases", JSON.stringify(all));
     return 0;
-  }
+  },
 };
 
 module.exports = function (vorpal) {
@@ -98,8 +97,8 @@ module.exports = function (vorpal) {
   }
   vorpal.api.alias = alias;
   vorpal
-    .command('alias [name...]')
-    .option('-p', 'print all defined aliases in a reusable format')
+    .command("alias [name...]")
+    .option("-p", "print all defined aliases in a reusable format")
     .action(function (args, callback) {
       args.options = args.options || {};
       args.options.vorpal = vorpal;
@@ -107,7 +106,7 @@ module.exports = function (vorpal) {
         command: alias,
         args: args.name,
         options: args.options,
-        callback
+        callback,
       });
     });
 };

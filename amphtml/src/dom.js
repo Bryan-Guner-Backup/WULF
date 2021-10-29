@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 /**
  * Removes the element.
  * @param {!Element} element
@@ -25,7 +24,6 @@ export function removeElement(element) {
   }
 }
 
-
 /**
  * Removes all child nodes of the specified element.
  * @param {!Element} parent
@@ -35,7 +33,6 @@ export function removeChildren(parent) {
     parent.removeChild(parent.firstChild);
   }
 }
-
 
 /**
  * Copies all children nodes of element "from" to element "to". Child nodes
@@ -51,7 +48,6 @@ export function copyChildren(from, to) {
   }
   to.appendChild(frag);
 }
-
 
 /**
  * Finds the closest element that satisfies the callback from this element
@@ -69,7 +65,6 @@ export function closest(element, callback) {
   return null;
 }
 
-
 /**
  * Finds the closest element with the specified name from this element
  * up the DOM subtree.
@@ -83,7 +78,6 @@ export function closestByTag(element, tagName) {
     return el.tagName == tagName;
   });
 }
-
 
 /**
  * Finds the first descendant element with the specified name.

@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-import {getService} from './service';
-
+import { getService } from "./service";
 
 /**
  * A helper class that provides information about device/OS/browser currently
  * running.
  */
 export class Platform {
-
   /**
    * @param {!Window} win
    */
@@ -46,17 +44,16 @@ export class Platform {
   isChrome() {
     return /Chrome|CriOS/i.test(this.win.navigator.userAgent);
   }
-};
-
+}
 
 /**
  * @param {!Window} window
  * @return {!Platform}
  */
 export function platformFor(window) {
-  return getService(window, 'platform', () => {
+  return getService(window, "platform", () => {
     return new Platform(window);
   });
-};
+}
 
 export const platform = platformFor(window);

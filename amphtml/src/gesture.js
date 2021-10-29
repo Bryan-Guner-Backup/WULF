@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-import {Observable} from './observable';
-import {assert} from './asserts';
-import {calcVelocity} from './motion';
-import {Pass} from './pass';
-import {timer} from './timer';
+import { Observable } from "./observable";
+import { assert } from "./asserts";
+import { calcVelocity } from "./motion";
+import { Pass } from "./pass";
+import { timer } from "./timer";
 
-const PROP_ = '__AMP_Gestures';
-
+const PROP_ = "__AMP_Gestures";
 
 /**
  * A gesture object contains the type and data of the gesture such as
@@ -51,7 +50,6 @@ export class Gesture {
   }
 }
 
-
 /**
  * Gestures object manages all gestures on a particular element. It listens
  * to all pointer events and delegates them to individual gesture recognizers.
@@ -60,7 +58,6 @@ export class Gesture {
  * between competing recognizers to decide which gesture should go forward.
  */
 export class Gestures {
-
   /**
    * Creates if not yet created and returns the shared Gestures instance for
    * the specified element.
@@ -126,20 +123,20 @@ export class Gestures {
     /** @private @const {function(!Event)} */
     this.boundOnTouchCancel_ = this.onTouchCancel_.bind(this);
 
-    this.element_.addEventListener('touchstart', this.boundOnTouchStart_);
-    this.element_.addEventListener('touchend', this.boundOnTouchEnd_);
-    this.element_.addEventListener('touchmove', this.boundOnTouchMove_);
-    this.element_.addEventListener('touchcancel', this.boundOnTouchCancel_);
+    this.element_.addEventListener("touchstart", this.boundOnTouchStart_);
+    this.element_.addEventListener("touchend", this.boundOnTouchEnd_);
+    this.element_.addEventListener("touchmove", this.boundOnTouchMove_);
+    this.element_.addEventListener("touchcancel", this.boundOnTouchCancel_);
   }
 
   /**
    * Unsubscribes from all pointer events.
    */
   cleanup() {
-    this.element_.removeEventListener('touchstart', this.boundOnTouchStart_);
-    this.element_.removeEventListener('touchend', this.boundOnTouchEnd_);
-    this.element_.removeEventListener('touchmove', this.boundOnTouchMove_);
-    this.element_.removeEventListener('touchcancel', this.boundOnTouchCancel_);
+    this.element_.removeEventListener("touchstart", this.boundOnTouchStart_);
+    this.element_.removeEventListener("touchend", this.boundOnTouchEnd_);
+    this.element_.removeEventListener("touchmove", this.boundOnTouchMove_);
+    this.element_.removeEventListener("touchcancel", this.boundOnTouchCancel_);
     this.pass_.cancel();
   }
 
@@ -351,12 +348,16 @@ export class Gestures {
    * @private
    */
   signalEmit_(recognizer, data, event) {
-    assert(this.eventing_ == recognizer,
-        'Recognizer is not currently allowed: %s', recognizer.getType());
+    assert(
+      this.eventing_ == recognizer,
+      "Recognizer is not currently allowed: %s",
+      recognizer.getType()
+    );
     let overserver = this.overservers_[recognizer.getType()];
     if (overserver) {
-      overserver.fire(new Gesture(recognizer.getType(), data, timer.now(),
-          event));
+      overserver.fire(
+        new Gesture(recognizer.getType(), data, timer.now(), event)
+      );
     }
   }
 
@@ -370,8 +371,7 @@ export class Gestures {
     if (!cancelEvent) {
       let now = timer.now();
       for (let i = 0; i < this.recognizers_.length; i++) {
-        if (this.ready_[i] ||
-                this.pending_[i] && this.pending_[i] >= now) {
+        if (this.ready_[i] || (this.pending_[i] && this.pending_[i] >= now)) {
           cancelEvent = true;
           break;
         }
@@ -485,7 +485,6 @@ export class Gestures {
   }
 }
 
-
 /**
  * The gesture recognizer receives the pointer events from Gestures instance.
  * Based on these events, it can "recognize" the gesture it's responsible for,
@@ -514,7 +513,6 @@ export class Gestures {
  * @template DATA
  */
 export class GestureRecognizer {
-
   /**
    * @oaram {string} type
    * @param {!Gestures} manager
@@ -587,15 +585,13 @@ export class GestureRecognizer {
    * state. It will be in this state until it calls {@link signalEnd} or
    * the {@link acceptCancel} is called by the Gestures instance.
    */
-  acceptStart() {
-  }
+  acceptStart() {}
 
   /**
    * The Gestures instance calls this method to reset the recognizer. At this
    * point the recognizer is in the intial waiting state.
    */
-  acceptCancel() {
-  }
+  acceptCancel() {}
 
   /**
    * The Gestures instance calls this method for each "touchstart" event. If
@@ -626,6 +622,5 @@ export class GestureRecognizer {
    * next touch series.
    * @param {!Event} event
    */
-  onTouchEnd(event) {
-  }
+  onTouchEnd(event) {}
 }

@@ -23,7 +23,7 @@ Either way, the keys for the arguments needed are listed below, respective to th
     :post_suite
     :pre_cleanup
 
-*Note* that one difference between the two methods is that if you provide the options via the CLI, we support various input methods such as specifying individual files vs paths to folders. The second option (providing keys to config files) only works if each file is fully specified. Beaker will not find all files in a directory in the second case, that expansion is only done on the CLI inputs.
+_Note_ that one difference between the two methods is that if you provide the options via the CLI, we support various input methods such as specifying individual files vs paths to folders. The second option (providing keys to config files) only works if each file is fully specified. Beaker will not find all files in a directory in the second case, that expansion is only done on the CLI inputs.
 
 # Suite Details, & Failure Mode Behavior
 

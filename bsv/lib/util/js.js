@@ -1,7 +1,7 @@
-'use strict'
+"use strict";
 
-var _ = require('../util/_')
-var $ = require('./preconditions')
+var _ = require("../util/_");
+var $ = require("./preconditions");
 
 /**
  * Determines whether a string contains only hexadecimal values
@@ -10,12 +10,12 @@ var $ = require('./preconditions')
  * @param {string} value
  * @return {boolean} true if the string is the hexa representation of a number
  */
-var isHexa = function isHexa (value) {
+var isHexa = function isHexa(value) {
   if (!_.isString(value)) {
-    return false
+    return false;
   }
-  return /^[0-9a-fA-F]+$/.test(value)
-}
+  return /^[0-9a-fA-F]+$/.test(value);
+};
 
 /**
  * @namespace JSUtil
@@ -28,20 +28,20 @@ module.exports = {
    * @param {string} arg
    * @return {Object|boolean} false if the argument is not a JSON string.
    */
-  isValidJSON: function isValidJSON (arg) {
-    var parsed
+  isValidJSON: function isValidJSON(arg) {
+    var parsed;
     if (!_.isString(arg)) {
-      return false
+      return false;
     }
     try {
-      parsed = JSON.parse(arg)
+      parsed = JSON.parse(arg);
     } catch (e) {
-      return false
+      return false;
     }
-    if (typeof (parsed) === 'object') {
-      return true
+    if (typeof parsed === "object") {
+      return true;
     }
-    return false
+    return false;
   },
   isHexa: isHexa,
   isHexaString: isHexa,
@@ -53,15 +53,15 @@ module.exports = {
    * @param {Object} values - An object of properties
    * @return {Object} The target object
    */
-  defineImmutable: function defineImmutable (target, values) {
+  defineImmutable: function defineImmutable(target, values) {
     Object.keys(values).forEach(function (key) {
       Object.defineProperty(target, key, {
         configurable: false,
         enumerable: true,
-        value: values[key]
-      })
-    })
-    return target
+        value: values[key],
+      });
+    });
+    return target;
   },
   /**
    * Checks that a value is a natural number, a positive integer or zero.
@@ -69,11 +69,13 @@ module.exports = {
    * @param {*} value
    * @return {Boolean}
    */
-  isNaturalNumber: function isNaturalNumber (value) {
-    return typeof value === 'number' &&
+  isNaturalNumber: function isNaturalNumber(value) {
+    return (
+      typeof value === "number" &&
       isFinite(value) &&
       Math.floor(value) === value &&
       value >= 0
+    );
   },
 
   /**
@@ -82,10 +84,10 @@ module.exports = {
    * @param {number} integer
    * @return {Buffer}
    */
-  integerAsBuffer: function integerAsBuffer (integer) {
-    $.checkArgumentType(integer, 'number', 'integer')
-    const buf = Buffer.allocUnsafe(4)
-    buf.writeUInt32BE(integer, 0)
-    return buf
-  }
-}
+  integerAsBuffer: function integerAsBuffer(integer) {
+    $.checkArgumentType(integer, "number", "integer");
+    const buf = Buffer.allocUnsafe(4);
+    buf.writeUInt32BE(integer, 0);
+    return buf;
+  },
+};

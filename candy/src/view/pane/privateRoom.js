@@ -9,7 +9,7 @@
  *   (c) 2011 Amiado Group AG. All rights reserved.
  *   (c) 2012-2014 Patrick Stadler & Michael Weibel. All rights reserved.
  */
-'use strict';
+"use strict";
 
 /* global Candy, Strophe, jQuery */
 
@@ -20,8 +20,7 @@
  *   (Candy.View.Pane) self - itself
  *   (jQuery) $ - jQuery
  */
-Candy.View.Pane = (function(self, $) {
-
+Candy.View.Pane = (function (self, $) {
   /** Class: Candy.View.Pane.PrivateRoom
    * Private room handling
    */
@@ -40,12 +39,14 @@ Candy.View.Pane = (function(self, $) {
      * Triggers:
      *   candy:view.private-room.after-open using {roomJid, type, element}
      */
-    open: function(roomJid, roomName, switchToRoom, isNoConferenceRoomJid) {
-      var user = isNoConferenceRoomJid ? Candy.Core.getUser() : self.Room.getUser(Strophe.getBareJidFromJid(roomJid)),
+    open: function (roomJid, roomName, switchToRoom, isNoConferenceRoomJid) {
+      var user = isNoConferenceRoomJid
+          ? Candy.Core.getUser()
+          : self.Room.getUser(Strophe.getBareJidFromJid(roomJid)),
         evtData = {
-          'roomJid': roomJid,
-          'roomName': roomName,
-          'type': 'chat',
+          roomJid: roomJid,
+          roomName: roomName,
+          type: "chat",
         };
 
       /** Event: candy:view.private-room.before-open
@@ -59,32 +60,44 @@ Candy.View.Pane = (function(self, $) {
        * Returns:
        *   Boolean - if you don't want to open the private room, return false
        */
-      if($(Candy).triggerHandler('candy:view.private-room.before-open', evtData) === false) {
+      if (
+        $(Candy).triggerHandler(
+          "candy:view.private-room.before-open",
+          evtData
+        ) === false
+      ) {
         return false;
       }
 
       // if target user is in privacy list, don't open the private chat.
-      if (Candy.Core.getUser().isInPrivacyList('ignore', roomJid)) {
+      if (Candy.Core.getUser().isInPrivacyList("ignore", roomJid)) {
         return false;
       }
-      if(!self.Chat.rooms[roomJid]) {
-        if(self.Room.init(roomJid, roomName, 'chat') === false) {
+      if (!self.Chat.rooms[roomJid]) {
+        if (self.Room.init(roomJid, roomName, "chat") === false) {
           return false;
         }
       }
-      if(switchToRoom) {
+      if (switchToRoom) {
         self.Room.show(roomJid);
       }
 
-      self.Roster.update(roomJid, new Candy.Core.ChatUser(roomJid, roomName), 'join', user);
-      self.Roster.update(roomJid, user, 'join', user);
-      self.PrivateRoom.setStatus(roomJid, 'join');
-
-
+      self.Roster.update(
+        roomJid,
+        new Candy.Core.ChatUser(roomJid, roomName),
+        "join",
+        user
+      );
+      self.Roster.update(roomJid, user, "join", user);
+      self.PrivateRoom.setStatus(roomJid, "join");
 
       // We can't track the presence of a user if it's not a conference jid
-      if(isNoConferenceRoomJid) {
-        self.Chat.infoMessage(roomJid, $.i18n._('presenceUnknownWarningSubject'), $.i18n._('presenceUnknownWarning'));
+      if (isNoConferenceRoomJid) {
+        self.Chat.infoMessage(
+          roomJid,
+          $.i18n._("presenceUnknownWarningSubject"),
+          $.i18n._("presenceUnknownWarning")
+        );
       }
 
       evtData.element = self.Room.getPane(roomJid);
@@ -96,7 +109,7 @@ Candy.View.Pane = (function(self, $) {
        *   (String) type - 'chat'
        *   (jQuery.Element) element - User element
        */
-      $(Candy).triggerHandler('candy:view.private-room.after-open', evtData);
+      $(Candy).triggerHandler("candy:view.private-room.after-open", evtData);
     },
 
     /** Function: setStatus
@@ -106,20 +119,20 @@ Candy.View.Pane = (function(self, $) {
      *   (String) roomJid - Private room jid
      *   (String) status - "leave"/"join"
      */
-    setStatus: function(roomJid, status) {
-      var messageForm = self.Room.getPane(roomJid, '.message-form');
-      if(status === 'join') {
-        self.Chat.getTab(roomJid).addClass('online').removeClass('offline');
+    setStatus: function (roomJid, status) {
+      var messageForm = self.Room.getPane(roomJid, ".message-form");
+      if (status === "join") {
+        self.Chat.getTab(roomJid).addClass("online").removeClass("offline");
 
-        messageForm.children('.field').removeAttr('disabled');
-        messageForm.children('.submit').removeAttr('disabled');
+        messageForm.children(".field").removeAttr("disabled");
+        messageForm.children(".submit").removeAttr("disabled");
 
         self.Chat.getTab(roomJid);
-      } else if(status === 'leave') {
-        self.Chat.getTab(roomJid).addClass('offline').removeClass('online');
+      } else if (status === "leave") {
+        self.Chat.getTab(roomJid).addClass("offline").removeClass("online");
 
-        messageForm.children('.field').attr('disabled', true);
-        messageForm.children('.submit').attr('disabled', true);
+        messageForm.children(".field").attr("disabled", true);
+        messageForm.children(".submit").attr("disabled", true);
       }
     },
 
@@ -131,10 +144,10 @@ Candy.View.Pane = (function(self, $) {
      *   (Candy.Core.ChatUser) user - User which changes his nick
      */
     changeNick: function changeNick(roomJid, user) {
-      Candy.Core.log('[View:Pane:PrivateRoom] changeNick');
+      Candy.Core.log("[View:Pane:PrivateRoom] changeNick");
 
-      var previousPrivateRoomJid = roomJid + '/' + user.getPreviousNick(),
-        newPrivateRoomJid = roomJid + '/' + user.getNick(),
+      var previousPrivateRoomJid = roomJid + "/" + user.getPreviousNick(),
+        newPrivateRoomJid = roomJid + "/" + user.getNick(),
         previousPrivateRoomId = Candy.Util.jidToId(previousPrivateRoomJid),
         newPrivateRoomId = Candy.Util.jidToId(newPrivateRoomJid),
         room = self.Chat.rooms[previousPrivateRoomJid],
@@ -147,42 +160,52 @@ Candy.View.Pane = (function(self, $) {
         self.Room.close(newPrivateRoomJid);
       }
 
-      if (room) { /* someone I talk with, changed nick */
+      if (room) {
+        /* someone I talk with, changed nick */
         room.name = user.getNick();
-        room.id   = newPrivateRoomId;
+        room.id = newPrivateRoomId;
 
         self.Chat.rooms[newPrivateRoomJid] = room;
         delete self.Chat.rooms[previousPrivateRoomJid];
 
-        roomElement = $('#chat-room-' + previousPrivateRoomId);
+        roomElement = $("#chat-room-" + previousPrivateRoomId);
         if (roomElement) {
-          roomElement.attr('data-roomjid', newPrivateRoomJid);
-          roomElement.attr('id', 'chat-room-' + newPrivateRoomId);
+          roomElement.attr("data-roomjid", newPrivateRoomJid);
+          roomElement.attr("id", "chat-room-" + newPrivateRoomId);
 
-          roomTabElement = $('#chat-tabs li[data-roomjid="' + previousPrivateRoomJid + '"]');
-          roomTabElement.attr('data-roomjid', newPrivateRoomJid);
+          roomTabElement = $(
+            '#chat-tabs li[data-roomjid="' + previousPrivateRoomJid + '"]'
+          );
+          roomTabElement.attr("data-roomjid", newPrivateRoomJid);
 
           /* TODO: The '@' is defined in the template. Somehow we should
            * extract both things into our CSS or do something else to prevent that.
            */
-          roomTabElement.children('a.label').text('@' + user.getNick());
+          roomTabElement.children("a.label").text("@" + user.getNick());
 
           if (Candy.View.getCurrent().roomJid === previousPrivateRoomJid) {
             Candy.View.getCurrent().roomJid = newPrivateRoomJid;
           }
         }
-      } else { /* I changed the nick */
-        roomElement = $('.room-pane.roomtype-chat[data-userjid="' + previousPrivateRoomJid + '"]');
+      } else {
+        /* I changed the nick */
+        roomElement = $(
+          '.room-pane.roomtype-chat[data-userjid="' +
+            previousPrivateRoomJid +
+            '"]'
+        );
         if (roomElement.length) {
-          previousPrivateRoomId = Candy.Util.jidToId(roomElement.attr('data-roomjid'));
-          roomElement.attr('data-userjid', newPrivateRoomJid);
+          previousPrivateRoomId = Candy.Util.jidToId(
+            roomElement.attr("data-roomjid")
+          );
+          roomElement.attr("data-userjid", newPrivateRoomJid);
         }
       }
       if (roomElement && roomElement.length) {
         self.Roster.changeNick(previousPrivateRoomId, user);
       }
-    }
+    },
   };
 
   return self;
-}(Candy.View.Pane || {}, jQuery));
+})(Candy.View.Pane || {}, jQuery);

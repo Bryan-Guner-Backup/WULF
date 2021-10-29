@@ -5,11 +5,11 @@
 ![bottle](./bottle2.png)
 
 > Did you know that you can upload files directly to the Bitcoin network, as permanent, immutable, and monetizable Bitcoin transactions?
-> 
+>
 > These files can be all sorts of things like documents, images, and videos, and can be combined to make other things, like applications or interactive pages.
-> 
+>
 > With files, you can publish things that reference one another through URI schemes.
-> 
+>
 > And because it's on the blockchain, ownership is provable, the content is permanent, and it can be directly monetized forever.
 
 Bottle is a browser that lets you surf the Bitcoin network for these things, and brings them all together through Bitcoin native URI schemes such as [B://](https://b.bitdb.network) or [C://](https://c.bitdb.network) (or any other protocols we add in the future).

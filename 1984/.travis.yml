@@ -4,7 +4,7 @@ node_js: "node"
 before_deploy:
   - npm run build
   - mv site/1984.html site/index.html
-  
+
 deploy:
   provider: surge
   on:
@@ -12,4 +12,3 @@ deploy:
   skip_cleanup: true
   domain: 1984.surge.sh
   project: site/
-  

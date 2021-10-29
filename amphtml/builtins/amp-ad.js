@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-import {BaseElement} from '../src/base-element';
-import {isLayoutSizeDefined} from '../src/layout';
-import {setStyles} from '../src/style';
-import {loadPromise} from '../src/event-helper';
-import {registerElement} from '../src/custom-element';
-import {getIframe, listen} from '../src/3p-frame';
-
+import { BaseElement } from "../src/base-element";
+import { isLayoutSizeDefined } from "../src/layout";
+import { setStyles } from "../src/style";
+import { loadPromise } from "../src/event-helper";
+import { registerElement } from "../src/custom-element";
+import { getIframe, listen } from "../src/3p-frame";
 
 /**
  * Preview phase only default backfill for ads. If the ad
@@ -28,17 +27,14 @@ import {getIframe, listen} from '../src/3p-frame';
  * @private @const
  */
 const BACKFILL_IMGS_ = {
-  '300x200': [
-    'backfill-1@1x.png',
-    'backfill-2@1x.png',
-    'backfill-3@1x.png',
-    'backfill-4@1x.png',
-    'backfill-5@1x.png',
+  "300x200": [
+    "backfill-1@1x.png",
+    "backfill-2@1x.png",
+    "backfill-3@1x.png",
+    "backfill-4@1x.png",
+    "backfill-5@1x.png",
   ],
-  '320x50': [
-    'backfill-6@1x.png',
-    'backfill-7@1x.png',
-  ],
+  "320x50": ["backfill-6@1x.png", "backfill-7@1x.png"],
 };
 
 /** @private @const */
@@ -55,7 +51,7 @@ const BACKFILL_DIMENSIONS_ = [
  * @visibleForTesting
  */
 export function scoreDimensions_(dims, maxWidth, maxHeight) {
-  return dims.map(function(dim) {
+  return dims.map(function (dim) {
     let [width, height] = dim;
     let widthScore = Math.abs(width - maxWidth);
     // if the width is over the max then we need to penalize it
@@ -65,7 +61,7 @@ export function scoreDimensions_(dims, maxWidth, maxHeight) {
     // if the height is over the max then we need to penalize it
     let heightPenalty = Math.abs((maxHeight - height) * 2.5);
 
-    return (widthScore - widthPenalty) + (heightScore - heightPenalty);
+    return widthScore - widthPenalty + (heightScore - heightPenalty);
   });
 }
 
@@ -78,11 +74,10 @@ export function upgradeImages_(images) {
   Object.keys(images).forEach((key) => {
     let curDimImgs = images[key];
     curDimImgs.forEach((item, index) => {
-      curDimImgs[index] = item.replace(/@1x\.png$/, '@2x.png');
+      curDimImgs[index] = item.replace(/@1x\.png$/, "@2x.png");
     });
   });
 }
-
 
 /**
  * @param {!Window} win Destination window for the new element.
@@ -91,7 +86,6 @@ export function upgradeImages_(images) {
  */
 export function installAd(win) {
   class AmpAd extends BaseElement {
-
     /** @override */
     createdCallback() {
       this.preconnect.threePFrame();
@@ -125,7 +119,7 @@ export function installAd(win) {
     /** @override */
     buildCallback() {
       if (this.placeholder_) {
-        this.placeholder_.classList.add('hidden');
+        this.placeholder_.classList.add("hidden");
       } else {
         this.isDefaultPlaceholder_ = true;
         if (this.getDpr() >= 0.5) {
@@ -137,13 +131,15 @@ export function installAd(win) {
     /** @override */
     layoutCallback() {
       if (!this.iframe_) {
-        this.iframe_ = getIframe(this.element.ownerDocument.defaultView,
-            this.element);
+        this.iframe_ = getIframe(
+          this.element.ownerDocument.defaultView,
+          this.element
+        );
         this.applyFillContent(this.iframe_);
         this.element.appendChild(this.iframe_);
 
         // Triggered by context.noContentAvailable() inside the ad iframe.
-        listen(this.iframe_, 'no-content', () => {
+        listen(this.iframe_, "no-content", () => {
           // NOTE(erwinm): guard against an iframe firing off no-content twice.
           // since there is currently no way to `unlisten`.
           if (this.isDefaultPlaceholder_ && !this.isDefaultPlaceholderSet_) {
@@ -152,7 +148,7 @@ export function installAd(win) {
             this.element.removeChild(this.iframe_);
             this.isDefaultPlaceholderSet_ = true;
           }
-          this.placeholder_.classList.remove('hidden');
+          this.placeholder_.classList.remove("hidden");
         });
       }
       return loadPromise(this.iframe_);
@@ -166,16 +162,16 @@ export function installAd(win) {
      * @visibleForTesting
      */
     setDefaultPlaceholder_() {
-      var a = document.createElement('a');
-      a.href = 'https://www.ampproject.org';
-      a.target = '_blank';
-      a.setAttribute('placeholder', '');
-      a.classList.add('hidden');
+      var a = document.createElement("a");
+      a.href = "https://www.ampproject.org";
+      a.target = "_blank";
+      a.setAttribute("placeholder", "");
+      a.classList.add("hidden");
       var img = new Image();
       setStyles(img, {
-        width: 'auto',
-        height: '100%',
-        margin: 'auto',
+        width: "auto",
+        height: "100%",
+        margin: "auto",
       });
 
       let winner = this.getPlaceholderImage_();
@@ -191,15 +187,17 @@ export function installAd(win) {
      * @return {string} The image URL.
      */
     getPlaceholderImage_() {
-      let scores = scoreDimensions_(BACKFILL_DIMENSIONS_,
-          this.element./*REVIEW*/clientWidth,
-          this.element./*REVIEW*/clientHeight);
+      let scores = scoreDimensions_(
+        BACKFILL_DIMENSIONS_,
+        this.element./*REVIEW*/ clientWidth,
+        this.element./*REVIEW*/ clientHeight
+      );
       let dims = BACKFILL_DIMENSIONS_[scores.indexOf(Math.max(...scores))];
-      let images = BACKFILL_IMGS_[dims.join('x')];
+      let images = BACKFILL_IMGS_[dims.join("x")];
       // do we need a more sophisticated randomizer?
       return images[Math.floor(Math.random() * images.length)];
     }
-  };
+  }
 
-  registerElement(win, 'amp-ad', AmpAd);
+  registerElement(win, "amp-ad", AmpAd);
 }

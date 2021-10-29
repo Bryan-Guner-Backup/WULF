@@ -1,5 +1,5 @@
 ---
-title: 'Example: Diff, commit, revert'
+title: "Example: Diff, commit, revert"
 section: webAPIs
 sectionTitle: Web APIs
 order: 8

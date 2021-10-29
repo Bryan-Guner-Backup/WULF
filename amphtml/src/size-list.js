@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-import {assert} from './asserts';
-import {assertLength} from './layout';
-
+import { assert } from "./asserts";
+import { assertLength } from "./layout";
 
 /**
  * A single option within a SizeList.
@@ -26,7 +25,6 @@ import {assertLength} from './layout';
  * }}
  */
 var SizeListOption;
-
 
 /**
  * Parses the text representation of "sizes" into SizeList object.
@@ -42,18 +40,18 @@ var SizeListOption;
  * @return {!SizeList}
  */
 export function parseSizeList(s) {
-  let sSizes = s.split(',');
-  assert(sSizes.length > 0, 'sizes has to have at least one size');
+  let sSizes = s.split(",");
+  assert(sSizes.length > 0, "sizes has to have at least one size");
   let sizes = [];
   sSizes.forEach((sSize) => {
-    sSize = sSize.replace(/\s+/g, ' ').trim();
+    sSize = sSize.replace(/\s+/g, " ").trim();
     if (sSize.length == 0) {
       return;
     }
 
     let mediaStr;
     let sizeStr;
-    let spaceIndex = sSize.lastIndexOf(' ');
+    let spaceIndex = sSize.lastIndexOf(" ");
     if (spaceIndex != -1) {
       mediaStr = sSize.substring(0, spaceIndex).trim();
       sizeStr = sSize.substring(spaceIndex + 1).trim();
@@ -61,11 +59,10 @@ export function parseSizeList(s) {
       sizeStr = sSize;
       mediaStr = undefined;
     }
-    sizes.push({mediaQuery: mediaStr, size: assertLength(sizeStr)});
+    sizes.push({ mediaQuery: mediaStr, size: assertLength(sizeStr) });
   });
   return new SizeList(sizes);
-};
-
+}
 
 /**
  * A SizeList object contains one or more sizes as typically seen in "sizes"
@@ -81,7 +78,7 @@ export class SizeList {
    * @param {!Array<!SizeListOption>} sizes
    */
   constructor(sizes) {
-    assert(sizes.length > 0, 'SizeList must have at least one option');
+    assert(sizes.length > 0, "SizeList must have at least one option");
     /** @private @const {!Array<!SizeListOption>} */
     this.sizes_ = sizes;
 
@@ -90,11 +87,15 @@ export class SizeList {
     for (let i = 0; i < sizes.length; i++) {
       let option = sizes[i];
       if (i < sizes.length - 1) {
-        assert(option.mediaQuery,
-            'All options except for the last must have a media condition');
+        assert(
+          option.mediaQuery,
+          "All options except for the last must have a media condition"
+        );
       } else {
-        assert(!option.mediaQuery,
-            'The last option must not have a media condition');
+        assert(
+          !option.mediaQuery,
+          "The last option must not have a media condition"
+        );
       }
     }
   }

@@ -1,9 +1,9 @@
-'use strict'
+"use strict";
 
-var hash = require('hash.js')
-var $ = require('../util/preconditions')
+var hash = require("hash.js");
+var $ = require("../util/preconditions");
 
-var Hash = module.exports
+var Hash = module.exports;
 
 /**
  * A SHA or SHA1 hash, which is always 160 bits or 20 bytes long.
@@ -15,11 +15,11 @@ var Hash = module.exports
  * @returns {Buffer} The hash in the form of a buffer.
  */
 Hash.sha1 = function (buf) {
-  $.checkArgument(Buffer.isBuffer(buf))
-  return Buffer.from(hash.sha1().update(buf).digest('hex'), 'hex')
-}
+  $.checkArgument(Buffer.isBuffer(buf));
+  return Buffer.from(hash.sha1().update(buf).digest("hex"), "hex");
+};
 
-Hash.sha1.blocksize = 512
+Hash.sha1.blocksize = 512;
 
 /**
  * A SHA256 hash, which is always 256 bits or 32 bytes long.
@@ -31,11 +31,11 @@ Hash.sha1.blocksize = 512
  * @returns {Buffer} The hash in the form of a buffer.
  */
 Hash.sha256 = function (buf) {
-  $.checkArgument(Buffer.isBuffer(buf))
-  return Buffer.from(hash.sha256().update(buf).digest('hex'), 'hex')
-}
+  $.checkArgument(Buffer.isBuffer(buf));
+  return Buffer.from(hash.sha256().update(buf).digest("hex"), "hex");
+};
 
-Hash.sha256.blocksize = 512
+Hash.sha256.blocksize = 512;
 
 /**
  * A double SHA256 hash, which is always 256 bits or 32 bytes bytes long. This
@@ -49,9 +49,9 @@ Hash.sha256.blocksize = 512
  * @returns {Buffer} The hash in the form of a buffer.
  */
 Hash.sha256sha256 = function (buf) {
-  $.checkArgument(Buffer.isBuffer(buf))
-  return Hash.sha256(Hash.sha256(buf))
-}
+  $.checkArgument(Buffer.isBuffer(buf));
+  return Hash.sha256(Hash.sha256(buf));
+};
 
 /**
  * A RIPEMD160 hash, which is always 160 bits or 20 bytes long.
@@ -63,9 +63,9 @@ Hash.sha256sha256 = function (buf) {
  * @returns {Buffer} The hash in the form of a buffer.
  */
 Hash.ripemd160 = function (buf) {
-  $.checkArgument(Buffer.isBuffer(buf))
-  return Buffer.from(hash.ripemd160().update(buf).digest('hex'), 'hex')
-}
+  $.checkArgument(Buffer.isBuffer(buf));
+  return Buffer.from(hash.ripemd160().update(buf).digest("hex"), "hex");
+};
 /**
  * A RIPEMD160 hash of a SHA256 hash, which is always 160 bits or 20 bytes long.
  * This value is commonly used inside Bitcoin, particularly for Bitcoin
@@ -78,9 +78,9 @@ Hash.ripemd160 = function (buf) {
  * @returns {Buffer} The hash in the form of a buffer.
  */
 Hash.sha256ripemd160 = function (buf) {
-  $.checkArgument(Buffer.isBuffer(buf))
-  return Hash.ripemd160(Hash.sha256(buf))
-}
+  $.checkArgument(Buffer.isBuffer(buf));
+  return Hash.ripemd160(Hash.sha256(buf));
+};
 
 /**
  * A SHA512 hash, which is always 512 bits or 64 bytes long.
@@ -92,11 +92,11 @@ Hash.sha256ripemd160 = function (buf) {
  * @returns {Buffer} The hash in the form of a buffer.
  */
 Hash.sha512 = function (buf) {
-  $.checkArgument(Buffer.isBuffer(buf))
-  return Buffer.from(hash.sha512().update(buf).digest('hex'), 'hex')
-}
+  $.checkArgument(Buffer.isBuffer(buf));
+  return Buffer.from(hash.sha512().update(buf).digest("hex"), "hex");
+};
 
-Hash.sha512.blocksize = 1024
+Hash.sha512.blocksize = 1024;
 
 /**
  * A way to do HMAC using any underlying hash function. If you ever find that
@@ -117,36 +117,36 @@ Hash.sha512.blocksize = 1024
 Hash.hmac = function (hashf, data, key) {
   // http://en.wikipedia.org/wiki/Hash-based_message_authentication_code
   // http://tools.ietf.org/html/rfc4868#section-2
-  $.checkArgument(Buffer.isBuffer(data))
-  $.checkArgument(Buffer.isBuffer(key))
-  $.checkArgument(hashf.blocksize)
+  $.checkArgument(Buffer.isBuffer(data));
+  $.checkArgument(Buffer.isBuffer(key));
+  $.checkArgument(hashf.blocksize);
 
-  var blocksize = hashf.blocksize / 8
+  var blocksize = hashf.blocksize / 8;
 
   if (key.length > blocksize) {
-    key = hashf(key)
+    key = hashf(key);
   } else if (key < blocksize) {
-    var fill = Buffer.alloc(blocksize)
-    fill.fill(0)
-    key.copy(fill)
-    key = fill
+    var fill = Buffer.alloc(blocksize);
+    fill.fill(0);
+    key.copy(fill);
+    key = fill;
   }
 
-  var oKey = Buffer.alloc(blocksize)
-  oKey.fill(0x5c)
+  var oKey = Buffer.alloc(blocksize);
+  oKey.fill(0x5c);
 
-  var iKey = Buffer.alloc(blocksize)
-  iKey.fill(0x36)
+  var iKey = Buffer.alloc(blocksize);
+  iKey.fill(0x36);
 
-  var oKeyPad = Buffer.alloc(blocksize)
-  var iKeyPad = Buffer.alloc(blocksize)
+  var oKeyPad = Buffer.alloc(blocksize);
+  var iKeyPad = Buffer.alloc(blocksize);
   for (var i = 0; i < blocksize; i++) {
-    oKeyPad[i] = oKey[i] ^ key[i]
-    iKeyPad[i] = iKey[i] ^ key[i]
+    oKeyPad[i] = oKey[i] ^ key[i];
+    iKeyPad[i] = iKey[i] ^ key[i];
   }
 
-  return hashf(Buffer.concat([oKeyPad, hashf(Buffer.concat([iKeyPad, data]))]))
-}
+  return hashf(Buffer.concat([oKeyPad, hashf(Buffer.concat([iKeyPad, data]))]));
+};
 
 /**
  * A SHA256 HMAC.
@@ -156,8 +156,8 @@ Hash.hmac = function (hashf, data, key) {
  * @returns {Buffer} The HMAC in the form of a buffer.
  */
 Hash.sha256hmac = function (data, key) {
-  return Hash.hmac(Hash.sha256, data, key)
-}
+  return Hash.hmac(Hash.sha256, data, key);
+};
 
 /**
  * A SHA512 HMAC.
@@ -167,5 +167,5 @@ Hash.sha256hmac = function (data, key) {
  * @returns {Buffer} The HMAC in the form of a buffer.
  */
 Hash.sha512hmac = function (data, key) {
-  return Hash.hmac(Hash.sha512, data, key)
-}
+  return Hash.hmac(Hash.sha512, data, key);
+};

@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('./parser')(process.argv, 'kill');
+require("./parser")(process.argv, "kill");

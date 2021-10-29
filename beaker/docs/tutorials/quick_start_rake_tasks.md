@@ -4,8 +4,8 @@ We have developed some rake tasks to help new Beaker users get up and running qu
 
 ## Pre-requisites
 
-* You will need to have already completed the Beaker installation tutorial - [Beaker Installation](installation.md)
-* Hypervisors are services that provision SUTs for Beaker. We have made two available in this quick start guide to allow you to get up and running. See the docs on how to setup [Vmpooler](https://github.com/puppetlabs/beaker-vmpooler/blob/master/vmpooler.md) and [Vagrant](https://github.com/puppetlabs/beaker-vagrant/blob/master/docs/vagrant.md).
+- You will need to have already completed the Beaker installation tutorial - [Beaker Installation](installation.md)
+- Hypervisors are services that provision SUTs for Beaker. We have made two available in this quick start guide to allow you to get up and running. See the docs on how to setup [Vmpooler](https://github.com/puppetlabs/beaker-vmpooler/blob/master/vmpooler.md) and [Vagrant](https://github.com/puppetlabs/beaker-vagrant/blob/master/docs/vagrant.md).
 
 ## How to use them
 
@@ -53,9 +53,9 @@ If you have the zsh shell then you will need to escape the square brackets:
 
 These tasks are standalone and can be run independently from each other to generate the desired files.
 
-* beaker_quickstart:gen_hosts  (generates default host config)
-* beaker_quickstart:gen_pre_suite  (generates default pre-suite)
-* beaker_quickstart:gen_smoke_test  (generates default smoke test)
+- beaker_quickstart:gen_hosts (generates default host config)
+- beaker_quickstart:gen_pre_suite (generates default pre-suite)
+- beaker_quickstart:gen_smoke_test (generates default smoke test)
 
 #### gen_hosts
 
@@ -179,7 +179,7 @@ smoke test file:
       step 'puppet install smoketest: verify \'puppet help\' can be successfully called on
       all hosts' do
             hosts.each do |host|
-              on host, puppet('help') 
+              on host, puppet('help')
             end
       end
     end

@@ -9,7 +9,7 @@
  *   (c) 2011 Amiado Group AG. All rights reserved.
  *   (c) 2012-2014 Patrick Stadler & Michael Weibel. All rights reserved.
  */
-'use strict';
+"use strict";
 
 /* global Candy, Mustache, Strophe, jQuery */
 
@@ -20,8 +20,7 @@
  *   (Candy.View.Pane) self - itself
  *   (jQuery) $ - jQuery
  */
-Candy.View.Pane = (function(self, $) {
-
+Candy.View.Pane = (function (self, $) {
   /** Class: Candy.View.Pane.Room
    * Everything which belongs to room view things belongs here.
    */
@@ -45,13 +44,13 @@ Candy.View.Pane = (function(self, $) {
      * Returns:
      *   (String) - the room id of the element created.
      */
-    init: function(roomJid, roomName, roomType) {
-      roomType = roomType || 'groupchat';
+    init: function (roomJid, roomName, roomType) {
+      roomType = roomType || "groupchat";
       roomJid = Candy.Util.unescapeJid(roomJid);
 
       var evtData = {
         roomJid: roomJid,
-        type: roomType
+        type: roomType,
       };
       /** Event: candy:view.room.before-add
        * Before initialising a room
@@ -63,35 +62,51 @@ Candy.View.Pane = (function(self, $) {
        * Returns:
        *   Boolean - if you don't want to initialise the room, return false.
        */
-      if($(Candy).triggerHandler('candy:view.room.before-add', evtData) === false) {
+      if (
+        $(Candy).triggerHandler("candy:view.room.before-add", evtData) === false
+      ) {
         return false;
       }
 
       // First room, show sound control
-      if(Candy.Util.isEmptyObject(self.Chat.rooms)) {
+      if (Candy.Util.isEmptyObject(self.Chat.rooms)) {
         self.Chat.Toolbar.show();
       }
 
       var roomId = Candy.Util.jidToId(roomJid);
-      self.Chat.rooms[roomJid] = {id: roomId, usercount: 0, name: roomName, type: roomType, messageCount: 0, scrollPosition: -1, targetJid: roomJid};
+      self.Chat.rooms[roomJid] = {
+        id: roomId,
+        usercount: 0,
+        name: roomName,
+        type: roomType,
+        messageCount: 0,
+        scrollPosition: -1,
+        targetJid: roomJid,
+      };
 
-      $('#chat-rooms').append(Mustache.to_html(Candy.View.Template.Room.pane, {
-        roomId: roomId,
-        roomJid: roomJid,
-        roomType: roomType,
-        form: {
-          _messageSubmit: $.i18n._('messageSubmit')
-        },
-        roster: {
-          _userOnline: $.i18n._('userOnline')
-        }
-      }, {
-        roster: Candy.View.Template.Roster.pane,
-        messages: Candy.View.Template.Message.pane,
-        form: Candy.View.Template.Room.form
-      }));
+      $("#chat-rooms").append(
+        Mustache.to_html(
+          Candy.View.Template.Room.pane,
+          {
+            roomId: roomId,
+            roomJid: roomJid,
+            roomType: roomType,
+            form: {
+              _messageSubmit: $.i18n._("messageSubmit"),
+            },
+            roster: {
+              _userOnline: $.i18n._("userOnline"),
+            },
+          },
+          {
+            roster: Candy.View.Template.Roster.pane,
+            messages: Candy.View.Template.Message.pane,
+            form: Candy.View.Template.Room.form,
+          }
+        )
+      );
       self.Chat.addTab(roomJid, roomName, roomType);
-      self.Room.getPane(roomJid, '.message-form').submit(self.Message.submit);
+      self.Room.getPane(roomJid, ".message-form").submit(self.Message.submit);
 
       evtData.element = self.Room.getPane(roomJid);
 
@@ -103,7 +118,7 @@ Candy.View.Pane = (function(self, $) {
        *   (String) type - Room Type
        *   (jQuery.Element) element - Room element
        */
-      $(Candy).triggerHandler('candy:view.room.after-add', evtData);
+      $(Candy).triggerHandler("candy:view.room.after-add", evtData);
 
       return roomId;
     },
@@ -118,18 +133,18 @@ Candy.View.Pane = (function(self, $) {
      *   candy:view.room.after-show using {roomJid, element}
      *   candy:view.room.after-hide using {roomJid, element}
      */
-    show: function(roomJid) {
+    show: function (roomJid) {
       var roomId = self.Chat.rooms[roomJid].id,
         evtData;
 
-      $('.room-pane').each(function() {
+      $(".room-pane").each(function () {
         var elem = $(this);
         evtData = {
-          'roomJid': elem.attr('data-roomjid'),
-          'element' : elem
+          roomJid: elem.attr("data-roomjid"),
+          element: elem,
         };
 
-        if(elem.attr('id') === ('chat-room-' + roomId)) {
+        if (elem.attr("id") === "chat-room-" + roomId) {
           elem.show();
           Candy.View.getCurrent().roomJid = roomJid;
           self.Chat.setActiveTab(roomJid);
@@ -145,8 +160,7 @@ Candy.View.Pane = (function(self, $) {
            *   (String) roomJid - Room JID
            *   (jQuery.Element) element - Room element
            */
-          $(Candy).triggerHandler('candy:view.room.after-show', evtData);
-
+          $(Candy).triggerHandler("candy:view.room.after-show", evtData);
         } else {
           elem.hide();
 
@@ -157,7 +171,7 @@ Candy.View.Pane = (function(self, $) {
            *   (String) roomJid - Room JID
            *   (jQuery.Element) element - Room element
            */
-          $(Candy).triggerHandler('candy:view.room.after-hide', evtData);
+          $(Candy).triggerHandler("candy:view.room.after-hide", evtData);
         }
       });
     },
@@ -172,15 +186,15 @@ Candy.View.Pane = (function(self, $) {
      *   (String) roomJid - Room Jid
      *   (String) subject - The new subject
      */
-    setSubject: function(roomJid, subject) {
+    setSubject: function (roomJid, subject) {
       subject = Candy.Util.Parser.linkify(Candy.Util.Parser.escape(subject));
       var timestamp = new Date();
       var html = Mustache.to_html(Candy.View.Template.Room.subject, {
         subject: subject,
         roomName: self.Chat.rooms[roomJid].name,
-        _roomSubject: $.i18n._('roomSubject'),
+        _roomSubject: $.i18n._("roomSubject"),
         time: Candy.Util.localizedTime(timestamp),
-        timestamp: timestamp.toISOString()
+        timestamp: timestamp.toISOString(),
       });
       self.Room.appendToMessagePane(roomJid, html);
       self.Room.scrollToBottom(roomJid);
@@ -193,10 +207,10 @@ Candy.View.Pane = (function(self, $) {
        *   (jQuery.Element) element - Room element
        *   (String) subject - New subject
        */
-      $(Candy).triggerHandler('candy:view.room.after-subject-change', {
-        'roomJid': roomJid,
-        'element' : self.Room.getPane(roomJid),
-        'subject' : subject
+      $(Candy).triggerHandler("candy:view.room.after-subject-change", {
+        roomJid: roomJid,
+        element: self.Room.getPane(roomJid),
+        subject: subject,
       });
     },
 
@@ -212,7 +226,7 @@ Candy.View.Pane = (function(self, $) {
      * Parameters:
      *   (String) roomJid - Room to close
      */
-    close: function(roomJid) {
+    close: function (roomJid) {
       self.Chat.removeTab(roomJid);
       self.Window.clearUnreadMessages();
 
@@ -222,13 +236,13 @@ Candy.View.Pane = (function(self, $) {
         This happens when form has no focus too. Maybe it's because of CSS positioning.
       */
       self.Room.getPane(roomJid).remove();
-      var openRooms = $('#chat-rooms').children();
-      if(Candy.View.getCurrent().roomJid === roomJid) {
+      var openRooms = $("#chat-rooms").children();
+      if (Candy.View.getCurrent().roomJid === roomJid) {
         Candy.View.getCurrent().roomJid = null;
-        if(openRooms.length === 0) {
+        if (openRooms.length === 0) {
           self.Chat.allTabsClosed();
         } else {
-          self.Room.show(openRooms.last().attr('data-roomjid'));
+          self.Room.show(openRooms.last().attr("data-roomjid"));
         }
       }
       delete self.Chat.rooms[roomJid];
@@ -239,8 +253,8 @@ Candy.View.Pane = (function(self, $) {
        * Parameters:
        *   (String) roomJid - Room JID
        */
-      $(Candy).triggerHandler('candy:view.room.after-close', {
-        'roomJid' : roomJid
+      $(Candy).triggerHandler("candy:view.room.after-close", {
+        roomJid: roomJid,
       });
     },
 
@@ -251,8 +265,8 @@ Candy.View.Pane = (function(self, $) {
      *   (String) roomJid - Room JID
      *   (String) html - rendered message html
      */
-    appendToMessagePane: function(roomJid, html) {
-      self.Room.getPane(roomJid, '.message-pane').append(html);
+    appendToMessagePane: function (roomJid, html) {
+      self.Room.getPane(roomJid, ".message-pane").append(html);
       self.Chat.rooms[roomJid].messageCount++;
       self.Room.sliceMessagePane(roomJid);
     },
@@ -267,12 +281,15 @@ Candy.View.Pane = (function(self, $) {
      * Parameters:
      *   (String) roomJid - Room JID
      */
-    sliceMessagePane: function(roomJid) {
+    sliceMessagePane: function (roomJid) {
       // Only clean if autoscroll is enabled
-      if(self.Window.autoscroll) {
+      if (self.Window.autoscroll) {
         var options = Candy.View.getOptions().messages;
-        if(self.Chat.rooms[roomJid].messageCount > options.limit) {
-          self.Room.getPane(roomJid, '.message-pane').children().slice(0, options.remove).remove();
+        if (self.Chat.rooms[roomJid].messageCount > options.limit) {
+          self.Room.getPane(roomJid, ".message-pane")
+            .children()
+            .slice(0, options.remove)
+            .remove();
           self.Chat.rooms[roomJid].messageCount -= options.remove;
         }
       }
@@ -287,7 +304,7 @@ Candy.View.Pane = (function(self, $) {
      * Uses:
      *   - <onScrollToBottom>
      */
-    scrollToBottom: function(roomJid) {
+    scrollToBottom: function (roomJid) {
       self.Room.onScrollToBottom(roomJid);
     },
 
@@ -297,11 +314,11 @@ Candy.View.Pane = (function(self, $) {
      * Parameters:
      *   (String) roomJid - Room JID
      */
-    onScrollToBottom: function(roomJid) {
-      var messagePane = self.Room.getPane(roomJid, '.message-pane');
+    onScrollToBottom: function (roomJid) {
+      var messagePane = self.Room.getPane(roomJid, ".message-pane");
 
       if (Candy.View.Pane.Chat.rooms[roomJid].enableScroll === true) {
-        messagePane.scrollTop(messagePane.prop('scrollHeight'));
+        messagePane.scrollTop(messagePane.prop("scrollHeight"));
       } else {
         return false;
       }
@@ -314,11 +331,11 @@ Candy.View.Pane = (function(self, $) {
      * Parameters:
      *   (String) roomJid - Room JID
      */
-    onScrollToStoredPosition: function(roomJid) {
+    onScrollToStoredPosition: function (roomJid) {
       // This should only apply when entering a room...
       // ... therefore we set scrollPosition to -1 after execution.
-      if(self.Chat.rooms[roomJid].scrollPosition > -1) {
-        var messagePane = self.Room.getPane(roomJid, '.message-pane-wrapper');
+      if (self.Chat.rooms[roomJid].scrollPosition > -1) {
+        var messagePane = self.Room.getPane(roomJid, ".message-pane-wrapper");
         messagePane.scrollTop(self.Chat.rooms[roomJid].scrollPosition);
         self.Chat.rooms[roomJid].scrollPosition = -1;
       }
@@ -330,13 +347,13 @@ Candy.View.Pane = (function(self, $) {
      * Parameters:
      *   (String) roomJid - Room JID
      */
-    setFocusToForm: function(roomJid) {
-      var pane = self.Room.getPane(roomJid, '.message-form');
+    setFocusToForm: function (roomJid) {
+      var pane = self.Room.getPane(roomJid, ".message-form");
       if (pane) {
         // IE8 will fail maybe, because the field isn't there yet.
         try {
-          pane.children('.field')[0].focus();
-        } catch(e) {
+          pane.children(".field")[0].focus();
+        } catch (e) {
           // fail silently
         }
       }
@@ -350,22 +367,22 @@ Candy.View.Pane = (function(self, $) {
      *   (String) roomJid - Room in which the user is set to.
      *   (Candy.Core.ChatUser) user - The user
      */
-    setUser: function(roomJid, user) {
+    setUser: function (roomJid, user) {
       self.Chat.rooms[roomJid].user = user;
       var roomPane = self.Room.getPane(roomJid),
-        chatPane = $('#chat-pane');
+        chatPane = $("#chat-pane");
 
-      roomPane.attr('data-userjid', user.getJid());
+      roomPane.attr("data-userjid", user.getJid());
       // Set classes based on user role / affiliation
-      if(user.isModerator()) {
+      if (user.isModerator()) {
         if (user.getRole() === user.ROLE_MODERATOR) {
-          chatPane.addClass('role-moderator');
+          chatPane.addClass("role-moderator");
         }
         if (user.getAffiliation() === user.AFFILIATION_OWNER) {
-          chatPane.addClass('affiliation-owner');
+          chatPane.addClass("affiliation-owner");
         }
       } else {
-        chatPane.removeClass('role-moderator affiliation-owner');
+        chatPane.removeClass("role-moderator affiliation-owner");
       }
       self.Chat.Context.init();
     },
@@ -379,7 +396,7 @@ Candy.View.Pane = (function(self, $) {
      * Returns:
      *   (Candy.Core.ChatUser) - user
      */
-    getUser: function(roomJid) {
+    getUser: function (roomJid) {
       return self.Chat.rooms[roomJid].user;
     },
 
@@ -390,7 +407,7 @@ Candy.View.Pane = (function(self, $) {
      *   (String) roomJid - Room in which the user should be ignored
      *   (String) userJid - User which should be ignored
      */
-    ignoreUser: function(roomJid, userJid) {
+    ignoreUser: function (roomJid, userJid) {
       Candy.Core.Action.Jabber.Room.IgnoreUnignore(userJid);
       Candy.View.Pane.Room.addIgnoreIcon(roomJid, userJid);
     },
@@ -402,7 +419,7 @@ Candy.View.Pane = (function(self, $) {
      *   (String) roomJid - Room in which the user should be unignored
      *   (String) userJid - User which should be unignored
      */
-    unignoreUser: function(roomJid, userJid) {
+    unignoreUser: function (roomJid, userJid) {
       Candy.Core.Action.Jabber.Room.IgnoreUnignore(userJid);
       Candy.View.Pane.Room.removeIgnoreIcon(roomJid, userJid);
     },
@@ -414,12 +431,22 @@ Candy.View.Pane = (function(self, $) {
      *   (String) roomJid - Room in which the roster item should be updated
      *   (String) userJid - User of which the roster item should be updated
      */
-    addIgnoreIcon: function(roomJid, userJid) {
+    addIgnoreIcon: function (roomJid, userJid) {
       if (Candy.View.Pane.Chat.rooms[userJid]) {
-        $('#user-' + Candy.View.Pane.Chat.rooms[userJid].id + '-' + Candy.Util.jidToId(userJid)).addClass('status-ignored');
+        $(
+          "#user-" +
+            Candy.View.Pane.Chat.rooms[userJid].id +
+            "-" +
+            Candy.Util.jidToId(userJid)
+        ).addClass("status-ignored");
       }
       if (Candy.View.Pane.Chat.rooms[Strophe.getBareJidFromJid(roomJid)]) {
-        $('#user-' + Candy.View.Pane.Chat.rooms[Strophe.getBareJidFromJid(roomJid)].id + '-' + Candy.Util.jidToId(userJid)).addClass('status-ignored');
+        $(
+          "#user-" +
+            Candy.View.Pane.Chat.rooms[Strophe.getBareJidFromJid(roomJid)].id +
+            "-" +
+            Candy.Util.jidToId(userJid)
+        ).addClass("status-ignored");
       }
     },
 
@@ -430,12 +457,22 @@ Candy.View.Pane = (function(self, $) {
      *   (String) roomJid - Room in which the roster item should be updated
      *   (String) userJid - User of which the roster item should be updated
      */
-    removeIgnoreIcon: function(roomJid, userJid) {
+    removeIgnoreIcon: function (roomJid, userJid) {
       if (Candy.View.Pane.Chat.rooms[userJid]) {
-        $('#user-' + Candy.View.Pane.Chat.rooms[userJid].id + '-' + Candy.Util.jidToId(userJid)).removeClass('status-ignored');
+        $(
+          "#user-" +
+            Candy.View.Pane.Chat.rooms[userJid].id +
+            "-" +
+            Candy.Util.jidToId(userJid)
+        ).removeClass("status-ignored");
       }
       if (Candy.View.Pane.Chat.rooms[Strophe.getBareJidFromJid(roomJid)]) {
-        $('#user-' + Candy.View.Pane.Chat.rooms[Strophe.getBareJidFromJid(roomJid)].id + '-' + Candy.Util.jidToId(userJid)).removeClass('status-ignored');
+        $(
+          "#user-" +
+            Candy.View.Pane.Chat.rooms[Strophe.getBareJidFromJid(roomJid)].id +
+            "-" +
+            Candy.Util.jidToId(userJid)
+        ).removeClass("status-ignored");
       }
     },
 
@@ -446,17 +483,19 @@ Candy.View.Pane = (function(self, $) {
      *   (String) roomJid - Room in which the pane lies
      *   (String) subPane - Sub pane of the chat room pane if needed [optional]
      */
-    getPane: function(roomJid, subPane) {
+    getPane: function (roomJid, subPane) {
       if (self.Chat.rooms[roomJid]) {
-        if(subPane) {
-          if(self.Chat.rooms[roomJid]['pane-' + subPane]) {
-            return self.Chat.rooms[roomJid]['pane-' + subPane];
+        if (subPane) {
+          if (self.Chat.rooms[roomJid]["pane-" + subPane]) {
+            return self.Chat.rooms[roomJid]["pane-" + subPane];
           } else {
-            self.Chat.rooms[roomJid]['pane-' + subPane] = $('#chat-room-' + self.Chat.rooms[roomJid].id).find(subPane);
-            return self.Chat.rooms[roomJid]['pane-' + subPane];
+            self.Chat.rooms[roomJid]["pane-" + subPane] = $(
+              "#chat-room-" + self.Chat.rooms[roomJid].id
+            ).find(subPane);
+            return self.Chat.rooms[roomJid]["pane-" + subPane];
           }
         } else {
-          return $('#chat-room-' + self.Chat.rooms[roomJid].id);
+          return $("#chat-room-" + self.Chat.rooms[roomJid].id);
         }
       }
     },
@@ -468,13 +507,18 @@ Candy.View.Pane = (function(self, $) {
      *   (String) roomId - Id of the room
      *   (Candy.Core.ChatUser) user - User
      */
-    changeDataUserJidIfUserIsMe: function(roomId, user) {
+    changeDataUserJidIfUserIsMe: function (roomId, user) {
       if (user.getNick() === Candy.Core.getUser().getNick()) {
-        var roomElement = $('#chat-room-' + roomId);
-        roomElement.attr('data-userjid', Strophe.getBareJidFromJid(roomElement.attr('data-userjid')) + '/' + user.getNick());
+        var roomElement = $("#chat-room-" + roomId);
+        roomElement.attr(
+          "data-userjid",
+          Strophe.getBareJidFromJid(roomElement.attr("data-userjid")) +
+            "/" +
+            user.getNick()
+        );
       }
-    }
+    },
   };
 
   return self;
-}(Candy.View.Pane || {}, jQuery));
+})(Candy.View.Pane || {}, jQuery);

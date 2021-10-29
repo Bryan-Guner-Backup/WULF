@@ -1,1 +1,1 @@
-module.exports = require('./electrum-ecies')
+module.exports = require("./electrum-ecies");

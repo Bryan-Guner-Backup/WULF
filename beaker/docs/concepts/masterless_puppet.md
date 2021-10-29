@@ -8,7 +8,7 @@ Masterless Puppet is a common way of running Puppet where you might have a numbe
 
 A few examples of common situations where running masterless Puppet would be useful are below:
 
-- Testing modules against Windows.  Traditionally, a non-Windows master would be required, but is really just needless overhead in this case.
+- Testing modules against Windows. Traditionally, a non-Windows master would be required, but is really just needless overhead in this case.
 - running Puppet to provision hosts, only running it the once, using `puppet agent`, and then providing it to your users
 
 ## How Do I Run Masterless?
@@ -29,7 +29,7 @@ If no host was given with this role, then Beaker throws a `DSL::Outcomes::FailTe
 
 ## What Does This Flag Do?
 
-Inside Beaker, when you call `Beaker::DSL::Roles` module's methods with the masterless flag set, Beaker will allow there to be hosts which don't fit defined roles.  If a host can't be found for a particular role, that role method will now return `nil`.
+Inside Beaker, when you call `Beaker::DSL::Roles` module's methods with the masterless flag set, Beaker will allow there to be hosts which don't fit defined roles. If a host can't be found for a particular role, that role method will now return `nil`.
 
 If you'd like to test both masterless and not, you'll have to deal with a role method potentially returning `nil`.
 

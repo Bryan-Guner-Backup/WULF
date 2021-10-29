@@ -34,26 +34,26 @@ It will not enable remotely-served styles, scripts, or objects.
 ```js
 // Request access
 var res = await navigator.permissions.request({
-  name: 'network',
-  hostname: 'github.com'
-})
-res.status // => 'granted'
+  name: "network",
+  hostname: "github.com",
+});
+res.status; // => 'granted'
 
 // Query access
 res = await navigator.permissions.query({
-  name: 'network',
-  hostname: 'github.com'
-})
-res.status // => 'granted'
+  name: "network",
+  hostname: "github.com",
+});
+res.status; // => 'granted'
 
 // Give up access
 res = await navigator.permissions.revoke({
-  name: 'network',
-  hostname: 'github.com'
-})
-res.status // => 'prompt'
+  name: "network",
+  hostname: "github.com",
+});
+res.status; // => 'prompt'
 ```
 
 The page must be refreshed for the policy-change to take effect.
 Multiple hosts can be requested; subsequent requests add hosts, rather than replacing the current allowed hosts.
-A wildcard string ('*') can be used to request or revoke access to all hosts.
+A wildcard string ('\*') can be used to request or revoke access to all hosts.

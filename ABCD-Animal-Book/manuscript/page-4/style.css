@@ -29,7 +29,7 @@ body {
 
 .aligator {
   position: absolute;
-  margin: 0 50px
+  margin: 0 50px;
 }
 
 .cabeza {
@@ -54,7 +54,7 @@ body {
   transform: rotate(75deg);
   -moz-transform: rotate(75deg);
   -webkit-transform: rotate(75deg);
-  margin: -6vw 19vw
+  margin: -6vw 19vw;
 }
 
 .boca::before {
@@ -64,7 +64,7 @@ body {
   height: 4vw;
   border-radius: 100%;
   background: #75b000;
-  margin: -2vw 0vw
+  margin: -2vw 0vw;
 }
 
 .boca::after {
@@ -74,7 +74,7 @@ body {
   height: 21vw;
   border-radius: 100%;
   border-right: 1vw solid #354405;
-  margin: -3vw 1.3vw
+  margin: -3vw 1.3vw;
 }
 
 .dientes {
@@ -107,7 +107,7 @@ body {
   height: 2vw;
   border-radius: 100vw;
   background: #354405;
-  margin: 0vw 1vw
+  margin: 0vw 1vw;
 }
 
 .nariz::before {
@@ -117,7 +117,7 @@ body {
   height: 2vw;
   border-radius: 100vw;
   background: #354405;
-  margin: -2vw 0vw
+  margin: -2vw 0vw;
 }
 
 .boca3 {
@@ -129,7 +129,7 @@ body {
   transform: rotate(-21deg);
   -moz-transform: rotate(-21deg);
   -webkit-transform: rotate(-21deg);
-  margin: 24vw 40vw
+  margin: 24vw 40vw;
 }
 
 .ojos {
@@ -142,7 +142,7 @@ body {
   transform: rotate(35deg);
   -moz-transform: rotate(35deg);
   -webkit-transform: rotate(35deg);
-  border: .5vw solid #354405;
+  border: 0.5vw solid #354405;
 }
 
 .ojos::before {
@@ -152,8 +152,8 @@ body {
   height: 2.5vw;
   border-radius: 100vw;
   background: #542106;
-  border: .8vw solid white;
-  margin: 1vw 1.5vw
+  border: 0.8vw solid white;
+  margin: 1vw 1.5vw;
 }
 
 .ojos3 {
@@ -162,7 +162,7 @@ body {
   height: 7vw;
   border-radius: 100vw;
   background: #75b000;
-  border: .5vw solid #354405;
+  border: 0.5vw solid #354405;
   margin: -5vw 4vw;
   transform: rotate(35deg);
   -moz-transform: rotate(35deg);
@@ -176,8 +176,8 @@ body {
   height: 2.5vw;
   border-radius: 100vw;
   background: #542106;
-  border: .8vw solid white;
-  margin: 1vw 2vw
+  border: 0.8vw solid white;
+  margin: 1vw 2vw;
 }
 
 .body {
@@ -186,8 +186,8 @@ body {
   height: 33vw;
   border-radius: 100%;
   background: #75b000;
-  border-right: .7vw solid #c4b400;
-  border-left: .7vw solid #c4b400;
+  border-right: 0.7vw solid #c4b400;
+  border-left: 0.7vw solid #c4b400;
   margin: 27vw 16vw;
   transform: rotate(21deg);
   -moz-transform: rotate(21deg);
@@ -251,7 +251,7 @@ body {
 }
 
 .c3 {
-  margin: 33vw 23vw
+  margin: 33vw 23vw;
 }
 
 .c1::before,
@@ -325,7 +325,7 @@ body {
   transform: rotate(130deg);
   -moz-transform: rotate(130deg);
   -webkit-transform: rotate(130deg);
-  margin: -2vw 12vw
+  margin: -2vw 12vw;
 }
 
 .ani {
@@ -458,7 +458,7 @@ body {
     margin: 0vw 0vw;
   }
   100% {
-    margin: -.1vw .3vw;
+    margin: -0.1vw 0.3vw;
   }
 }
 
@@ -467,7 +467,7 @@ body {
     margin: 0vw 0vw;
   }
   100% {
-    margin: -.1vw .3vw;
+    margin: -0.1vw 0.3vw;
   }
 }
 
@@ -476,6 +476,6 @@ body {
     margin: 0vw 0vw;
   }
   100% {
-    margin: -.1vw .3vw;
+    margin: -0.1vw 0.3vw;
   }
 }

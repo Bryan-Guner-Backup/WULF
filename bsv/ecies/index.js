@@ -1,1 +1,1 @@
-module.exports = require('../lib/ecies')
+module.exports = require("../lib/ecies");

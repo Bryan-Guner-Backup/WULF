@@ -22,8 +22,8 @@ The initial step in Beaker's pipeline is to execute spec testing with supported 
 
 All acceptance tests use actual OS's with beaker installed and use beaker itself to verify that its own methods and classes are working.
 
-* The Base tests are tests that do not require puppet be installed on the SUT. This includes much of the DSL and host helpers.
-* The puppet tests rely on puppet being installed in the pre-suite
+- The Base tests are tests that do not require puppet be installed on the SUT. This includes much of the DSL and host helpers.
+- The puppet tests rely on puppet being installed in the pre-suite
 
 ### Beaker Regression
 

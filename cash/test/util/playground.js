@@ -1,9 +1,8 @@
-'use strict';
+"use strict";
 
-const cash = require('../../dist/index.js');
+const cash = require("../../dist/index.js");
 
+let result = cash("fooo!!!!!");
 
-let result = cash('fooo!!!!!');
-
-console.log('!!!!!!!!!' + result);
-console.log('----------------');
+console.log("!!!!!!!!!" + result);
+console.log("----------------");

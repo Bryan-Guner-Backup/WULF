@@ -1,11 +1,11 @@
 ---
-date: '2011-05-03 10:05:22'
+date: "2011-05-03 10:05:22"
 layout: post
 slug: application-driven-philosophy
 status: publish
 title: Application driven philosophy
 categories:
-- post
+  - post
 ---
 
 In the set off statement of ccv, I listed one property of it to be "modern", which means rather than provides a truck-load of obsolete algorithms, ccv intended to provide best-of-its-kind algorithm among wide range of applications. Last September, I even went further and claimed that the first 4 applications for ccv would be: 1). object matching; 2). object detection; 3). text detection; 4). 3d reconstruction. These statements set the tone for ccv development known now as application-driven.

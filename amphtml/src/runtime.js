@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-import {BaseElement} from './base-element';
-import {assert} from './asserts';
-import {getMode} from './mode';
-import {installStyles} from './styles';
-import {registerElement} from './custom-element';
-import {registerExtendedElement} from './extended-element';
-import {viewerFor} from './viewer';
-import {viewportFor} from './viewport';
-
+import { BaseElement } from "./base-element";
+import { assert } from "./asserts";
+import { getMode } from "./mode";
+import { installStyles } from "./styles";
+import { registerElement } from "./custom-element";
+import { registerExtendedElement } from "./extended-element";
+import { viewerFor } from "./viewer";
+import { viewportFor } from "./viewport";
 
 /** @type {!Array} */
 const elementsForTesting = [];
-
 
 /**
  * Applies the runtime to a given global scope.
@@ -52,12 +50,12 @@ export function adopt(global) {
    *     the special variable $CSS$ in your code. It will be replaced with the
    *     CSS file associated with the element.
    */
-  global.AMP.registerElement = function(name, implementationClass, opt_css) {
-    var register = function() {
+  global.AMP.registerElement = function (name, implementationClass, opt_css) {
+    var register = function () {
       registerExtendedElement(global, name, implementationClass);
       elementsForTesting.push({
         name: name,
-        implementationClass: implementationClass
+        implementationClass: implementationClass,
       });
     };
     if (opt_css) {
@@ -65,7 +63,6 @@ export function adopt(global) {
     } else {
       register();
     }
-
   };
 
   /** @const */
@@ -96,7 +93,7 @@ export function adopt(global) {
    * Registers a new custom element.
    * @param {GlobalAmp} fn
    */
-  global.AMP.push = function(fn) {
+  global.AMP.push = function (fn) {
     preregisteredElements.push(fn);
     fn(global.AMP);
   };
@@ -107,7 +104,6 @@ export function adopt(global) {
     fn(global.AMP);
   }
 }
-
 
 /**
  * Registers all extended elements as normal elements in the given

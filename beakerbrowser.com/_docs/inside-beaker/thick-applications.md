@@ -37,9 +37,9 @@ Beaker’s architectural philosophy holds that all networked applications should
 
 The peer-to-peer features of Beaker results in three key properties.:
 
- 1. Any device can act as a server.
- 2. Multiple computers can serve the same site simultaneously.
- 3. There is no back end.
+1.  Any device can act as a server.
+2.  Multiple computers can serve the same site simultaneously.
+3.  There is no back end.
 
 These features enable users to publish independently of services, and move between applications freely. The rest of the architecture is built upon these ideas.
 

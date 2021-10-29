@@ -1,8 +1,7 @@
-database
-========
+# database
 
 [![Build Status](http://img.shields.io/travis/btcsuite/btcd.svg)]
-(https://travis-ci.org/btcsuite/btcd)  [![ISC License]
+(https://travis-ci.org/btcsuite/btcd) [![ISC License]
 (http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
 
 Package database provides a database interface for the bitcoin block chain and
@@ -39,28 +38,30 @@ $ go get github.com/btcsuite/btcd/database
 
 ## Examples
 
-* [CreateDB Example]
+- [CreateDB Example]
   (http://godoc.org/github.com/btcsuite/btcd/database#example-CreateDB)  
   Demonstrates creating a new database and inserting the genesis block into it.
 
-* [NewestSha Example]
+- [NewestSha Example]
   (http://godoc.org/github.com/btcsuite/btcd/database#example-Db--NewestSha)  
-  Demonstrates  querying the database for the most recent best block height and
+  Demonstrates querying the database for the most recent best block height and
   hash.
 
 ## TODO
+
 - Increase test coverage to 100%
 
 ## GPG Verification Key
 
 All official release tags are signed by Conformal so users can ensure the code
-has not been tampered with and is coming from the btcsuite developers.  To
+has not been tampered with and is coming from the btcsuite developers. To
 verify the signature perform the following:
 
 - Download the public key from the Conformal website at
   https://opensource.conformal.com/GIT-GPG-KEY-conformal.txt
 
 - Import the public key into your GPG keyring:
+
   ```bash
   gpg --import GIT-GPG-KEY-conformal.txt
   ```

@@ -14,29 +14,31 @@
  * limitations under the License.
  */
 
-
-var gulp = require('gulp');
-var eslint = require('gulp-eslint');
-var util = require('gulp-util');
-var config = require('../config');
+var gulp = require("gulp");
+var eslint = require("gulp-eslint");
+var util = require("gulp-util");
+var config = require("../config");
 
 var options = {
-  plugins: ['eslint-plugin-google-camelcase'],
+  plugins: ["eslint-plugin-google-camelcase"],
 };
 
 function lint() {
   var errorsFound = false;
-  return gulp.src(['**/*.js', config.src.exclude])
-      .pipe(eslint(options))
-      .pipe(eslint.formatEach('compact', function(msg) {
+  return gulp
+    .src(["**/*.js", config.src.exclude])
+    .pipe(eslint(options))
+    .pipe(
+      eslint.formatEach("compact", function (msg) {
         errorsFound = true;
         util.log(util.colors.red(msg));
-      }))
-      .on('end', function() {
-        if (errorsFound) {
-          process.exit(1);
-        }
-      });
+      })
+    )
+    .on("end", function () {
+      if (errorsFound) {
+        process.exit(1);
+      }
+    });
 }
 
-gulp.task('lint', lint);
+gulp.task("lint", lint);

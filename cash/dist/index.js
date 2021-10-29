@@ -1,17 +1,16 @@
-'use strict';
+"use strict";
 
-var _ = require('lodash');
-var os = require('os');
-var Vorpal = require('vorpal');
+var _ = require("lodash");
+var os = require("os");
+var Vorpal = require("vorpal");
 
-var commands = require('./../commands.json');
-var help = require('./help');
-var interfacer = require('./util/interfacer');
+var commands = require("./../commands.json");
+var help = require("./help");
+var interfacer = require("./util/interfacer");
 
 var cmds = undefined;
 
 var app = {
-
   commands: commands.commands,
 
   importedCommands: commands.importedCommands,
@@ -25,19 +24,19 @@ var app = {
   export: function _export(str, cbk) {
     cbk = cbk || function () {};
     var options = {
-      fatal: app._fatal || false
+      fatal: app._fatal || false,
     };
     // Hook stdin, execute the command and
     // then return it all.
-    var intercept = require('./util/intercept');
-    var out = '';
+    var intercept = require("./util/intercept");
+    var out = "";
     var unhook = intercept(function (str) {
-      out += str + '\n';
-      return '';
+      out += str + "\n";
+      return "";
     });
     app.vorpal.execSync(str, options);
     unhook();
-    return String(out).replace(/\n$/, '');
+    return String(out).replace(/\n$/, "");
   },
   load: function load() {
     var self = this;
@@ -48,16 +47,16 @@ var app = {
       }
       try {
         (function () {
-          var mod = require('./commands/' + cmd + '.js');
+          var mod = require("./commands/" + cmd + ".js");
           var help = undefined;
           try {
-            help = require('./help/' + cmd + '.js');
-            help = String(help).replace(/^\n|\n$/g, '');
+            help = require("./help/" + cmd + ".js");
+            help = String(help).replace(/^\n|\n$/g, "");
           } catch (e) {
             // .. whatever
           }
           self.vorpal.use(mod, {
-            parent: self
+            parent: self,
           });
           var cmdObj = self.vorpal.find(cmd);
           if (cmdObj && help) {
@@ -69,25 +68,25 @@ var app = {
         })();
       } catch (e) {
         /* istanbul ignore next */
-        self.vorpal.log('Error loading command ' + cmd + ': ', e);
+        self.vorpal.log("Error loading command " + cmd + ": ", e);
       }
     });
     this.importedCommands.forEach(function (cmd) {
       try {
-        var mod = require('vorpal-' + cmd);
+        var mod = require("vorpal-" + cmd);
         self.vorpal.use(mod, {
-          parent: self
+          parent: self,
         });
       } catch (e) {
         /* istanbul ignore next */
-        self.vorpal.log('Error loading command ' + cmd + ': ', e);
+        self.vorpal.log("Error loading command " + cmd + ": ", e);
       }
     });
 
     // If we're running Windows, register
     // process spawning for Windows child processes.
     // If on Linux, just does registers the .catch command.
-    var windows = require('./windows');
+    var windows = require("./windows");
     windows.registerCommands(self);
 
     var _loop = function _loop(cmd) {
@@ -102,7 +101,7 @@ var app = {
             options: options,
             callback: callback,
             async: app.vorpal.api[cmd].async || false,
-            silent: true
+            silent: true,
           });
         };
       }
@@ -112,9 +111,9 @@ var app = {
       _loop(cmd);
     }
 
-    app.vorpal.history('cash').localStorage('cash').help(help);
+    app.vorpal.history("cash").localStorage("cash").help(help);
 
-    app.vorpal.find('exit').action(function () {
+    app.vorpal.find("exit").action(function () {
       /* istanbul ignore next */
       process.exit(1);
     });
@@ -122,17 +121,17 @@ var app = {
     // Load aliases
     var all = undefined;
     try {
-      all = JSON.parse(app.vorpal.localStorage.getItem('aliases') || []);
+      all = JSON.parse(app.vorpal.localStorage.getItem("aliases") || []);
     } catch (e) {
       /* istanbul ignore next */
       all = [];
       /* istanbul ignore next */
-      app.vorpal.localStorage.removeItem('aliases');
+      app.vorpal.localStorage.removeItem("aliases");
     }
     var aliases = {};
     /* istanbul ignore next */
     for (var i = 0; i < all.length; ++i) {
-      var item = app.vorpal.localStorage.getItem('alias|' + all[i]);
+      var item = app.vorpal.localStorage.getItem("alias|" + all[i]);
       if (item !== undefined && item !== null) {
         aliases[all[i]] = item;
       }
@@ -147,7 +146,7 @@ var app = {
     // Skip this on linux, as its mainly
     // for dev testing.
     /* istanbul ignore next */
-    if (os.platform().indexOf('win') > -1) {
+    if (os.platform().indexOf("win") > -1) {
       (function () {
         var counter = 0;
         setInterval(function () {
@@ -155,7 +154,7 @@ var app = {
         }, 3000);
         app.vorpal.sigint(function () {
           counter++;
-          app.vorpal.ui.submit('');
+          app.vorpal.ui.submit("");
           if (counter > 5) {
             app.vorpal.log('(to quit Cash, use the "exit" command)');
             counter -= 10000;
@@ -168,7 +167,7 @@ var app = {
     app.export.vorpal = app.vorpal;
     _.extend(app.export, cmds);
     return this;
-  }
+  },
 };
 
 cmds = {
@@ -177,7 +176,7 @@ cmds = {
   show: function show() {
     /* istanbul ignore next */
     app.vorpal.show();
-  }
+  },
 };
 
 app.load();

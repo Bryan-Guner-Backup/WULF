@@ -1,30 +1,29 @@
-'use strict';
+"use strict";
 
-const _ = require('lodash');
-const fsAutocomplete = require('vorpal-autocomplete-fs');
+const _ = require("lodash");
+const fsAutocomplete = require("vorpal-autocomplete-fs");
 
-const fetch = require('./../util/fetch');
-const interfacer = require('./../util/interfacer');
-const lpad = require('./../util/lpad');
-const strip = require('./../util/stripAnsi');
+const fetch = require("./../util/fetch");
+const interfacer = require("./../util/interfacer");
+const lpad = require("./../util/lpad");
+const strip = require("./../util/stripAnsi");
 
 const cat = {
-
   exec(args, options) {
     const self = this;
 
     // Input normalization
     if (args === undefined) {
       args = {
-        files: []
+        files: [],
       };
     } else if (_.isString(args)) {
       args = {
-        files: [args]
+        files: [args],
       };
     } else if (_.isArray(args)) {
       args = {
-        files: args
+        files: args,
       };
     }
 
@@ -49,7 +48,7 @@ const cat = {
       options.showtabs = true;
     }
 
-    let stdout = '';
+    let stdout = "";
     try {
       const stdin = fetch(args.files, args.stdin, {
         onDirectory(name) {
@@ -57,39 +56,36 @@ const cat = {
         },
         onInvalidFile(name) {
           return `cat: ${name}: No such file or directory`;
-        }
+        },
       });
       let ctr = 0;
       for (let i = 0; i < stdin.length; ++i) {
         // If -s, squeeze double blank lines to a
         // single line.
         if (options.squeezeblank) {
-          stdin[i] = stdin[i].replace(/\n\n\s*\n/g, '\n\n');
+          stdin[i] = stdin[i].replace(/\n\n\s*\n/g, "\n\n");
         }
         if (options.showtabs) {
-          stdin[i] = stdin[i].replace(/\t/g, '^I');
+          stdin[i] = stdin[i].replace(/\t/g, "^I");
         }
         // Get rid of trailing line break because
         // node logging does it anyway.
-        stdin[i] = stdin[i].replace(/\s$/, '');
-        const parts = String(stdin[i]).split('\n');
+        stdin[i] = stdin[i].replace(/\s$/, "");
+        const parts = String(stdin[i]).split("\n");
         for (let j = 0; j < parts.length; ++j) {
-          const blank = ((strip(parts[j])).trim() === '');
+          const blank = strip(parts[j]).trim() === "";
           // If -b, number every non-blank line
           // If -n, number every line
-          const numbered = ((!blank && options.numbernonblank) || (options.number && !options.numbernonblank));
+          const numbered =
+            (!blank && options.numbernonblank) ||
+            (options.number && !options.numbernonblank);
           if (numbered) {
             ctr++;
           }
-          const numStr = (numbered) ?
-            `${lpad(String(ctr), 6, ' ')}  ` :
-            '';
+          const numStr = numbered ? `${lpad(String(ctr), 6, " ")}  ` : "";
           // If -E, append a $ to each line end.
-          const dollarStr = (options.showends) ? '$' : '';
-          const line =
-            numStr +
-            parts[j] +
-            dollarStr;
+          const dollarStr = options.showends ? "$" : "";
+          const line = numStr + parts[j] + dollarStr;
           self.log(line);
           stdout += `${line}\n`;
         }
@@ -101,7 +97,7 @@ const cat = {
       /* istanbul ignore next */
       return 1;
     }
-  }
+  },
 };
 
 module.exports = function (vorpal) {
@@ -110,16 +106,22 @@ module.exports = function (vorpal) {
   }
   vorpal.api.cat = cat;
   vorpal
-    .command('cat [files...]')
-    .option('-A, --show-all', 'equivalent to -vET')
-    .option('-b, --number-nonblank', 'number nonempty output lines, overrides -n')
-    .option('-e', 'equivalent to -vE')
-    .option('-E, --show-ends', 'display $ at end of each line')
-    .option('-n, --number', 'number all output lines')
-    .option('-s, --squeeze-blank', 'suppress repeated empty output lines')
-    .option('-t', 'equivalent to -vT')
-    .option('-T, --show-tabs', 'display TAB characters as ^I')
-    .option('-v, --show-nonprinting', 'use ^ and M- notation, except for LFD and TAB') // this doesn't work yet...
+    .command("cat [files...]")
+    .option("-A, --show-all", "equivalent to -vET")
+    .option(
+      "-b, --number-nonblank",
+      "number nonempty output lines, overrides -n"
+    )
+    .option("-e", "equivalent to -vE")
+    .option("-E, --show-ends", "display $ at end of each line")
+    .option("-n, --number", "number all output lines")
+    .option("-s, --squeeze-blank", "suppress repeated empty output lines")
+    .option("-t", "equivalent to -vT")
+    .option("-T, --show-tabs", "display TAB characters as ^I")
+    .option(
+      "-v, --show-nonprinting",
+      "use ^ and M- notation, except for LFD and TAB"
+    ) // this doesn't work yet...
     .autocomplete(fsAutocomplete())
     .action(function (args, cb) {
       args.options = args.options || {};
@@ -127,7 +129,7 @@ module.exports = function (vorpal) {
         command: cat,
         args,
         options: args.options,
-        callback: cb
+        callback: cb,
       });
     });
 };

@@ -34,8 +34,8 @@ Moving past the original Bittorrent design, Elliptic curve cryptography can now 
 
 The Bittorrent variants share many features, and at Beaker's formation, IPFS was the presumptive choice. However, differences in design goals made Dat our ultimate choice.
 
- - IPFS exchanges static hash-addressed blobs. While it does provide “mutable” public-key-addressed blobs, it is not as well-developed as Dat’s auditable archive histories. We favored the better mutability featureset of Dat for Beaker.
- - IPFS made a decision to break from the standard URL format, which was incompatible with Beaker’s goals. We want to use a URL scheme which mirrors the existing HTTP/S format as closely as possible.
+- IPFS exchanges static hash-addressed blobs. While it does provide “mutable” public-key-addressed blobs, it is not as well-developed as Dat’s auditable archive histories. We favored the better mutability featureset of Dat for Beaker.
+- IPFS made a decision to break from the standard URL format, which was incompatible with Beaker’s goals. We want to use a URL scheme which mirrors the existing HTTP/S format as closely as possible.
 
 ## Further development
 

@@ -19,13 +19,10 @@
  * party iframe.
  */
 
-
-import {assert} from './asserts';
-
+import { assert } from "./asserts";
 
 /** @typedef {function(!Window, !Object)}  */
 var ThirdPartyFunction;
-
 
 /** @const {!Object<ThirdPartyFunction>} */
 var registrations = {};
@@ -37,7 +34,7 @@ var syncScriptLoads = 0;
  * @param {ThirdPartyFunction} draw Function that draws the 3p integration.
  */
 export function register(id, draw) {
-  assert(!registrations[id], 'Double registration %s', id);
+  assert(!registrations[id], "Double registration %s", id);
   registrations[id] = draw;
 }
 
@@ -49,7 +46,7 @@ export function register(id, draw) {
  */
 export function run(id, win, data) {
   var fn = registrations[id];
-  assert(fn, 'Unknown 3p: ' + id);
+  assert(fn, "Unknown 3p: " + id);
   fn(win, data);
 }
 
@@ -64,8 +61,9 @@ export function run(id, win, data) {
  */
 export function writeScript(win, url, opt_cb) {
   /*eslint no-useless-concat: 0*/
-  win.document
-      .write('<' + 'script src="' + encodeURI(url) + '"><' + '/script>');
+  win.document.write(
+    "<" + 'script src="' + encodeURI(url) + '"><' + "/script>"
+  );
   if (opt_cb) {
     executeAfterWriteScript(win, opt_cb);
   }
@@ -79,8 +77,8 @@ export function writeScript(win, url, opt_cb) {
  */
 function executeAfterWriteScript(win, fn) {
   var index = syncScriptLoads++;
-  win['__runScript' + index] = fn;
-  win.document.write('<' + 'script>__runScript' + index + '()<' + '/script>');
+  win["__runScript" + index] = fn;
+  win.document.write("<" + "script>__runScript" + index + "()<" + "/script>");
 }
 
 /**
@@ -90,6 +88,6 @@ function executeAfterWriteScript(win, fn) {
  */
 export function validateSrcPrefix(prefix, src) {
   if (src.indexOf(prefix) != 0) {
-    throw new Error('Invalid src ' + src);
+    throw new Error("Invalid src " + src);
   }
 }

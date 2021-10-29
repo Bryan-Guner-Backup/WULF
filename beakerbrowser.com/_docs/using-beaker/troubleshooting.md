@@ -21,7 +21,7 @@ The MacOS firewall defaults to blocking all incoming traffic. You’ll need to c
 <figcaption>Select "Security &amp; Privacy" in MacOS System Preferences</figcaption>
 </figure>
 
-You *could* disable the firewall entirely, but it’s better to leave it on. Turn on the firewall, then click “Firewall Options.”
+You _could_ disable the firewall entirely, but it’s better to leave it on. Turn on the firewall, then click “Firewall Options.”
 
 <figure>
 <img data-src="/img/docs/trouble-macos-firewall1.jpg">

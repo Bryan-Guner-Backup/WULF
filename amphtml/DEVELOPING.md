@@ -32,22 +32,23 @@ We discuss implementation issues on [amphtml-discuss@googlegroups.com](https://g
 
 [![Build Status](https://magnum.travis-ci.com/ampproject/amphtml.svg?token=AmxgqDRzeUjVvqT2oydf&branch=master)](https://magnum.travis-ci.com/ampproject/amphtml)
 
-| Command                       | Description                                                           |
-| ----------------------------- | --------------------------------------------------------------------- |
-| `gulp`                        | Same as "watch"                                                       |
-| `gulp minify`                 | Builds production binaries.                                           |
-| `gulp lint`                   | Validates against Google Closure Linter.                              |
-| `gulp build`                  | Builds the AMP library.                                               |
-| `gulp clean`                  | Removes build output.                                                 |
-| `gulp test`                   | Runs tests in Chrome.                                                 |
-| `gulp test --verbose`         | Runs tests in Chrome with logging enabled.                            |
-| `gulp test --watch`           | Watches for changes in files, runs corresponding test(s) in Chrome.   |
-| `gulp test --watch --verbose` | Same as "watch" with logging enabled.                                 |
-| `gulp test --safari`          | Runs tests in Safari.                                                 |
-| `gulp test --firefox`         | Runs tests in Firefox.                                                |
-| `http-server -p 8000 -c-1`    | serves content in current working dir over http://localhost:8000/     |
+| Command                       | Description                                                         |
+| ----------------------------- | ------------------------------------------------------------------- |
+| `gulp`                        | Same as "watch"                                                     |
+| `gulp minify`                 | Builds production binaries.                                         |
+| `gulp lint`                   | Validates against Google Closure Linter.                            |
+| `gulp build`                  | Builds the AMP library.                                             |
+| `gulp clean`                  | Removes build output.                                               |
+| `gulp test`                   | Runs tests in Chrome.                                               |
+| `gulp test --verbose`         | Runs tests in Chrome with logging enabled.                          |
+| `gulp test --watch`           | Watches for changes in files, runs corresponding test(s) in Chrome. |
+| `gulp test --watch --verbose` | Same as "watch" with logging enabled.                               |
+| `gulp test --safari`          | Runs tests in Safari.                                               |
+| `gulp test --firefox`         | Runs tests in Firefox.                                              |
+| `http-server -p 8000 -c-1`    | serves content in current working dir over http://localhost:8000/   |
 
 To fix issues with Safari test runner launching multiple instances of the test, run:
+
 <pre>
   defaults write com.apple.Safari ApplePersistenceIgnoreState YES
 </pre>
@@ -57,6 +58,7 @@ To fix issues with Safari test runner launching multiple instances of the test, 
 For testing documents on arbitrary URLs with your current local version of the AMP runtime we created a [Chrome extension](testing/local-amp-chrome-extension/README.md).
 
 ## Repository Layout
+
 <pre>
   3p/             - Implementation of third party sandbox iframes.
   ads/            - Modules implementing specific ad networks used in <amp-ad>
@@ -91,7 +93,7 @@ In particular, we try to maintain "it might not be perfect but isn't broken"-sup
 
 ## Eng docs
 
-- [Life of an AMP *](https://docs.google.com/document/d/1WdNj3qNFDmtI--c2PqyRYrPrxSg2a-93z5iX0SzoQS0/edit#)
+- [Life of an AMP \*](https://docs.google.com/document/d/1WdNj3qNFDmtI--c2PqyRYrPrxSg2a-93z5iX0SzoQS0/edit#)
 - [AMP Layout system](https://docs.google.com/document/d/1YjFk_B6r97CCaQJf2nXRVuBOuNi_3Fn87Zyf1U7Xoz4/edit)
 
 We also recommend scanning the [spec](spec/). The non-element part should help understand some of the design aspects.

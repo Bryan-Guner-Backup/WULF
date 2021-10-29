@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import {dashToCamelCase} from '../../src/string';
+import { dashToCamelCase } from "../../src/string";
 
-describe('dashToCamelCase', () => {
-  it('should transform dashes to camel case.', () => {
-    expect(dashToCamelCase('foo')).to.equal('foo');
-    expect(dashToCamelCase('foo-bar')).to.equal('fooBar');
-    expect(dashToCamelCase('foo-bar-baz')).to.equal('fooBarBaz');
-    expect(dashToCamelCase('-foo')).to.equal('Foo');
+describe("dashToCamelCase", () => {
+  it("should transform dashes to camel case.", () => {
+    expect(dashToCamelCase("foo")).to.equal("foo");
+    expect(dashToCamelCase("foo-bar")).to.equal("fooBar");
+    expect(dashToCamelCase("foo-bar-baz")).to.equal("fooBarBaz");
+    expect(dashToCamelCase("-foo")).to.equal("Foo");
   });
 });

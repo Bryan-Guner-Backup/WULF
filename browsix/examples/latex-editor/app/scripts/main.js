@@ -1,17 +1,17 @@
 (() => {
-	'use strict';
-	let f = 'example';
-	let texFile = f + '.tex';
-	let bibFile = 'mybib.bib';
-	let edTex = document.getElementById('ed-tex');
-	let edBib = document.getElementById('ed-bib');
-	let button = document.getElementById('create-button');
-	let pdfEmbed = document.getElementById('pdf-embed');
+	"use strict";
+	let f = "example";
+	let texFile = f + ".tex";
+	let bibFile = "mybib.bib";
+	let edTex = document.getElementById("ed-tex");
+	let edBib = document.getElementById("ed-bib");
+	let button = document.getElementById("create-button");
+	let pdfEmbed = document.getElementById("pdf-embed");
 	let kernel = null;
 	function startBrowsix() {
 		window.Boot(
-			'XmlHttpRequest',
-			['index.json', 'fs', true],
+			"XmlHttpRequest",
+			["index.json", "fs", true],
 			(err, k) => {
 				if (err) {
 					console.log(err);
@@ -19,7 +19,8 @@
 				}
 				kernel = k;
 				loadFiles();
-			});
+			}
+		);
 	}
 	function loadFiles() {
 		edTex.value = kernel.fs.readFileSync(texFile).toString();
@@ -35,19 +36,21 @@
 		});
 	}
 	function showPDF() {
-		var fName = f + '.pdf';
-		var mimeType = 'application/pdf';
-		var buf = new Uint8Array(kernel.fs.readFileSync(fName).data.buff.buffer);
-		var blob = new Blob([buf], {type: mimeType});
+		var fName = f + ".pdf";
+		var mimeType = "application/pdf";
+		var buf = new Uint8Array(
+			kernel.fs.readFileSync(fName).data.buff.buffer
+		);
+		var blob = new Blob([buf], { type: mimeType });
 		pdfEmbed.src = window.URL.createObjectURL(blob);
 
-		$(button).toggleClass('is-active').blur();
+		$(button).toggleClass("is-active").blur();
 	}
 	let sequence = [
-		'pdflatex ' + f,
-		'bibtex ' + f,
-		'pdflatex ' + f,
-		'pdflatex ' + f,
+		"pdflatex " + f,
+		"bibtex " + f,
+		"pdflatex " + f,
+		"pdflatex " + f,
 	];
 	function runLatex() {
 		let seq = sequence.slice();
@@ -58,8 +61,7 @@
 			console.log(out);
 		}
 		function runNext(pid, code) {
-			if (code !== 0)
-				alert('latex failed');
+			if (code !== 0) alert("latex failed");
 			var cmd = seq.shift();
 			if (!cmd) {
 				showPDF();
@@ -70,9 +72,9 @@
 		runNext(-1, 0);
 	}
 	function clicked() {
-		$(button).toggleClass('is-active').blur();
+		$(button).toggleClass("is-active").blur();
 		saveFiles(runLatex);
 	}
-	button.addEventListener('click', clicked);
+	button.addEventListener("click", clicked);
 	startBrowsix();
 })();

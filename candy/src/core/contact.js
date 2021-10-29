@@ -9,14 +9,14 @@
  *   (c) 2011 Amiado Group AG. All rights reserved.
  *   (c) 2012-2014 Patrick Stadler & Michael Weibel. All rights reserved.
  */
-'use strict';
+"use strict";
 
 /* global Candy, Strophe, $ */
 
 /** Class: Candy.Core.Contact
  * Roster contact
  */
-Candy.Core.Contact = function(stropheRosterItem) {
+Candy.Core.Contact = function (stropheRosterItem) {
   /** Object: data
    * Strophe Roster plugin item model containing:
    * - jid
@@ -36,8 +36,8 @@ Candy.Core.Contact = function(stropheRosterItem) {
  * Returns:
  *   (String) - jid
  */
-Candy.Core.Contact.prototype.getJid = function() {
-  if(this.data.jid) {
+Candy.Core.Contact.prototype.getJid = function () {
+  if (this.data.jid) {
     return Candy.Util.unescapeJid(this.data.jid);
   }
   return;
@@ -52,7 +52,7 @@ Candy.Core.Contact.prototype.getJid = function() {
  * Returns:
  *   (String) - escaped jid
  */
-Candy.Core.Contact.prototype.getEscapedJid = function() {
+Candy.Core.Contact.prototype.getEscapedJid = function () {
   return Candy.Util.escapeJid(this.data.jid);
 };
 
@@ -62,7 +62,7 @@ Candy.Core.Contact.prototype.getEscapedJid = function() {
  * Returns:
  *   (String) - name
  */
-Candy.Core.Contact.prototype.getName = function() {
+Candy.Core.Contact.prototype.getName = function () {
   if (!this.data.name) {
     return this.getJid();
   }
@@ -83,9 +83,9 @@ Candy.Core.Contact.prototype.getNick = Candy.Core.Contact.prototype.getName;
  * Returns:
  *   (String) - subscription
  */
-Candy.Core.Contact.prototype.getSubscription = function() {
+Candy.Core.Contact.prototype.getSubscription = function () {
   if (!this.data.subscription) {
-    return 'none';
+    return "none";
   }
   return this.data.subscription;
 };
@@ -96,7 +96,7 @@ Candy.Core.Contact.prototype.getSubscription = function() {
  * Returns:
  *   (Array) - groups
  */
-Candy.Core.Contact.prototype.getGroups = function() {
+Candy.Core.Contact.prototype.getGroups = function () {
   return this.data.groups;
 };
 
@@ -106,20 +106,23 @@ Candy.Core.Contact.prototype.getGroups = function() {
  * Returns:
  *   (String) - aggregate status, one of chat|dnd|available|away|xa|unavailable
  */
-Candy.Core.Contact.prototype.getStatus = function() {
-  var status = 'unavailable',
+Candy.Core.Contact.prototype.getStatus = function () {
+  var status = "unavailable",
     self = this,
     highestResourcePriority;
 
-  $.each(this.data.resources, function(resource, obj) {
+  $.each(this.data.resources, function (resource, obj) {
     var resourcePriority = parseInt(obj.priority, 10);
 
-    if (obj.show === '' || obj.show === null || obj.show === undefined) {
+    if (obj.show === "" || obj.show === null || obj.show === undefined) {
       // TODO: Submit this as a bugfix to strophejs-plugins' roster plugin
-      obj.show = 'available';
+      obj.show = "available";
     }
 
-    if (highestResourcePriority === undefined || highestResourcePriority < resourcePriority) {
+    if (
+      highestResourcePriority === undefined ||
+      highestResourcePriority < resourcePriority
+    ) {
       // This resource is higher priority than the ones we've checked so far, override with this one
       status = obj.show;
       highestResourcePriority = resourcePriority;
@@ -134,19 +137,19 @@ Candy.Core.Contact.prototype.getStatus = function() {
   return status;
 };
 
-Candy.Core.Contact.prototype._weightForStatus = function(status) {
+Candy.Core.Contact.prototype._weightForStatus = function (status) {
   switch (status) {
-    case 'chat':
-    case 'dnd':
+    case "chat":
+    case "dnd":
       return 1;
-    case 'available':
-    case '':
+    case "available":
+    case "":
       return 2;
-    case 'away':
+    case "away":
       return 3;
-    case 'xa':
+    case "xa":
       return 4;
-    case 'unavailable':
+    case "unavailable":
       return 5;
   }
 };

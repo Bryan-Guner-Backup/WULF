@@ -9,7 +9,7 @@
  *   (c) 2011 Amiado Group AG. All rights reserved.
  *   (c) 2012-2014 Patrick Stadler & Michael Weibel. All rights reserved.
  */
-'use strict';
+"use strict";
 
 /* global Candy, Mustache, jQuery */
 
@@ -20,8 +20,7 @@
  *   (Candy.View.Pane) self - itself
  *   (jQuery) $ - jQuery
  */
-Candy.View.Pane = (function(self, $) {
-
+Candy.View.Pane = (function (self, $) {
   /** Class: Candy.View.Pane.Message
    * Message submit/show handling
    */
@@ -39,17 +38,20 @@ Candy.View.Pane = (function(self, $) {
      * FIXME: as everywhere, `roomJid` might be slightly incorrect in this case
      *        - maybe rename this as part of a refactoring.
      */
-    submit: function(event) {
+    submit: function (event) {
       var roomJid = Candy.View.getCurrent().roomJid,
         room = Candy.View.Pane.Chat.rooms[roomJid],
         roomType = room.type,
         targetJid = room.targetJid,
-        message = $(this).children('.field').val().substring(0, Candy.View.getOptions().crop.message.body),
+        message = $(this)
+          .children(".field")
+          .val()
+          .substring(0, Candy.View.getOptions().crop.message.body),
         xhtmlMessage,
         evtData = {
           roomJid: roomJid,
           message: message,
-          xhtmlMessage: xhtmlMessage
+          xhtmlMessage: xhtmlMessage,
         };
 
       /** Event: candy:view.message.before-send
@@ -63,7 +65,10 @@ Candy.View.Pane = (function(self, $) {
        * Returns:
        *   Boolean|undefined - if you like to stop sending the message, return false.
        */
-      if($(Candy).triggerHandler('candy:view.message.before-send', evtData) === false) {
+      if (
+        $(Candy).triggerHandler("candy:view.message.before-send", evtData) ===
+        false
+      ) {
         event.preventDefault();
         return;
       }
@@ -71,13 +76,25 @@ Candy.View.Pane = (function(self, $) {
       message = evtData.message;
       xhtmlMessage = evtData.xhtmlMessage;
 
-      Candy.Core.Action.Jabber.Room.Message(targetJid, message, roomType, xhtmlMessage);
+      Candy.Core.Action.Jabber.Room.Message(
+        targetJid,
+        message,
+        roomType,
+        xhtmlMessage
+      );
       // Private user chat. Jabber won't notify the user who has sent the message. Just show it as the user hits the button...
-      if(roomType === 'chat' && message) {
-        self.Message.show(roomJid, self.Room.getUser(roomJid).getNick(), message, undefined, undefined, Candy.Core.getUser().getJid());
+      if (roomType === "chat" && message) {
+        self.Message.show(
+          roomJid,
+          self.Room.getUser(roomJid).getNick(),
+          message,
+          undefined,
+          undefined,
+          Candy.Core.getUser().getJid()
+        );
       }
       // Clear input and set focus to it
-      $(this).children('.field').val('').focus();
+      $(this).children(".field").val("").focus();
       event.preventDefault();
     },
 
@@ -96,10 +113,15 @@ Candy.View.Pane = (function(self, $) {
      *   candy.view.message.before-render using {template, templateData}
      *   candy:view.message.after-show using {roomJid, name, message, element}
      */
-    show: function(roomJid, name, message, xhtmlMessage, timestamp, from) {
-      message = Candy.Util.Parser.all(message.substring(0, Candy.View.getOptions().crop.message.body));
-      if(Candy.View.getOptions().enableXHTML === true && xhtmlMessage) {
-        xhtmlMessage = Candy.Util.parseAndCropXhtml(xhtmlMessage, Candy.View.getOptions().crop.message.body);
+    show: function (roomJid, name, message, xhtmlMessage, timestamp, from) {
+      message = Candy.Util.Parser.all(
+        message.substring(0, Candy.View.getOptions().crop.message.body)
+      );
+      if (Candy.View.getOptions().enableXHTML === true && xhtmlMessage) {
+        xhtmlMessage = Candy.Util.parseAndCropXhtml(
+          xhtmlMessage,
+          Candy.View.getOptions().crop.message.body
+        );
       }
 
       timestamp = timestamp || new Date();
@@ -110,16 +132,18 @@ Candy.View.Pane = (function(self, $) {
       }
 
       // Before we add the new message, check to see if we should be automatically scrolling or not.
-      var messagePane = self.Room.getPane(roomJid, '.message-pane');
-      var enableScroll = (messagePane.scrollTop() + messagePane.outerHeight()) === messagePane.prop('scrollHeight');
+      var messagePane = self.Room.getPane(roomJid, ".message-pane");
+      var enableScroll =
+        messagePane.scrollTop() + messagePane.outerHeight() ===
+        messagePane.prop("scrollHeight");
       Candy.View.Pane.Chat.rooms[roomJid].enableScroll = enableScroll;
 
       var evtData = {
-        'roomJid': roomJid,
-        'name': name,
-        'message': message,
-        'xhtmlMessage': xhtmlMessage,
-        'from': from
+        roomJid: roomJid,
+        name: name,
+        message: message,
+        xhtmlMessage: xhtmlMessage,
+        from: from,
       };
 
       /** Event: candy:view.message.before-show
@@ -133,17 +157,20 @@ Candy.View.Pane = (function(self, $) {
        * Returns:
        *   Boolean - if you don't want to show the message, return false
        */
-      if($(Candy).triggerHandler('candy:view.message.before-show', evtData) === false) {
+      if (
+        $(Candy).triggerHandler("candy:view.message.before-show", evtData) ===
+        false
+      ) {
         return;
       }
 
       message = evtData.message;
       xhtmlMessage = evtData.xhtmlMessage;
-      if(xhtmlMessage !== undefined && xhtmlMessage.length > 0) {
+      if (xhtmlMessage !== undefined && xhtmlMessage.length > 0) {
         message = xhtmlMessage;
       }
 
-      if(!message) {
+      if (!message) {
         return;
       }
 
@@ -151,13 +178,16 @@ Candy.View.Pane = (function(self, $) {
         template: Candy.View.Template.Message.item,
         templateData: {
           name: name,
-          displayName: Candy.Util.crop(name, Candy.View.getOptions().crop.message.nickname),
+          displayName: Candy.Util.crop(
+            name,
+            Candy.View.getOptions().crop.message.nickname
+          ),
           message: message,
           time: Candy.Util.localizedTime(timestamp),
           timestamp: timestamp.toISOString(),
           roomjid: roomJid,
-          from: from
-        }
+          from: from,
+        },
       };
 
       /** Event: candy:view.message.before-render
@@ -172,18 +202,35 @@ Candy.View.Pane = (function(self, $) {
        *                           - (String) time - Localized time of message
        *                           - (String) timestamp - ISO formatted timestamp of message
        */
-      $(Candy).triggerHandler('candy:view.message.before-render', renderEvtData);
+      $(Candy).triggerHandler(
+        "candy:view.message.before-render",
+        renderEvtData
+      );
 
-      var html = Mustache.to_html(renderEvtData.template, renderEvtData.templateData);
+      var html = Mustache.to_html(
+        renderEvtData.template,
+        renderEvtData.templateData
+      );
       self.Room.appendToMessagePane(roomJid, html);
-      var elem = self.Room.getPane(roomJid, '.message-pane').children().last();
+      var elem = self.Room.getPane(roomJid, ".message-pane").children().last();
       // click on username opens private chat
-      elem.find('a.label').click(function(event) {
+      elem.find("a.label").click(function (event) {
         event.preventDefault();
         // Check if user is online and not myself
         var room = Candy.Core.getRoom(roomJid);
-        if(room && name !== self.Room.getUser(Candy.View.getCurrent().roomJid).getNick() && room.getRoster().get(roomJid + '/' + name)) {
-          if(Candy.View.Pane.PrivateRoom.open(roomJid + '/' + name, name, true) === false) {
+        if (
+          room &&
+          name !==
+            self.Room.getUser(Candy.View.getCurrent().roomJid).getNick() &&
+          room.getRoster().get(roomJid + "/" + name)
+        ) {
+          if (
+            Candy.View.Pane.PrivateRoom.open(
+              roomJid + "/" + name,
+              name,
+              true
+            ) === false
+          ) {
             return false;
           }
         }
@@ -191,11 +238,14 @@ Candy.View.Pane = (function(self, $) {
 
       var notifyEvtData = {
         name: name,
-        displayName: Candy.Util.crop(name, Candy.View.getOptions().crop.message.nickname),
+        displayName: Candy.Util.crop(
+          name,
+          Candy.View.getOptions().crop.message.nickname
+        ),
         roomJid: roomJid,
         message: message,
         time: Candy.Util.localizedTime(timestamp),
-        timestamp: timestamp.toISOString()
+        timestamp: timestamp.toISOString(),
       };
       /** Event: candy:view.message.notify
        * Notify the user (optionally) that a new message has been received
@@ -209,20 +259,26 @@ Candy.View.Pane = (function(self, $) {
        *                           - (String) time - Localized time of message
        *                           - (String) timestamp - ISO formatted timestamp of message
        */
-      $(Candy).triggerHandler('candy:view.message.notify', notifyEvtData);
+      $(Candy).triggerHandler("candy:view.message.notify", notifyEvtData);
 
       // Check to see if in-core notifications are disabled
-      if(!Candy.Core.getOptions().disableCoreNotifications) {
+      if (!Candy.Core.getOptions().disableCoreNotifications) {
         // Notify the user about a new private message
-        if(Candy.View.getCurrent().roomJid !== roomJid || !self.Window.hasFocus()) {
+        if (
+          Candy.View.getCurrent().roomJid !== roomJid ||
+          !self.Window.hasFocus()
+        ) {
           self.Chat.increaseUnreadMessages(roomJid);
-          if(Candy.View.Pane.Chat.rooms[roomJid].type === 'chat' && !self.Window.hasFocus()) {
+          if (
+            Candy.View.Pane.Chat.rooms[roomJid].type === "chat" &&
+            !self.Window.hasFocus()
+          ) {
             self.Chat.Toolbar.playSound();
           }
         }
       }
 
-      if(Candy.View.getCurrent().roomJid === roomJid) {
+      if (Candy.View.getCurrent().roomJid === roomJid) {
         self.Room.scrollToBottom(roomJid);
       }
 
@@ -237,9 +293,9 @@ Candy.View.Pane = (function(self, $) {
        *   (String) name - Name of the sending user
        *   (String) message - Message text
        */
-      $(Candy).triggerHandler('candy:view.message.after-show', evtData);
-    }
+      $(Candy).triggerHandler("candy:view.message.after-show", evtData);
+    },
   };
 
   return self;
-}(Candy.View.Pane || {}, jQuery));
+})(Candy.View.Pane || {}, jQuery);

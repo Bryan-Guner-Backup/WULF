@@ -1,5 +1,5 @@
 ---
-title: 'Example: Read site files'
+title: "Example: Read site files"
 section: webAPIs
 sectionTitle: Web APIs
 order: 6
@@ -135,24 +135,27 @@ async function main () {
   // create an archive instance for the current website
   var archive = new DatArchive(window.location.toString())
 
-  // list the files in the site
-  var files = await archive.readdir('/', {recursive: true})
-  console.log(files)
+// list the files in the site
+var files = await archive.readdir('/', {recursive: true})
+console.log(files)
 
-  // read this file
-  var indexJs = await archive.readFile('/js/index.js')
-  console.log(indexJs)
+// read this file
+var indexJs = await archive.readFile('/js/index.js')
+console.log(indexJs)
 
-  // duplicate the image
-  var beakerPng = await archive.readFile('/img/logo.png', 'base64')
-  var img = document.createElement('img')
-  img.src = 'data:image/png;base64,'+beakerPng
-  document.body.appendChild(img)
+// duplicate the image
+var beakerPng = await archive.readFile('/img/logo.png', 'base64')
+var img = document.createElement('img')
+img.src = 'data:image/png;base64,'+beakerPng
+document.body.appendChild(img)
 
-  // get this file's metadata
-  var indexJsStat = await archive.stat('/js/index.js')
-  console.log(indexJsStat)
+// get this file's metadata
+var indexJsStat = await archive.stat('/js/index.js')
+console.log(indexJsStat)
 }
 
 main()
+
+```
+
 ```

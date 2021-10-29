@@ -14,34 +14,31 @@
  * limitations under the License.
  */
 
-import {Observable} from './observable';
-import {assert} from './asserts';
-import {documentStateFor} from './document-state';
-import {getService} from './service';
-import {log} from './log';
-import {parseQueryString, removeFragment} from './url';
-import {platform} from './platform';
+import { Observable } from "./observable";
+import { assert } from "./asserts";
+import { documentStateFor } from "./document-state";
+import { getService } from "./service";
+import { log } from "./log";
+import { parseQueryString, removeFragment } from "./url";
+import { platform } from "./platform";
 
-
-let TAG_ = 'Viewer';
-let SENTINEL_ = '__AMP__';
-
+let TAG_ = "Viewer";
+let SENTINEL_ = "__AMP__";
 
 /**
  * The type of the viewport.
  * @enum {string}
  */
 export const ViewportType = {
-
   /**
    * Viewer leaves sizing and scrolling up to the AMP document's window.
    */
-  NATURAL: 'natural',
+  NATURAL: "natural",
 
   /**
    * Viewer sets and updates sizing and scrolling.
    */
-  VIRTUAL: 'virtual',
+  VIRTUAL: "virtual",
 
   /**
    * This is AMP-specific type and doesn't come from viewer. This is the type
@@ -50,9 +47,8 @@ export const ViewportType = {
    * See https://docs.google.com/document/d/1YjFk_B6r97CCaQJf2nXRVuBOuNi_3Fn87Zyf1U7Xoz4/edit
    * and {@link ViewportBindingNaturalIosEmbed_} for more details.
    */
-  NATURAL_IOS_EMBED: 'natural-ios-embed'
+  NATURAL_IOS_EMBED: "natural-ios-embed",
 };
-
 
 /**
  * Visibility state of the AMP document.
@@ -60,18 +56,16 @@ export const ViewportType = {
  * @private
  */
 export const VisibilityState = {
-
   /**
    * Viewer has shown the AMP document.
    */
-  VISIBLE: 'visible',
+  VISIBLE: "visible",
 
   /**
    * Viewer has indicated that AMP document is hidden.
    */
-  HIDDEN: 'hidden'
+  HIDDEN: "hidden",
 };
-
 
 /**
  * An AMP representation of the Viewer. This class doesn't do any work itself
@@ -80,7 +74,6 @@ export const VisibilityState = {
  * {@link getParam}, {@link receiveMessage} and {@link setMessageDeliverer}.
  */
 export class Viewer {
-
   /**
    * @param {!Window} win
    */
@@ -113,7 +106,7 @@ export class Viewer {
     this.viewportHeight_ = 0;
 
     /** @private {number} */
-    this./*OK*/scrollTop_ = 0;
+    this./*OK*/ scrollTop_ = 0;
 
     /** @private {number} */
     this.paddingTop_ = 0;
@@ -148,46 +141,49 @@ export class Viewer {
       parseParams_(this.win.location.hash, this.params_);
     }
 
-    log.fine(TAG_, 'Viewer params:', this.params_);
+    log.fine(TAG_, "Viewer params:", this.params_);
 
-    this.isRuntimeOn_ = !parseInt(this.params_['off'], 10);
-    log.fine(TAG_, '- runtimeOn:', this.isRuntimeOn_);
+    this.isRuntimeOn_ = !parseInt(this.params_["off"], 10);
+    log.fine(TAG_, "- runtimeOn:", this.isRuntimeOn_);
 
-    this.overtakeHistory_ = parseInt(this.params_['history'], 10) ||
-        this.overtakeHistory_;
-    log.fine(TAG_, '- history:', this.overtakeHistory_);
+    this.overtakeHistory_ =
+      parseInt(this.params_["history"], 10) || this.overtakeHistory_;
+    log.fine(TAG_, "- history:", this.overtakeHistory_);
 
-    this.visibilityState_ = this.params_['visibilityState'] ||
-        this.visibilityState_;
-    log.fine(TAG_, '- visibilityState:', this.visibilityState_);
+    this.visibilityState_ =
+      this.params_["visibilityState"] || this.visibilityState_;
+    log.fine(TAG_, "- visibilityState:", this.visibilityState_);
 
-    this.prerenderSize_ = parseInt(this.params_['prerenderSize'], 10) ||
-        this.prerenderSize_;
-    log.fine(TAG_, '- prerenderSize:', this.prerenderSize_);
+    this.prerenderSize_ =
+      parseInt(this.params_["prerenderSize"], 10) || this.prerenderSize_;
+    log.fine(TAG_, "- prerenderSize:", this.prerenderSize_);
 
-    this.viewportType_ = this.params_['viewportType'] || this.viewportType_;
+    this.viewportType_ = this.params_["viewportType"] || this.viewportType_;
     // Configure scrolling parameters when AMP is embeded in a viewer on iOS.
-    if (this.viewportType_ == ViewportType.NATURAL && this.win.parent &&
-            platform.isIos()) {
+    if (
+      this.viewportType_ == ViewportType.NATURAL &&
+      this.win.parent &&
+      platform.isIos()
+    ) {
       this.viewportType_ = ViewportType.NATURAL_IOS_EMBED;
     }
-    log.fine(TAG_, '- viewportType:', this.viewportType_);
+    log.fine(TAG_, "- viewportType:", this.viewportType_);
 
-    this.viewportWidth_ = parseInt(this.params_['width'], 10) ||
-        this.viewportWidth_;
-    log.fine(TAG_, '- viewportWidth:', this.viewportWidth_);
+    this.viewportWidth_ =
+      parseInt(this.params_["width"], 10) || this.viewportWidth_;
+    log.fine(TAG_, "- viewportWidth:", this.viewportWidth_);
 
-    this.viewportHeight_ = parseInt(this.params_['height'], 10) ||
-        this.viewportHeight_;
-    log.fine(TAG_, '- viewportHeight:', this.viewportHeight_);
+    this.viewportHeight_ =
+      parseInt(this.params_["height"], 10) || this.viewportHeight_;
+    log.fine(TAG_, "- viewportHeight:", this.viewportHeight_);
 
-    this./*OK*/scrollTop_ = parseInt(this.params_['scrollTop'], 10) ||
-        this./*OK*/scrollTop_;
-    log.fine(TAG_, '- scrollTop:', this./*OK*/scrollTop_);
+    this./*OK*/ scrollTop_ =
+      parseInt(this.params_["scrollTop"], 10) || this./*OK*/ scrollTop_;
+    log.fine(TAG_, "- scrollTop:", this./*OK*/ scrollTop_);
 
-    this.paddingTop_ = parseInt(this.params_['paddingTop'], 10) ||
-        this.paddingTop_;
-    log.fine(TAG_, '- padding-top:', this.paddingTop_);
+    this.paddingTop_ =
+      parseInt(this.params_["paddingTop"], 10) || this.paddingTop_;
+    log.fine(TAG_, "- padding-top:", this.paddingTop_);
 
     // Wait for document to become visible.
     this.docState_.onVisibilityChanged(() => {
@@ -198,8 +194,8 @@ export class Viewer {
     if (this.win.parent && this.win.parent != this.win) {
       var newUrl = removeFragment(this.win.location.href);
       if (newUrl != this.win.location.href && this.win.history.replaceState) {
-        this.win.history.replaceState({}, '', newUrl);
-        log.fine(TAG_, 'replace url:' + this.win.location.href);
+        this.win.history.replaceState({}, "", newUrl);
+        log.fine(TAG_, "replace url:" + this.win.location.href);
       }
     }
   }
@@ -226,7 +222,7 @@ export class Viewer {
    */
   toggleRuntime() {
     this.isRuntimeOn_ = !this.isRuntimeOn_;
-    log.fine(TAG_, 'Runtime state:', this.isRuntimeOn_);
+    log.fine(TAG_, "Runtime state:", this.isRuntimeOn_);
     this.runtimeOnObservable_.fire(this.isRuntimeOn_);
   }
 
@@ -265,8 +261,10 @@ export class Viewer {
    * @return {boolean}
    */
   isVisible() {
-    return this.visibilityState_ == VisibilityState.VISIBLE &&
-        !this.docState_.isHidden();
+    return (
+      this.visibilityState_ == VisibilityState.VISIBLE &&
+      !this.docState_.isHidden()
+    );
   }
 
   /**
@@ -313,7 +311,7 @@ export class Viewer {
    * @return {number}
    */
   getScrollTop() {
-    return this./*OK*/scrollTop_;
+    return this./*OK*/ scrollTop_;
   }
 
   /**
@@ -359,7 +357,11 @@ export class Viewer {
    * @param {number} height
    */
   postDocumentReady(width, height) {
-    this.sendMessage_('documentLoaded', {width: width, height: height}, false);
+    this.sendMessage_(
+      "documentLoaded",
+      { width: width, height: height },
+      false
+    );
   }
 
   /**
@@ -368,7 +370,11 @@ export class Viewer {
    * @param {number} height
    */
   postDocumentResized(width, height) {
-    this.sendMessage_('documentResized', {width: width, height: height}, false);
+    this.sendMessage_(
+      "documentResized",
+      { width: width, height: height },
+      false
+    );
   }
 
   /**
@@ -377,7 +383,7 @@ export class Viewer {
    * @return {!Promise}
    */
   requestFullOverlay() {
-    return this.sendMessage_('requestFullOverlay', {}, true);
+    return this.sendMessage_("requestFullOverlay", {}, true);
   }
 
   /**
@@ -386,7 +392,7 @@ export class Viewer {
    * @return {!Promise}
    */
   cancelFullOverlay() {
-    return this.sendMessage_('cancelFullOverlay', {}, true);
+    return this.sendMessage_("cancelFullOverlay", {}, true);
   }
 
   /**
@@ -395,7 +401,7 @@ export class Viewer {
    * @return {!Promise}
    */
   postPushHistory(stackIndex) {
-    return this.sendMessage_('pushHistory', {stackIndex: stackIndex}, true);
+    return this.sendMessage_("pushHistory", { stackIndex: stackIndex }, true);
   }
 
   /**
@@ -404,7 +410,7 @@ export class Viewer {
    * @return {!Promise}
    */
   postPopHistory(stackIndex) {
-    return this.sendMessage_('popHistory', {stackIndex: stackIndex}, true);
+    return this.sendMessage_("popHistory", { stackIndex: stackIndex }, true);
   }
 
   /**
@@ -417,41 +423,45 @@ export class Viewer {
    * @expose
    */
   receiveMessage(eventType, data, awaitResponse) {
-    if (eventType == 'viewport') {
-      if (data['width'] !== undefined) {
-        this.viewportWidth_ = data['width'];
+    if (eventType == "viewport") {
+      if (data["width"] !== undefined) {
+        this.viewportWidth_ = data["width"];
       }
-      if (data['height'] !== undefined) {
-        this.viewportHeight_ = data['height'];
+      if (data["height"] !== undefined) {
+        this.viewportHeight_ = data["height"];
       }
-      if (data['paddingTop'] !== undefined) {
-        this.paddingTop_ = data['paddingTop'];
+      if (data["paddingTop"] !== undefined) {
+        this.paddingTop_ = data["paddingTop"];
       }
-      if (data['scrollTop'] !== undefined) {
-        this./*OK*/scrollTop_ = data['scrollTop'];
+      if (data["scrollTop"] !== undefined) {
+        this./*OK*/ scrollTop_ = data["scrollTop"];
       }
       this.viewportObservable_.fire();
       return undefined;
     }
-    if (eventType == 'historyPopped') {
+    if (eventType == "historyPopped") {
       this.historyPoppedObservable_.fire({
-        newStackIndex: data['newStackIndex']
+        newStackIndex: data["newStackIndex"],
       });
       return Promise.resolve();
     }
-    if (eventType == 'visibilitychange') {
-      if (data['state'] !== undefined) {
-        this.visibilityState_ = data['state'];
+    if (eventType == "visibilitychange") {
+      if (data["state"] !== undefined) {
+        this.visibilityState_ = data["state"];
       }
-      if (data['prerenderSize'] !== undefined) {
-        this.prerenderSize_ = data['prerenderSize'];
+      if (data["prerenderSize"] !== undefined) {
+        this.prerenderSize_ = data["prerenderSize"];
       }
-      log.fine(TAG_, 'visibilitychange event:', this.visibilityState_,
-          this.prerenderSize_);
+      log.fine(
+        TAG_,
+        "visibilitychange event:",
+        this.visibilityState_,
+        this.prerenderSize_
+      );
       this.visibilityObservable_.fire();
       return Promise.resolve();
     }
-    log.fine(TAG_, 'unknown message:', eventType);
+    log.fine(TAG_, "unknown message:", eventType);
     return undefined;
   }
 
@@ -463,7 +473,7 @@ export class Viewer {
    * @expose
    */
   setMessageDeliverer(deliverer) {
-    assert(!this.messageDeliverer_, 'message deliverer can only be set once');
+    assert(!this.messageDeliverer_, "message deliverer can only be set once");
     this.messageDeliverer_ = deliverer;
     if (this.messageQueue_.length > 0) {
       let queue = this.messageQueue_.slice(0);
@@ -497,7 +507,7 @@ export class Viewer {
     if (found) {
       found.data = data;
     } else {
-      this.messageQueue_.push({eventType: eventType, data: data});
+      this.messageQueue_.push({ eventType: eventType, data: data });
     }
     if (awaitResponse) {
       // TODO(dvoytenko): This is somewhat questionable. What do we return
@@ -507,7 +517,6 @@ export class Viewer {
     return undefined;
   }
 }
-
 
 /**
  * Parses the viewer parameters as a string.
@@ -525,7 +534,6 @@ export function parseParams_(str, allParams) {
   }
 }
 
-
 /**
  * @typedef {{
  *   newStackIndex: number
@@ -533,15 +541,14 @@ export function parseParams_(str, allParams) {
  */
 var ViewerHistoryPoppedEvent;
 
-
 /**
  * @param {!Window} window
  * @return {!Viewer}
  */
 export function viewerFor(window) {
-  return getService(window, 'viewer', () => {
+  return getService(window, "viewer", () => {
     return new Viewer(window);
   });
-};
+}
 
 export const viewer = viewerFor(window);

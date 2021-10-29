@@ -1,39 +1,38 @@
-'use strict';
+"use strict";
 
-var assert = require('./assert');
-var net = require('./net');
-var util = require('./util');
-var Buffer = require('./buffer').Buffer;
-var Transform = require('./stream').Transform;
+var assert = require("./assert");
+var net = require("./net");
+var util = require("./util");
+var Buffer = require("./buffer").Buffer;
+var Transform = require("./stream").Transform;
 
 exports.start = function start() {
   var agent = new Agent();
 
   // Do not let `agent.listen()` request listening from cluster master
-  var cluster = require('./cluster');
+  var cluster = require("./cluster");
   cluster.isWorker = false;
   cluster.isMaster = true;
 
-  agent.on('error', function(err) {
+  agent.on("error", function (err) {
     process._rawDebug(err.stack || err);
   });
 
-  agent.listen(process._debugAPI.port, function() {
+  agent.listen(process._debugAPI.port, function () {
     var addr = this.address();
-    process._rawDebug('Debugger listening on port %d', addr.port);
+    process._rawDebug("Debugger listening on port %d", addr.port);
     process._debugAPI.notifyListen();
   });
 
   // Just to spin-off events
   // TODO(indutny): Figure out why node.cc isn't doing this
-  setImmediate(function() {
-  });
+  setImmediate(function () {});
 
-  process._debugAPI.onclose = function() {
+  process._debugAPI.onclose = function () {
     // We don't care about it, but it prevents loop from cleaning up gently
     // NOTE: removeAllListeners won't work, as it doesn't call `removeListener`
-    process.listeners('SIGWINCH').forEach(function(fn) {
-      process.removeListener('SIGWINCH', fn);
+    process.listeners("SIGWINCH").forEach(function (fn) {
+      process.removeListener("SIGWINCH", fn);
     });
 
     agent.close();
@@ -50,14 +49,14 @@ function Agent() {
   this.binding = process._debugAPI;
 
   var self = this;
-  this.binding.onmessage = function(msg) {
-    self.clients.forEach(function(client) {
+  this.binding.onmessage = function (msg) {
+    self.clients.forEach(function (client) {
       client.send({}, msg);
     });
   };
 
   this.clients = [];
-  assert(this.binding, 'Debugger agent running without bindings!');
+  assert(this.binding, "Debugger agent running without bindings!");
 }
 util.inherits(Agent, net.Server);
 
@@ -68,7 +67,7 @@ Agent.prototype.onConnection = function onConnection(socket) {
   this.clients.push(c);
 
   var self = this;
-  c.once('close', function() {
+  c.once("close", function () {
     var index = self.clients.indexOf(c);
     assert(index !== -1);
     self.clients.splice(index, 1);
@@ -76,14 +75,13 @@ Agent.prototype.onConnection = function onConnection(socket) {
 };
 
 Agent.prototype.notifyWait = function notifyWait() {
-  if (this.first)
-    this.binding.notifyWait();
+  if (this.first) this.binding.notifyWait();
   this.first = false;
 };
 
 function Client(agent, socket) {
   Transform.call(this, {
-    readableObjectMode: true
+    readableObjectMode: true,
   });
 
   this.agent = agent;
@@ -91,15 +89,15 @@ function Client(agent, socket) {
   this.socket = socket;
 
   // Parse incoming data
-  this.state = 'headers';
+  this.state = "headers";
   this.headers = {};
-  this.buffer = '';
+  this.buffer = "";
   socket.pipe(this);
 
-  this.on('data', this.onCommand);
+  this.on("data", this.onCommand);
 
   var self = this;
-  this.socket.on('close', function() {
+  this.socket.on("close", function () {
     self.destroy();
   });
 }
@@ -108,7 +106,7 @@ util.inherits(Client, Transform);
 Client.prototype.destroy = function destroy(msg) {
   this.socket.destroy();
 
-  this.emit('close');
+  this.emit("close");
 };
 
 Client.prototype._transform = function _transform(data, enc, cb) {
@@ -117,14 +115,13 @@ Client.prototype._transform = function _transform(data, enc, cb) {
   this.buffer += data;
 
   while (true) {
-    if (this.state === 'headers') {
+    if (this.state === "headers") {
       // Not enough data
-      if (!/\r\n/.test(this.buffer))
-        break;
+      if (!/\r\n/.test(this.buffer)) break;
 
       if (/^\r\n/.test(this.buffer)) {
         this.buffer = this.buffer.slice(2);
-        this.state = 'body';
+        this.state = "body";
         continue;
       }
 
@@ -132,22 +129,20 @@ Client.prototype._transform = function _transform(data, enc, cb) {
       //   Header-name: header-value\r\n
       var match = this.buffer.match(/^([^:\s\r\n]+)\s*:\s*([^\s\r\n]+)\r\n/);
       if (!match)
-        return this.destroy('Expected header, but failed to parse it');
+        return this.destroy("Expected header, but failed to parse it");
 
       this.headers[match[1].toLowerCase()] = match[2];
 
       this.buffer = this.buffer.slice(match[0].length);
     } else {
-      var len = this.headers['content-length'];
-      if (len === undefined)
-        return this.destroy('Expected content-length');
+      var len = this.headers["content-length"];
+      if (len === undefined) return this.destroy("Expected content-length");
 
       len = len | 0;
-      if (Buffer.byteLength(this.buffer) < len)
-        break;
+      if (Buffer.byteLength(this.buffer) < len) break;
 
       this.push(new Command(this.headers, this.buffer.slice(0, len)));
-      this.state = 'headers';
+      this.state = "headers";
       this.buffer = this.buffer.slice(len);
       this.headers = {};
     }
@@ -155,29 +150,27 @@ Client.prototype._transform = function _transform(data, enc, cb) {
 };
 
 Client.prototype.send = function send(headers, data) {
-  if (!data)
-    data = '';
+  if (!data) data = "";
 
   var out = [];
-  Object.keys(headers).forEach(function(key) {
-    out.push(key + ': ' + headers[key]);
+  Object.keys(headers).forEach(function (key) {
+    out.push(key + ": " + headers[key]);
   });
-  out.push('Content-Length: ' + Buffer.byteLength(data), '');
+  out.push("Content-Length: " + Buffer.byteLength(data), "");
 
   this.socket.cork();
-  this.socket.write(out.join('\r\n') + '\r\n');
+  this.socket.write(out.join("\r\n") + "\r\n");
 
-  if (data.length > 0)
-    this.socket.write(data);
+  if (data.length > 0) this.socket.write(data);
   this.socket.uncork();
 };
 
 Client.prototype.start = function start() {
   this.send({
-    Type: 'connect',
-    'V8-Version': process.versions.v8,
-    'Protocol-Version': 1,
-    'Embedding-Host': 'node ' + process.version
+    Type: "connect",
+    "V8-Version": process.versions.v8,
+    "Protocol-Version": 1,
+    "Embedding-Host": "node " + process.version,
   });
 };
 

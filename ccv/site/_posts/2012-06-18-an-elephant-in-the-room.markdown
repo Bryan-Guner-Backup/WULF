@@ -1,11 +1,11 @@
 ---
-date: '2012-06-18 23:01:00'
+date: "2012-06-18 23:01:00"
 layout: post
 slug: an-elephant-in-the-room
 status: publish
 title: An elephant in the room
 categories:
-- post
+  - post
 ---
 
 There is an elephant in the room. Why go through all this hassles when there is [OpenCV](http://opencv.org/)? Well, OpenCV is a solid and well-crafted software. But after these years, there are quite few things it failed to address, and these things are exactly what ccv prioritizes for.

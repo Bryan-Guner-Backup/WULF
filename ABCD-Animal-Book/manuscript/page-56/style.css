@@ -3,7 +3,7 @@ body {
   margin: 0 0;
   overflow: hidden;
   color: #444;
-  font: 4vw/1.2 'EB Garamond', serif;
+  font: 4vw/1.2 "EB Garamond", serif;
 }
 
 .inner {
@@ -34,7 +34,7 @@ ol {
   margin: 0;
   padding: 1vw 5vw;
   font-size: 3vw;
-  font-family: 'EB Garamond', sans-serif;
+  font-family: "EB Garamond", sans-serif;
 }
 
 .small {

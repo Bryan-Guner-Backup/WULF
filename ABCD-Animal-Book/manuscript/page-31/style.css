@@ -7,5 +7,6 @@ body {
 }
 
 .stroke {
-  text-shadow: 3px 3px 0 #fa0, -1px -1px 0 #d00, 1px -1px 0 #d00, -1px 1px 0 yellow, 1px 1px 0 orange;
+  text-shadow: 3px 3px 0 #fa0, -1px -1px 0 #d00, 1px -1px 0 #d00,
+    -1px 1px 0 yellow, 1px 1px 0 orange;
 }

@@ -1,12 +1,12 @@
-
 Beaker uses a set of colors to output different types of messages on to the terminal.
 
 ## The Default Color Codes
-   If you do not provide any values, the defaults are: [Default colors](https://github.com/puppetlabs/beaker/blob/master/lib/beaker/logger.rb#L85-L95)
+
+If you do not provide any values, the defaults are: [Default colors](https://github.com/puppetlabs/beaker/blob/master/lib/beaker/logger.rb#L85-L95)
 
 ## Beaker Color Codes:
 
-In addition, Beaker can support few other colors. List of all colors supported by Beaker:  [Colors Supported by Beaker] (https://github.com/puppetlabs/beaker/blob/master/lib/beaker/logger.rb#L14-L32)
+In addition, Beaker can support few other colors. List of all colors supported by Beaker: [Colors Supported by Beaker] (https://github.com/puppetlabs/beaker/blob/master/lib/beaker/logger.rb#L14-L32)
 
 ## How to Customize:
 

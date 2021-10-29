@@ -1,24 +1,25 @@
 ### Table of Contents
+
 1. [About](#About)
 2. [Getting Started](#GettingStarted)
-    1. [Installation](#Installation)
-        1. [Windows](#WindowsInstallation)
-        2. [Linux/BSD/MacOSX/POSIX](#PosixInstallation)
-    2. [Configuration](#Configuration)
-    3. [Controlling and Querying btcd via btcctl](#BtcctlConfig)
-    4. [Mining](#Mining)
+   1. [Installation](#Installation)
+      1. [Windows](#WindowsInstallation)
+      2. [Linux/BSD/MacOSX/POSIX](#PosixInstallation)
+   2. [Configuration](#Configuration)
+   3. [Controlling and Querying btcd via btcctl](#BtcctlConfig)
+   4. [Mining](#Mining)
 3. [Help](#Help)
-    1. [Startup](#Startup)
-        1. [Using bootstrap.dat](#BootstrapDat)
-    2. [Network Configuration](#NetworkConfig)
-    3. [Wallet](#Wallet)
+   1. [Startup](#Startup)
+      1. [Using bootstrap.dat](#BootstrapDat)
+   2. [Network Configuration](#NetworkConfig)
+   3. [Wallet](#Wallet)
 4. [Contact](#Contact)
-    1. [IRC](#ContactIRC)
-    2. [Mailing Lists](#MailingLists)
+   1. [IRC](#ContactIRC)
+   2. [Mailing Lists](#MailingLists)
 5. [Developer Resources](#DeveloperResources)
-    1. [Code Contribution Guidelines](#ContributionGuidelines)
-    2. [JSON-RPC Reference](#JSONRPCReference)
-    3. [The btcsuite Bitcoin-related Go Packages](#GoPackages)
+   1. [Code Contribution Guidelines](#ContributionGuidelines)
+   2. [JSON-RPC Reference](#JSONRPCReference)
+   3. [The btcsuite Bitcoin-related Go Packages](#GoPackages)
 
 <a name="About" />
 ### 1. About
@@ -32,7 +33,7 @@ we come out of beta.
 
 It currently properly downloads, validates, and serves the block chain using the
 exact rules (including bugs) for block acceptance as the reference
-implementation, [bitcoind](https://github.com/bitcoin/bitcoin).  We have taken
+implementation, [bitcoind](https://github.com/bitcoin/bitcoin). We have taken
 great care to avoid btcd causing a fork to the block chain. It passes all of
 the '[official](https://github.com/TheBlueMatt/test-scripts/)' block acceptance
 tests.
@@ -59,23 +60,23 @@ active development.
 <a name="Installation" />
 **2.1 Installation**<br />
 
-The first step is to install btcd.  See one of the following sections for
+The first step is to install btcd. See one of the following sections for
 details on how to install on the supported operating systems.
 
 <a name="WindowsInstallation" />
 **2.1.1 Windows Installation**<br />
 
-* Install the MSI available at: https://github.com/btcsuite/btcd/releases
-* Launch btcd from the Start Menu
+- Install the MSI available at: https://github.com/btcsuite/btcd/releases
+- Launch btcd from the Start Menu
 
 <a name="PosixInstallation" />
 **2.1.2 Linux/BSD/MacOSX/POSIX Installation**<br />
 
-* Install Go according to the installation instructions here: http://golang.org/doc/install
-* Run the following command to ensure your Go version is at least version 1.2: `$ go version`
-* Run the following command to obtain btcd, its dependencies, and install it: `$ go get github.com/btcsuite/btcd/...`<br />
-  * To upgrade, run the following command: `$ go get -u github.com/btcsuite/btcd/...`
-* Run btcd: `$ btcd`
+- Install Go according to the installation instructions here: http://golang.org/doc/install
+- Run the following command to ensure your Go version is at least version 1.2: `$ go version`
+- Run the following command to obtain btcd, its dependencies, and install it: `$ go get github.com/btcsuite/btcd/...`<br />
+  - To upgrade, run the following command: `$ go get -u github.com/btcsuite/btcd/...`
+- Run btcd: `$ btcd`
 
 <a name="Configuration" />
 **2.2 Configuration**<br />
@@ -87,11 +88,12 @@ options, which can be viewed by running: `$ btcd --help`.
 **2.3 Controlling and Querying btcd via btcctl**<br />
 
 btcctl is a command line utility that can be used to both control and query btcd
-via [RPC](http://www.wikipedia.org/wiki/Remote_procedure_call).  btcd does
-**not** enable its RPC server by default;  You must configure at minimum both an
+via [RPC](http://www.wikipedia.org/wiki/Remote_procedure_call). btcd does
+**not** enable its RPC server by default; You must configure at minimum both an
 RPC username and password or both an RPC limited username and password:
 
-* btcd.conf configuration file
+- btcd.conf configuration file
+
 ```
 [Application Options]
 rpcuser=myuser
@@ -99,18 +101,23 @@ rpcpass=SomeDecentp4ssw0rd
 rpclimituser=mylimituser
 rpclimitpass=Limitedp4ssw0rd
 ```
-* btcctl.conf configuration file
+
+- btcctl.conf configuration file
+
 ```
 [Application Options]
 rpcuser=myuser
 rpcpass=SomeDecentp4ssw0rd
 ```
+
 OR
+
 ```
 [Application Options]
 rpclimituser=mylimituser
 rpclimitpass=Limitedp4ssw0rd
 ```
+
 For a list of available options, run: `$ btcctl --help`
 
 <a name="Mining" />
@@ -170,7 +177,7 @@ configuration necessary, however, there is an optional method to use a
 **3.1 Wallet**<br />
 
 btcd was intentionally developed without an integrated wallet for security
-reasons.  Please see [btcwallet](https://github.com/btcsuite/btcwallet) for more
+reasons. Please see [btcwallet](https://github.com/btcsuite/btcwallet) for more
 information.
 
 <a name="Contact" />

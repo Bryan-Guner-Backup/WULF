@@ -1,30 +1,29 @@
-'use strict';
+"use strict";
 
-var util = require('./util');
-var internalUtil = require('./internal/util');
-var debug = util.debuglog('child_process');
-var constants = require('./constants');
+var util = require("./util");
+var internalUtil = require("./internal/util");
+var debug = util.debuglog("child_process");
+var constants = require("./constants");
 
-var uv = process.binding('uv');
-var spawn_sync = process.binding('spawn_sync');
-var Buffer = require('./buffer').Buffer;
-var Pipe = process.binding('pipe_wrap').Pipe;
-var child_process = require('./internal/child_process');
+var uv = process.binding("uv");
+var spawn_sync = process.binding("spawn_sync");
+var Buffer = require("./buffer").Buffer;
+var Pipe = process.binding("pipe_wrap").Pipe;
+var child_process = require("./internal/child_process");
 
 var errnoException = util._errnoException;
 var _validateStdio = child_process._validateStdio;
 var setupChannel = child_process.setupChannel;
-var ChildProcess = exports.ChildProcess = child_process.ChildProcess;
+var ChildProcess = (exports.ChildProcess = child_process.ChildProcess);
 
-exports.fork = function(modulePath /*, args, options*/) {
-
+exports.fork = function (modulePath /*, args, options*/) {
   // Get options and args arguments.
   var options, args, execArgv;
   if (Array.isArray(arguments[1])) {
     args = arguments[1];
     options = util._extend({}, arguments[2]);
-  } else if (arguments[1] && typeof arguments[1] !== 'object') {
-    throw new TypeError('Incorrect value of args option');
+  } else if (arguments[1] && typeof arguments[1] !== "object") {
+    throw new TypeError("Incorrect value of args option");
   } else {
     args = [];
     options = util._extend({}, arguments[1]);
@@ -36,34 +35,33 @@ exports.fork = function(modulePath /*, args, options*/) {
 
   // Leave stdin open for the IPC channel. stdout and stderr should be the
   // same as the parent's if silent isn't set.
-  options.stdio = options.silent ? ['pipe', 'pipe', 'pipe', 'ipc'] :
-      [0, 1, 2, 'ipc'];
+  options.stdio = options.silent
+    ? ["pipe", "pipe", "pipe", "ipc"]
+    : [0, 1, 2, "ipc"];
 
   options.execPath = options.execPath || process.execPath;
 
   return spawn(options.execPath, args, options);
 };
 
-
-exports._forkChild = function(fd) {
+exports._forkChild = function (fd) {
   // set process.send()
   var p = new Pipe(true);
   p.open(fd);
   p.unref();
   var control = setupChannel(process, p);
-  process.on('newListener', function(name) {
-    if (name === 'message' || name === 'disconnect') control.ref();
+  process.on("newListener", function (name) {
+    if (name === "message" || name === "disconnect") control.ref();
   });
-  process.on('removeListener', function(name) {
-    if (name === 'message' || name === 'disconnect') control.unref();
+  process.on("removeListener", function (name) {
+    if (name === "message" || name === "disconnect") control.unref();
   });
 };
-
 
 function normalizeExecArgs(command /*, options, callback*/) {
   var file, args, options, callback;
 
-  if (typeof arguments[1] === 'function') {
+  if (typeof arguments[1] === "function") {
     options = undefined;
     callback = arguments[1];
   } else {
@@ -71,49 +69,44 @@ function normalizeExecArgs(command /*, options, callback*/) {
     callback = arguments[2];
   }
 
-  if (process.platform === 'win32') {
-    file = process.env.comspec || 'cmd.exe';
-    args = ['/s', '/c', '"' + command + '"'];
+  if (process.platform === "win32") {
+    file = process.env.comspec || "cmd.exe";
+    args = ["/s", "/c", '"' + command + '"'];
     // Make a shallow copy before patching so we don't clobber the user's
     // options object.
     options = util._extend({}, options);
     options.windowsVerbatimArguments = true;
   } else {
-    file = '/bin/sh';
-    args = ['-c', command];
+    file = "/bin/sh";
+    args = ["-c", command];
   }
 
-  if (options && options.shell)
-    file = options.shell;
+  if (options && options.shell) file = options.shell;
 
   return {
     cmd: command,
     file: file,
     args: args,
     options: options,
-    callback: callback
+    callback: callback,
   };
 }
 
-
-exports.exec = function(command /*, options, callback*/) {
+exports.exec = function (command /*, options, callback*/) {
   var opts = normalizeExecArgs.apply(null, arguments);
-  return exports.execFile(opts.file,
-                          opts.args,
-                          opts.options,
-                          opts.callback);
+  return exports.execFile(opts.file, opts.args, opts.options, opts.callback);
 };
 
-
-exports.execFile = function(file /*, args, options, callback*/) {
-  var args = [], callback;
+exports.execFile = function (file /*, args, options, callback*/) {
+  var args = [],
+    callback;
   var options = {
-    encoding: 'utf8',
+    encoding: "utf8",
     timeout: 0,
     maxBuffer: 200 * 1024,
-    killSignal: 'SIGTERM',
+    killSignal: "SIGTERM",
     cwd: null,
-    env: null
+    env: null,
   };
 
   // Parse the optional positional parameters.
@@ -124,18 +117,18 @@ exports.execFile = function(file /*, args, options, callback*/) {
     pos++;
   }
 
-  if (pos < arguments.length && typeof arguments[pos] === 'object') {
+  if (pos < arguments.length && typeof arguments[pos] === "object") {
     options = util._extend(options, arguments[pos++]);
   } else if (pos < arguments.length && arguments[pos] == null) {
     pos++;
   }
 
-  if (pos < arguments.length && typeof arguments[pos] === 'function') {
+  if (pos < arguments.length && typeof arguments[pos] === "function") {
     callback = arguments[pos++];
   }
 
   if (pos === 1 && arguments.length > 1) {
-    throw new TypeError('Incorrect value of args option');
+    throw new TypeError("Incorrect value of args option");
   }
 
   var child = spawn(file, args, {
@@ -143,16 +136,16 @@ exports.execFile = function(file /*, args, options, callback*/) {
     env: options.env,
     gid: options.gid,
     uid: options.uid,
-    windowsVerbatimArguments: !!options.windowsVerbatimArguments
+    windowsVerbatimArguments: !!options.windowsVerbatimArguments,
   });
 
   var encoding;
   var _stdout;
   var _stderr;
-  if (options.encoding !== 'buffer' && Buffer.isEncoding(options.encoding)) {
+  if (options.encoding !== "buffer" && Buffer.isEncoding(options.encoding)) {
     encoding = options.encoding;
-    _stdout = '';
-    _stderr = '';
+    _stdout = "";
+    _stderr = "";
   } else {
     _stdout = [];
     _stderr = [];
@@ -196,11 +189,10 @@ exports.execFile = function(file /*, args, options, callback*/) {
     }
 
     var cmd = file;
-    if (args.length !== 0)
-      cmd += ' ' + args.join(' ');
+    if (args.length !== 0) cmd += " " + args.join(" ");
 
     if (!ex) {
-      ex = new Error('Command failed: ' + cmd + '\n' + stderr);
+      ex = new Error("Command failed: " + cmd + "\n" + stderr);
       ex.killed = child.killed || killed;
       ex.code = code < 0 ? uv.errname(code) : code;
       ex.signal = signal;
@@ -231,37 +223,33 @@ exports.execFile = function(file /*, args, options, callback*/) {
   }
 
   if (options.timeout > 0) {
-    timeoutId = setTimeout(function() {
+    timeoutId = setTimeout(function () {
       kill();
       timeoutId = null;
     }, options.timeout);
   }
 
-  child.stdout.addListener('data', function(chunk) {
+  child.stdout.addListener("data", function (chunk) {
     stdoutLen += chunk.length;
 
     if (stdoutLen > options.maxBuffer) {
-      ex = new Error('stdout maxBuffer exceeded.');
+      ex = new Error("stdout maxBuffer exceeded.");
       kill();
     } else {
-      if (!encoding)
-        _stdout.push(chunk);
-      else
-        _stdout += chunk;
+      if (!encoding) _stdout.push(chunk);
+      else _stdout += chunk;
     }
   });
 
-  child.stderr.addListener('data', function(chunk) {
+  child.stderr.addListener("data", function (chunk) {
     stderrLen += chunk.length;
 
     if (stderrLen > options.maxBuffer) {
-      ex = new Error('stderr maxBuffer exceeded.');
+      ex = new Error("stderr maxBuffer exceeded.");
       kill();
     } else {
-      if (!encoding)
-        _stderr.push(chunk);
-      else
-        _stderr += chunk;
+      if (!encoding) _stderr.push(chunk);
+      else _stderr += chunk;
     }
   });
 
@@ -270,18 +258,18 @@ exports.execFile = function(file /*, args, options, callback*/) {
     child.stdout.setEncoding(encoding);
   }
 
-  child.addListener('close', exithandler);
-  child.addListener('error', errorhandler);
+  child.addListener("close", exithandler);
+  child.addListener("error", errorhandler);
 
   return child;
 };
 
-var _deprecatedCustomFds = internalUtil.deprecate(function(options) {
-  options.stdio = options.customFds.map(function(fd) {
-    return fd === -1 ? 'pipe' : fd;
+var _deprecatedCustomFds = internalUtil.deprecate(function (options) {
+  options.stdio = options.customFds.map(function (fd) {
+    return fd === -1 ? "pipe" : fd;
   });
-}, 'child_process: options.customFds option is deprecated. ' +
-   'Use options.stdio instead.');
+}, "child_process: options.customFds option is deprecated. " +
+  "Use options.stdio instead.");
 
 function _convertCustomFds(options) {
   if (options && options.customFds && !options.stdio) {
@@ -295,18 +283,19 @@ function normalizeSpawnArguments(file /*, args, options*/) {
   if (Array.isArray(arguments[1])) {
     args = arguments[1].slice(0);
     options = arguments[2];
-  } else if (arguments[1] !== undefined &&
-             (arguments[1] === null || typeof arguments[1] !== 'object')) {
-    throw new TypeError('Incorrect value of args option');
+  } else if (
+    arguments[1] !== undefined &&
+    (arguments[1] === null || typeof arguments[1] !== "object")
+  ) {
+    throw new TypeError("Incorrect value of args option");
   } else {
     args = [];
     options = arguments[1];
   }
 
-  if (options === undefined)
-    options = {};
-  else if (options === null || typeof options !== 'object')
-    throw new TypeError('options argument must be an object');
+  if (options === undefined) options = {};
+  else if (options === null || typeof options !== "object")
+    throw new TypeError("options argument must be an object");
 
   options = util._extend({}, options);
   args.unshift(file);
@@ -315,7 +304,7 @@ function normalizeSpawnArguments(file /*, args, options*/) {
   var envPairs = [];
 
   for (var key in env) {
-    envPairs.push(key + '=' + env[key]);
+    envPairs.push(key + "=" + env[key]);
   }
 
   _convertCustomFds(options);
@@ -324,17 +313,16 @@ function normalizeSpawnArguments(file /*, args, options*/) {
     file: file,
     args: args,
     options: options,
-    envPairs: envPairs
+    envPairs: envPairs,
   };
 }
 
-
-var spawn = exports.spawn = function(/*file, args, options*/) {
+var spawn = (exports.spawn = function (/*file, args, options*/) {
   var opts = normalizeSpawnArguments.apply(null, arguments);
   var options = opts.options;
   var child = new ChildProcess();
 
-  debug('spawn', opts.args, options);
+  debug("spawn", opts.args, options);
 
   child.spawn({
     file: opts.file,
@@ -345,23 +333,19 @@ var spawn = exports.spawn = function(/*file, args, options*/) {
     envPairs: opts.envPairs,
     stdio: options.stdio,
     uid: options.uid,
-    gid: options.gid
+    gid: options.gid,
   });
 
   return child;
-};
-
+});
 
 function lookupSignal(signal) {
-  if (typeof signal === 'number')
-    return signal;
+  if (typeof signal === "number") return signal;
 
-  if (!(signal in constants))
-    throw new Error('Unknown signal: ' + signal);
+  if (!(signal in constants)) throw new Error("Unknown signal: " + signal);
 
   return constants[signal];
 }
-
 
 function spawnSync(/*file, args, options*/) {
   var opts = normalizeSpawnArguments.apply(null, arguments);
@@ -370,19 +354,18 @@ function spawnSync(/*file, args, options*/) {
 
   var i;
 
-  debug('spawnSync', opts.args, options);
+  debug("spawnSync", opts.args, options);
 
   options.file = opts.file;
   options.args = opts.args;
   options.envPairs = opts.envPairs;
 
-  if (options.killSignal)
-    options.killSignal = lookupSignal(options.killSignal);
+  if (options.killSignal) options.killSignal = lookupSignal(options.killSignal);
 
-  options.stdio = _validateStdio(options.stdio || 'pipe', true).stdio;
+  options.stdio = _validateStdio(options.stdio || "pipe", true).stdio;
 
   if (options.input) {
-    var stdin = options.stdio[0] = util._extend({}, options.stdio[0]);
+    var stdin = (options.stdio[0] = util._extend({}, options.stdio[0]));
     stdin.input = options.input;
   }
 
@@ -390,16 +373,18 @@ function spawnSync(/*file, args, options*/) {
   for (i = 0; i < options.stdio.length; i++) {
     var input = options.stdio[i] && options.stdio[i].input;
     if (input != null) {
-      var pipe = options.stdio[i] = util._extend({}, options.stdio[i]);
-      if (Buffer.isBuffer(input))
-        pipe.input = input;
-      else if (typeof input === 'string')
+      var pipe = (options.stdio[i] = util._extend({}, options.stdio[i]));
+      if (Buffer.isBuffer(input)) pipe.input = input;
+      else if (typeof input === "string")
         pipe.input = new Buffer(input, options.encoding);
       else
-        throw new TypeError(util.format(
-            'stdio[%d] should be Buffer or string not %s',
+        throw new TypeError(
+          util.format(
+            "stdio[%d] should be Buffer or string not %s",
             i,
-            typeof input));
+            typeof input
+          )
+        );
     }
   }
 
@@ -407,8 +392,7 @@ function spawnSync(/*file, args, options*/) {
 
   if (result.output && options.encoding) {
     for (i = 0; i < result.output.length; i++) {
-      if (!result.output[i])
-        continue;
+      if (!result.output[i]) continue;
       result.output[i] = result.output[i].toString(options.encoding);
     }
   }
@@ -417,7 +401,7 @@ function spawnSync(/*file, args, options*/) {
   result.stderr = result.output && result.output[2];
 
   if (result.error) {
-    result.error = errnoException(result.error, 'spawnSync ' + opts.file);
+    result.error = errnoException(result.error, "spawnSync " + opts.file);
     result.error.path = opts.file;
     result.error.spawnargs = opts.args.slice(1);
   }
@@ -428,16 +412,16 @@ function spawnSync(/*file, args, options*/) {
 }
 exports.spawnSync = spawnSync;
 
-
 function checkExecSyncError(ret) {
   if (ret.error || ret.status !== 0) {
     var err = ret.error;
     ret.error = null;
 
     if (!err) {
-      var msg = 'Command failed: ' +
-                (ret.cmd ? ret.cmd : ret.args.join(' ')) +
-                (ret.stderr ? '\n' + ret.stderr.toString() : '');
+      var msg =
+        "Command failed: " +
+        (ret.cmd ? ret.cmd : ret.args.join(" ")) +
+        (ret.stderr ? "\n" + ret.stderr.toString() : "");
       err = new Error(msg);
     }
 
@@ -448,25 +432,20 @@ function checkExecSyncError(ret) {
   return false;
 }
 
-
 function execFileSync(/*command, args, options*/) {
   var opts = normalizeSpawnArguments.apply(null, arguments);
   var inheritStderr = !opts.options.stdio;
 
   var ret = spawnSync(opts.file, opts.args.slice(1), opts.options);
 
-  if (inheritStderr)
-    process.stderr.write(ret.stderr);
+  if (inheritStderr) process.stderr.write(ret.stderr);
 
   var err = checkExecSyncError(ret);
 
-  if (err)
-    throw err;
-  else
-    return ret.stdout;
+  if (err) throw err;
+  else return ret.stdout;
 }
 exports.execFileSync = execFileSync;
-
 
 function execSync(/*command, options*/) {
   var opts = normalizeExecArgs.apply(null, arguments);
@@ -475,14 +454,11 @@ function execSync(/*command, options*/) {
   var ret = spawnSync(opts.file, opts.args, opts.options);
   ret.cmd = opts.cmd;
 
-  if (inheritStderr)
-    process.stderr.write(ret.stderr);
+  if (inheritStderr) process.stderr.write(ret.stderr);
 
   var err = checkExecSyncError(ret);
 
-  if (err)
-    throw err;
-  else
-    return ret.stdout;
+  if (err) throw err;
+  else return ret.stdout;
 }
 exports.execSync = execSync;

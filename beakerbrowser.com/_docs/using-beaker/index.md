@@ -87,7 +87,6 @@ You can also open the folder in your explorer, and make changes directly.
   <img class="screenshot" src="/img/docs/tour-new-site-publish1.png"/>
 </figure>
 
-
 </section>
 
 <section markdown="1">

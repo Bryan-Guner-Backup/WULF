@@ -22,22 +22,20 @@ There are two DNS resource record types that are relevant to this objective:
 IPFS uses `TXT` records for publishing [dnslink][6] as a means of exposing content
 from an IPFS Path under `/ipns/${fqdn}/` namespace. Validation of `/ipns/` paths
 includes a DNS lookup to verify if `/ipns/${fqdn}` is backed by the presence of
-a dnslink `TXT` record. 
+a dnslink `TXT` record.
 
 Without a dedicated API for DNS lookups browser extensions are forced to use
 third-party [DNS-over-HTTPS][7] services.
 This workaround comes at a price:
 
 - Dependency on hardcoded third party lookup service introduces a single
-  point of failure.  It also makes MITM attacks easier and increases
+  point of failure. It also makes MITM attacks easier and increases
   probability of leaking private information.
 
 - Sending an HTTP GET for each query is much slower than native DNS client already
- present in web browser.
- The overhead is particularly undesirable during time-critical paths such as
- [blocking `onBeforeRequest` handler][8] (degrades browsing performance, kills battery).
-
-
+  present in web browser.
+  The overhead is particularly undesirable during time-critical paths such as
+  [blocking `onBeforeRequest` handler][8] (degrades browsing performance, kills battery).
 
 ## Usage Documentation
 
@@ -63,8 +61,7 @@ resolving.then(resolved);
 - `browser.dns.resolve` in Firefox 60 is limited to `A`/`AAAA` records.
   It is impossible to perform lookups for other record types such as `SRV` ([Bug 14328](https://bugzilla.mozilla.org/show_bug.cgi?id=14328)) or `TXT` ([Bug 1449171](https://bugzilla.mozilla.org/show_bug.cgi?id=1449171)).
 
-
-[1]: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/dns/resolve 
+[1]: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/dns/resolve
 [2]: https://www.ietf.org/rfc/rfc2782.txt
 [3]: http://www.gushi.org/make-dns-cert/howto.html
 [4]: https://support.google.com/a/answer/183895?hl=en

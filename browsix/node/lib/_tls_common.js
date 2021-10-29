@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-var constants = require('./constants');
-var tls = require('./tls');
+var constants = require("./constants");
+var tls = require("./tls");
 
 // Lazily loaded
 var crypto = null;
 
-var binding = process.binding('crypto');
+var binding = process.binding("crypto");
 var NativeSecureContext = binding.SecureContext;
 
 function SecureContext(secureProtocol, flags, context) {
@@ -30,7 +30,6 @@ function SecureContext(secureProtocol, flags, context) {
 }
 
 exports.SecureContext = SecureContext;
-
 
 exports.createSecureContext = function createSecureContext(options, context) {
   if (!options) options = {};
@@ -75,10 +74,8 @@ exports.createSecureContext = function createSecureContext(options, context) {
       for (var i = 0; i < options.key.length; i++) {
         var key = options.key[i];
 
-        if (key.passphrase)
-          c.context.setKey(key.pem, key.passphrase);
-        else
-          c.context.setKey(key);
+        if (key.passphrase) c.context.setKey(key.pem, key.passphrase);
+        else c.context.setKey(key);
       }
     } else {
       if (options.passphrase) {
@@ -89,15 +86,12 @@ exports.createSecureContext = function createSecureContext(options, context) {
     }
   }
 
-  if (options.ciphers)
-    c.context.setCiphers(options.ciphers);
-  else
-    c.context.setCiphers(tls.DEFAULT_CIPHERS);
+  if (options.ciphers) c.context.setCiphers(options.ciphers);
+  else c.context.setCiphers(tls.DEFAULT_CIPHERS);
 
   if (options.ecdhCurve === undefined)
     c.context.setECDHCurve(tls.DEFAULT_ECDH_CURVE);
-  else if (options.ecdhCurve)
-    c.context.setECDHCurve(options.ecdhCurve);
+  else if (options.ecdhCurve) c.context.setECDHCurve(options.ecdhCurve);
 
   if (options.dhparam) c.context.setDHParam(options.dhparam);
 
@@ -119,12 +113,10 @@ exports.createSecureContext = function createSecureContext(options, context) {
     var pfx = options.pfx;
     var passphrase = options.passphrase;
 
-    if (!crypto)
-      crypto = require('./crypto');
+    if (!crypto) crypto = require("./crypto");
 
     pfx = crypto._toBuf(pfx);
-    if (passphrase)
-      passphrase = crypto._toBuf(passphrase);
+    if (passphrase) passphrase = crypto._toBuf(passphrase);
 
     if (passphrase) {
       c.context.loadPKCS12(pfx, passphrase);
@@ -143,8 +135,7 @@ exports.createSecureContext = function createSecureContext(options, context) {
 };
 
 exports.translatePeerCertificate = function translatePeerCertificate(c) {
-  if (!c)
-    return null;
+  if (!c) return null;
 
   if (c.issuer) c.issuer = tls.parseCertString(c.issuer);
   if (c.issuerCertificate && c.issuerCertificate !== c) {
@@ -156,14 +147,11 @@ exports.translatePeerCertificate = function translatePeerCertificate(c) {
     c.infoAccess = {};
 
     // XXX: More key validation?
-    info.replace(/([^\n:]*):([^\n]*)(?:\n|$)/g, function(all, key, val) {
-      if (key === '__proto__')
-        return;
+    info.replace(/([^\n:]*):([^\n]*)(?:\n|$)/g, function (all, key, val) {
+      if (key === "__proto__") return;
 
-      if (c.infoAccess.hasOwnProperty(key))
-        c.infoAccess[key].push(val);
-      else
-        c.infoAccess[key] = [val];
+      if (c.infoAccess.hasOwnProperty(key)) c.infoAccess[key].push(val);
+      else c.infoAccess[key] = [val];
     });
   }
   return c;

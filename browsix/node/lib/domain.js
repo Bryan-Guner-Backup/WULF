@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
 // WARNING: THIS MODULE IS PENDING DEPRECATION.
 //
 // No new pull requests targeting this module will be accepted
 // unless they address existing, critical bugs.
 
-var util = require('./util');
-var EventEmitter = require('./events');
+var util = require("./util");
+var EventEmitter = require("./events");
 var inherits = util.inherits;
 
 // communicate with events module, but don't require that
@@ -17,14 +17,14 @@ EventEmitter.usingDomains = true;
 // overwrite process.domain with a getter/setter that will allow for more
 // effective optimizations
 var _domain = [null];
-Object.defineProperty(process, 'domain', {
+Object.defineProperty(process, "domain", {
   enumerable: true,
-  get: function() {
+  get: function () {
     return _domain[0];
   },
-  set: function(arg) {
-    return _domain[0] = arg;
-  }
+  set: function (arg) {
+    return (_domain[0] = arg);
+  },
 });
 
 // let the process know we're using domains
@@ -32,7 +32,7 @@ var _domain_flag = process._setupDomainUse(_domain);
 
 exports.Domain = Domain;
 
-exports.create = exports.createDomain = function() {
+exports.create = exports.createDomain = function () {
   return new Domain();
 };
 
@@ -42,7 +42,6 @@ var stack = [];
 exports._stack = stack;
 // the active domain is always the one that we're currently in.
 exports.active = null;
-
 
 inherits(Domain, EventEmitter);
 
@@ -55,14 +54,13 @@ function Domain() {
 Domain.prototype.members = undefined;
 Domain.prototype._disposed = undefined;
 
-
 // Called by process._fatalException in case an error was thrown.
 Domain.prototype._errorHandler = function errorHandler(er) {
   var caught = false;
   var self = this;
 
   function emitError() {
-    var handled = self.emit('error', er);
+    var handled = self.emit("error", er);
 
     // Exit all domains on the stack.  Uncaught exceptions end the
     // current tick and no domains should be left on the stack
@@ -78,8 +76,7 @@ Domain.prototype._errorHandler = function errorHandler(er) {
   // XXX This is a bit stupid.  We should probably get rid of
   // domain.dispose() altogether.  It's almost always a terrible
   // idea.  --isaacs
-  if (this._disposed)
-    return true;
+  if (this._disposed) return true;
 
   if (!util.isPrimitive(er)) {
     er.domain = this;
@@ -137,8 +134,7 @@ Domain.prototype._errorHandler = function errorHandler(er) {
   return caught;
 };
 
-
-Domain.prototype.enter = function() {
+Domain.prototype.enter = function () {
   if (this._disposed) return;
 
   // note that this might be a no-op, but we still need
@@ -148,8 +144,7 @@ Domain.prototype.enter = function() {
   _domain_flag[0] = stack.length;
 };
 
-
-Domain.prototype.exit = function() {
+Domain.prototype.exit = function () {
   // skip disposed domains, as usual, but also don't do anything if this
   // domain is not on the stack.
   var index = stack.lastIndexOf(this);
@@ -163,16 +158,13 @@ Domain.prototype.exit = function() {
   process.domain = exports.active;
 };
 
-
 // note: this works for timers as well.
-Domain.prototype.add = function(ee) {
+Domain.prototype.add = function (ee) {
   // If the domain is disposed or already added, then nothing left to do.
-  if (this._disposed || ee.domain === this)
-    return;
+  if (this._disposed || ee.domain === this) return;
 
   // has a domain already - remove it first.
-  if (ee.domain)
-    ee.domain.remove(ee);
+  if (ee.domain) ee.domain.remove(ee);
 
   // check for circular Domain->Domain links.
   // This causes bad insanity!
@@ -183,7 +175,7 @@ Domain.prototype.add = function(ee) {
   // d.add(e);
   // e.add(d);
   // e.emit('error', er); // RangeError, stack overflow!
-  if (this.domain && (ee instanceof Domain)) {
+  if (this.domain && ee instanceof Domain) {
     for (var d = this.domain; d; d = d.domain) {
       if (ee === d) return;
     }
@@ -193,18 +185,14 @@ Domain.prototype.add = function(ee) {
   this.members.push(ee);
 };
 
-
-Domain.prototype.remove = function(ee) {
+Domain.prototype.remove = function (ee) {
   ee.domain = null;
   var index = this.members.indexOf(ee);
-  if (index !== -1)
-    this.members.splice(index, 1);
+  if (index !== -1) this.members.splice(index, 1);
 };
 
-
-Domain.prototype.run = function(fn) {
-  if (this._disposed)
-    return;
+Domain.prototype.run = function (fn) {
+  if (this._disposed) return;
 
   var ret;
 
@@ -213,8 +201,7 @@ Domain.prototype.run = function(fn) {
     var len = arguments.length;
     var args = new Array(len - 1);
 
-    for (var i = 1; i < len; i++)
-      args[i - 1] = arguments[i];
+    for (var i = 1; i < len; i++) args[i - 1] = arguments[i];
 
     ret = fn.apply(this, args);
   } else {
@@ -225,19 +212,17 @@ Domain.prototype.run = function(fn) {
   return ret;
 };
 
-
 function intercepted(_this, self, cb, fnargs) {
-  if (self._disposed)
-    return;
+  if (self._disposed) return;
 
   if (fnargs[0] && fnargs[0] instanceof Error) {
     var er = fnargs[0];
     util._extend(er, {
       domainBound: cb,
       domainThrown: false,
-      domain: self
+      domain: self,
     });
-    self.emit('error', er);
+    self.emit("error", er);
     return;
   }
 
@@ -246,8 +231,7 @@ function intercepted(_this, self, cb, fnargs) {
 
   self.enter();
   if (fnargs.length > 1) {
-    for (i = 1; i < fnargs.length; i++)
-      args.push(fnargs[i]);
+    for (i = 1; i < fnargs.length; i++) args.push(fnargs[i]);
     ret = cb.apply(_this, args);
   } else {
     ret = cb.call(_this);
@@ -257,8 +241,7 @@ function intercepted(_this, self, cb, fnargs) {
   return ret;
 }
 
-
-Domain.prototype.intercept = function(cb) {
+Domain.prototype.intercept = function (cb) {
   var self = this;
 
   function runIntercepted() {
@@ -268,25 +251,20 @@ Domain.prototype.intercept = function(cb) {
   return runIntercepted;
 };
 
-
 function bound(_this, self, cb, fnargs) {
-  if (self._disposed)
-    return;
+  if (self._disposed) return;
 
   var ret;
 
   self.enter();
-  if (fnargs.length > 0)
-    ret = cb.apply(_this, fnargs);
-  else
-    ret = cb.call(_this);
+  if (fnargs.length > 0) ret = cb.apply(_this, fnargs);
+  else ret = cb.call(_this);
   self.exit();
 
   return ret;
 }
 
-
-Domain.prototype.bind = function(cb) {
+Domain.prototype.bind = function (cb) {
   var self = this;
 
   function runBound() {
@@ -298,8 +276,7 @@ Domain.prototype.bind = function(cb) {
   return runBound;
 };
 
-
-Domain.prototype.dispose = util.deprecate(function() {
+Domain.prototype.dispose = util.deprecate(function () {
   if (this._disposed) return;
 
   // if we're the active domain, then get out now.

@@ -1,8 +1,6 @@
-ConvNet: Deep Convolutional Networks
-====================================
+# ConvNet: Deep Convolutional Networks
 
-What's ConvNet?
----------------
+## What's ConvNet?
 
 Convolutional network is a specific artificial neural network topology that is inspired by
 biological visual cortex and tailored for computer vision tasks by Yann LeCun in early 1990s. See
@@ -23,23 +21,21 @@ One Weird Trick for Parallelizing Convolutional Neural Networks, Alex Krizhevsky
 
 The VGG-D model trained is based on:
 
-Very Deep Convolutional Networks for Large-Scale Image Recognition, Karen Simonyan, Andrew Zisserman, ICLR 2015*
+Very Deep Convolutional Networks for Large-Scale Image Recognition, Karen Simonyan, Andrew Zisserman, ICLR 2015\*
 
-How it works?
--------------
+## How it works?
 
 With advances in GPGPU programming, we can have very deep convolutional networks (with over
 50 million parameters) trained on millions of images. It turns out that once you have both and
 a bag of tricks (dropout, pooling etc.), the resulted convolutional networks can achieve good
 image classification results.
 
-	> ./cnnclassify ../samples/dex.png ../samples/image-net-2012-vgg-d.sqlite3 | ./cnndraw.rb ../samples/image-net-2012.words ../samples/dex.png output.png
+    > ./cnnclassify ../samples/dex.png ../samples/image-net-2012-vgg-d.sqlite3 | ./cnndraw.rb ../samples/image-net-2012.words ../samples/dex.png output.png
 
 Check `output.png`, the convolutional networks suggest a few possible relevant classes in the
 top left chart.
 
-What about the performance?
----------------------------
+## What about the performance?
 
 ConvNet on the very large scale is not extremely fast. There are a few
 implementations available for ConvNet that focused on speed performance,
@@ -64,21 +60,21 @@ they reported 27.0% top-1 missing rate when averaging densely sampled image.
 
 Assuming you have ILSVRC 2012 validation set files ordered in image-net-2012-val.txt, run
 
-	> ./cnnclassify image-net-2012-val.txt ../samples/image-net-2012-vgg-d.sqlite3 > image-net-2012-classify.txt
+    > ./cnnclassify image-net-2012-val.txt ../samples/image-net-2012-vgg-d.sqlite3 > image-net-2012-classify.txt
 
 For complete validation set to finish, this command takes 6 hour on one GPU, and if you don't
 have GPU enabled, it will take about two days to run on CPU.
 
 Assuming you have the ILSVRC 2012 validation ground truth data in LSVRC2012_val_ground_truth.txt
 
-	> ./cnnvldtr.rb LSVRC2012_val_ground_truth.txt image-net-2012-classify.txt
+    > ./cnnvldtr.rb LSVRC2012_val_ground_truth.txt image-net-2012-classify.txt
 
 will reports the top-1 missing rate as well as top-5 missing rate.
 
 For 32-bit float point `image-net-2012-vgg-d-32bit.sqlite3` on GPU, the top-1 missing rate
 is 29.61%, 8.56% (in absolute) better than ccv's previous result with 1 convnet, and 2.3%
 (in absolute) worse than VGG's result with 1 convnet and configured with mode D. The top-5
-missing rate is 9.9%, 6.3% better than previous and 1.1% worse than VGG's.  For half precision
+missing rate is 9.9%, 6.3% better than previous and 1.1% worse than VGG's. For half precision
 `image-net-2012-vgg-d.sqlite3` (the one default downloaded to `./samples/`), the top-1 missing
 rate is 29.61% and the top-5 missing rate is 9.9%.
 
@@ -108,7 +104,7 @@ averaging 10 patches ccv or Decaf does).
 
 For AlexNet 12, the GPU version does forward pass + backward error propagate for batch size
 of 128 in about 0.664s. Thus, training ImageNet convolutional network takes about 186 hours
-with 100 epochs.  Caffe reported their forward pass + backward error propagate for batch size
+with 100 epochs. Caffe reported their forward pass + backward error propagate for batch size
 of 256 in about 1.3s on NVIDIA TITAN. In the paper, Alex reported 90 epochs within 6 days on
 two GeForce 580. In "Multi-GPU Training of ConvNets" (Omry Yadan, Keith Adams, Yaniv Taigman,
 and Marc'Aurelio Ranzato, arXiv:1312.5853), Omry mentioned that they did 100 epochs of AlexNet
@@ -117,7 +113,7 @@ in 10.5 days on 1 GPU), which suggests my time is within line of these implement
 For MattNet, the single GPU version does forward pass + backward error propagate for batch size
 of 128 in about 0.845s. With 4 GPUs, the MattNet can be trained at batch size of 512 in about
 0.909s. Thus, 3.72x speed up. In AlexNet 14 [One weird trick](http://arxiv.org/abs/1404.5997),
-the reported speed up is 3.74x.  "Multi-GPU Training of ConvNets" reported 2.2x speed up with
+the reported speed up is 3.74x. "Multi-GPU Training of ConvNets" reported 2.2x speed up with
 hybrid approach on 4 GPUs. The implementation is inline with AlexNet 14 findings.
 
 For VGG-D model, the GPU version does forward pass + backward error propagate for batch size
@@ -133,8 +129,7 @@ its functionalities in about 10,000 lines of code, Caffe implements with 14,000 
 as of this release, ccv implements with about 4,300 lines of code. For the future, the low-hanging
 optimization opportunities include using cuDNN, doing FFT in densely convolved layers etc.
 
-How to train my own image classifier?
--------------------------------------
+## How to train my own image classifier?
 
 First, you need to figure out your network topology. For all intents and purposes, I will walk
 you through how to train with ImageNet LSVRC 2012 data.
@@ -155,16 +150,16 @@ Unfortunately, the metadata are stored in Matlab proprietary format, there are s
 work to be done. Here will demonstrate how to use Octave to do this. Install Octave on Linux-like
 system is easy, for me on Ubuntu, it is about one line:
 
-	> sudo apt-get install octave
+    > sudo apt-get install octave
 
 Assuming you've downloaded devkit-1.0 from the above link, and found meta.mat file somewhere
 in that tarball, launching Octave interactive environment and run:
 
-	octave> file = fopen('meta.txt', 'w+')
-	octave> for i = 1:1000
-	octave>	      fprintf(file, "%d %s %d\n", synsets(i).ILSVRC2012_ID, synsets(i).WNID, synsets(i).num_train_images)
-	octave> endfor
-	octave> fclose(file)
+    octave> file = fopen('meta.txt', 'w+')
+    octave> for i = 1:1000
+    octave>	      fprintf(file, "%d %s %d\n", synsets(i).ILSVRC2012_ID, synsets(i).WNID, synsets(i).num_train_images)
+    octave> endfor
+    octave> fclose(file)
 
 The newly created meta.txt file will give us the class id, the WordNet id, and the number of
 training image available for each class.
@@ -172,13 +167,13 @@ training image available for each class.
 The ImageNet data downloaded from the torrent puts the training images into directories named
 by the WordNet ids.
 
-	> find <ImageNet dataset>/train/ -name "*.JPEG" > train-file.txt
+    > find <ImageNet dataset>/train/ -name "*.JPEG" > train-file.txt
 
 I use this script to generate format that ccv understands: <https://gist.github.com/liuliu/8393461>
 
 The test dataset is ordered numerically, thus,
 
-	> find <ImageNet dataset>/test/ -name "*.JPEG" > test-file.txt
+    > find <ImageNet dataset>/test/ -name "*.JPEG" > test-file.txt
 
 will generate file list corresponding to `ILSVRC2012_test_ground_truth.txt` for class ids.
 
@@ -191,7 +186,7 @@ I partially replaced `./bin/image-net.c` with this snippet:
 <https://gist.github.com/liuliu/8906523> to generate files suffixed with `.resize.png`. Compile
 and run:
 
-	> ./image-net --train-list ~/Fast/imageNet/train-file.txt --test-list ~/Fast/imageNet/test-file.txt --base-dir ~/Fast/imageNet --working-dir image-net.sqlite3
+    > ./image-net --train-list ~/Fast/imageNet/train-file.txt --test-list ~/Fast/imageNet/test-file.txt --base-dir ~/Fast/imageNet --working-dir image-net.sqlite3
 
 The resize will take about 3 hours, and after that, `train.txt` and `test.txt` are generated from
 `train-file.txt` and `test-file.txt` by suffixing `.resize.png` on every line.
@@ -206,28 +201,25 @@ The generated `image-net-2012.sqlite3` file is about 600MiB in size because it c
 needed for training and resume. You can either open this file with sqlite command-line tool
 (it is a vanilla sqlite database file), and do:
 
-	sqlite> drop table conv_vary_params;
-	sqlite> drop table momentum_data;
-	sqlite> drop table function_state;
-	sqlite> vacuum;
+    sqlite> drop table conv_vary_params;
+    sqlite> drop table momentum_data;
+    sqlite> drop table function_state;
+    sqlite> vacuum;
 
 The file size will shrink to about 200MiB. You can achieve further reduction in file size by
-rewrite it into half-precision, with `ccv_convnet_write` and `write_param.half_precision =
-1`. The resulted `image-net-2012.sqlite3` is exactly what I included in `./samples`.
+rewrite it into half-precision, with `ccv_convnet_write` and `write_param.half_precision = 1`. The resulted `image-net-2012.sqlite3` is exactly what I included in `./samples`.
 
-Can I use the ImageNet pre-trained data model?
-----------------------------------------------
+## Can I use the ImageNet pre-trained data model?
 
 ccv is released under FreeBSD 3-clause license, and the pre-trained data models
 `./samples/image-net-2012.sqlite3` and `./samples/image-net-2012-vgg-d.sqlite3` are released under
-Creative Commons Attribution 4.0 International License.  You can use it, modify it practically
+Creative Commons Attribution 4.0 International License. You can use it, modify it practically
 anywhere and anyhow with proper attribution. As far as I can tell, this is the first pre-trained
 data model released under commercial-friendly license (Caffe itself is released under FreeBSD
 license but its pre-trained data model is "research only" and OverFeat is released under custom
 research only license).
 
-Differences between ccv's implementation, Caffe's AlexNet, Alex's and Matt's
-----------------------------------------------------------------------------
+## Differences between ccv's implementation, Caffe's AlexNet, Alex's and Matt's
 
 Although the network topology of ccv's implementation followed closely to Matt's, the reported
 results diverged significantly enough for me to document the differences in implementation details.
@@ -273,7 +265,7 @@ second 5 patches are the horizontal mirrors of the first 5 patches.
 
 Alex's implementation averages the softmax output of 10 patches from the test image by first
 resize image into sizes such that the minimal dimension is 256 while retains the aspect ratio
-and then center-crops into 256x256.  The 10 patches of size 224x224 are sampled from the 256x256
+and then center-crops into 256x256. The 10 patches of size 224x224 are sampled from the 256x256
 crop the same way as Caffe did.
 
 ccv's GPU implementation averages the softmax output of 30 patches from the test image by
@@ -284,8 +276,6 @@ bottom left, bottom right into 225x225. This generates 15 patches, and each one 
 its horizontally-mirrored counter-part.
 
 ccv's CPU implementation for efficiency considerations averages the softmax output of 10 patches
-from the test image by first resize the image into sizes such that the minimal dimension is
-257. The mean image is upsampled into the same size with `CCV_INTER_CUBIC` and then is subtracted
+from the test image by first resize the image into sizes such that the minimal dimension is 257. The mean image is upsampled into the same size with `CCV_INTER_CUBIC` and then is subtracted
 from the resized image. The top left, top right, center, bottom left, bottom right patches of
 225x225 is extracted and horizontally mirrored to generate the 10 patches.
-

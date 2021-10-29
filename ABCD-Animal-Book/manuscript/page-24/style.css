@@ -1,10 +1,10 @@
 body {
   height: 100vh;
   width: 100vw;
-  background:#efe7d2; 
-  background: -webkit-radial-gradient(right 60%, #efe7d2, #66aaf3); 
-  background: -webkit-radial-gradient(at right 60%, #efe7d2, #66aaf3); 
-  background: radial-gradient(at right 60%, #efe7d2, #66aaf3);   
+  background: #efe7d2;
+  background: -webkit-radial-gradient(right 60%, #efe7d2, #66aaf3);
+  background: -webkit-radial-gradient(at right 60%, #efe7d2, #66aaf3);
+  background: radial-gradient(at right 60%, #efe7d2, #66aaf3);
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -39,7 +39,7 @@ body {
   height: 14.5vw;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
   background: #cc9666;
-  margin: 12vw 29vw
+  margin: 12vw 29vw;
 }
 
 .orejas {
@@ -52,7 +52,7 @@ body {
   transform: rotate(-30deg);
   -moz-transform: rotate(-30deg);
   -webkit-transform: rotate(-30deg);
-  border: .6vw solid #f7bb7b;
+  border: 0.6vw solid #f7bb7b;
 }
 
 .orejas::before {
@@ -66,7 +66,7 @@ body {
   transform: rotate(60deg);
   -moz-transform: rotate(60deg);
   -webkit-transform: rotate(60deg);
-  border: .6vw solid #f7bb7b;
+  border: 0.6vw solid #f7bb7b;
 }
 
 .ojos {
@@ -122,7 +122,7 @@ body {
   border-right: 2vw solid transparent;
   border-bottom: 2.5vw solid black;
   border-radius: 100vw / 50vw;
-  margin: -2vw -.25vw
+  margin: -2vw -0.25vw;
 }
 
 .hocico {
@@ -131,7 +131,7 @@ body {
   height: 2vw;
   border-radius: 0 0 80vw 80vw;
   background: #121212;
-  margin: 11vw 4vw
+  margin: 11vw 4vw;
 }
 
 .cuello {
@@ -141,7 +141,7 @@ body {
   border-right: 1.5vw solid transparent;
   height: 0;
   width: 4vw;
-  margin: 25vw 31.2vw
+  margin: 25vw 31.2vw;
 }
 
 .body {
@@ -150,7 +150,7 @@ body {
   height: 21vw;
   border-radius: 100%;
   background: #f7bb7b;
-  margin: 29vw 26.3vw
+  margin: 29vw 26.3vw;
 }
 
 .body3 {
@@ -173,7 +173,7 @@ body {
   border-radius: 50vw 50vw 0 50vw;
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
-  margin: 40vw 23.5vw
+  margin: 40vw 23.5vw;
 }
 
 .legs::before {
@@ -187,7 +187,7 @@ body {
   border-radius: 50vw 50vw 0 50vw;
   -webkit-transform: rotate(0deg);
   transform: rotate(0deg);
-  margin: -7vw 7vw
+  margin: -7vw 7vw;
 }
 
 .legs3 {
@@ -223,7 +223,7 @@ body {
   border-radius: 100vw / 100vw;
   -webkit-transform: rotate(-70deg);
   transform: rotate(-70deg);
-  margin: 27.5vw 30.5vw
+  margin: 27.5vw 30.5vw;
 }
 
 .legs5::before {
@@ -246,7 +246,7 @@ body {
   height: 2.5vw;
   border-radius: 0 0 50vw 50vw;
   background: #cc9666;
-  margin: 38.7vw 27.4vw
+  margin: 38.7vw 27.4vw;
 }
 
 .legs7::before {
@@ -256,7 +256,7 @@ body {
   height: 2.5vw;
   border-radius: 0 0 50vw 50vw;
   background: #cc9666;
-  margin: 0vw 10.2vw
+  margin: 0vw 10.2vw;
 }
 
 .cola {
@@ -278,7 +278,7 @@ body {
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
   background: #dd9966;
   margin: 33vw 14vw;
-  border: 1px solid #996633
+  border: 1px solid #996633;
 }
 
 .orejitas {
@@ -287,7 +287,7 @@ body {
   height: 6vw;
   border-radius: 100%;
   background: #cc9666;
-  border: .3vw solid #ffd7ae;
+  border: 0.3vw solid #ffd7ae;
   margin: 30.5vw 13.5vw;
   -webkit-transform: rotate(-21deg);
   transform: rotate(-21deg);
@@ -300,7 +300,7 @@ body {
   height: 6vw;
   border-radius: 100%;
   background: #cc9666;
-  border: .3vw solid #ffd7ae;
+  border: 0.3vw solid #ffd7ae;
   margin: 1.5vw 4.3vw;
   -webkit-transform: rotate(42deg);
   transform: rotate(42deg);
@@ -312,7 +312,7 @@ body {
   height: 2vw;
   border-radius: 100vw;
   background: white;
-  margin: 3vw .5vw;
+  margin: 3vw 0.5vw;
   animation: abre 2s linear infinite;
   -moz-animation: abre 2s linear infinite;
   -webkit-animation: abre 2s linear infinite;
@@ -334,7 +334,7 @@ body {
   height: 1.5vw;
   border-radius: 100vw;
   background: black;
-  margin: 1px .5vw;
+  margin: 1px 0.5vw;
 }
 
 .irisitos::before {
@@ -350,10 +350,10 @@ body {
 .hocico3 {
   position: absolute;
   width: 1.9vw;
-  height: .9vw;
+  height: 0.9vw;
   border-radius: 0 0 80vw 80vw;
   background: #121212;
-  margin: 5.3vw 2.1vw
+  margin: 5.3vw 2.1vw;
 }
 
 .hocico3::before {
@@ -365,7 +365,7 @@ body {
   border-right: 1.2vw solid transparent;
   border-bottom: 1.2vw solid black;
   border-radius: 100vw / 50vw;
-  margin: -1vw -.2vw
+  margin: -1vw -0.2vw;
 }
 
 .cangurito {
@@ -381,7 +381,7 @@ body {
     opacity: 1;
   }
   25% {
-    opacity: 1
+    opacity: 1;
   }
   50% {
     opacity: 1;
@@ -399,7 +399,7 @@ body {
     opacity: 1;
   }
   25% {
-    opacity: 1
+    opacity: 1;
   }
   50% {
     opacity: 1;
@@ -427,7 +427,6 @@ body {
   }
   100% {
     margin: 10vw 22.1vw;
-    ;
   }
 }
 
@@ -446,7 +445,6 @@ body {
   }
   100% {
     margin: 10vw 22.1vw;
-    ;
   }
 }
 
@@ -456,7 +454,6 @@ body {
   }
   25% {
     margin: 6vw 1.2vw;
-    ;
   }
   50% {
     margin: 7vw 1.2vw;
@@ -475,7 +472,6 @@ body {
   }
   25% {
     margin: 6vw 1.2vw;
-    ;
   }
   50% {
     margin: 7vw 1.2vw;

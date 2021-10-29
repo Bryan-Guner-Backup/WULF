@@ -9,7 +9,7 @@
  *   (c) 2011 Amiado Group AG. All rights reserved.
  *   (c) 2012-2014 Patrick Stadler & Michael Weibel. All rights reserved.
  */
-'use strict';
+"use strict";
 
 /* global Candy */
 
@@ -17,10 +17,10 @@
  * Chat Roster
  */
 Candy.Core.ChatRoster = function () {
-	/** Object: items
-	 * Roster items
-	 */
-	this.items = {};
+  /** Object: items
+   * Roster items
+   */
+  this.items = {};
 };
 
 /** Function: add
@@ -29,8 +29,8 @@ Candy.Core.ChatRoster = function () {
  * Parameters:
  *   (Candy.Core.ChatUser) user - User to add
  */
-Candy.Core.ChatRoster.prototype.add = function(user) {
-	this.items[user.getJid()] = user;
+Candy.Core.ChatRoster.prototype.add = function (user) {
+  this.items[user.getJid()] = user;
 };
 
 /** Function: remove
@@ -39,8 +39,8 @@ Candy.Core.ChatRoster.prototype.add = function(user) {
  * Parameters:
  *   (String) jid - User jid
  */
-Candy.Core.ChatRoster.prototype.remove = function(jid) {
-	delete this.items[jid];
+Candy.Core.ChatRoster.prototype.remove = function (jid) {
+  delete this.items[jid];
 };
 
 /** Function: get
@@ -52,8 +52,8 @@ Candy.Core.ChatRoster.prototype.remove = function(jid) {
  * Returns:
  *   (Candy.Core.ChatUser) - User
  */
-Candy.Core.ChatRoster.prototype.get = function(jid) {
-	return this.items[jid];
+Candy.Core.ChatRoster.prototype.get = function (jid) {
+  return this.items[jid];
 };
 
 /** Function: getAll
@@ -62,6 +62,6 @@ Candy.Core.ChatRoster.prototype.get = function(jid) {
  * Returns:
  *   (Object) - all roster items
  */
-Candy.Core.ChatRoster.prototype.getAll = function() {
-	return this.items;
+Candy.Core.ChatRoster.prototype.getAll = function () {
+  return this.items;
 };

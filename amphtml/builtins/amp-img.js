@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-import {BaseElement} from '../src/base-element';
-import {createLoaderElement} from '../src/loader';
-import {getLengthNumeral, isLayoutSizeDefined} from '../src/layout';
-import {loadPromise} from '../src/event-helper';
-import {parseSrcset} from '../src/srcset';
-import {registerElement} from '../src/custom-element';
-import {timer} from '../src/timer';
-import {vsync} from '../src/vsync';
-import {removeElement} from '../src/dom';
-
+import { BaseElement } from "../src/base-element";
+import { createLoaderElement } from "../src/loader";
+import { getLengthNumeral, isLayoutSizeDefined } from "../src/layout";
+import { loadPromise } from "../src/event-helper";
+import { parseSrcset } from "../src/srcset";
+import { registerElement } from "../src/custom-element";
+import { timer } from "../src/timer";
+import { vsync } from "../src/vsync";
+import { removeElement } from "../src/dom";
 
 /**
  * @param {!Window} win Destination window for the new element.
@@ -31,12 +30,10 @@ import {removeElement} from '../src/dom';
  * @return {undefined}
  */
 export function installImg(win) {
-
   /** @type {number} Count of images */
   var count = 0;
 
   class AmpImg extends BaseElement {
-
     /** @override */
     isLayoutSupported(layout) {
       return isLayoutSizeDefined(layout);
@@ -57,24 +54,25 @@ export function installImg(win) {
       this.imgLoadedOnce_ = false;
 
       if (this.element.id) {
-        this.img_.setAttribute('amp-img-id', this.element.id);
+        this.img_.setAttribute("amp-img-id", this.element.id);
       }
-      this.propagateAttributes(['alt'], this.img_);
+      this.propagateAttributes(["alt"], this.img_);
       this.applyFillContent(this.img_);
 
-      this.img_.width = getLengthNumeral(this.element.getAttribute('width'));
-      this.img_.height = getLengthNumeral(this.element.getAttribute('height'));
+      this.img_.width = getLengthNumeral(this.element.getAttribute("width"));
+      this.img_.height = getLengthNumeral(this.element.getAttribute("height"));
 
       this.element.appendChild(this.img_);
 
       /** @private @const {!Srcset} */
-      this.srcset_ = parseSrcset(this.element.getAttribute('srcset') ||
-          this.element.getAttribute('src'));
+      this.srcset_ = parseSrcset(
+        this.element.getAttribute("srcset") || this.element.getAttribute("src")
+      );
 
       // Default placeholdder
       if (this.isDefaultPlaceholder_) {
         this.placeholder_ = createLoaderElement();
-        this.placeholder_.setAttribute('placeholder', '');
+        this.placeholder_.setAttribute("placeholder", "");
         this.element.appendChild(this.placeholder_);
       }
     }
@@ -110,12 +108,11 @@ export function installImg(win) {
       if (this.getLayoutWidth() <= 0) {
         return Promise.resolve();
       }
-      let src = this.srcset_.select(this.getLayoutWidth(),
-          this.getDpr()).url;
-      if (src == this.img_.getAttribute('src')) {
+      let src = this.srcset_.select(this.getLayoutWidth(), this.getDpr()).url;
+      if (src == this.img_.getAttribute("src")) {
         return Promise.resolve();
       }
-      this.img_.setAttribute('src', src);
+      this.img_.setAttribute("src", src);
 
       let onImgLoaded = this.onImgLoaded_.bind(this);
       return loadPromise(this.img_).then(onImgLoaded, onImgLoaded);
@@ -125,8 +122,8 @@ export function installImg(win) {
     toggleDefaultPlaceholder_() {
       if (this.isDefaultPlaceholder_) {
         if (!this.isInViewport()) {
-          this.placeholder_.classList.toggle('hidden', true);
-          this.placeholder_.classList.toggle('active', false);
+          this.placeholder_.classList.toggle("hidden", true);
+          this.placeholder_.classList.toggle("active", false);
         } else {
           // Set a minimum delay in case the image resource loads much faster
           // than an intermittent loading screen that disappears right away.
@@ -134,10 +131,14 @@ export function installImg(win) {
           return timer.delay(() => {
             vsync.mutate(() => {
               if (this.placeholder_) {
-                this.placeholder_.classList.toggle('hidden',
-                    !this.isInViewport());
-                this.placeholder_.classList.toggle('active',
-                    this.isInViewport());
+                this.placeholder_.classList.toggle(
+                  "hidden",
+                  !this.isInViewport()
+                );
+                this.placeholder_.classList.toggle(
+                  "active",
+                  this.isInViewport()
+                );
               }
             });
           }, 100);
@@ -153,8 +154,8 @@ export function installImg(win) {
         this.isDefaultPlaceholder_ = false;
         let placeholder = this.placeholder_;
         this.placeholder_ = null;
-        placeholder.classList.remove('active');
-        placeholder.classList.add('hidden');
+        placeholder.classList.remove("active");
+        placeholder.classList.add("hidden");
         this.deferMutate(() => {
           removeElement(placeholder);
         });
@@ -171,7 +172,7 @@ export function installImg(win) {
       this.cleanupPlaceholder_();
       return element;
     }
-  };
+  }
 
-  registerElement(win, 'amp-img', AmpImg);
+  registerElement(win, "amp-img", AmpImg);
 }

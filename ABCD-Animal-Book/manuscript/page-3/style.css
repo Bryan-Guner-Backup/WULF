@@ -3,7 +3,7 @@ body {
   margin: 0 0;
   overflow: hidden;
   color: #666;
-  font: 3.5vw/1.1 'Chewy', sans-serif;
+  font: 3.5vw/1.1 "Chewy", sans-serif;
 }
 
 .leaf {
@@ -54,5 +54,5 @@ a:hover {
 
 p {
   font-size: 4vw;
-  font: 3vw/1.1 'Chewy', sans-serif;
+  font: 3vw/1.1 "Chewy", sans-serif;
 }

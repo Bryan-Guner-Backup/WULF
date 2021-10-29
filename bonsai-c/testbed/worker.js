@@ -1,8 +1,8 @@
-importScripts('module.js');
+importScripts("module.js");
 
 var module = Module();
 
-onmessage = function(e) {
-	var result = module.main();
-	postMessage(result);
+onmessage = function (e) {
+  var result = module.main();
+  postMessage(result);
 };

@@ -4,9 +4,9 @@ The document gives an overview of the subcommands that Beaker supports and descr
 
 ## Why Subcommands?
 
-Subcommands are designed to make test development and iteration simpler by separating out all of the phases of a Beaker [test run](test_run.md)*. Instead of requiring the entirety of your Beaker execution in one command, subcommands allow you to execute each phase independently. This allows for faster feedback for potential failures and better control for iterating over actual test development.
+Subcommands are designed to make test development and iteration simpler by separating out all of the phases of a Beaker [test run](test_run.md)\*. Instead of requiring the entirety of your Beaker execution in one command, subcommands allow you to execute each phase independently. This allows for faster feedback for potential failures and better control for iterating over actual test development.
 
-Most subcommands pass through flags to the Beaker options. For instance, you can pass through `--hosts` to the `init` subcommand and it will parse the `--hosts` argument as if you were executing a Beaker run*. Please review the subcommand specific help for further information. You can see the help for a specific subcommand by running `beaker help SUBCOMMAND`.
+Most subcommands pass through flags to the Beaker options. For instance, you can pass through `--hosts` to the `init` subcommand and it will parse the `--hosts` argument as if you were executing a Beaker run\*. Please review the subcommand specific help for further information. You can see the help for a specific subcommand by running `beaker help SUBCOMMAND`.
 
 Please note that in this document, a Beaker `run` is standard beaker invocation without any subcommands.
 

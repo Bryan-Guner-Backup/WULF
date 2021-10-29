@@ -45,7 +45,7 @@ body {
   height: 6.5vw;
   border-radius: 100vw;
   background: white;
-  margin: 4vw 7vw
+  margin: 4vw 7vw;
 }
 
 .iris {
@@ -76,7 +76,7 @@ body {
   height: 7vw;
   border-radius: 100%;
   background: #ae8663;
-  margin: 7vw 0vw
+  margin: 7vw 0vw;
 }
 
 .boca::before {
@@ -85,7 +85,7 @@ body {
   width: 16vw;
   height: 12vw;
   border-radius: 100%;
-  border-top: 6vw ridge #D69364;
+  border-top: 6vw ridge #d69364;
   margin: -3vw -13vw;
 }
 
@@ -95,10 +95,8 @@ body {
   height: 21vw;
   border-radius: 0 0 112vw 112vw;
   border-bottom: 4vw solid #ea7684;
-  ;
   border-left: 4.5vw solid #ea7684;
-  ;
-  margin: 21vw 33vw
+  margin: 21vw 33vw;
 }
 
 .body {
@@ -108,7 +106,7 @@ body {
   -webkit-border-radius: 63vw 63vw 63vw 63vw / 108vw 108vw 72vw 72vw;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
   background: #2b0c14;
-  margin: 37vw 35vw
+  margin: 37vw 35vw;
 }
 
 .body::before {
@@ -118,7 +116,7 @@ body {
   height: 14vw;
   border-radius: 100vw;
   background: #ccc;
-  margin: -1.5vw 7vw
+  margin: -1.5vw 7vw;
 }
 
 .alas {
@@ -130,7 +128,7 @@ body {
   transform: rotate(-65deg);
   -moz-transform: rotate(-65deg);
   -webkit-transform: rotate(-65deg);
-  margin: 43vw 24vw
+  margin: 43vw 24vw;
 }
 
 .alas::before {
@@ -143,7 +141,7 @@ body {
   transform: rotate(-39deg);
   -moz-transform: rotate(-39deg);
   -webkit-transform: rotate(-39deg);
-  margin: 14vw 5.5vw
+  margin: 14vw 5.5vw;
 }
 
 .legs {
@@ -151,8 +149,8 @@ body {
   width: 7vw;
   height: 8.5vw;
   border-radius: 100%;
-  border-left: 2.5vw groove #D69364;
-  margin: 63.5vw 39vw
+  border-left: 2.5vw groove #d69364;
+  margin: 63.5vw 39vw;
 }
 
 .legs::before {
@@ -161,8 +159,8 @@ body {
   width: 7vw;
   height: 8.5vw;
   border-radius: 100%;
-  border-left: 2.5vw groove #D69364;
-  margin: 0vw -.7vw
+  border-left: 2.5vw groove #d69364;
+  margin: 0vw -0.7vw;
 }
 
 .legs::after {
@@ -171,8 +169,8 @@ body {
   width: 7vw;
   height: 8.5vw;
   border-radius: 100%;
-  border-left: 2.5vw groove #D69364;
-  margin: 0vw 1vw
+  border-left: 2.5vw groove #d69364;
+  margin: 0vw 1vw;
 }
 
 .legs3 {
@@ -180,8 +178,8 @@ body {
   width: 7vw;
   height: 8.5vw;
   border-radius: 100%;
-  border-left: 2.5vw groove #D69364;
-  margin: 63.5vw 49vw
+  border-left: 2.5vw groove #d69364;
+  margin: 63.5vw 49vw;
 }
 
 .legs3::before {
@@ -190,8 +188,8 @@ body {
   width: 7vw;
   height: 8.5vw;
   border-radius: 100%;
-  border-left: 2.5vw groove #D69364;
-  margin: 0vw -.7vw
+  border-left: 2.5vw groove #d69364;
+  margin: 0vw -0.7vw;
 }
 
 .legs3::after {
@@ -200,8 +198,8 @@ body {
   width: 7vw;
   height: 8.5vw;
   border-radius: 100%;
-  border-left: 2.5vw groove #D69364;
-  margin: 0vw 1vw
+  border-left: 2.5vw groove #d69364;
+  margin: 0vw 1vw;
 }
 
 .cola {
@@ -248,7 +246,7 @@ body {
   height: 7vw;
   border-radius: 50vw;
   background: #874128;
-  margin: 64vw 17vw
+  margin: 64vw 17vw;
 }
 
 @keyframes sube {

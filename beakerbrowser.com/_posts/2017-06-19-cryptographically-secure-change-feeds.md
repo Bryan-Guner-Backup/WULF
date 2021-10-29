@@ -10,36 +10,36 @@ excerpt: |
 ---
 
 **TL;DR: Dat uses an append-only feed that’s inspired by Certificate Transparency to create auditable change logs in file archives. We use this to deliver Web applications securely in Beaker.**
- 
+
 The [Decentralized Archive Transport (Dat) Protocol](https://beakerbrowser.com/docs/inside-beaker/) uses append-only feeds to internally represent its file archives. Each time you make a change, a `put` or a `del` is appended to the feed.
- 
+
 ```
 rev1. put /index.html '<h1>hi!</h1>'
 rev2. put /styles.css '* { color: red }'
 rev3. put /styles.css '* { color: blue }'
 rev4. put /main.js    'console.log("hi")'
 ```
- 
+
 This is how the archive is versioned. Each change creates a revision, and each revision can be kept for later reading. This enables historic checkouts:
- 
+
 ```js
-archive.checkout(2).readFile('/styles.css')
+archive.checkout(2).readFile("/styles.css");
 // => '* { color: red }'
 ```
- 
+
 Here's another example:
- 
+
 ```js
 // revision 2 doesnt have a main.js yet
 archive.checkout(2).readdir('/') => ['index.html', 'styles.css']
 ```
- 
+
 In Beaker, you can access historic versions of sites by URL. Here, for instance, is the URL to revision 100 of our website: [dat://beakerbrowser.com+100/](dat://beakerbrowser.com+100/).
- 
+
 ## Dissecting the feed
- 
+
 So now we know there’s an append-only feed inside the files archive. But, what’s inside the append-only feed?
- 
+
 Internally, Dat represents the append-only feed with a signed merkle tree.
 
 <figure>
@@ -57,11 +57,11 @@ The hashes of the entries in the feed act as the leaves of the tree. Each time a
 Each root hash is signed. Consumers of the feed will already have the public key, because the file archive is addressed by its public key, so they can easily check the signature.
 
 This provides authentication and integrity. Now, what about the append-only constraint?
- 
+
 ## Enforcing the append-only constraint
 
-It’s important that the change-feeds *really are* append-only.
- 
+It’s important that the change-feeds _really are_ append-only.
+
 Why? In Beaker, Dat archives contain Web applications. Our goal is to support end-to-end secrecy of user data, so it's very important that we can trust the software.
 
 <aside class="highlight">
@@ -71,7 +71,7 @@ Why? In Beaker, Dat archives contain Web applications. Our goal is to support en
 We want a "uniform distribution" of all applications. If it were possible for a developer to distribute multiple versions of their code, then they could deliver one version of the app to most users, and deliver a compromised version to a single target. We call this a "targeted payload" attack.
 
 In Dat, this would be visible as multiple histories to the archive.
- 
+
 <figure>
 <img src="/img/posts/cryptographically-secure-change-feeds/targeted-payloads.png" >
 <figcaption>The targeted payload creates its own alternate history</figcaption>

@@ -1,11 +1,11 @@
 ---
-date: '2014-12-23 21:14:00'
+date: "2014-12-23 21:14:00"
 layout: post
 slug: with-a-sub-10-image-classifier-a-decent-face-detector-here-comes-ccv-0.7
 status: publish
 title: with a sub-10% image classifier, a decent face detector, here comes ccv 0.7
 categories:
-- post
+  - post
 ---
 
 A few months ago, with the release of ccv 0.6, I promised a subsequent version of ccv without major updates but a lot bugfixes. There is a close to release date at around July, however, slippery happened and what you see now is a 4-month delayed release bundled with some exciting new functionalities.
@@ -14,9 +14,9 @@ A few months ago, with the release of ccv 0.6, I promised a subsequent version o
 
 [![Lemur on VGG](/photo/2014-09-09-lemur-vgg.png "Lemur with New Model")](/photo/2014-09-09-lemur-vgg.png)
 
-In August, libccv's pre-trained model participated ImageNet 2014 Large Scale Image Visual Recognition Competition and placed humbly in the middle. The idea is to provide an openly pre-trained model so that every other participant should be raised above this baseline. After a few months, a new image classification pre-trained model now provided with **ccv 0.7 which reached 9.9% top-5 missing rate (*given an image, with 5 guesses, one of the guesses is the correct anwser in 90.1% cases*) on ImageNet 2012 dataset**. In ImageNet 2014 challenge, only 3 participants (GoogLeNet, VGG models, and MSRA) reached sub-10% with one model, and among these, VGG made their models available in [Caffe Model Zoo](https://github.com/BVLC/caffe/wiki/Model-Zoo) under [CC-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/).
+In August, libccv's pre-trained model participated ImageNet 2014 Large Scale Image Visual Recognition Competition and placed humbly in the middle. The idea is to provide an openly pre-trained model so that every other participant should be raised above this baseline. After a few months, a new image classification pre-trained model now provided with **ccv 0.7 which reached 9.9% top-5 missing rate (_given an image, with 5 guesses, one of the guesses is the correct anwser in 90.1% cases_) on ImageNet 2012 dataset**. In ImageNet 2014 challenge, only 3 participants (GoogLeNet, VGG models, and MSRA) reached sub-10% with one model, and among these, VGG made their models available in [Caffe Model Zoo](https://github.com/BVLC/caffe/wiki/Model-Zoo) under [CC-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/).
 
-Finally, multi-GPU with proper data / model parallelism (*[One weird trick](http://arxiv.org/abs/1404.5997)*) is implemented in this version, with 4 GPUs, Matt's model takes one and half day to converge (3.72x speed-up). 2 GPU support was actually done in July, but the recent advance in image classification challenge calls for more GPUs, and the current version is a complete rewrite and in theory can support up to 8 GPUs, however, I don't have that setup, thus, hard-coded 4 GPU limit was imposed.
+Finally, multi-GPU with proper data / model parallelism (_[One weird trick](http://arxiv.org/abs/1404.5997)_) is implemented in this version, with 4 GPUs, Matt's model takes one and half day to converge (3.72x speed-up). 2 GPU support was actually done in July, but the recent advance in image classification challenge calls for more GPUs, and the current version is a complete rewrite and in theory can support up to 8 GPUs, however, I don't have that setup, thus, hard-coded 4 GPU limit was imposed.
 
 This version of ccv also comes with optimized convolutional kernels on CPU (SIMD with SSE2 or NEON). For the forward pass, with Core i7 5930K, VGG-D model takes about 2 seconds, Matt's model takes about 600 ms on 10 averaging outputs (crop to center, 4 corners, and their horizontal flips). A simplified Matt's model can do the same 10 averaging outputs on iPhone 6 within 1 second.
 

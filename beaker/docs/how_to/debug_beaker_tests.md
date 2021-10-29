@@ -4,7 +4,7 @@ beaker includes [pry-byebug](https://github.com/deivid-rodriguez/pry-byebug), a 
 
 ### What is Pry?
 
-[Pry](http://pryrepl.org/) is a powerful Ruby editing and debugging tool.  Beaker uses Pry runtime invocation to create a developer console.
+[Pry](http://pryrepl.org/) is a powerful Ruby editing and debugging tool. Beaker uses Pry runtime invocation to create a developer console.
 
 ### What is byebug?
 
@@ -12,9 +12,9 @@ beaker includes [pry-byebug](https://github.com/deivid-rodriguez/pry-byebug), a 
 
 There are several ways to have your tests break and enter debugging:
 
- 1. [Add a breakpoint to your test file](#add-a-breakpoint-to-your-test-file)
- 2. [Use the --debug-errors option](#use-the---debug-errors-option)
- 3. [Defining external breakpoints with byebug](#defining-external-breakpoints-with-byebug)
+1.  [Add a breakpoint to your test file](#add-a-breakpoint-to-your-test-file)
+2.  [Use the --debug-errors option](#use-the---debug-errors-option)
+3.  [Defining external breakpoints with byebug](#defining-external-breakpoints-with-byebug)
 
 ## Add a breakpoint to your test file
 
@@ -24,7 +24,7 @@ Add Pry to individual tests by adding `require 'pry'` to the Ruby test file. The
 
 #### Example test trypry.rb
 
-Here's a test file that exercises different ways of running commands on Beaker hosts.  At the end of the main `hosts.each` loop I've included `binding.pry` to invoke the console.
+Here's a test file that exercises different ways of running commands on Beaker hosts. At the end of the main `hosts.each` loop I've included `binding.pry` to invoke the console.
 
 ```
 hosts.each do |h|
@@ -134,9 +134,10 @@ From: /Users/anode/beaker/tests/trypry.rb @ line 19 self.run_test:
 
 #### Using the console
 
-At this point I have access to the console.  I have full access to Beaker hosts, the Beaker DSL and Ruby.
+At this point I have access to the console. I have full access to Beaker hosts, the Beaker DSL and Ruby.
 
 Here's some sample console calls:
+
 ```
 [1] pry(#<Beaker::TestCase>)> hosts
 => [pe-centos6, w2k8r2, w2k3r2]

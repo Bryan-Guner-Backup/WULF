@@ -1,13 +1,13 @@
-'use strict'
+"use strict";
 
-var _ = require('../util/_')
-var BlockHeader = require('./blockheader')
-var BufferReader = require('../encoding/bufferreader')
-var BufferWriter = require('../encoding/bufferwriter')
-var Hash = require('../crypto/hash')
-var Transaction = require('../transaction')
-var errors = require('../errors')
-var $ = require('../util/preconditions')
+var _ = require("../util/_");
+var BlockHeader = require("./blockheader");
+var BufferReader = require("../encoding/bufferreader");
+var BufferWriter = require("../encoding/bufferwriter");
+var Hash = require("../crypto/hash");
+var Transaction = require("../transaction");
+var errors = require("../errors");
+var $ = require("../util/preconditions");
 
 /**
  * Instantiate a MerkleBlock from a Buffer, JSON object, or Object with
@@ -17,20 +17,20 @@ var $ = require('../util/preconditions')
  * @returns {MerkleBlock}
  * @constructor
  */
-function MerkleBlock (arg) {
+function MerkleBlock(arg) {
   if (!(this instanceof MerkleBlock)) {
-    return new MerkleBlock(arg)
+    return new MerkleBlock(arg);
   }
 
-  var info = {}
+  var info = {};
   if (Buffer.isBuffer(arg)) {
-    info = MerkleBlock._fromBufferReader(BufferReader(arg))
+    info = MerkleBlock._fromBufferReader(BufferReader(arg));
   } else if (_.isObject(arg)) {
-    var header
+    var header;
     if (arg.header instanceof BlockHeader) {
-      header = arg.header
+      header = arg.header;
     } else {
-      header = BlockHeader.fromObject(arg.header)
+      header = BlockHeader.fromObject(arg.header);
     }
     info = {
       /**
@@ -52,100 +52,101 @@ function MerkleBlock (arg) {
        * @name MerkleBlock#flags
        * @type {Number[]}
        */
-      flags: arg.flags
-    }
+      flags: arg.flags,
+    };
   } else {
-    throw new TypeError('Unrecognized argument for MerkleBlock')
+    throw new TypeError("Unrecognized argument for MerkleBlock");
   }
-  _.extend(this, info)
-  this._flagBitsUsed = 0
-  this._hashesUsed = 0
+  _.extend(this, info);
+  this._flagBitsUsed = 0;
+  this._hashesUsed = 0;
 
-  return this
+  return this;
 }
 
 /**
  * @param {Buffer} - MerkleBlock data in a Buffer object
  * @returns {MerkleBlock} - A MerkleBlock object
  */
-MerkleBlock.fromBuffer = function fromBuffer (buf) {
-  return MerkleBlock.fromBufferReader(BufferReader(buf))
-}
+MerkleBlock.fromBuffer = function fromBuffer(buf) {
+  return MerkleBlock.fromBufferReader(BufferReader(buf));
+};
 
 /**
  * @param {BufferReader} - MerkleBlock data in a BufferReader object
  * @returns {MerkleBlock} - A MerkleBlock object
  */
-MerkleBlock.fromBufferReader = function fromBufferReader (br) {
-  return new MerkleBlock(MerkleBlock._fromBufferReader(br))
-}
+MerkleBlock.fromBufferReader = function fromBufferReader(br) {
+  return new MerkleBlock(MerkleBlock._fromBufferReader(br));
+};
 
 /**
  * @returns {Buffer} - A buffer of the block
  */
-MerkleBlock.prototype.toBuffer = function toBuffer () {
-  return this.toBufferWriter().concat()
-}
+MerkleBlock.prototype.toBuffer = function toBuffer() {
+  return this.toBufferWriter().concat();
+};
 
 /**
  * @param {BufferWriter} - An existing instance of BufferWriter
  * @returns {BufferWriter} - An instance of BufferWriter representation of the MerkleBlock
  */
-MerkleBlock.prototype.toBufferWriter = function toBufferWriter (bw) {
+MerkleBlock.prototype.toBufferWriter = function toBufferWriter(bw) {
   if (!bw) {
-    bw = new BufferWriter()
+    bw = new BufferWriter();
   }
-  bw.write(this.header.toBuffer())
-  bw.writeUInt32LE(this.numTransactions)
-  bw.writeVarintNum(this.hashes.length)
+  bw.write(this.header.toBuffer());
+  bw.writeUInt32LE(this.numTransactions);
+  bw.writeVarintNum(this.hashes.length);
   for (var i = 0; i < this.hashes.length; i++) {
-    bw.write(Buffer.from(this.hashes[i], 'hex'))
+    bw.write(Buffer.from(this.hashes[i], "hex"));
   }
-  bw.writeVarintNum(this.flags.length)
+  bw.writeVarintNum(this.flags.length);
   for (i = 0; i < this.flags.length; i++) {
-    bw.writeUInt8(this.flags[i])
+    bw.writeUInt8(this.flags[i]);
   }
-  return bw
-}
+  return bw;
+};
 
 /**
  * @returns {Object} - A plain object with the MerkleBlock properties
  */
-MerkleBlock.prototype.toObject = MerkleBlock.prototype.toJSON = function toObject () {
-  return {
-    header: this.header.toObject(),
-    numTransactions: this.numTransactions,
-    hashes: this.hashes,
-    flags: this.flags
-  }
-}
+MerkleBlock.prototype.toObject = MerkleBlock.prototype.toJSON =
+  function toObject() {
+    return {
+      header: this.header.toObject(),
+      numTransactions: this.numTransactions,
+      hashes: this.hashes,
+      flags: this.flags,
+    };
+  };
 
 /**
  * Verify that the MerkleBlock is valid
  * @returns {Boolean} - True/False whether this MerkleBlock is Valid
  */
-MerkleBlock.prototype.validMerkleTree = function validMerkleTree () {
-  $.checkState(_.isArray(this.flags), 'MerkleBlock flags is not an array')
-  $.checkState(_.isArray(this.hashes), 'MerkleBlock hashes is not an array')
+MerkleBlock.prototype.validMerkleTree = function validMerkleTree() {
+  $.checkState(_.isArray(this.flags), "MerkleBlock flags is not an array");
+  $.checkState(_.isArray(this.hashes), "MerkleBlock hashes is not an array");
 
   // Can't have more hashes than numTransactions
   if (this.hashes.length > this.numTransactions) {
-    return false
+    return false;
   }
 
   // Can't have more flag bits than num hashes
   if (this.flags.length * 8 < this.hashes.length) {
-    return false
+    return false;
   }
 
-  var height = this._calcTreeHeight()
-  var opts = { hashesUsed: 0, flagBitsUsed: 0 }
-  var root = this._traverseMerkleTree(height, 0, opts)
+  var height = this._calcTreeHeight();
+  var opts = { hashesUsed: 0, flagBitsUsed: 0 };
+  var root = this._traverseMerkleTree(height, 0, opts);
   if (opts.hashesUsed !== this.hashes.length) {
-    return false
+    return false;
   }
-  return root.equals(this.header.merkleRoot)
-}
+  return root.equals(this.header.merkleRoot);
+};
 
 /**
  * WARNING: This method is deprecated. Use filteredTxsHash instead.
@@ -153,41 +154,41 @@ MerkleBlock.prototype.validMerkleTree = function validMerkleTree () {
  * Return a list of all the txs hash that match the filter
  * @returns {Array} - txs hash that match the filter
  */
-MerkleBlock.prototype.filterdTxsHash = function filterdTxsHash () {
-  throw new Error('filterdTxsHash has been deprecated. use filteredTxsHash.')
-}
+MerkleBlock.prototype.filterdTxsHash = function filterdTxsHash() {
+  throw new Error("filterdTxsHash has been deprecated. use filteredTxsHash.");
+};
 
 /**
  * Return a list of all the txs hash that match the filter
  * @returns {Array} - txs hash that match the filter
  */
-MerkleBlock.prototype.filteredTxsHash = function filteredTxsHash () {
-  $.checkState(_.isArray(this.flags), 'MerkleBlock flags is not an array')
-  $.checkState(_.isArray(this.hashes), 'MerkleBlock hashes is not an array')
+MerkleBlock.prototype.filteredTxsHash = function filteredTxsHash() {
+  $.checkState(_.isArray(this.flags), "MerkleBlock flags is not an array");
+  $.checkState(_.isArray(this.hashes), "MerkleBlock hashes is not an array");
 
   // Can't have more hashes than numTransactions
   if (this.hashes.length > this.numTransactions) {
-    throw new errors.MerkleBlock.InvalidMerkleTree()
+    throw new errors.MerkleBlock.InvalidMerkleTree();
   }
 
   // Can't have more flag bits than num hashes
   if (this.flags.length * 8 < this.hashes.length) {
-    throw new errors.MerkleBlock.InvalidMerkleTree()
+    throw new errors.MerkleBlock.InvalidMerkleTree();
   }
 
   // If there is only one hash the filter do not match any txs in the block
   if (this.hashes.length === 1) {
-    return []
-  };
-
-  var height = this._calcTreeHeight()
-  var opts = { hashesUsed: 0, flagBitsUsed: 0 }
-  var txs = this._traverseMerkleTree(height, 0, opts, true)
-  if (opts.hashesUsed !== this.hashes.length) {
-    throw new errors.MerkleBlock.InvalidMerkleTree()
+    return [];
   }
-  return txs
-}
+
+  var height = this._calcTreeHeight();
+  var opts = { hashesUsed: 0, flagBitsUsed: 0 };
+  var txs = this._traverseMerkleTree(height, 0, opts, true);
+  if (opts.hashesUsed !== this.hashes.length) {
+    throw new errors.MerkleBlock.InvalidMerkleTree();
+  }
+  return txs;
+};
 
 /**
  * Traverse a the tree in this MerkleBlock, validating it along the way
@@ -203,39 +204,45 @@ MerkleBlock.prototype.filteredTxsHash = function filteredTxsHash () {
  * @returns {Array} - transactions found during traversal that match the filter
  * @private
  */
-MerkleBlock.prototype._traverseMerkleTree = function traverseMerkleTree (depth, pos, opts, checkForTxs) {
-  opts = opts || {}
-  opts.txs = opts.txs || []
-  opts.flagBitsUsed = opts.flagBitsUsed || 0
-  opts.hashesUsed = opts.hashesUsed || 0
-  checkForTxs = checkForTxs || false
+MerkleBlock.prototype._traverseMerkleTree = function traverseMerkleTree(
+  depth,
+  pos,
+  opts,
+  checkForTxs
+) {
+  opts = opts || {};
+  opts.txs = opts.txs || [];
+  opts.flagBitsUsed = opts.flagBitsUsed || 0;
+  opts.hashesUsed = opts.hashesUsed || 0;
+  checkForTxs = checkForTxs || false;
 
   if (opts.flagBitsUsed > this.flags.length * 8) {
-    return null
+    return null;
   }
-  var isParentOfMatch = (this.flags[opts.flagBitsUsed >> 3] >>> (opts.flagBitsUsed++ & 7)) & 1
+  var isParentOfMatch =
+    (this.flags[opts.flagBitsUsed >> 3] >>> (opts.flagBitsUsed++ & 7)) & 1;
   if (depth === 0 || !isParentOfMatch) {
     if (opts.hashesUsed >= this.hashes.length) {
-      return null
+      return null;
     }
-    var hash = this.hashes[opts.hashesUsed++]
+    var hash = this.hashes[opts.hashesUsed++];
     if (depth === 0 && isParentOfMatch) {
-      opts.txs.push(hash)
+      opts.txs.push(hash);
     }
-    return Buffer.from(hash, 'hex')
+    return Buffer.from(hash, "hex");
   } else {
-    var left = this._traverseMerkleTree(depth - 1, pos * 2, opts)
-    var right = left
+    var left = this._traverseMerkleTree(depth - 1, pos * 2, opts);
+    var right = left;
     if (pos * 2 + 1 < this._calcTreeWidth(depth - 1)) {
-      right = this._traverseMerkleTree(depth - 1, pos * 2 + 1, opts)
+      right = this._traverseMerkleTree(depth - 1, pos * 2 + 1, opts);
     }
     if (checkForTxs) {
-      return opts.txs
+      return opts.txs;
     } else {
-      return Hash.sha256sha256(Buffer.concat([left, right]))
+      return Hash.sha256sha256(Buffer.concat([left, right]));
     }
   }
-}
+};
 
 /** Calculates the width of a merkle tree at a given height.
  *  Modeled after Bitcoin Core merkleblock.h CalcTreeWidth()
@@ -243,74 +250,76 @@ MerkleBlock.prototype._traverseMerkleTree = function traverseMerkleTree (depth, 
  * @returns {Number} - Width of the tree at a given height
  * @private
  */
-MerkleBlock.prototype._calcTreeWidth = function calcTreeWidth (height) {
-  return (this.numTransactions + (1 << height) - 1) >> height
-}
+MerkleBlock.prototype._calcTreeWidth = function calcTreeWidth(height) {
+  return (this.numTransactions + (1 << height) - 1) >> height;
+};
 
 /** Calculates the height of the merkle tree in this MerkleBlock
  * @param {Number} - Height at which we want the tree width
  * @returns {Number} - Height of the merkle tree in this MerkleBlock
  * @private
  */
-MerkleBlock.prototype._calcTreeHeight = function calcTreeHeight () {
-  var height = 0
+MerkleBlock.prototype._calcTreeHeight = function calcTreeHeight() {
+  var height = 0;
   while (this._calcTreeWidth(height) > 1) {
-    height++
+    height++;
   }
-  return height
-}
+  return height;
+};
 
 /**
  * @param {Transaction|String} - Transaction or Transaction ID Hash
  * @returns {Boolean} - return true/false if this MerkleBlock has the TX or not
  * @private
  */
-MerkleBlock.prototype.hasTransaction = function hasTransaction (tx) {
-  $.checkArgument(!_.isUndefined(tx), 'tx cannot be undefined')
-  $.checkArgument(tx instanceof Transaction || typeof tx === 'string',
-    'Invalid tx given, tx must be a "string" or "Transaction"')
+MerkleBlock.prototype.hasTransaction = function hasTransaction(tx) {
+  $.checkArgument(!_.isUndefined(tx), "tx cannot be undefined");
+  $.checkArgument(
+    tx instanceof Transaction || typeof tx === "string",
+    'Invalid tx given, tx must be a "string" or "Transaction"'
+  );
 
-  var hash = tx
+  var hash = tx;
   if (tx instanceof Transaction) {
     // We need to reverse the id hash for the lookup
-    hash = Buffer.from(tx.id, 'hex').reverse().toString('hex')
+    hash = Buffer.from(tx.id, "hex").reverse().toString("hex");
   }
 
-  var txs = []
-  var height = this._calcTreeHeight()
-  this._traverseMerkleTree(height, 0, { txs: txs })
-  return txs.indexOf(hash) !== -1
-}
+  var txs = [];
+  var height = this._calcTreeHeight();
+  this._traverseMerkleTree(height, 0, { txs: txs });
+  return txs.indexOf(hash) !== -1;
+};
 
 /**
  * @param {Buffer} - MerkleBlock data
  * @returns {Object} - An Object representing merkleblock data
  * @private
  */
-MerkleBlock._fromBufferReader = function _fromBufferReader (br) {
-  $.checkState(!br.finished(), 'No merkleblock data received')
-  var info = {}
-  info.header = BlockHeader.fromBufferReader(br)
-  info.numTransactions = br.readUInt32LE()
-  var numHashes = br.readVarintNum()
-  info.hashes = []
+MerkleBlock._fromBufferReader = function _fromBufferReader(br) {
+  $.checkState(!br.finished(), "No merkleblock data received");
+  var info = {};
+  info.header = BlockHeader.fromBufferReader(br);
+  info.numTransactions = br.readUInt32LE();
+  var numHashes = br.readVarintNum();
+  info.hashes = [];
   for (var i = 0; i < numHashes; i++) {
-    info.hashes.push(br.read(32).toString('hex'))
+    info.hashes.push(br.read(32).toString("hex"));
   }
-  var numFlags = br.readVarintNum()
-  info.flags = []
+  var numFlags = br.readVarintNum();
+  info.flags = [];
   for (i = 0; i < numFlags; i++) {
-    info.flags.push(br.readUInt8())
+    info.flags.push(br.readUInt8());
   }
-  return info
-}
+  return info;
+};
 
 /**
  * @param {Object} - A plain JavaScript object
  * @returns {Block} - An instance of block
  */
-MerkleBlock.fromObject = function fromObject (obj) {
-  return new MerkleBlock(obj)
-}
+MerkleBlock.fromObject = function fromObject(obj) {
+  return new MerkleBlock(obj);
+};
 
-module.exports = MerkleBlock
+module.exports = MerkleBlock;

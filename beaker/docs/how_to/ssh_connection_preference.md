@@ -32,15 +32,15 @@ HOSTS:
     template: ubuntu-1604-x86_64
     ssh_preference: [:vmhostname, :hostname, :ip]
     roles:
-    - agent
-    - default
+      - agent
+      - default
   ubuntu1604-64-2:
     hypervisor: vmpooler
     platform: ubuntu-16.04-amd64
     template: ubuntu-1604-x86_64
     ssh_preference: [:ip, :vmhostname]
     roles:
-    - agent
+      - agent
 CONFIG:
   nfs_server: none
   consoleport: 443

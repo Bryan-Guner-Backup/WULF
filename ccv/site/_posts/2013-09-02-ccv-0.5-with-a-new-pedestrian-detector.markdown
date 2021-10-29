@@ -1,11 +1,11 @@
 ---
-date: '2013-09-02 22:35:00'
+date: "2013-09-02 22:35:00"
 layout: post
 slug: ccv-0.5-with-a-new-pedestrian-detector
 status: publish
 title: ccv 0.5 with a new pedestrian detector
 categories:
-- post
+  - post
 ---
 
 It has been half a year since the last release of ccv. I haven't kept up my words of releasing a new version of ccv every four weeks. The colorful spring and energetic summer are playful. Hopefully during the depressing fall and bitter winter, I could keep up the pace.

@@ -6,7 +6,7 @@ The confine method will limit the hosts the testcase is run against. You can pas
 
 Full method documentation here:
 
-* [confine](http://www.rubydoc.info/github/puppetlabs/beaker/Beaker/DSL/Structure#confine-instance_method)
+- [confine](http://www.rubydoc.info/github/puppetlabs/beaker/Beaker/DSL/Structure#confine-instance_method)
 
 ## How does the optional Array<Host> parameter work?
 
@@ -38,7 +38,6 @@ Take the following example:
         platform: ubuntu-14.04-amd64
         template: Delivery/Quality Assurance/Templates/vCloud/ubuntu-1404-x86_64
         hypervisor: vcloud
-
 
 Using the following confine:
 

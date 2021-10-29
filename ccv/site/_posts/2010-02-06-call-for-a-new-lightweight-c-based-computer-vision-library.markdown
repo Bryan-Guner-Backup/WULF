@@ -1,11 +1,11 @@
 ---
-date: '2010-02-06 14:10:48'
+date: "2010-02-06 14:10:48"
 layout: post
 slug: call-for-a-new-lightweight-c-based-computer-vision-library
 status: publish
 title: Call for a new, lightweight, c-based computer vision library
 categories:
-- post
+  - post
 ---
 
 Since 2005, most of my computer vision work were done with OpenCV. It is an amazingly hand-optimized piece of software. A large number of modern applications are based on OpenCV framework. It is a useful toolset. However, for all this years, I finally feel the need to make a more lightweight, pure-c/function based library. There are some ideas:

@@ -16,8 +16,8 @@
 
 // TODO(malteubl) Move somewhere else since this is not an ad.
 
-import {writeScript, executeAfterWriteScript} from '../src/3p';
-import {setStyles} from '../src/style';
+import { writeScript, executeAfterWriteScript } from "../src/3p";
+import { setStyles } from "../src/style";
 
 /**
  * Returns the Twitter API object. If the current frame is the master
@@ -27,15 +27,15 @@ import {setStyles} from '../src/style';
  */
 function getTwttr(global) {
   if (context.isMaster) {
-    return global.twttrPromise = new Promise(function(resolve, reject) {
-      var s = document.createElement('script');
-      s.src = 'https://platform.twitter.com/widgets.js';
-      s.onload = function() {
+    return (global.twttrPromise = new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = "https://platform.twitter.com/widgets.js";
+      s.onload = function () {
         resolve(global.twttr);
       };
       s.onerror = reject;
       global.document.body.appendChild(s);
-    });
+    }));
   } else {
     // Because we rely on this global existing it is important that
     // this promise is created synchronously after master selection.
@@ -48,34 +48,38 @@ function getTwttr(global) {
  * @param {!Object} data
  */
 export function twitter(global, data) {
-  var tweet = document.createElement('div');
-  tweet.id = 'tweet';
+  var tweet = document.createElement("div");
+  tweet.id = "tweet";
   var width = data.initialWindowWidth;
   var height = data.initialWindowHeight;
-  tweet.style.width = '100%';
-  global.document.getElementById('c').appendChild(tweet);
-  getTwttr(global).then(function(twttr) {
+  tweet.style.width = "100%";
+  global.document.getElementById("c").appendChild(tweet);
+  getTwttr(global).then(function (twttr) {
     // Dimensions are given by the parent frame.
     delete data.width;
     delete data.height;
     twttr.widgets.createTweet(data.tweetid, tweet, data).then(() => {
-      var iframe = global.document.querySelector('#c iframe');
+      var iframe = global.document.querySelector("#c iframe");
       // Unfortunately the tweet isn't really done when the promise
       // resolves. We listen for resize to learn when things are
       // really done.
-      iframe.contentWindow.addEventListener('resize', function(e) {
-        render();
-      }, true);
+      iframe.contentWindow.addEventListener(
+        "resize",
+        function (e) {
+          render();
+        },
+        true
+      );
       render();
     });
   });
 
-
   function render() {
-    var iframe = global.document.querySelector('#c iframe');
+    var iframe = global.document.querySelector("#c iframe");
     var body = iframe.contentWindow.document.body;
     context.updateDimensions(
-        body./*OK*/offsetWidth,
-        body./*OK*/offsetHeight + /* margins */ 20);
+      body./*OK*/ offsetWidth,
+      body./*OK*/ offsetHeight + /* margins */ 20
+    );
   }
 }

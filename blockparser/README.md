@@ -1,5 +1,4 @@
-blockparser
-===========
+# blockparser
 
     Who wrote it ?
     --------------
@@ -305,4 +304,3 @@ blockparser
         . The code makes heavy use of the google dense hash maps. You can switch it to use sparse hash
           maps (see Makefile, search for: DENSE, undef it). Sparse hash maps are slower but save quite a
           bit of RAM.
-

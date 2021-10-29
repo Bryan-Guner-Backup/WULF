@@ -16,7 +16,7 @@
 
 .ui-flipbook .page-wrapper {
   -webkit-perspective: 2000px;
-          perspective: 2000px;
+  perspective: 2000px;
 }
 
 .ui-slider {
@@ -176,7 +176,7 @@
 
 /* line 169, /Users/admin/projects/RoR/bubblin/app/assets/stylesheets/scss/_book.scss */
 .ui-miniatures-slider .focused-page {
-  background-color: #B30000;
+  background-color: #b30000;
 }
 
 /* line 172, /Users/admin/projects/RoR/bubblin/app/assets/stylesheets/scss/_book.scss */
@@ -398,7 +398,8 @@ body {
 }
 
 /* line 357, /Users/admin/projects/RoR/bubblin/app/assets/stylesheets/scss/_book.scss */
-.touch-device.display-single .ui-arrow-next-page, .touch-device.display-single .ui-arrow-previous-page {
+.touch-device.display-single .ui-arrow-next-page,
+.touch-device.display-single .ui-arrow-previous-page {
   display: none;
 }
 
@@ -416,7 +417,7 @@ body {
   font-size: 60px;
   opacity: 0.5;
   -webkit-transition: opacity 0.2s;
-          transition: opacity 0.2s;
+  transition: opacity 0.2s;
   cursor: pointer;
   background: rgba(100, 100, 100, 0.4);
   display: -webkit-box;
@@ -425,8 +426,8 @@ body {
   display: flex;
   -webkit-box-align: center;
   -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   border-radius: 0 10px 10px 0;
   color: white;
 }
@@ -489,11 +490,11 @@ body {
   -ms-animation-iteration-count: infinite;
   -ms-animation-timing-function: ease-in-out;
   -webkit-animation: next-page 1s;
-          animation: next-page 1s;
+  animation: next-page 1s;
   -webkit-animation-iteration-count: infinite;
-          animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
   -webkit-animation-timing-function: ease-in-out;
-          animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
 }
 
 @-webkit-keyframes next-page {
@@ -698,7 +699,7 @@ body {
   /* line 613, /Users/admin/projects/RoR/bubblin/app/assets/stylesheets/scss/_book.scss */
   #controls.extend-ui-options #page-slider {
     -webkit-transform: translate3d(-250px, 0px, 0px);
-            transform: translate3d(-250px, 0px, 0px);
+    transform: translate3d(-250px, 0px, 0px);
   }
 
   /* line 620, /Users/admin/projects/RoR/bubblin/app/assets/stylesheets/scss/_book.scss */
@@ -715,7 +716,7 @@ body {
   #controls.extend-ui-options #ui-icon-toggle {
     color: #999;
     -webkit-transform: rotateZ(90deg);
-            transform: rotateZ(90deg);
+    transform: rotateZ(90deg);
   }
 }
 /* line 629, /Users/admin/projects/RoR/bubblin/app/assets/stylesheets/scss/_book.scss */
@@ -934,7 +935,7 @@ html:full-screen #controls #ui-icon-full-screen .fa:before {
   }
 }
 
-.page{
+.page {
   background: rgba(20, 125, 250, 0.1);
 }
 
@@ -946,5 +947,5 @@ html:full-screen #controls #ui-icon-full-screen .fa:before {
   min-width: 100%;
   min-height: 100%;
   margin: 0;
-  background:white;
+  background: white;
 }

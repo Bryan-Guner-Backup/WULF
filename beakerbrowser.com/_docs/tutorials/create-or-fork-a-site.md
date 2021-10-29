@@ -1,5 +1,5 @@
 ---
-title: 'Example: Create or fork a site'
+title: "Example: Create or fork a site"
 section: webAPIs
 sectionTitle: Web APIs
 order: 10
@@ -7,9 +7,9 @@ order: 10
 
 The [DatArchive API](/docs/apis/dat.html) provides three ways to get an archive instance:
 
- 1. Open an existing archive with [the `DatArchive` constructor](/docs/apis/dat.html#datarchive).
- 2. Create a new site with [`DatArchive.create()`](/docs/apis/dat.html#datarchive-create).
- 3. Fork an existing site with [`DatArchive.fork()`](/docs/apis/dat.html#datarchive-fork).
+1.  Open an existing archive with [the `DatArchive` constructor](/docs/apis/dat.html#datarchive).
+2.  Create a new site with [`DatArchive.create()`](/docs/apis/dat.html#datarchive-create).
+3.  Fork an existing site with [`DatArchive.fork()`](/docs/apis/dat.html#datarchive-fork).
 
 ## `DatArchive`
 

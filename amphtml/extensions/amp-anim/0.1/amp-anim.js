@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-import {getLengthNumeral, isLayoutSizeDefined} from '../../../src/layout';
-import {loadPromise} from '../../../src/event-helper';
-import {parseSrcset} from '../../../src/srcset';
-import * as st from '../../../src/style';
+import { getLengthNumeral, isLayoutSizeDefined } from "../../../src/layout";
+import { loadPromise } from "../../../src/event-helper";
+import { parseSrcset } from "../../../src/srcset";
+import * as st from "../../../src/style";
 
 class AmpAnim extends AMP.BaseElement {
-
   /** @override */
   isLayoutSupported(layout) {
     return isLayoutSizeDefined(layout);
@@ -38,10 +37,10 @@ class AmpAnim extends AMP.BaseElement {
 
     /** @private @const {!Element} */
     this.img_ = new Image();
-    this.propagateAttributes(['alt'], this.img_);
+    this.propagateAttributes(["alt"], this.img_);
     this.applyFillContent(this.img_);
-    this.img_.width = getLengthNumeral(this.element.getAttribute('width'));
-    this.img_.height = getLengthNumeral(this.element.getAttribute('height'));
+    this.img_.width = getLengthNumeral(this.element.getAttribute("width"));
+    this.img_.height = getLengthNumeral(this.element.getAttribute("height"));
 
     // The image shown/hidden depends on placeholder.
     st.toggle(this.img_, !this.placeholder_);
@@ -49,8 +48,9 @@ class AmpAnim extends AMP.BaseElement {
     this.element.appendChild(this.img_);
 
     /** @private @const {!Srcset} */
-    this.srcset_ = parseSrcset(this.element.getAttribute('srcset') ||
-        this.element.getAttribute('src'));
+    this.srcset_ = parseSrcset(
+      this.element.getAttribute("srcset") || this.element.getAttribute("src")
+    );
 
     /** @private {?Promise} */
     this.loadPromise_ = null;
@@ -80,14 +80,14 @@ class AmpAnim extends AMP.BaseElement {
   /** @override */
   documentInactiveCallback() {
     // Release memory held by the image - animations are typically large.
-    this.img_.src = '';
+    this.img_.src = "";
     return true;
   }
 
   /** @private */
   updateInViewport_() {
     let inViewport = this.isInViewport();
-    this.placeholder_.classList.toggle('hidden', inViewport);
+    this.placeholder_.classList.toggle("hidden", inViewport);
     st.toggle(this.img_, inViewport);
   }
 
@@ -99,15 +99,14 @@ class AmpAnim extends AMP.BaseElement {
     if (this.getLayoutWidth() <= 0) {
       return Promise.resolve();
     }
-    let src = this.srcset_.select(this.getLayoutWidth(),
-        this.getDpr()).url;
-    if (src == this.img_.getAttribute('src')) {
+    let src = this.srcset_.select(this.getLayoutWidth(), this.getDpr()).url;
+    if (src == this.img_.getAttribute("src")) {
       return Promise.resolve();
     }
-    this.img_.setAttribute('src', src);
+    this.img_.setAttribute("src", src);
     this.loadPromise_ = loadPromise(this.img_);
     return this.loadPromise_;
   }
-};
+}
 
-AMP.registerElement('amp-anim', AmpAnim);
+AMP.registerElement("amp-anim", AmpAnim);

@@ -6,7 +6,6 @@ class: dark
 
 Beaker is built by a team of decentralizated Web enthusiasists with a history of making Web apps, FOSS software, and peer-to-peer networks.
 
-
 ## Beaker team
 
 <div class="team-members">

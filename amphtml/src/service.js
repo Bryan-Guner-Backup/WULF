@@ -28,7 +28,7 @@ export function getService(win, id, factory) {
   }
   var s = services[id];
   if (!s) {
-    return services[id] = factory(win);
+    return (services[id] = factory(win));
   }
   return s;
 }

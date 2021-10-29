@@ -1,23 +1,23 @@
-'use strict';
+"use strict";
 
-var util = require('./util');
-var path = require('./path');
-var net = require('./net');
-var vm = require('./vm');
-var Module = require('./module');
+var util = require("./util");
+var path = require("./path");
+var net = require("./net");
+var vm = require("./vm");
+var Module = require("./module");
 var repl = Module.requireRepl();
 var inherits = util.inherits;
-var assert = require('./assert');
-var spawn = require('./child_process').spawn;
-var Buffer = require('./buffer').Buffer;
+var assert = require("./assert");
+var spawn = require("./child_process").spawn;
+var Buffer = require("./buffer").Buffer;
 
-exports.start = function(argv, stdin, stdout) {
+exports.start = function (argv, stdin, stdout) {
   argv || (argv = process.argv.slice(2));
 
   if (argv.length < 1) {
-    console.error('Usage: node debug script.js');
-    console.error('       node debug <host>:<port>');
-    console.error('       node debug -p <pid>');
+    console.error("Usage: node debug script.js");
+    console.error("       node debug <host>:<port>");
+    console.error("       node debug -p <pid>");
     process.exit(1);
   }
 
@@ -25,14 +25,16 @@ exports.start = function(argv, stdin, stdout) {
   stdin = stdin || process.stdin;
   stdout = stdout || process.stdout;
 
-  var args = ['--debug-brk'].concat(argv),
-      interface_ = new Interface(stdin, stdout, args);
+  var args = ["--debug-brk"].concat(argv),
+    interface_ = new Interface(stdin, stdout, args);
 
   stdin.resume();
 
-  process.on('uncaughtException', function(e) {
-    console.error("There was an internal error in Node's debugger. " +
-        'Please report this bug.');
+  process.on("uncaughtException", function (e) {
+    console.error(
+      "There was an internal error in Node's debugger. " +
+        "Please report this bug."
+    );
     console.error(e.message);
     console.error(e.stack);
     if (interface_.child) interface_.child.kill();
@@ -41,7 +43,6 @@ exports.start = function(argv, stdin, stdout) {
 };
 
 exports.port = 5858;
-
 
 //
 // Parser/Serializer for V8 debugger protocol
@@ -66,84 +67,86 @@ function Protocol() {
 }
 exports.Protocol = Protocol;
 
-
-Protocol.prototype._newRes = function(raw) {
-  this.res = { raw: raw || '', headers: {} };
-  this.state = 'headers';
+Protocol.prototype._newRes = function (raw) {
+  this.res = { raw: raw || "", headers: {} };
+  this.state = "headers";
   this.reqSeq = 1;
-  this.execute('');
+  this.execute("");
 };
 
-
-Protocol.prototype.execute = function(d) {
+Protocol.prototype.execute = function (d) {
   var res = this.res;
   res.raw += d;
 
   switch (this.state) {
-    case 'headers':
-      var endHeaderIndex = res.raw.indexOf('\r\n\r\n');
+    case "headers":
+      var endHeaderIndex = res.raw.indexOf("\r\n\r\n");
 
       if (endHeaderIndex < 0) break;
 
       var rawHeader = res.raw.slice(0, endHeaderIndex);
-      var endHeaderByteIndex = Buffer.byteLength(rawHeader, 'utf8');
-      var lines = rawHeader.split('\r\n');
+      var endHeaderByteIndex = Buffer.byteLength(rawHeader, "utf8");
+      var lines = rawHeader.split("\r\n");
       for (var i = 0; i < lines.length; i++) {
         var kv = lines[i].split(/: +/);
         res.headers[kv[0]] = kv[1];
       }
 
-      this.contentLength = +res.headers['Content-Length'];
+      this.contentLength = +res.headers["Content-Length"];
       this.bodyStartByteIndex = endHeaderByteIndex + 4;
 
-      this.state = 'body';
+      this.state = "body";
 
-      var len = Buffer.byteLength(res.raw, 'utf8');
+      var len = Buffer.byteLength(res.raw, "utf8");
       if (len - this.bodyStartByteIndex < this.contentLength) {
         break;
       }
-      // falls through
-    case 'body':
-      var resRawByteLength = Buffer.byteLength(res.raw, 'utf8');
+    // falls through
+    case "body":
+      var resRawByteLength = Buffer.byteLength(res.raw, "utf8");
 
       if (resRawByteLength - this.bodyStartByteIndex >= this.contentLength) {
         var buf = new Buffer(resRawByteLength);
-        buf.write(res.raw, 0, resRawByteLength, 'utf8');
-        res.body =
-            buf.slice(this.bodyStartByteIndex,
-                      this.bodyStartByteIndex +
-                      this.contentLength).toString('utf8');
+        buf.write(res.raw, 0, resRawByteLength, "utf8");
+        res.body = buf
+          .slice(
+            this.bodyStartByteIndex,
+            this.bodyStartByteIndex + this.contentLength
+          )
+          .toString("utf8");
         // JSON parse body?
         res.body = res.body.length ? JSON.parse(res.body) : {};
 
         // Done!
         this.onResponse(res);
 
-        this._newRes(buf.slice(this.bodyStartByteIndex +
-                               this.contentLength).toString('utf8'));
+        this._newRes(
+          buf
+            .slice(this.bodyStartByteIndex + this.contentLength)
+            .toString("utf8")
+        );
       }
       break;
 
     default:
-      throw new Error('Unknown state');
+      throw new Error("Unknown state");
   }
 };
 
-
-Protocol.prototype.serialize = function(req) {
-  req.type = 'request';
+Protocol.prototype.serialize = function (req) {
+  req.type = "request";
   req.seq = this.reqSeq++;
   var json = JSON.stringify(req);
-  return 'Content-Length: ' + Buffer.byteLength(json, 'utf8') +
-         '\r\n\r\n' + json;
+  return (
+    "Content-Length: " + Buffer.byteLength(json, "utf8") + "\r\n\r\n" + json
+  );
 };
-
 
 var NO_FRAME = -1;
 
 function Client() {
   net.Stream.call(this);
-  var protocol = this.protocol = new Protocol(this);
+  var protocol = (this.protocol = new Protocol(this));
   this._reqCallbacks = [];
   var socket = this;
 
@@ -154,8 +157,8 @@ function Client() {
   this.breakpoints = [];
 
   // Note that 'Protocol' requires strings instead of Buffers.
-  socket.setEncoding('utf8');
-  socket.on('data', function(d) {
+  socket.setEncoding("utf8");
+  socket.on("data", function (d) {
     protocol.execute(d);
   });
 
@@ -164,43 +167,41 @@ function Client() {
 inherits(Client, net.Stream);
 exports.Client = Client;
 
-
-Client.prototype._addHandle = function(desc) {
-  if (desc === null || typeof desc !== 'object' ||
-      typeof desc.handle !== 'number') {
+Client.prototype._addHandle = function (desc) {
+  if (
+    desc === null ||
+    typeof desc !== "object" ||
+    typeof desc.handle !== "number"
+  ) {
     return;
   }
 
   this.handles[desc.handle] = desc;
 
-  if (desc.type === 'script') {
+  if (desc.type === "script") {
     this._addScript(desc);
   }
 };
 
+var natives = process.binding("natives");
 
-var natives = process.binding('natives');
-
-
-Client.prototype._addScript = function(desc) {
+Client.prototype._addScript = function (desc) {
   this.scripts[desc.id] = desc;
   if (desc.name) {
-    desc.isNative = (desc.name.replace('.js', '') in natives) ||
-                    desc.name == 'node.js';
+    desc.isNative =
+      desc.name.replace(".js", "") in natives || desc.name == "node.js";
   }
 };
 
-
-Client.prototype._removeScript = function(desc) {
+Client.prototype._removeScript = function (desc) {
   this.scripts[desc.id] = undefined;
 };
 
-
-Client.prototype._onResponse = function(res) {
+Client.prototype._onResponse = function (res) {
   var cb,
-      index = -1;
+    index = -1;
 
-  this._reqCallbacks.some(function(fn, i) {
+  this._reqCallbacks.some(function (fn, i) {
     if (fn.request_seq == res.body.request_seq) {
       cb = fn;
       index = i;
@@ -211,30 +212,25 @@ Client.prototype._onResponse = function(res) {
   var self = this;
   var handled = false;
 
-  if (res.headers.Type == 'connect') {
+  if (res.headers.Type == "connect") {
     // Request a list of scripts for our own storage.
     self.reqScripts();
-    self.emit('ready');
+    self.emit("ready");
     handled = true;
-
-  } else if (res.body && res.body.event == 'break') {
-    this.emit('break', res.body);
+  } else if (res.body && res.body.event == "break") {
+    this.emit("break", res.body);
     handled = true;
-
-  } else if (res.body && res.body.event == 'exception') {
-    this.emit('exception', res.body);
+  } else if (res.body && res.body.event == "exception") {
+    this.emit("exception", res.body);
     handled = true;
-
-  } else if (res.body && res.body.event == 'afterCompile') {
+  } else if (res.body && res.body.event == "afterCompile") {
     this._addHandle(res.body.body.script);
     handled = true;
-
-  } else if (res.body && res.body.event == 'scriptCollected') {
+  } else if (res.body && res.body.event == "scriptCollected") {
     // ???
     this._removeScript(res.body.body.script);
     handled = true;
-
-  } else if (res.body && res.body.event === 'compileError') {
+  } else if (res.body && res.body.event === "compileError") {
     // This event is not used anywhere right now, perhaps somewhere in the
     // future?
     handled = true;
@@ -244,48 +240,46 @@ Client.prototype._onResponse = function(res) {
     this._reqCallbacks.splice(index, 1);
     handled = true;
 
-    var err = res.success === false && (res.message || true) ||
-              res.body.success === false && (res.body.message || true);
-    cb(err, res.body && res.body.body || res.body, res);
+    var err =
+      (res.success === false && (res.message || true)) ||
+      (res.body.success === false && (res.body.message || true));
+    cb(err, (res.body && res.body.body) || res.body, res);
   }
 
-  if (!handled) this.emit('unhandledResponse', res.body);
+  if (!handled) this.emit("unhandledResponse", res.body);
 };
 
-
-Client.prototype.req = function(req, cb) {
+Client.prototype.req = function (req, cb) {
   this.write(this.protocol.serialize(req));
   cb.request_seq = req.seq;
   this._reqCallbacks.push(cb);
 };
 
-
-Client.prototype.reqVersion = function(cb) {
-  cb = cb || function() {};
-  this.req({ command: 'version' }, function(err, body, res) {
+Client.prototype.reqVersion = function (cb) {
+  cb = cb || function () {};
+  this.req({ command: "version" }, function (err, body, res) {
     if (err) return cb(err);
     cb(null, res.body.body.V8Version, res.body.running);
   });
 };
 
-
-Client.prototype.reqLookup = function(refs, cb) {
+Client.prototype.reqLookup = function (refs, cb) {
   var self = this;
 
   // TODO: We have a cache of handle's we've already seen in this.handles
   // This can be used if we're careful.
   var req = {
-    command: 'lookup',
+    command: "lookup",
     arguments: {
-      handles: refs
-    }
+      handles: refs,
+    },
   };
 
-  cb = cb || function() {};
-  this.req(req, function(err, res) {
+  cb = cb || function () {};
+  this.req(req, function (err, res) {
     if (err) return cb(err);
     for (var ref in res) {
-      if (res[ref] !== null && typeof res[ref] === 'object') {
+      if (res[ref] !== null && typeof res[ref] === "object") {
         self._addHandle(res[ref]);
       }
     }
@@ -294,25 +288,25 @@ Client.prototype.reqLookup = function(refs, cb) {
   });
 };
 
-Client.prototype.reqScopes = function(cb) {
+Client.prototype.reqScopes = function (cb) {
   var self = this,
-      req = {
-        command: 'scopes',
-        arguments: {}
-      };
+    req = {
+      command: "scopes",
+      arguments: {},
+    };
 
-  cb = cb || function() {};
-  this.req(req, function(err, res) {
+  cb = cb || function () {};
+  this.req(req, function (err, res) {
     if (err) return cb(err);
-    var refs = res.scopes.map(function(scope) {
+    var refs = res.scopes.map(function (scope) {
       return scope.object.ref;
     });
 
-    self.reqLookup(refs, function(err, res) {
+    self.reqLookup(refs, function (err, res) {
       if (err) return cb(err);
 
-      var globals = Object.keys(res).map(function(key) {
-        return res[key].properties.map(function(prop) {
+      var globals = Object.keys(res).map(function (key) {
+        return res[key].properties.map(function (prop) {
           return prop.name;
         });
       });
@@ -324,7 +318,7 @@ Client.prototype.reqScopes = function(cb) {
 
 // This is like reqEval, except it will look up the expression in each of the
 // scopes associated with the current frame.
-Client.prototype.reqEval = function(expression, cb) {
+Client.prototype.reqEval = function (expression, cb) {
   var self = this;
 
   if (this.currentFrame == NO_FRAME) {
@@ -333,9 +327,9 @@ Client.prototype.reqEval = function(expression, cb) {
     return;
   }
 
-  cb = cb || function() {};
+  cb = cb || function () {};
   // Otherwise we need to get the current frame to see which scopes it has.
-  this.reqBacktrace(function(err, bt) {
+  this.reqBacktrace(function (err, bt) {
     if (err || !bt.frames) {
       // ??
       return cb(null, {});
@@ -343,7 +337,7 @@ Client.prototype.reqEval = function(expression, cb) {
 
     var frame = bt.frames[self.currentFrame];
 
-    var evalFrames = frame.scopes.map(function(s) {
+    var evalFrames = frame.scopes.map(function (s) {
       if (!s) return;
       var x = bt.frames[s.index];
       if (!x) return;
@@ -354,9 +348,8 @@ Client.prototype.reqEval = function(expression, cb) {
   });
 };
 
-
 // Finds the first scope in the array in which the expression evals.
-Client.prototype._reqFramesEval = function(expression, evalFrames, cb) {
+Client.prototype._reqFramesEval = function (expression, evalFrames, cb) {
   if (evalFrames.length == 0) {
     // Just eval in global scope.
     this.reqFrameEval(expression, NO_FRAME, cb);
@@ -366,19 +359,18 @@ Client.prototype._reqFramesEval = function(expression, evalFrames, cb) {
   var self = this;
   var i = evalFrames.shift();
 
-  cb = cb || function() {};
-  this.reqFrameEval(expression, i, function(err, res) {
+  cb = cb || function () {};
+  this.reqFrameEval(expression, i, function (err, res) {
     if (!err) return cb(null, res);
     self._reqFramesEval(expression, evalFrames, cb);
   });
 };
 
-
-Client.prototype.reqFrameEval = function(expression, frame, cb) {
+Client.prototype.reqFrameEval = function (expression, frame, cb) {
   var self = this;
   var req = {
-    command: 'evaluate',
-    arguments: { expression: expression }
+    command: "evaluate",
+    arguments: { expression: expression },
   };
 
   if (frame == NO_FRAME) {
@@ -387,30 +379,30 @@ Client.prototype.reqFrameEval = function(expression, frame, cb) {
     req.arguments.frame = frame;
   }
 
-  cb = cb || function() {};
-  this.req(req, function(err, res) {
+  cb = cb || function () {};
+  this.req(req, function (err, res) {
     if (!err) self._addHandle(res);
     cb(err, res);
   });
 };
 
-
 // reqBacktrace(cb)
 // TODO: from, to, bottom
-Client.prototype.reqBacktrace = function(cb) {
-  this.req({ command: 'backtrace', arguments: { inlineRefs: true } }, cb);
+Client.prototype.reqBacktrace = function (cb) {
+  this.req({ command: "backtrace", arguments: { inlineRefs: true } }, cb);
 };
-
 
 // reqSetExceptionBreak(type, cb)
 // TODO: from, to, bottom
-Client.prototype.reqSetExceptionBreak = function(type, cb) {
-  this.req({
-    command: 'setexceptionbreak',
-    arguments: { type: type, enabled: true }
-  }, cb);
+Client.prototype.reqSetExceptionBreak = function (type, cb) {
+  this.req(
+    {
+      command: "setexceptionbreak",
+      arguments: { type: type, enabled: true },
+    },
+    cb
+  );
 };
-
 
 // Returns an array of objects like this:
 //
@@ -428,11 +420,11 @@ Client.prototype.reqSetExceptionBreak = function(type, cb) {
 //     context: { ref: 10 },
 //     text: 'node.js (lines: 562)' }
 //
-Client.prototype.reqScripts = function(cb) {
+Client.prototype.reqScripts = function (cb) {
   var self = this;
-  cb = cb || function() {};
+  cb = cb || function () {};
 
-  this.req({ command: 'scripts' }, function(err, res) {
+  this.req({ command: "scripts" }, function (err, res) {
     if (err) return cb(err);
 
     for (var i = 0; i < res.length; i++) {
@@ -442,63 +434,60 @@ Client.prototype.reqScripts = function(cb) {
   });
 };
 
-
-Client.prototype.reqContinue = function(cb) {
+Client.prototype.reqContinue = function (cb) {
   this.currentFrame = NO_FRAME;
-  this.req({ command: 'continue' }, cb);
+  this.req({ command: "continue" }, cb);
 };
 
-Client.prototype.listbreakpoints = function(cb) {
-  this.req({ command: 'listbreakpoints' }, cb);
+Client.prototype.listbreakpoints = function (cb) {
+  this.req({ command: "listbreakpoints" }, cb);
 };
 
-Client.prototype.setBreakpoint = function(req, cb) {
+Client.prototype.setBreakpoint = function (req, cb) {
   req = {
-    command: 'setbreakpoint',
-    arguments: req
+    command: "setbreakpoint",
+    arguments: req,
   };
 
   this.req(req, cb);
 };
 
-Client.prototype.clearBreakpoint = function(req, cb) {
+Client.prototype.clearBreakpoint = function (req, cb) {
   var req = {
-    command: 'clearbreakpoint',
-    arguments: req
+    command: "clearbreakpoint",
+    arguments: req,
   };
 
   this.req(req, cb);
 };
 
-Client.prototype.reqSource = function(from, to, cb) {
+Client.prototype.reqSource = function (from, to, cb) {
   var req = {
-    command: 'source',
+    command: "source",
     fromLine: from,
-    toLine: to
+    toLine: to,
   };
 
   this.req(req, cb);
 };
-
 
 // client.next(1, cb);
-Client.prototype.step = function(action, count, cb) {
+Client.prototype.step = function (action, count, cb) {
   var req = {
-    command: 'continue',
-    arguments: { stepaction: action, stepcount: count }
+    command: "continue",
+    arguments: { stepaction: action, stepcount: count },
   };
 
   this.currentFrame = NO_FRAME;
   this.req(req, cb);
 };
 
-
-Client.prototype.mirrorObject = function(handle, depth, cb) {
+Client.prototype.mirrorObject = function (handle, depth, cb) {
   var self = this;
 
   var val;
 
-  if (handle.type === 'object') {
+  if (handle.type === "object") {
     // The handle looks something like this:
     // { handle: 8,
     //   type: 'object',
@@ -513,52 +502,51 @@ Client.prototype.mirrorObject = function(handle, depth, cb) {
     // TJ's method of object inspection would probably be good for this:
     // https://groups.google.com/forum/?pli=1#!topic/nodejs-dev/4gkWBOimiOg
 
-    var propertyRefs = handle.properties.map(function(p) {
+    var propertyRefs = handle.properties.map(function (p) {
       return p.ref;
     });
 
-    cb = cb || function() {};
-    this.reqLookup(propertyRefs, function(err, res) {
+    cb = cb || function () {};
+    this.reqLookup(propertyRefs, function (err, res) {
       if (err) {
-        console.error('problem with reqLookup');
+        console.error("problem with reqLookup");
         cb(null, handle);
         return;
       }
 
       var mirror,
-          waiting = 1;
+        waiting = 1;
 
-      if (handle.className == 'Array') {
+      if (handle.className == "Array") {
         mirror = [];
-      } else if (handle.className == 'Date') {
+      } else if (handle.className == "Date") {
         mirror = new Date(handle.value);
       } else {
         mirror = {};
       }
 
-
       var keyValues = [];
-      handle.properties.forEach(function(prop, i) {
+      handle.properties.forEach(function (prop, i) {
         var value = res[prop.ref];
         var mirrorValue;
         if (value) {
           mirrorValue = value.value ? value.value : value.text;
         } else {
-          mirrorValue = '[?]';
+          mirrorValue = "[?]";
         }
 
-        if (Array.isArray(mirror) && typeof prop.name !== 'number') {
+        if (Array.isArray(mirror) && typeof prop.name !== "number") {
           // Skip the 'length' property.
           return;
         }
 
         keyValues[i] = {
           name: prop.name,
-          value: mirrorValue
+          value: mirrorValue,
         };
         if (value && value.handle && depth > 0) {
           waiting++;
-          self.mirrorObject(value, depth - 1, function(err, result) {
+          self.mirrorObject(value, depth - 1, function (err, result) {
             if (!err) keyValues[i].value = result;
             waitForOthers();
           });
@@ -568,21 +556,21 @@ Client.prototype.mirrorObject = function(handle, depth, cb) {
       waitForOthers();
       function waitForOthers() {
         if (--waiting === 0 && cb) {
-          keyValues.forEach(function(kv) {
+          keyValues.forEach(function (kv) {
             mirror[kv.name] = kv.value;
           });
           cb(null, mirror);
         }
-      };
+      }
     });
     return;
-  } else if (handle.type === 'function') {
-    val = function() {};
-  } else if (handle.type === 'null') {
+  } else if (handle.type === "function") {
+    val = function () {};
+  } else if (handle.type === "null") {
     val = null;
   } else if (handle.value !== undefined) {
     val = handle.value;
-  } else if (handle.type === 'undefined') {
+  } else if (handle.type === "undefined") {
     val = undefined;
   } else {
     val = handle;
@@ -590,14 +578,13 @@ Client.prototype.mirrorObject = function(handle, depth, cb) {
   process.nextTick(cb, null, val);
 };
 
-
-Client.prototype.fullTrace = function(cb) {
+Client.prototype.fullTrace = function (cb) {
   var self = this;
 
-  cb = cb || function() {};
-  this.reqBacktrace(function(err, trace) {
+  cb = cb || function () {};
+  this.reqBacktrace(function (err, trace) {
     if (err) return cb(err);
-    if (trace.totalFrames <= 0) return cb(Error('No frames'));
+    if (trace.totalFrames <= 0) return cb(Error("No frames"));
 
     var refs = [];
 
@@ -625,7 +612,7 @@ Client.prototype.fullTrace = function(cb) {
       refs.push(frame.receiver.ref);
     }
 
-    self.reqLookup(refs, function(err, res) {
+    self.reqLookup(refs, function (err, res) {
       if (err) return cb(err);
 
       for (var i = 0; i < trace.frames.length; i++) {
@@ -640,65 +627,62 @@ Client.prototype.fullTrace = function(cb) {
   });
 };
 
-
 var commands = [
   [
-    'run (r)',
-    'cont (c)',
-    'next (n)',
-    'step (s)',
-    'out (o)',
-    'backtrace (bt)',
-    'setBreakpoint (sb)',
-    'clearBreakpoint (cb)'
+    "run (r)",
+    "cont (c)",
+    "next (n)",
+    "step (s)",
+    "out (o)",
+    "backtrace (bt)",
+    "setBreakpoint (sb)",
+    "clearBreakpoint (cb)",
   ],
   [
-    'watch',
-    'unwatch',
-    'watchers',
-    'repl',
-    'restart',
-    'kill',
-    'list',
-    'scripts',
-    'breakOnException',
-    'breakpoints',
-    'version'
-  ]
+    "watch",
+    "unwatch",
+    "watchers",
+    "repl",
+    "restart",
+    "kill",
+    "list",
+    "scripts",
+    "breakOnException",
+    "breakpoints",
+    "version",
+  ],
 ];
 
-
-var helpMessage = 'Commands: ' + commands.map(function(group) {
-  return group.join(', ');
-}).join(',\n');
-
+var helpMessage =
+  "Commands: " +
+  commands
+    .map(function (group) {
+      return group.join(", ");
+    })
+    .join(",\n");
 
 function SourceUnderline(sourceText, position, repl) {
-  if (!sourceText) return '';
+  if (!sourceText) return "";
 
   var head = sourceText.slice(0, position),
-      tail = sourceText.slice(position);
+    tail = sourceText.slice(position);
 
   // Colourize char if stdout supports colours
   if (repl.useColors) {
-    tail = tail.replace(/(.+?)([^\w]|$)/, '\u001b[32m$1\u001b[39m$2');
+    tail = tail.replace(/(.+?)([^\w]|$)/, "\u001b[32m$1\u001b[39m$2");
   }
 
   // Return source line with coloured char at `position`
-  return [
-    head,
-    tail
-  ].join('');
+  return [head, tail].join("");
 }
 
-
 function SourceInfo(body) {
-  var result = body.exception ? 'exception in ' : 'break in ';
+  var result = body.exception ? "exception in " : "break in ";
 
   if (body.script) {
     if (body.script.name) {
       var name = body.script.name,
-          dir = path.resolve() + '/';
+        dir = path.resolve() + "/";
 
       // Change path to relative, if possible
       if (name.indexOf(dir) === 0) {
@@ -707,13 +691,13 @@ function SourceInfo(body) {
 
       result += name;
     } else {
-      result += '[unnamed]';
+      result += "[unnamed]";
     }
   }
-  result += ':';
+  result += ":";
   result += body.sourceLine + 1;
 
-  if (body.exception) result += '\n' + body.exception.text;
+  if (body.exception) result += "\n" + body.exception.text;
 
   return result;
 }
@@ -730,59 +714,69 @@ function Interface(stdin, stdout, args) {
   // Two eval modes are available: controlEval and debugEval
   // But controlEval is used by default
   var opts = {
-    prompt: 'debug> ',
+    prompt: "debug> ",
     input: this.stdin,
     output: this.stdout,
     eval: this.controlEval.bind(this),
     useGlobal: false,
-    ignoreUndefined: true
+    ignoreUndefined: true,
   };
-  if (parseInt(process.env['NODE_NO_READLINE'], 10)) {
+  if (parseInt(process.env["NODE_NO_READLINE"], 10)) {
     opts.terminal = false;
-  } else if (parseInt(process.env['NODE_FORCE_READLINE'], 10)) {
+  } else if (parseInt(process.env["NODE_FORCE_READLINE"], 10)) {
     opts.terminal = true;
 
     // Emulate Ctrl+C if we're emulating terminal
     if (!this.stdout.isTTY) {
-      process.on('SIGINT', function() {
-        self.repl.rli.emit('SIGINT');
+      process.on("SIGINT", function () {
+        self.repl.rli.emit("SIGINT");
       });
     }
   }
-  if (parseInt(process.env['NODE_DISABLE_COLORS'], 10)) {
+  if (parseInt(process.env["NODE_DISABLE_COLORS"], 10)) {
     opts.useColors = false;
   }
 
   this.repl = repl.start(opts);
 
   // Do not print useless warning
-  repl._builtinLibs.splice(repl._builtinLibs.indexOf('repl'), 1);
+  repl._builtinLibs.splice(repl._builtinLibs.indexOf("repl"), 1);
 
   // Kill child process when main process dies
-  this.repl.on('exit', function() {
+  this.repl.on("exit", function () {
     process.exit(0);
   });
 
   // Handle all possible exits
-  process.on('exit', this.killChild.bind(this));
-  process.once('SIGTERM', process.exit.bind(process, 0));
-  process.once('SIGHUP', process.exit.bind(process, 0));
+  process.on("exit", this.killChild.bind(this));
+  process.once("SIGTERM", process.exit.bind(process, 0));
+  process.once("SIGHUP", process.exit.bind(process, 0));
 
   var proto = Interface.prototype;
-  var ignored = ['pause', 'resume', 'exitRepl', 'handleBreak',
-                   'requireConnection', 'killChild', 'trySpawn',
-                   'controlEval', 'debugEval', 'print', 'childPrint',
-                   'clearline'];
+  var ignored = [
+    "pause",
+    "resume",
+    "exitRepl",
+    "handleBreak",
+    "requireConnection",
+    "killChild",
+    "trySpawn",
+    "controlEval",
+    "debugEval",
+    "print",
+    "childPrint",
+    "clearline",
+  ];
   var shortcut = {
-    'run': 'r',
-    'cont': 'c',
-    'next': 'n',
-    'step': 's',
-    'out': 'o',
-    'backtrace': 'bt',
-    'setBreakpoint': 'sb',
-    'clearBreakpoint': 'cb',
-    'pause_': 'pause'
+    run: "r",
+    cont: "c",
+    next: "n",
+    step: "s",
+    out: "o",
+    backtrace: "bt",
+    setBreakpoint: "sb",
+    clearBreakpoint: "cb",
+    pause_: "pause",
   };
 
   function defineProperty(key, protoKey) {
@@ -793,18 +787,20 @@ function Interface(stdin, stdout, args) {
       Object.defineProperty(self.repl.context, key, {
         get: fn,
         enumerable: true,
-        configurable: false
+        configurable: false,
       });
     } else {
       self.repl.context[key] = fn;
     }
-  };
+  }
 
   // Copy all prototype methods in repl context
   // Setup them as getters if possible
   for (var i in proto) {
-    if (Object.prototype.hasOwnProperty.call(proto, i) &&
-        ignored.indexOf(i) === -1) {
+    if (
+      Object.prototype.hasOwnProperty.call(proto, i) &&
+      ignored.indexOf(i) === -1
+    ) {
       defineProperty(i, i);
       if (shortcut[i]) defineProperty(shortcut[i], i);
     }
@@ -816,7 +812,7 @@ function Interface(stdin, stdout, args) {
   this.context = this.repl.context;
   this.history = {
     debug: [],
-    control: []
+    control: [],
   };
   this.breakpoints = [];
   this._watchers = [];
@@ -825,26 +821,23 @@ function Interface(stdin, stdout, args) {
   this.pause();
 
   // XXX Need to figure out why we need this delay
-  setTimeout(function() {
-
-    self.run(function() {
+  setTimeout(function () {
+    self.run(function () {
       self.resume();
     });
   }, 10);
 }
 
-
 // Stream control
 
-
-Interface.prototype.pause = function() {
+Interface.prototype.pause = function () {
   if (this.killed || this.paused++ > 0) return this;
   this.repl.rli.pause();
   this.stdin.pause();
   return this;
 };
 
-Interface.prototype.resume = function(silent) {
+Interface.prototype.resume = function (silent) {
   if (this.killed || this.paused === 0 || --this.paused !== 0) return this;
   this.repl.rli.resume();
   if (silent !== true) {
@@ -859,48 +852,53 @@ Interface.prototype.resume = function(silent) {
   return this;
 };
 
-
 // Clear current line
-Interface.prototype.clearline = function() {
+Interface.prototype.clearline = function () {
   if (this.stdout.isTTY) {
     this.stdout.cursorTo(0);
     this.stdout.clearLine(1);
   } else {
-    this.stdout.write('\b');
+    this.stdout.write("\b");
   }
 };
 
 // Print text to output stream
-Interface.prototype.print = function(text, oneline) {
+Interface.prototype.print = function (text, oneline) {
   if (this.killed) return;
   this.clearline();
 
-  this.stdout.write(typeof text === 'string' ? text : util.inspect(text));
+  this.stdout.write(typeof text === "string" ? text : util.inspect(text));
 
   if (oneline !== true) {
-    this.stdout.write('\n');
+    this.stdout.write("\n");
   }
 };
 
 // Format and print text from child process
-Interface.prototype.childPrint = function(text) {
-  this.print(text.toString().split(/\r\n|\r|\n/g).filter(function(chunk) {
-    return chunk;
-  }).map(function(chunk) {
-    return '< ' + chunk;
-  }).join('\n'));
+Interface.prototype.childPrint = function (text) {
+  this.print(
+    text
+      .toString()
+      .split(/\r\n|\r|\n/g)
+      .filter(function (chunk) {
+        return chunk;
+      })
+      .map(function (chunk) {
+        return "< " + chunk;
+      })
+      .join("\n")
+  );
   this.repl.displayPrompt(true);
 };
 
 // Errors formatting
-Interface.prototype.error = function(text) {
+Interface.prototype.error = function (text) {
   this.print(text);
   this.resume();
 };
 
-
 // Debugger's `break` event handler
-Interface.prototype.handleBreak = function(r) {
+Interface.prototype.handleBreak = function (r) {
   var self = this;
 
   this.pause();
@@ -916,7 +914,7 @@ Interface.prototype.handleBreak = function(r) {
   this.print(SourceInfo(r));
 
   // Show watchers' values
-  this.watchers(true, function(err) {
+  this.watchers(true, function (err) {
     if (err) return self.error(err);
 
     // And list source
@@ -926,26 +924,24 @@ Interface.prototype.handleBreak = function(r) {
   });
 };
 
-
 // Internal method for checking connection state
-Interface.prototype.requireConnection = function() {
+Interface.prototype.requireConnection = function () {
   if (!this.client) {
-    this.error('App isn\'t running... Try `run` instead');
+    this.error("App isn't running... Try `run` instead");
     return false;
   }
   return true;
 };
 
-
 // Evals
 
 // Used for debugger's commands evaluation and execution
-Interface.prototype.controlEval = function(code, context, filename, callback) {
+Interface.prototype.controlEval = function (code, context, filename, callback) {
   try {
     // Repeat last command if empty line are going to be evaluated
     if (this.repl.rli.history && this.repl.rli.history.length > 0) {
-      if (code === '\n') {
-        code = this.repl.rli.history[0] + '\n';
+      if (code === "\n") {
+        code = this.repl.rli.history[0] + "\n";
       }
     }
 
@@ -957,7 +953,7 @@ Interface.prototype.controlEval = function(code, context, filename, callback) {
 
     // Add a callback for asynchronous command
     // (it will be automatically invoked by .resume() method
-    this.waiting = function() {
+    this.waiting = function () {
       callback(null, result);
     };
   } catch (e) {
@@ -966,14 +962,14 @@ Interface.prototype.controlEval = function(code, context, filename, callback) {
 };
 
 // Used for debugger's remote evaluation (`repl`) commands
-Interface.prototype.debugEval = function(code, context, filename, callback) {
+Interface.prototype.debugEval = function (code, context, filename, callback) {
   if (!this.requireConnection()) return;
 
   var self = this,
-      client = this.client;
+    client = this.client;
 
   // Repl asked for scope variables
-  if (code === '.scope') {
+  if (code === ".scope") {
     client.reqScopes(callback);
     return;
   }
@@ -983,7 +979,7 @@ Interface.prototype.debugEval = function(code, context, filename, callback) {
   self.pause();
 
   // Request remote evaluation globally or in current frame
-  client.reqFrameEval(code, frame, function(err, res) {
+  client.reqFrameEval(code, frame, function (err, res) {
     if (err) {
       callback(err);
       self.resume(true);
@@ -991,13 +987,12 @@ Interface.prototype.debugEval = function(code, context, filename, callback) {
     }
 
     // Request object by handles (and it's sub-properties)
-    client.mirrorObject(res, 3, function(err, mirror) {
+    client.mirrorObject(res, 3, function (err, mirror) {
       callback(null, mirror);
       self.resume(true);
     });
   });
 };
-
 
 // Utils
 
@@ -1005,41 +1000,37 @@ Interface.prototype.debugEval = function(code, context, filename, callback) {
 // maxN is a maximum number we should have space for
 function leftPad(n, prefix, maxN) {
   var s = n.toString(),
-      nchars = Math.max(2, String(maxN).length) + 1,
-      nspaces = nchars - s.length - 1;
+    nchars = Math.max(2, String(maxN).length) + 1,
+    nspaces = nchars - s.length - 1;
 
   for (var i = 0; i < nspaces; i++) {
-    prefix += ' ';
+    prefix += " ";
   }
 
   return prefix + s;
 }
 
-
 // Commands
 
-
 // Print help message
-Interface.prototype.help = function() {
+Interface.prototype.help = function () {
   this.print(helpMessage);
 };
 
-
 // Run script
-Interface.prototype.run = function() {
+Interface.prototype.run = function () {
   var callback = arguments[0];
 
   if (this.child) {
-    this.error('App is already running... Try `restart` instead');
+    this.error("App is already running... Try `restart` instead");
     callback && callback(true);
   } else {
     this.trySpawn(callback);
   }
 };
 
-
 // Restart script
-Interface.prototype.restart = function() {
+Interface.prototype.restart = function () {
   if (!this.requireConnection()) return;
 
   var self = this;
@@ -1048,21 +1039,20 @@ Interface.prototype.restart = function() {
   self.killChild();
 
   // XXX need to wait a little bit for the restart to work?
-  setTimeout(function() {
+  setTimeout(function () {
     self.trySpawn();
     self.resume();
   }, 1000);
 };
 
-
 // Print version
-Interface.prototype.version = function() {
+Interface.prototype.version = function () {
   if (!this.requireConnection()) return;
 
   var self = this;
 
   this.pause();
-  this.client.reqVersion(function(err, v) {
+  this.client.reqVersion(function (err, v) {
     if (err) {
       self.error(err);
     } else {
@@ -1073,35 +1063,37 @@ Interface.prototype.version = function() {
 };
 
 // List source code
-Interface.prototype.list = function(delta) {
+Interface.prototype.list = function (delta) {
   if (!this.requireConnection()) return;
 
   delta || (delta = 5);
 
   var self = this,
-      client = this.client,
-      from = client.currentSourceLine - delta + 1,
-      to = client.currentSourceLine + delta + 1;
+    client = this.client,
+    from = client.currentSourceLine - delta + 1,
+    to = client.currentSourceLine + delta + 1;
 
   self.pause();
-  client.reqSource(from, to, function(err, res) {
+  client.reqSource(from, to, function (err, res) {
     if (err || !res) {
-      self.error('You can\'t list source code right now');
+      self.error("You can't list source code right now");
       self.resume();
       return;
     }
 
-    var lines = res.source.split('\n');
+    var lines = res.source.split("\n");
     for (var i = 0; i < lines.length; i++) {
       var lineno = res.fromLine + i + 1;
       if (lineno < from || lineno > to) continue;
 
       var current = lineno == 1 + client.currentSourceLine,
-          breakpoint = client.breakpoints.some(function(bp) {
-            return (bp.scriptReq === client.currentScript ||
-                    bp.script === client.currentScript) &&
-                    bp.line == lineno;
-          });
+        breakpoint = client.breakpoints.some(function (bp) {
+          return (
+            (bp.scriptReq === client.currentScript ||
+              bp.script === client.currentScript) &&
+            bp.line == lineno
+          );
+        });
 
       if (lineno == 1) {
         // The first line needs to have the module wrapper filtered out of
@@ -1115,146 +1107,140 @@ Interface.prototype.list = function(delta) {
       // Highlight executing statement
       var line;
       if (current) {
-        line = SourceUnderline(lines[i],
-                               client.currentSourceColumn,
-                               self.repl);
+        line = SourceUnderline(lines[i], client.currentSourceColumn, self.repl);
       } else {
         line = lines[i];
       }
 
-      var prefixChar = ' ';
+      var prefixChar = " ";
       if (current) {
-        prefixChar = '>';
+        prefixChar = ">";
       } else if (breakpoint) {
-        prefixChar = '*';
+        prefixChar = "*";
       }
 
-      self.print(leftPad(lineno, prefixChar, to) + ' ' + line);
+      self.print(leftPad(lineno, prefixChar, to) + " " + line);
     }
     self.resume();
   });
 };
 
 // Print backtrace
-Interface.prototype.backtrace = function() {
+Interface.prototype.backtrace = function () {
   if (!this.requireConnection()) return;
 
   var self = this,
-      client = this.client;
+    client = this.client;
 
   self.pause();
-  client.fullTrace(function(err, bt) {
+  client.fullTrace(function (err, bt) {
     if (err) {
-      self.error('Can\'t request backtrace now');
+      self.error("Can't request backtrace now");
       self.resume();
       return;
     }
 
     if (bt.totalFrames == 0) {
-      self.print('(empty stack)');
+      self.print("(empty stack)");
     } else {
       var trace = [],
-          firstFrameNative = bt.frames[0].script.isNative;
+        firstFrameNative = bt.frames[0].script.isNative;
 
       for (var i = 0; i < bt.frames.length; i++) {
         var frame = bt.frames[i];
         if (!firstFrameNative && frame.script.isNative) break;
 
-        var text = '#' + i + ' ';
+        var text = "#" + i + " ";
         if (frame.func.inferredName && frame.func.inferredName.length > 0) {
-          text += frame.func.inferredName + ' ';
+          text += frame.func.inferredName + " ";
         }
-        text += path.basename(frame.script.name) + ':';
-        text += (frame.line + 1) + ':' + (frame.column + 1);
+        text += path.basename(frame.script.name) + ":";
+        text += frame.line + 1 + ":" + (frame.column + 1);
 
         trace.push(text);
       }
 
-      self.print(trace.join('\n'));
+      self.print(trace.join("\n"));
     }
 
     self.resume();
   });
 };
 
-
 // First argument tells if it should display internal node scripts or not
 // (available only for internal debugger's functions)
-Interface.prototype.scripts = function() {
+Interface.prototype.scripts = function () {
   if (!this.requireConnection()) return;
 
   var client = this.client,
-      displayNatives = arguments[0] || false,
-      scripts = [];
+    displayNatives = arguments[0] || false,
+    scripts = [];
 
   this.pause();
   for (var id in client.scripts) {
     var script = client.scripts[id];
-    if (script !== null && typeof script === 'object' && script.name) {
-      if (displayNatives ||
-          script.name == client.currentScript ||
-          !script.isNative) {
+    if (script !== null && typeof script === "object" && script.name) {
+      if (
+        displayNatives ||
+        script.name == client.currentScript ||
+        !script.isNative
+      ) {
         scripts.push(
-            (script.name == client.currentScript ? '* ' : '  ') +
-            id + ': ' +
+          (script.name == client.currentScript ? "* " : "  ") +
+            id +
+            ": " +
             path.basename(script.name)
         );
       }
     }
   }
-  this.print(scripts.join('\n'));
+  this.print(scripts.join("\n"));
   this.resume();
 };
 
-
 // Continue execution of script
-Interface.prototype.cont = function() {
+Interface.prototype.cont = function () {
   if (!this.requireConnection()) return;
   this.pause();
 
   var self = this;
-  this.client.reqContinue(function(err) {
+  this.client.reqContinue(function (err) {
     if (err) self.error(err);
     self.resume();
   });
 };
 
-
 // Step commands generator
-Interface.stepGenerator = function(type, count) {
-  return function() {
+Interface.stepGenerator = function (type, count) {
+  return function () {
     if (!this.requireConnection()) return;
 
     var self = this;
 
     self.pause();
-    self.client.step(type, count, function(err, res) {
+    self.client.step(type, count, function (err, res) {
       if (err) self.error(err);
       self.resume();
     });
   };
 };
 
-
 // Jump to next command
-Interface.prototype.next = Interface.stepGenerator('next', 1);
-
+Interface.prototype.next = Interface.stepGenerator("next", 1);
 
 // Step in
-Interface.prototype.step = Interface.stepGenerator('in', 1);
-
+Interface.prototype.step = Interface.stepGenerator("in", 1);
 
 // Step out
-Interface.prototype.out = Interface.stepGenerator('out', 1);
-
+Interface.prototype.out = Interface.stepGenerator("out", 1);
 
 // Watch
-Interface.prototype.watch = function(expr) {
+Interface.prototype.watch = function (expr) {
   this._watchers.push(expr);
 };
 
 // Unwatch
-Interface.prototype.unwatch = function(expr) {
+Interface.prototype.unwatch = function (expr) {
   var index = this._watchers.indexOf(expr);
 
   // Unwatch by expression
@@ -1264,10 +1250,10 @@ Interface.prototype.unwatch = function(expr) {
 };
 
 // List watchers
-Interface.prototype.watchers = function() {
+Interface.prototype.watchers = function () {
   var self = this;
   var verbose = arguments[0] || false;
-  var callback = arguments[1] || function() {};
+  var callback = arguments[1] || function () {};
   var waiting = this._watchers.length;
   var values = [];
 
@@ -1279,24 +1265,28 @@ Interface.prototype.watchers = function() {
     return callback();
   }
 
-  this._watchers.forEach(function(watcher, i) {
-    self.debugEval(watcher, null, null, function(err, value) {
-      values[i] = err ? '<error>' : value;
+  this._watchers.forEach(function (watcher, i) {
+    self.debugEval(watcher, null, null, function (err, value) {
+      values[i] = err ? "<error>" : value;
       wait();
     });
   });
 
   function wait() {
     if (--waiting === 0) {
-      if (verbose) self.print('Watchers:');
+      if (verbose) self.print("Watchers:");
 
-      self._watchers.forEach(function(watcher, i) {
-        self.print(leftPad(i, ' ', self._watchers.length - 1) +
-                   ': ' + watcher + ' = ' +
-                   JSON.stringify(values[i]));
+      self._watchers.forEach(function (watcher, i) {
+        self.print(
+          leftPad(i, " ", self._watchers.length - 1) +
+            ": " +
+            watcher +
+            " = " +
+            JSON.stringify(values[i])
+        );
       });
 
-      if (verbose) self.print('');
+      if (verbose) self.print("");
 
       self.resume();
 
@@ -1313,19 +1303,18 @@ Interface.prototype.breakOnException = function breakOnException() {
 
   // Break on exceptions
   this.pause();
-  this.client.reqSetExceptionBreak('all', function(err, res) {
+  this.client.reqSetExceptionBreak("all", function (err, res) {
     self.resume();
   });
 };
 
 // Add breakpoint
-Interface.prototype.setBreakpoint = function(script, line,
-                                             condition, silent) {
+Interface.prototype.setBreakpoint = function (script, line, condition, silent) {
   if (!this.requireConnection()) return;
 
   var self = this,
-      scriptId,
-      ambiguous;
+    scriptId,
+    ambiguous;
 
   // setBreakpoint() should insert breakpoint on current line
   if (script === undefined) {
@@ -1334,32 +1323,36 @@ Interface.prototype.setBreakpoint = function(script, line,
   }
 
   // setBreakpoint(line-number) should insert breakpoint in current script
-  if (line === undefined && typeof script === 'number') {
+  if (line === undefined && typeof script === "number") {
     line = script;
     script = this.client.currentScript;
   }
 
   if (script === undefined) {
-    this.print('Cannot determine the current script, ' +
-        'make sure the debugged process is paused.');
+    this.print(
+      "Cannot determine the current script, " +
+        "make sure the debugged process is paused."
+    );
     return;
   }
 
   if (/\(\)$/.test(script)) {
     // setBreakpoint('functionname()');
     var req = {
-      type: 'function',
-      target: script.replace(/\(\)$/, ''),
-      condition: condition
+      type: "function",
+      target: script.replace(/\(\)$/, ""),
+      condition: condition,
     };
   } else {
     // setBreakpoint('scriptname')
     if (script != +script && !this.client.scripts[script]) {
       var scripts = this.client.scripts;
       for (var id in scripts) {
-        if (scripts[id] &&
-            scripts[id].name &&
-            scripts[id].name.indexOf(script) !== -1) {
+        if (
+          scripts[id] &&
+          scripts[id].name &&
+          scripts[id].name.indexOf(script) !== -1
+        ) {
           if (scriptId) {
             ambiguous = true;
           }
@@ -1370,32 +1363,32 @@ Interface.prototype.setBreakpoint = function(script, line,
       scriptId = script;
     }
 
-    if (ambiguous) return this.error('Script name is ambiguous');
-    if (line <= 0) return this.error('Line should be a positive value');
+    if (ambiguous) return this.error("Script name is ambiguous");
+    if (line <= 0) return this.error("Line should be a positive value");
 
     var req;
     if (scriptId) {
       req = {
-        type: 'scriptId',
+        type: "scriptId",
         target: scriptId,
         line: line - 1,
-        condition: condition
+        condition: condition,
       };
     } else {
-      this.print('Warning: script \'' + script + '\' was not loaded yet.');
-      var escapedPath = script.replace(/([/\\.?*()^${}|[\]])/g, '\\$1');
-      var scriptPathRegex = '^(.*[\\/\\\\])?' + escapedPath + '$';
+      this.print("Warning: script '" + script + "' was not loaded yet.");
+      var escapedPath = script.replace(/([/\\.?*()^${}|[\]])/g, "\\$1");
+      var scriptPathRegex = "^(.*[\\/\\\\])?" + escapedPath + "$";
       req = {
-        type: 'scriptRegExp',
+        type: "scriptRegExp",
         target: scriptPathRegex,
         line: line - 1,
-        condition: condition
+        condition: condition,
       };
     }
   }
 
   self.pause();
-  self.client.setBreakpoint(req, function(err, res) {
+  self.client.setBreakpoint(req, function (err, res) {
     if (err) {
       if (!silent) {
         self.error(err);
@@ -1418,7 +1411,7 @@ Interface.prototype.setBreakpoint = function(script, line,
         script: (self.client.scripts[scriptId] || {}).name,
         line: line,
         condition: condition,
-        scriptReq: script
+        scriptReq: script,
       });
     }
     self.resume();
@@ -1426,18 +1419,17 @@ Interface.prototype.setBreakpoint = function(script, line,
 };
 
 // Clear breakpoint
-Interface.prototype.clearBreakpoint = function(script, line) {
+Interface.prototype.clearBreakpoint = function (script, line) {
   if (!this.requireConnection()) return;
 
-  var ambiguous,
-      breakpoint,
-      scriptId,
-      index;
+  var ambiguous, breakpoint, scriptId, index;
 
-  this.client.breakpoints.some(function(bp, i) {
-    if (bp.scriptId === script ||
-        bp.scriptReq === script ||
-        (bp.script && bp.script.indexOf(script) !== -1)) {
+  this.client.breakpoints.some(function (bp, i) {
+    if (
+      bp.scriptId === script ||
+      bp.scriptReq === script ||
+      (bp.script && bp.script.indexOf(script) !== -1)
+    ) {
       if (index !== undefined) {
         ambiguous = true;
       }
@@ -1453,9 +1445,11 @@ Interface.prototype.clearBreakpoint = function(script, line) {
   if (!scriptId && !this.client.scripts[script]) {
     var scripts = this.client.scripts;
     for (var id in scripts) {
-      if (scripts[id] &&
-          scripts[id].name &&
-          scripts[id].name.indexOf(script) !== -1) {
+      if (
+        scripts[id] &&
+        scripts[id].name &&
+        scripts[id].name.indexOf(script) !== -1
+      ) {
         if (scriptId) {
           ambiguous = true;
         }
@@ -1464,23 +1458,23 @@ Interface.prototype.clearBreakpoint = function(script, line) {
     }
   }
 
-  if (ambiguous) return this.error('Script name is ambiguous');
+  if (ambiguous) return this.error("Script name is ambiguous");
 
   if (scriptId === undefined) {
-    return this.error('Script ' + script + ' not found');
+    return this.error("Script " + script + " not found");
   }
 
   if (breakpoint === undefined) {
-    return this.error('Breakpoint not found on line ' + line);
+    return this.error("Breakpoint not found on line " + line);
   }
 
   var self = this,
-      req = {
-        breakpoint: breakpoint
-      };
+    req = {
+      breakpoint: breakpoint,
+    };
 
   self.pause();
-  self.client.clearBreakpoint(req, function(err, res) {
+  self.client.clearBreakpoint(req, function (err, res) {
     if (err) {
       self.error(err);
     } else {
@@ -1491,14 +1485,13 @@ Interface.prototype.clearBreakpoint = function(script, line) {
   });
 };
 
-
 // Show breakpoints
-Interface.prototype.breakpoints = function() {
+Interface.prototype.breakpoints = function () {
   if (!this.requireConnection()) return;
 
   this.pause();
   var self = this;
-  this.client.listbreakpoints(function(err, res) {
+  this.client.listbreakpoints(function (err, res) {
     if (err) {
       self.error(err);
     } else {
@@ -1508,16 +1501,15 @@ Interface.prototype.breakpoints = function() {
   });
 };
 
-
 // Pause child process
-Interface.prototype.pause_ = function() {
+Interface.prototype.pause_ = function () {
   if (!this.requireConnection()) return;
 
   var self = this,
-      cmd = 'process._debugPause();';
+    cmd = "process._debugPause();";
 
   this.pause();
-  this.client.reqFrameEval(cmd, NO_FRAME, function(err, res) {
+  this.client.reqFrameEval(cmd, NO_FRAME, function (err, res) {
     if (err) {
       self.error(err);
     } else {
@@ -1526,32 +1518,30 @@ Interface.prototype.pause_ = function() {
   });
 };
 
-
 // Kill child process
-Interface.prototype.kill = function() {
+Interface.prototype.kill = function () {
   if (!this.child) return;
   this.killChild();
 };
 
-
 // Activate debug repl
-Interface.prototype.repl = function() {
+Interface.prototype.repl = function () {
   if (!this.requireConnection()) return;
 
   var self = this;
 
-  self.print('Press Ctrl + C to leave debug repl');
+  self.print("Press Ctrl + C to leave debug repl");
 
   // Don't display any default messages
-  var listeners = this.repl.rli.listeners('SIGINT').slice(0);
-  this.repl.rli.removeAllListeners('SIGINT');
+  var listeners = this.repl.rli.listeners("SIGINT").slice(0);
+  this.repl.rli.removeAllListeners("SIGINT");
 
   // Exit debug repl on Ctrl + C
-  this.repl.rli.once('SIGINT', function() {
+  this.repl.rli.once("SIGINT", function () {
     // Restore all listeners
-    process.nextTick(function() {
-      listeners.forEach(function(listener) {
-        self.repl.rli.on('SIGINT', listener);
+    process.nextTick(function () {
+      listeners.forEach(function (listener) {
+        self.repl.rli.on("SIGINT", listener);
       });
     });
 
@@ -1567,13 +1557,12 @@ Interface.prototype.repl = function() {
   this.history.control = this.repl.rli.history;
   this.repl.rli.history = this.history.debug;
 
-  this.repl.rli.setPrompt('> ');
+  this.repl.rli.setPrompt("> ");
   this.repl.displayPrompt();
 };
 
-
 // Exit debug repl
-Interface.prototype.exitRepl = function() {
+Interface.prototype.exitRepl = function () {
   // Restore eval
   this.repl.eval = this.controlEval.bind(this);
 
@@ -1582,20 +1571,18 @@ Interface.prototype.exitRepl = function() {
   this.repl.rli.history = this.history.control;
 
   this.repl.context = this.context;
-  this.repl.rli.setPrompt('debug> ');
+  this.repl.rli.setPrompt("debug> ");
   this.repl.displayPrompt();
 };
 
-
 // Quit
-Interface.prototype.quit = function() {
+Interface.prototype.quit = function () {
   this.killChild();
   process.exit(0);
 };
 
-
 // Kills child process
-Interface.prototype.killChild = function() {
+Interface.prototype.killChild = function () {
   if (this.child) {
     this.child.kill();
     this.child = null;
@@ -1610,14 +1597,13 @@ Interface.prototype.killChild = function() {
   }
 };
 
-
 // Spawns child process (and restores breakpoints)
-Interface.prototype.trySpawn = function(cb) {
+Interface.prototype.trySpawn = function (cb) {
   var self = this,
-      breakpoints = this.breakpoints || [],
-      port = exports.port,
-      host = '127.0.0.1',
-      childArgs = this.args;
+    breakpoints = this.breakpoints || [],
+    port = exports.port,
+    host = "127.0.0.1",
+    childArgs = this.args;
 
   this.killChild();
   assert(!this.child);
@@ -1635,12 +1621,12 @@ Interface.prototype.trySpawn = function(cb) {
     }
   } else if (this.args.length === 3) {
     // `node debug -p pid`
-    if (this.args[1] === '-p' && /^\d+$/.test(this.args[2])) {
+    if (this.args[1] === "-p" && /^\d+$/.test(this.args[2])) {
       var pid = parseInt(this.args[2], 10);
       try {
         process._debugProcess(pid);
       } catch (e) {
-        if (e.code === 'ESRCH') {
+        if (e.code === "ESRCH") {
           console.error(`Target process: ${pid} doesn't exist.`);
           process.exit(1);
         }
@@ -1653,7 +1639,7 @@ Interface.prototype.trySpawn = function(cb) {
         // Start debugger on custom port
         // `node debug --port=5858 app.js`
         port = parseInt(match[1], 10);
-        childArgs = ['--debug-brk=' + port].concat(this.args.slice(2));
+        childArgs = ["--debug-brk=" + port].concat(this.args.slice(2));
       }
     }
   }
@@ -1662,27 +1648,27 @@ Interface.prototype.trySpawn = function(cb) {
     // pipe stream into debugger
     this.child = spawn(process.execPath, childArgs);
 
-    this.child.stdout.on('data', this.childPrint.bind(this));
-    this.child.stderr.on('data', this.childPrint.bind(this));
+    this.child.stdout.on("data", this.childPrint.bind(this));
+    this.child.stderr.on("data", this.childPrint.bind(this));
   }
 
   this.pause();
 
-  var client = self.client = new Client(),
-      connectionAttempts = 0;
+  var client = (self.client = new Client()),
+    connectionAttempts = 0;
 
-  client.once('ready', function() {
-    self.stdout.write(' ok\n');
+  client.once("ready", function () {
+    self.stdout.write(" ok\n");
 
     // Restore breakpoints
-    breakpoints.forEach(function(bp) {
-      self.print('Restoring breakpoint ' + bp.scriptReq + ':' + bp.line);
+    breakpoints.forEach(function (bp) {
+      self.print("Restoring breakpoint " + bp.scriptReq + ":" + bp.line);
       self.setBreakpoint(bp.scriptReq, bp.line, bp.condition, true);
     });
 
-    client.on('close', function() {
+    client.on("close", function () {
       self.pause();
-      self.print('program terminated');
+      self.print("program terminated");
       self.resume();
       self.client = null;
       self.killChild();
@@ -1692,25 +1678,25 @@ Interface.prototype.trySpawn = function(cb) {
     self.resume();
   });
 
-  client.on('unhandledResponse', function(res) {
+  client.on("unhandledResponse", function (res) {
     self.pause();
-    self.print('\nunhandled res:' + JSON.stringify(res));
+    self.print("\nunhandled res:" + JSON.stringify(res));
     self.resume();
   });
 
-  client.on('break', function(res) {
+  client.on("break", function (res) {
     self.handleBreak(res.body);
   });
 
-  client.on('exception', function(res) {
+  client.on("exception", function (res) {
     self.handleBreak(res.body);
   });
 
-  client.on('error', connectError);
+  client.on("error", connectError);
   function connectError() {
     // If it's failed to connect 10 times then print failed message
     if (connectionAttempts >= 10) {
-      console.error(' failed, please retry');
+      console.error(" failed, please retry");
       process.exit(1);
     }
     setTimeout(attemptConnect, 500);
@@ -1718,15 +1704,15 @@ Interface.prototype.trySpawn = function(cb) {
 
   function attemptConnect() {
     ++connectionAttempts;
-    self.stdout.write('.');
+    self.stdout.write(".");
     client.connect(port, host);
   }
 
-  self.print('connecting to ' + host + ':' + port + ' ..', true);
+  self.print("connecting to " + host + ":" + port + " ..", true);
   if (isRemote) {
     attemptConnect();
   } else {
-    this.child.stderr.once('data', function() {
+    this.child.stderr.once("data", function () {
       setImmediate(attemptConnect);
     });
   }

@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import {parseQueryString} from './url';
-
+import { parseQueryString } from "./url";
 
 /**
  * @typedef {{
@@ -35,7 +34,7 @@ export function getMode() {
   if (mode) {
     return mode;
   }
-  return window.AMP_MODE = mode = getMode_();
+  return (window.AMP_MODE = mode = getMode_());
 }
 
 /**
@@ -51,24 +50,27 @@ export function setModeForTesting(m) {
  * @return {!Mode}
  */
 function getMode_() {
-  var isLocalDev = (location.hostname == 'localhost' ||
-      (location.ancestorOrigins && location.ancestorOrigins[0] &&
-          location.ancestorOrigins[0].indexOf('http://localhost:') == 0)) &&
-      // Filter out localhost running against a prod script.
-      // Because all allowed scripts are ours, we know that these can only
-      // occur during local dev.
-      !!document.querySelector('script[src*="/dist/"],script[src*="/base/"]');
+  var isLocalDev =
+    (location.hostname == "localhost" ||
+      (location.ancestorOrigins &&
+        location.ancestorOrigins[0] &&
+        location.ancestorOrigins[0].indexOf("http://localhost:") == 0)) &&
+    // Filter out localhost running against a prod script.
+    // Because all allowed scripts are ours, we know that these can only
+    // occur during local dev.
+    !!document.querySelector('script[src*="/dist/"],script[src*="/base/"]');
 
-  var overrideDevelopment = parseQueryString(location.hash)['development'];
-  var development = overrideDevelopment != undefined
-      ? overrideDevelopment == '1'
-      : !!document.querySelector('script[development]');
+  var overrideDevelopment = parseQueryString(location.hash)["development"];
+  var development =
+    overrideDevelopment != undefined
+      ? overrideDevelopment == "1"
+      : !!document.querySelector("script[development]");
 
   return {
     localDev: isLocalDev,
     // Triggers validation
-    development:  development,
-    minified: process.env.NODE_ENV == 'production',
-    test: window.AMP_TEST
+    development: development,
+    minified: process.env.NODE_ENV == "production",
+    test: window.AMP_TEST,
   };
 }

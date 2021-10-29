@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-
-import {getMode} from './mode';
-import {exponentialBackoff} from './exponential-backoff.js';
-import {makeBodyVisible} from './styles';
+import { getMode } from "./mode";
+import { exponentialBackoff } from "./exponential-backoff.js";
+import { makeBodyVisible } from "./styles";
 
 var globalExponentialBackoff = exponentialBackoff(1.5);
-
 
 /**
  * Reports an error. If the error has an "associatedElement" property
@@ -42,24 +40,23 @@ export function reportError(error, opt_associatedElement) {
   error.reported = true;
   var element = opt_associatedElement || error.associatedElement;
   if (element) {
-    element.classList.add('-amp-error');
+    element.classList.add("-amp-error");
     if (getMode().development) {
-      element.classList.add('-amp-element-error');
-      element.setAttribute('error-message', error.message);
+      element.classList.add("-amp-element-error");
+      element.setAttribute("error-message", error.message);
     }
   }
   if (error.messageArray) {
-    (console.error || console.log).apply(console,
-        error.messageArray);
+    (console.error || console.log).apply(console, error.messageArray);
   } else {
-    if (process.env.NODE_ENV == 'production') {
+    if (process.env.NODE_ENV == "production") {
       (console.error || console.log).call(console, error.message);
     } else {
       (console.error || console.log).call(console, error.stack);
     }
   }
   if (element && element.dispatchCustomEvent) {
-    element.dispatchCustomEvent('amp:error', error.message);
+    element.dispatchCustomEvent("amp:error", error.message);
   }
   reportErrorToServer(undefined, undefined, undefined, undefined, error);
 }
@@ -110,26 +107,36 @@ export function getErrorReportUrl(message, filename, line, col, error) {
     return;
   }
 
-  var url = 'https://cdn.ampproject.org/error/report.gif' +
-      '?v=' + encodeURIComponent('$internalRuntimeVersion$') +
-      '&m=' + encodeURIComponent(message);
+  var url =
+    "https://cdn.ampproject.org/error/report.gif" +
+    "?v=" +
+    encodeURIComponent("$internalRuntimeVersion$") +
+    "&m=" +
+    encodeURIComponent(message);
 
   if (error) {
-    var tagName = error && error.associatedElement
-      ? error.associatedElement.tagName
-      : 'u';  // Unknown
+    var tagName =
+      error && error.associatedElement ? error.associatedElement.tagName : "u"; // Unknown
     // We may want to consider not reporting asserts but for now
     // this should be helpful.
-    url += '&a=' + (error.fromAssert ? 1 : 0) +
-        '&el=' + encodeURIComponent(tagName) +
-        '&s=' + encodeURIComponent(error.stack || '');
-    } else {
-    url += '&f=' + encodeURIComponent(filename) +
-        '&l=' + encodeURIComponent(line) +
-        '&c=' + encodeURIComponent(col || '');
+    url +=
+      "&a=" +
+      (error.fromAssert ? 1 : 0) +
+      "&el=" +
+      encodeURIComponent(tagName) +
+      "&s=" +
+      encodeURIComponent(error.stack || "");
+  } else {
+    url +=
+      "&f=" +
+      encodeURIComponent(filename) +
+      "&l=" +
+      encodeURIComponent(line) +
+      "&c=" +
+      encodeURIComponent(col || "");
   }
   if (error) {
-    error.message += ' _reported_';
+    error.message += " _reported_";
   }
   // Shorten URLs to a value all browsers will send.
   return url.substr(0, 2000);

@@ -1,18 +1,19 @@
 ## What is This?
 
-Beaker test tagging allows you to add tags to tests (using the [`tag` DSL method](http://www.rubydoc.info/github/puppetlabs/beaker/master/Beaker/DSL/TestTagging#tag-instance_method)), so that you can include or exclude a specific subset of the tests given for use in this run.  Why would you want to use this?  Here are some examples of what you can do with this functionality:
+Beaker test tagging allows you to add tags to tests (using the [`tag` DSL method](http://www.rubydoc.info/github/puppetlabs/beaker/master/Beaker/DSL/TestTagging#tag-instance_method)), so that you can include or exclude a specific subset of the tests given for use in this run. Why would you want to use this? Here are some examples of what you can do with this functionality:
 
 - Run groups of tests separately from the same testing codebase
 - Declare different actions that should be taken when a test fails
 - Make new tests go through a provisional process before being considered solid tests
 
 ## How Tagging Works
- Add tags to a Beaker test at the beginning, like you would if you were using confine.  Things to stay aware of:
+
+Add tags to a Beaker test at the beginning, like you would if you were using confine. Things to stay aware of:
 
 - A test that is not executed due to a tag will be considered a ‘skipped’ test
 - Tags are free form strings and will not be subjected to any correctness testing
 - Tags are NOT case sensitive
-- Tagging was added after Beaker 2.14.1.  If you're using that version or older, this isn't available
+- Tagging was added after Beaker 2.14.1. If you're using that version or older, this isn't available
 - `--test-tag-or` was added after Beaker 3.12.0. If you're using an older version, this isnt available
 
 ## Test Examples

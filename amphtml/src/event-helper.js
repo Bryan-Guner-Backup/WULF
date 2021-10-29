@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import {timer} from './timer';
-
+import { timer } from "./timer";
 
 /**
  * Listens for the specified event on the element and removes the listener
@@ -40,7 +39,6 @@ export function listenOnce(element, eventType, listener, opt_capture) {
   return unlisten;
 }
 
-
 /**
  * Returns  a promise that will resolve as soon as the specified event has
  * fired on the element. Optionally, opt_timeout can be specified that will
@@ -51,8 +49,12 @@ export function listenOnce(element, eventType, listener, opt_capture) {
  * @param {number=} opt_timeout
  * @return {!Promise<!Event>}
  */
-export function listenOncePromise(element, eventType, opt_capture,
-    opt_timeout) {
+export function listenOncePromise(
+  element,
+  eventType,
+  opt_capture,
+  opt_timeout
+) {
   let unlisten;
   let eventPromise = new Promise((resolve, reject) => {
     unlisten = listenOnce(element, eventType, resolve, opt_capture);
@@ -60,16 +62,14 @@ export function listenOncePromise(element, eventType, opt_capture,
   return racePromise_(eventPromise, unlisten, opt_timeout);
 }
 
-
 /**
  * Whether the specified element has been loaded already.
  * @param {!Element} element
  * @return {boolean}
  */
 export function isLoaded(element) {
-  return element.complete || element.readyState == 'complete';
+  return element.complete || element.readyState == "complete";
 }
-
 
 /**
  * Returns a promise that will resolve or fail based on the element's 'load'
@@ -88,25 +88,28 @@ export function loadPromise(element, opt_timeout) {
     } else {
       // Listen once since IE 5/6/7 fire the onload event continuously for
       // animated GIFs.
-      if (element.tagName === 'AUDIO' || element.tagName === 'VIDEO') {
-        unlistenLoad = listenOnce(element, 'loadstart', () => resolve(element));
+      if (element.tagName === "AUDIO" || element.tagName === "VIDEO") {
+        unlistenLoad = listenOnce(element, "loadstart", () => resolve(element));
       } else {
-        unlistenLoad = listenOnce(element, 'load', () => resolve(element));
+        unlistenLoad = listenOnce(element, "load", () => resolve(element));
       }
-      unlistenError = listenOnce(element, 'error', reject);
+      unlistenError = listenOnce(element, "error", reject);
     }
   });
-  return racePromise_(loadingPromise, () => {
-    // It's critical that all listeners are removed.
-    if (unlistenLoad) {
-      unlistenLoad();
-    }
-    if (unlistenError) {
-      unlistenError();
-    }
-  }, opt_timeout);
+  return racePromise_(
+    loadingPromise,
+    () => {
+      // It's critical that all listeners are removed.
+      if (unlistenLoad) {
+        unlistenLoad();
+      }
+      if (unlistenError) {
+        unlistenError();
+      }
+    },
+    opt_timeout
+  );
 }
-
 
 /**
  * @param {!Promise<TYPE>} promise
@@ -127,11 +130,14 @@ function racePromise_(promise, unlisten, timeout) {
   if (!unlisten) {
     return racePromise;
   }
-  return racePromise.then((result) => {
-    unlisten();
-    return result;
-  }, (reason) => {
-    unlisten();
-    return Promise.reject(reason);
-  });
+  return racePromise.then(
+    (result) => {
+      unlisten();
+      return result;
+    },
+    (reason) => {
+      unlisten();
+      return Promise.reject(reason);
+    }
+  );
 }

@@ -19,25 +19,25 @@
  * one of them.
  */
 
-import '../src/polyfills';
-import {a9} from '../ads/a9';
-import {adreactor} from '../ads/adreactor';
-import {adsense} from '../ads/adsense';
-import {adtech} from '../ads/adtech';
-import {doubleclick} from '../ads/doubleclick';
-import {twitter} from './twitter';
-import {register, run} from '../src/3p';
-import {parseUrl} from '../src/url';
+import "../src/polyfills";
+import { a9 } from "../ads/a9";
+import { adreactor } from "../ads/adreactor";
+import { adsense } from "../ads/adsense";
+import { adtech } from "../ads/adtech";
+import { doubleclick } from "../ads/doubleclick";
+import { twitter } from "./twitter";
+import { register, run } from "../src/3p";
+import { parseUrl } from "../src/url";
 
-register('a9', a9);
-register('adreactor', adreactor);
-register('adsense', adsense);
-register('adtech', adtech);
-register('doubleclick', doubleclick);
-register('_ping_', function(win, data) {
-  win.document.getElementById('c').textContent = data.ping;
+register("a9", a9);
+register("adreactor", adreactor);
+register("adsense", adsense);
+register("adtech", adtech);
+register("doubleclick", doubleclick);
+register("_ping_", function (win, data) {
+  win.document.getElementById("c").textContent = data.ping;
 });
-register('twitter', twitter);
+register("twitter", twitter);
 
 /**
  * Visible for testing.
@@ -48,7 +48,7 @@ register('twitter', twitter);
 export function draw3p(win, data) {
   var type = data.type;
   run(type, win, data);
-};
+}
 
 /**
  * Returns the "master frame" for all widgets of a given type.
@@ -59,7 +59,7 @@ export function draw3p(win, data) {
  */
 function masterSelection(type) {
   // The master has a special name.
-  var masterName = 'frame_' + type + '_master';
+  var masterName = "frame_" + type + "_master";
   var master;
   try {
     // Try to get the master from the parent. If it does not
@@ -80,7 +80,7 @@ function masterSelection(type) {
 /**
  * Draws an optionally synchronously to the DOM.
  */
-window.draw3p = function() {
+window.draw3p = function () {
   var fragment = location.hash;
   var data = fragment ? JSON.parse(fragment.substr(1)) : {};
   window.context = data._context;
@@ -94,11 +94,11 @@ window.draw3p = function() {
 };
 
 function triggerNoContentAvailable() {
-  nonSensitiveDataPostMessage('no-content');
+  nonSensitiveDataPostMessage("no-content");
 }
 
 function triggerDimensions(width, height) {
-  nonSensitiveDataPostMessage('embed-size', {
+  nonSensitiveDataPostMessage("embed-size", {
     width: width,
     height: height,
   });
@@ -107,7 +107,7 @@ function triggerDimensions(width, height) {
 function nonSensitiveDataPostMessage(type, opt_object) {
   var object = opt_object || {};
   object.type = type;
-  object.sentinel = 'amp-3p';
+  object.sentinel = "amp-3p";
   // Use of * is OK. We are not worried who gets this message.
-  window.parent./*OK*/postMessage(object, '*');
+  window.parent./*OK*/ postMessage(object, "*");
 }

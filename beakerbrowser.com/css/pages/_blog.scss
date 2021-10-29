@@ -1,5 +1,4 @@
 .layout-blog {
-
   main {
     min-height: calc(100vh - 56px - 70px);
     margin: 2rem 0;
@@ -67,7 +66,7 @@
   .post-meta {
     @extend %flex-container;
     align-items: center;
-    font-size: .8rem;
+    font-size: 0.8rem;
     color: $text--light-bg-muted;
     margin-bottom: 1rem;
 
@@ -85,7 +84,7 @@
     }
 
     .info {
-      margin-left: .5rem;
+      margin-left: 0.5rem;
     }
   }
 

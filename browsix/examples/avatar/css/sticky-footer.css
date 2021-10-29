@@ -9,8 +9,6 @@ body {
   margin-bottom: 160px;
 }
 
-
-
 /* Custom page CSS
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
@@ -24,24 +22,23 @@ body {
   margin: 20px 0;
 }
 
-
-
-
 .img-thumbnail {
   margin-top: 10px;
 }
 
-
-html, body {
-    height: 100%;
+html,
+body {
+  height: 100%;
 }
 .container {
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -155px; /* the bottom margin is the negative value of the footer's height */
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -155px; /* the bottom margin is the negative value of the footer's height */
 }
-.push {height: 155px;}
+.push {
+  height: 155px;
+}
 .footer {
   height: 155px;
 }

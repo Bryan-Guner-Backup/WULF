@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 /**
  * Adds the given css text to the given document.
  *
@@ -33,15 +32,15 @@
  */
 export function installStyles(doc, cssText, cb, opt_isRuntimeCss) {
   var length = doc.styleSheets.length;
-  var style = doc.createElement('style');
+  var style = doc.createElement("style");
   style.textContent = cssText;
   var afterElement = null;
   // Make sure that we place style tags after the main runtime CSS. Otherwise
   // the order is random.
   if (opt_isRuntimeCss) {
-    style.setAttribute('amp-runtime', '');
+    style.setAttribute("amp-runtime", "");
   } else {
-    afterElement = doc.querySelector('style[amp-runtime]');
+    afterElement = doc.querySelector("style[amp-runtime]");
   }
   insertAfterOrAtStart(doc.head, style, afterElement);
   // Styles aren't always available synchronously. E.g. if there is a
@@ -89,7 +88,6 @@ export function makeBodyVisible(doc) {
   interval = setInterval(set, 4);
   set();
 }
-
 
 /**
  * Insert the element in the root after the element named after or

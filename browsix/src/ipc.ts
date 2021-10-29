@@ -4,16 +4,16 @@
 
 /// <reference path="../../typings/node/node.d.ts" />
 
-'use strict';
+"use strict";
 
 export var now: () => number;
 
 // use performance.now in the browser, and hrtime under node.
-if (typeof performance !== 'undefined') {
-	now = performance.now.bind(performance);
+if (typeof performance !== "undefined") {
+  now = performance.now.bind(performance);
 } else {
-	now = function(): number {
-		let [sec, nanosec] = process.hrtime();
-		return sec*1e3 + nanosec/1e6;
-	};
+  now = function (): number {
+    let [sec, nanosec] = process.hrtime();
+    return sec * 1e3 + nanosec / 1e6;
+  };
 }

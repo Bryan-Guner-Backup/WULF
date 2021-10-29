@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-import {Viewport, ViewportBindingNatural_, ViewportBindingNaturalIosEmbed_,
-          ViewportBindingVirtual_} from '../../src/viewport';
-import {getStyle} from '../../src/style';
-import * as sinon from 'sinon';
+import {
+  Viewport,
+  ViewportBindingNatural_,
+  ViewportBindingNaturalIosEmbed_,
+  ViewportBindingVirtual_,
+} from "../../src/viewport";
+import { getStyle } from "../../src/style";
+import * as sinon from "sinon";
 
-
-describe('Viewport', () => {
+describe("Viewport", () => {
   let sandbox;
   let clock;
   let viewport;
@@ -41,13 +44,13 @@ describe('Viewport', () => {
       getPaddingTop: () => 19,
       onViewportEvent: (handler) => {
         viewerViewportHandler = handler;
-      }
+      },
     };
     viewerMock = sandbox.mock(viewer);
     windowApi = {
       document: {
-        documentElement: {style: {}}
-      }
+        documentElement: { style: {} },
+      },
     };
     binding = new ViewportBindingVirtual_(windowApi, viewer);
     viewport = new Viewport(binding, viewer);
@@ -63,10 +66,11 @@ describe('Viewport', () => {
     sandbox = null;
   });
 
-  it('should pass through size and scroll', () => {
+  it("should pass through size and scroll", () => {
     expect(viewport.getPaddingTop()).to.equal(19);
-    expect(windowApi.document.documentElement.style.paddingTop).to.
-        equal('19px');
+    expect(windowApi.document.documentElement.style.paddingTop).to.equal(
+      "19px"
+    );
     expect(viewport.getSize().width).to.equal(111);
     expect(viewport.getSize().height).to.equal(222);
     expect(viewport.getTop()).to.equal(17);
@@ -76,67 +80,71 @@ describe('Viewport', () => {
     expect(viewport.getRect().height).to.equal(222);
   });
 
-  it('should not relayout on height resize', () => {
+  it("should not relayout on height resize", () => {
     let changeEvent = null;
     viewport.onChanged((event) => {
       changeEvent = event;
     });
-    viewerMock.expects('getViewportHeight').returns(223).atLeast(1);
+    viewerMock.expects("getViewportHeight").returns(223).atLeast(1);
     viewerViewportHandler();
     expect(changeEvent).to.not.equal(null);
     expect(changeEvent.relayoutAll).to.equal(false);
     expect(changeEvent.velocity).to.equal(0);
   });
 
-  it('should relayout on width resize', () => {
+  it("should relayout on width resize", () => {
     let changeEvent = null;
     viewport.onChanged((event) => {
       changeEvent = event;
     });
-    viewerMock.expects('getViewportWidth').returns(112).atLeast(1);
+    viewerMock.expects("getViewportWidth").returns(112).atLeast(1);
     viewerViewportHandler();
     expect(changeEvent).to.not.equal(null);
     expect(changeEvent.relayoutAll).to.equal(true);
     expect(changeEvent.velocity).to.equal(0);
   });
 
-  it('should update padding when changed only', () => {
+  it("should update padding when changed only", () => {
     // Shouldn't call updatePaddingTop since it hasn't changed.
     let bindingMock = sandbox.mock(binding);
-    bindingMock.expects('updatePaddingTop').never();
+    bindingMock.expects("updatePaddingTop").never();
     viewerViewportHandler();
     bindingMock.verify();
     bindingMock.restore();
 
     // Should call updatePaddingTop.
     bindingMock = sandbox.mock(binding);
-    viewerMock.expects('getPaddingTop').returns(21).atLeast(1);
-    bindingMock.expects('updatePaddingTop').withArgs(21).once();
+    viewerMock.expects("getPaddingTop").returns(21).atLeast(1);
+    bindingMock.expects("updatePaddingTop").withArgs(21).once();
     viewerViewportHandler();
     bindingMock.verify();
     bindingMock.restore();
   });
 
-  it('should call binding.updateViewerViewport', () => {
+  it("should call binding.updateViewerViewport", () => {
     let bindingMock = sandbox.mock(binding);
-    bindingMock.expects('updateViewerViewport').once();
+    bindingMock.expects("updateViewerViewport").once();
     viewerViewportHandler();
     bindingMock.verify();
     bindingMock.restore();
   });
 
-  it('should defer scroll events', () => {
+  it("should defer scroll events", () => {
     let changeEvent = null;
     viewport.onChanged((event) => {
       changeEvent = event;
     });
-    viewer.getScrollTop = () => {return 34;};
+    viewer.getScrollTop = () => {
+      return 34;
+    };
     viewerViewportHandler();
     expect(changeEvent).to.equal(null);
 
     // Not enough time past.
     clock.tick(100);
-    viewer.getScrollTop = () => {return 35;};
+    viewer.getScrollTop = () => {
+      return 35;
+    };
     viewerViewportHandler();
     expect(changeEvent).to.equal(null);
 
@@ -147,24 +155,29 @@ describe('Viewport', () => {
     expect(changeEvent.velocity).to.be.closeTo(0.002, 1e-4);
   });
 
-  it('should change scrollTop for scrollIntoView and respect padding', () => {
-    let element = document.createElement('div');
+  it("should change scrollTop for scrollIntoView and respect padding", () => {
+    let element = document.createElement("div");
     let bindingMock = sandbox.mock(binding);
-    bindingMock.expects('getLayoutRect').withArgs(element).
-        returns({top: 111}).once();
-    bindingMock.expects('setScrollTop').withArgs(111 - /* padding */ 19).once();
+    bindingMock
+      .expects("getLayoutRect")
+      .withArgs(element)
+      .returns({ top: 111 })
+      .once();
+    bindingMock
+      .expects("setScrollTop")
+      .withArgs(111 - /* padding */ 19)
+      .once();
     viewport.scrollIntoView(element);
   });
 
-  it('should deletegate scrollWidth', () => {
+  it("should deletegate scrollWidth", () => {
     let bindingMock = sandbox.mock(binding);
-    bindingMock.expects('getScrollWidth').withArgs().returns(111).once();
+    bindingMock.expects("getScrollWidth").withArgs().returns(111).once();
     expect(viewport.getScrollWidth()).to.equal(111);
   });
 });
 
-
-describe('ViewportBindingNatural', () => {
+describe("ViewportBindingNatural", () => {
   let sandbox;
   let windowMock;
   let binding;
@@ -173,9 +186,9 @@ describe('ViewportBindingNatural', () => {
 
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
-    var WindowApi = function() {};
+    var WindowApi = function () {};
     windowEventHandlers = {};
-    WindowApi.prototype.addEventListener = function(eventType, handler) {
+    WindowApi.prototype.addEventListener = function (eventType, handler) {
       windowEventHandlers[eventType] = handler;
     };
     windowApi = new WindowApi();
@@ -191,90 +204,90 @@ describe('ViewportBindingNatural', () => {
     sandbox = null;
   });
 
-  it('should subscribe to scroll and resize events', () => {
-    expect(windowEventHandlers['scroll']).to.not.equal(undefined);
-    expect(windowEventHandlers['resize']).to.not.equal(undefined);
+  it("should subscribe to scroll and resize events", () => {
+    expect(windowEventHandlers["scroll"]).to.not.equal(undefined);
+    expect(windowEventHandlers["resize"]).to.not.equal(undefined);
   });
 
-  it('should update padding', () => {
+  it("should update padding", () => {
     windowApi.document = {
-      documentElement: {style: {}}
+      documentElement: { style: {} },
     };
     binding.updatePaddingTop(31);
-    expect(windowApi.document.documentElement.style.paddingTop).to.
-        equal('31px');
+    expect(windowApi.document.documentElement.style.paddingTop).to.equal(
+      "31px"
+    );
   });
 
-  it('should calculate size', () => {
+  it("should calculate size", () => {
     windowApi.innerWidth = 111;
     windowApi.innerHeight = 222;
     windowApi.document = {
       documentElement: {
         clientWidth: 111,
-        clientHeight: 222
-      }
+        clientHeight: 222,
+      },
     };
     let size = binding.getSize();
     expect(size.width).to.equal(111);
     expect(size.height).to.equal(222);
   });
 
-  it('should calculate scrollTop from scrollElement', () => {
+  it("should calculate scrollTop from scrollElement", () => {
     windowApi.pageYOffset = 11;
     windowApi.document = {
       scrollingElement: {
-        scrollTop: 17
-      }
+        scrollTop: 17,
+      },
     };
     expect(binding.getScrollTop()).to.equal(17);
   });
 
-  it('should calculate scrollWidth from scrollElement', () => {
+  it("should calculate scrollWidth from scrollElement", () => {
     windowApi.pageYOffset = 11;
     windowApi.document = {
       scrollingElement: {
-        scrollWidth: 117
-      }
+        scrollWidth: 117,
+      },
     };
     expect(binding.getScrollWidth()).to.equal(117);
   });
 
-  it('should update scrollTop on scrollElement', () => {
+  it("should update scrollTop on scrollElement", () => {
     windowApi.pageYOffset = 11;
     windowApi.document = {
       scrollingElement: {
-        scrollTop: 17
-      }
+        scrollTop: 17,
+      },
     };
     binding.setScrollTop(21);
-    expect(windowApi.document.scrollingElement./*OK*/scrollTop).to.equal(21);
+    expect(windowApi.document.scrollingElement./*OK*/ scrollTop).to.equal(21);
   });
 
-  it('should fallback scrollTop to pageYOffset', () => {
+  it("should fallback scrollTop to pageYOffset", () => {
     windowApi.pageYOffset = 11;
-    windowApi.document = {scrollingElement: {}};
+    windowApi.document = { scrollingElement: {} };
     expect(binding.getScrollTop()).to.equal(11);
   });
 
-  it('should offset client rect for layout', () => {
+  it("should offset client rect for layout", () => {
     windowApi.pageXOffset = 100;
     windowApi.pageYOffset = 200;
-    windowApi.document = {scrollingElement: {}};
+    windowApi.document = { scrollingElement: {} };
     let el = {
       getBoundingClientRect: () => {
-        return {left: 11.5, top: 12.5, width: 13.5, height: 14.5};
-      }
+        return { left: 11.5, top: 12.5, width: 13.5, height: 14.5 };
+      },
     };
     let rect = binding.getLayoutRect(el);
-    expect(rect.left).to.equal(112);  // round(100 + 11.5)
-    expect(rect.top).to.equal(213);  // round(200 + 12.5)
-    expect(rect.width).to.equal(14);  // round(13.5)
-    expect(rect.height).to.equal(15);  // round(14.5)
+    expect(rect.left).to.equal(112); // round(100 + 11.5)
+    expect(rect.top).to.equal(213); // round(200 + 12.5)
+    expect(rect.width).to.equal(14); // round(13.5)
+    expect(rect.height).to.equal(15); // round(14.5)
   });
 });
 
-
-describe('ViewportBindingNaturalIosEmbed', () => {
+describe("ViewportBindingNaturalIosEmbed", () => {
   let sandbox;
   let clock;
   let windowMock;
@@ -287,18 +300,18 @@ describe('ViewportBindingNaturalIosEmbed', () => {
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
     clock = sandbox.useFakeTimers();
-    var WindowApi = function() {};
+    var WindowApi = function () {};
     windowEventHandlers = {};
     bodyEventListeners = {};
     bodyChildren = [];
-    WindowApi.prototype.addEventListener = function(eventType, handler) {
+    WindowApi.prototype.addEventListener = function (eventType, handler) {
       windowEventHandlers[eventType] = handler;
     };
     windowApi = new WindowApi();
     windowApi.innerWidth = 555;
     windowApi.document = {
-      readyState: 'complete',
-      documentElement: {style: {}},
+      readyState: "complete",
+      documentElement: { style: {} },
       body: {
         scrollWidth: 777,
         style: {},
@@ -307,16 +320,16 @@ describe('ViewportBindingNaturalIosEmbed', () => {
         },
         addEventListener: (eventType, handler) => {
           bodyEventListeners[eventType] = handler;
-        }
+        },
       },
       createElement: (tagName) => {
         return {
           tagName: tagName,
-          id: '',
+          id: "",
           style: {},
-          scrollIntoView: sinon.spy()
+          scrollIntoView: sinon.spy(),
         };
-      }
+      },
     };
     windowMock = sandbox.mock(windowApi);
     binding = new ViewportBindingNaturalIosEmbed_(windowApi);
@@ -332,33 +345,36 @@ describe('ViewportBindingNaturalIosEmbed', () => {
     sandbox = null;
   });
 
-  it('should subscribe to resize events on window, scroll on body', () => {
-    expect(windowEventHandlers['resize']).to.not.equal(undefined);
-    expect(windowEventHandlers['scroll']).to.equal(undefined);
-    expect(bodyEventListeners['scroll']).to.not.equal(undefined);
+  it("should subscribe to resize events on window, scroll on body", () => {
+    expect(windowEventHandlers["resize"]).to.not.equal(undefined);
+    expect(windowEventHandlers["scroll"]).to.equal(undefined);
+    expect(bodyEventListeners["scroll"]).to.not.equal(undefined);
   });
 
-  it('should pre-calculate scrollWidth', () => {
+  it("should pre-calculate scrollWidth", () => {
     expect(binding.scrollWidth_).to.equal(777);
   });
 
-  it('should defer scrollWidth to max of window.innerHeight ' +
-        ' and body.scrollWidth', () => {
-    binding.scrollWidth_ = 0;
-    expect(binding.getScrollWidth()).to.equal(555);
+  it(
+    "should defer scrollWidth to max of window.innerHeight " +
+      " and body.scrollWidth",
+    () => {
+      binding.scrollWidth_ = 0;
+      expect(binding.getScrollWidth()).to.equal(555);
 
-    binding.scrollWidth_ = 1000;
-    expect(binding.getScrollWidth()).to.equal(1000);
-  });
+      binding.scrollWidth_ = 1000;
+      expect(binding.getScrollWidth()).to.equal(1000);
+    }
+  );
 
-  it('should setup document for embed scrolling', () => {
+  it("should setup document for embed scrolling", () => {
     let documentElement = windowApi.document.documentElement;
     let body = windowApi.document.body;
-    expect(documentElement.style.overflow).to.equal('auto');
-    expect(documentElement.style.webkitOverflowScrolling).to.equal('touch');
-    expect(body.style.overflow).to.equal('auto');
-    expect(body.style.webkitOverflowScrolling).to.equal('touch');
-    expect(body.style.position).to.equal('absolute');
+    expect(documentElement.style.overflow).to.equal("auto");
+    expect(documentElement.style.webkitOverflowScrolling).to.equal("touch");
+    expect(body.style.overflow).to.equal("auto");
+    expect(body.style.webkitOverflowScrolling).to.equal("touch");
+    expect(body.style.position).to.equal("absolute");
     expect(body.style.top).to.equal(0);
     expect(body.style.left).to.equal(0);
     expect(body.style.right).to.equal(0);
@@ -366,33 +382,32 @@ describe('ViewportBindingNaturalIosEmbed', () => {
 
     expect(bodyChildren.length).to.equal(2);
 
-    expect(bodyChildren[0].id).to.equal('-amp-scrollpos');
-    expect(bodyChildren[0].style.position).to.equal('absolute');
+    expect(bodyChildren[0].id).to.equal("-amp-scrollpos");
+    expect(bodyChildren[0].style.position).to.equal("absolute");
     expect(bodyChildren[0].style.top).to.equal(0);
     expect(bodyChildren[0].style.left).to.equal(0);
     expect(bodyChildren[0].style.width).to.equal(0);
     expect(bodyChildren[0].style.height).to.equal(0);
-    expect(bodyChildren[0].style.visibility).to.equal('hidden');
+    expect(bodyChildren[0].style.visibility).to.equal("hidden");
 
-    expect(bodyChildren[1].id).to.equal('-amp-scrollmove');
-    expect(bodyChildren[1].style.position).to.equal('absolute');
+    expect(bodyChildren[1].id).to.equal("-amp-scrollmove");
+    expect(bodyChildren[1].style.position).to.equal("absolute");
     expect(bodyChildren[1].style.top).to.equal(0);
     expect(bodyChildren[1].style.left).to.equal(0);
     expect(bodyChildren[1].style.width).to.equal(0);
     expect(bodyChildren[1].style.height).to.equal(0);
-    expect(bodyChildren[1].style.visibility).to.equal('hidden');
+    expect(bodyChildren[1].style.visibility).to.equal("hidden");
   });
 
-  it('should update padding on BODY', () => {
+  it("should update padding on BODY", () => {
     windowApi.document = {
-      body: {style: {}}
+      body: { style: {} },
     };
     binding.updatePaddingTop(31);
-    expect(windowApi.document.body.style.paddingTop).to.
-        equal('31px');
+    expect(windowApi.document.body.style.paddingTop).to.equal("31px");
   });
 
-  it('should calculate size', () => {
+  it("should calculate size", () => {
     windowApi.innerWidth = 111;
     windowApi.innerHeight = 222;
     let size = binding.getSize();
@@ -400,90 +415,97 @@ describe('ViewportBindingNaturalIosEmbed', () => {
     expect(size.height).to.equal(222);
   });
 
-  it('should calculate scrollTop from scrollpos element', () => {
+  it("should calculate scrollTop from scrollpos element", () => {
     bodyChildren[0].getBoundingClientRect = () => {
-      return {top: -17, left: -11};
+      return { top: -17, left: -11 };
     };
     binding.onScrolled_();
     expect(binding.getScrollTop()).to.equal(17);
   });
 
-  it('should update scroll position via moving element', () => {
+  it("should update scroll position via moving element", () => {
     let moveEl = bodyChildren[1];
     binding.setScrollTop(17);
-    expect(getStyle(moveEl, 'transform')).to.equal('translateY(17px)');
+    expect(getStyle(moveEl, "transform")).to.equal("translateY(17px)");
     expect(moveEl.scrollIntoView.callCount).to.equal(1);
     expect(moveEl.scrollIntoView.firstCall.args[0]).to.equal(true);
   });
 
-  it('should offset client rect for layout', () => {
+  it("should offset client rect for layout", () => {
     bodyChildren[0].getBoundingClientRect = () => {
-      return {top: -200, left: -100};
+      return { top: -200, left: -100 };
     };
     binding.onScrolled_();
     let el = {
       getBoundingClientRect: () => {
-        return {left: 11.5, top: 12.5, width: 13.5, height: 14.5};
-      }
+        return { left: 11.5, top: 12.5, width: 13.5, height: 14.5 };
+      },
     };
     let rect = binding.getLayoutRect(el);
-    expect(rect.left).to.equal(112);  // round(100 + 11.5)
-    expect(rect.top).to.equal(213);  // round(200 + 12.5)
-    expect(rect.width).to.equal(14);  // round(13.5)
-    expect(rect.height).to.equal(15);  // round(14.5)
+    expect(rect.left).to.equal(112); // round(100 + 11.5)
+    expect(rect.top).to.equal(213); // round(200 + 12.5)
+    expect(rect.width).to.equal(14); // round(13.5)
+    expect(rect.height).to.equal(15); // round(14.5)
   });
 
-  it('should set scroll position via moving element', () => {
+  it("should set scroll position via moving element", () => {
     let moveEl = bodyChildren[1];
     binding.setScrollPos_(10);
-    expect(getStyle(moveEl, 'transform')).to.equal('translateY(10px)');
+    expect(getStyle(moveEl, "transform")).to.equal("translateY(10px)");
     expect(moveEl.scrollIntoView.callCount).to.equal(1);
     expect(moveEl.scrollIntoView.firstCall.args[0]).to.equal(true);
   });
 
-  it('should adjust scroll position when scrolled to 0', () => {
+  it("should adjust scroll position when scrolled to 0", () => {
     let posEl = bodyChildren[0];
-    posEl.getBoundingClientRect = () => {return {top: 0, left: 0};};
+    posEl.getBoundingClientRect = () => {
+      return { top: 0, left: 0 };
+    };
     let moveEl = bodyChildren[1];
-    let event = {preventDefault: sinon.spy()};
+    let event = { preventDefault: sinon.spy() };
     binding.adjustScrollPos_(event);
-    expect(getStyle(moveEl, 'transform')).to.equal('translateY(1px)');
+    expect(getStyle(moveEl, "transform")).to.equal("translateY(1px)");
     expect(moveEl.scrollIntoView.callCount).to.equal(1);
     expect(moveEl.scrollIntoView.firstCall.args[0]).to.equal(true);
     expect(event.preventDefault.callCount).to.equal(1);
   });
 
-  it('should adjust scroll position when scrolled to 0; w/o event', () => {
+  it("should adjust scroll position when scrolled to 0; w/o event", () => {
     let posEl = bodyChildren[0];
-    posEl.getBoundingClientRect = () => {return {top: 0, left: 0};};
+    posEl.getBoundingClientRect = () => {
+      return { top: 0, left: 0 };
+    };
     let moveEl = bodyChildren[1];
     binding.adjustScrollPos_();
     expect(moveEl.scrollIntoView.callCount).to.equal(1);
   });
 
-  it('should NOT adjust scroll position when scrolled away from 0', () => {
+  it("should NOT adjust scroll position when scrolled away from 0", () => {
     let posEl = bodyChildren[0];
-    posEl.getBoundingClientRect = () => {return {top: -10, left: 0};};
+    posEl.getBoundingClientRect = () => {
+      return { top: -10, left: 0 };
+    };
     let moveEl = bodyChildren[1];
-    let event = {preventDefault: sinon.spy()};
+    let event = { preventDefault: sinon.spy() };
     binding.adjustScrollPos_(event);
     expect(moveEl.scrollIntoView.callCount).to.equal(0);
     expect(event.preventDefault.callCount).to.equal(0);
   });
 
-  it('should NOT adjust scroll position when overscrolled', () => {
+  it("should NOT adjust scroll position when overscrolled", () => {
     let posEl = bodyChildren[0];
-    posEl.getBoundingClientRect = () => {return {top: 10, left: 0};};
+    posEl.getBoundingClientRect = () => {
+      return { top: 10, left: 0 };
+    };
     let moveEl = bodyChildren[1];
-    let event = {preventDefault: sinon.spy()};
+    let event = { preventDefault: sinon.spy() };
     binding.adjustScrollPos_(event);
     expect(moveEl.scrollIntoView.callCount).to.equal(0);
     expect(event.preventDefault.callCount).to.equal(0);
   });
 });
 
-
-describe('ViewportBindingVirtual', () => {
+describe("ViewportBindingVirtual", () => {
   let sandbox;
   let binding;
   let windowApi;
@@ -496,13 +518,13 @@ describe('ViewportBindingVirtual', () => {
       getViewportWidth: () => 111,
       getViewportHeight: () => 222,
       getScrollTop: () => 17,
-      getPaddingTop: () => 19
+      getPaddingTop: () => 19,
     };
     viewerMock = sandbox.mock(viewer);
     windowApi = {
       document: {
-        documentElement: {style: {}}
-      }
+        documentElement: { style: {} },
+      },
     };
     binding = new ViewportBindingVirtual_(windowApi, viewer);
   });
@@ -514,22 +536,23 @@ describe('ViewportBindingVirtual', () => {
     sandbox = null;
   });
 
-  it('should configure viewport parameters', () => {
+  it("should configure viewport parameters", () => {
     expect(binding.getSize().width).to.equal(111);
     expect(binding.getSize().height).to.equal(222);
     expect(binding.getScrollTop()).to.equal(17);
   });
 
-  it('should update padding', () => {
+  it("should update padding", () => {
     windowApi.document = {
-      documentElement: {style: {}}
+      documentElement: { style: {} },
     };
     binding.updatePaddingTop(33);
-    expect(windowApi.document.documentElement.style.paddingTop).to.
-        equal('33px');
+    expect(windowApi.document.documentElement.style.paddingTop).to.equal(
+      "33px"
+    );
   });
 
-  it('should send event on scroll changed', () => {
+  it("should send event on scroll changed", () => {
     let scrollHandler = sinon.spy();
     binding.onScroll(scrollHandler);
     expect(scrollHandler.callCount).to.equal(0);
@@ -540,19 +563,23 @@ describe('ViewportBindingVirtual', () => {
     expect(binding.getScrollTop()).to.equal(17);
 
     // Value didn't change.
-    viewer.getScrollTop = () => {return 17;};
+    viewer.getScrollTop = () => {
+      return 17;
+    };
     binding.updateViewerViewport(viewer);
     expect(scrollHandler.callCount).to.equal(0);
     expect(binding.getScrollTop()).to.equal(17);
 
     // Value changed.
-    viewer.getScrollTop = () => {return 19;};
+    viewer.getScrollTop = () => {
+      return 19;
+    };
     binding.updateViewerViewport(viewer);
     expect(scrollHandler.callCount).to.equal(1);
     expect(binding.getScrollTop()).to.equal(19);
   });
 
-  it('should send event on size changed', () => {
+  it("should send event on size changed", () => {
     let resizeHandler = sinon.spy();
     binding.onResize(resizeHandler);
     expect(resizeHandler.callCount).to.equal(0);
@@ -563,38 +590,46 @@ describe('ViewportBindingVirtual', () => {
     expect(binding.getSize().width).to.equal(111);
 
     // Size didn't change.
-    viewer.getViewportWidth = () => {return 111;};
-    viewer.getViewportHeight = () => {return 222;};
+    viewer.getViewportWidth = () => {
+      return 111;
+    };
+    viewer.getViewportHeight = () => {
+      return 222;
+    };
     binding.updateViewerViewport(viewer);
     expect(resizeHandler.callCount).to.equal(0);
     expect(binding.getSize().width).to.equal(111);
     expect(binding.getSize().height).to.equal(222);
 
     // Width changed.
-    viewer.getViewportWidth = () => {return 112;};
+    viewer.getViewportWidth = () => {
+      return 112;
+    };
     binding.updateViewerViewport(viewer);
     expect(resizeHandler.callCount).to.equal(1);
     expect(binding.getSize().width).to.equal(112);
     expect(binding.getSize().height).to.equal(222);
 
     // Height changed.
-    viewer.getViewportHeight = () => {return 223;};
+    viewer.getViewportHeight = () => {
+      return 223;
+    };
     binding.updateViewerViewport(viewer);
     expect(resizeHandler.callCount).to.equal(2);
     expect(binding.getSize().width).to.equal(112);
     expect(binding.getSize().height).to.equal(223);
   });
 
-  it('should NOT offset client rect for layout', () => {
+  it("should NOT offset client rect for layout", () => {
     let el = {
       getBoundingClientRect: () => {
-        return {left: 11.5, top: 12.5, width: 13.5, height: 14.5};
-      }
+        return { left: 11.5, top: 12.5, width: 13.5, height: 14.5 };
+      },
     };
     let rect = binding.getLayoutRect(el);
-    expect(rect.left).to.equal(12);  // round(11.5)
-    expect(rect.top).to.equal(13);  // round(12.5)
-    expect(rect.width).to.equal(14);  // round(13.5)
-    expect(rect.height).to.equal(15);  // round(14.5)
+    expect(rect.left).to.equal(12); // round(11.5)
+    expect(rect.top).to.equal(13); // round(12.5)
+    expect(rect.width).to.equal(14); // round(13.5)
+    expect(rect.height).to.equal(15); // round(14.5)
   });
 });

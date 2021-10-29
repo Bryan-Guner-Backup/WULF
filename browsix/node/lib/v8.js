@@ -12,12 +12,11 @@
 // ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 // OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-'use strict';
+"use strict";
 
-var v8binding = process.binding('v8');
+var v8binding = process.binding("v8");
 
-var heapStatisticsBuffer =
-    new Uint32Array(v8binding.heapStatisticsArrayBuffer);
+var heapStatisticsBuffer = new Uint32Array(v8binding.heapStatisticsArrayBuffer);
 
 var kTotalHeapSizeIndex = v8binding.kTotalHeapSizeIndex;
 var kTotalHeapSizeExecutableIndex = v8binding.kTotalHeapSizeExecutableIndex;
@@ -26,18 +25,18 @@ var kTotalAvailableSize = v8binding.kTotalAvailableSize;
 var kUsedHeapSizeIndex = v8binding.kUsedHeapSizeIndex;
 var kHeapSizeLimitIndex = v8binding.kHeapSizeLimitIndex;
 
-exports.getHeapStatistics = function() {
+exports.getHeapStatistics = function () {
   var buffer = heapStatisticsBuffer;
 
   v8binding.updateHeapStatisticsArrayBuffer();
 
   return {
-    'total_heap_size': buffer[kTotalHeapSizeIndex],
-    'total_heap_size_executable': buffer[kTotalHeapSizeExecutableIndex],
-    'total_physical_size': buffer[kTotalPhysicalSizeIndex],
-    'total_available_size': buffer[kTotalAvailableSize],
-    'used_heap_size': buffer[kUsedHeapSizeIndex],
-    'heap_size_limit': buffer[kHeapSizeLimitIndex]
+    total_heap_size: buffer[kTotalHeapSizeIndex],
+    total_heap_size_executable: buffer[kTotalHeapSizeExecutableIndex],
+    total_physical_size: buffer[kTotalPhysicalSizeIndex],
+    total_available_size: buffer[kTotalAvailableSize],
+    used_heap_size: buffer[kUsedHeapSizeIndex],
+    heap_size_limit: buffer[kHeapSizeLimitIndex],
   };
 };
 

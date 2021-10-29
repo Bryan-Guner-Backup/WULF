@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-
-import {assert} from './asserts';
-import {getLengthNumeral} from '../src/layout';
-import {documentInfoFor} from './document-info';
-import {getMode} from './mode';
-import {dashToCamelCase} from './string';
-import {parseUrl} from './url';
-
+import { assert } from "./asserts";
+import { getLengthNumeral } from "../src/layout";
+import { documentInfoFor } from "./document-info";
+import { getMode } from "./mode";
+import { dashToCamelCase } from "./string";
+import { parseUrl } from "./url";
 
 /** @type {!Object<string,number>} Number of 3p frames on the for that type. */
 var count = {};
-
 
 /**
  * Produces the attributes for the ad template.
@@ -39,10 +36,10 @@ var count = {};
  *     - A _context object for internal use.
  */
 function getFrameAttributes(parentWindow, element, opt_type) {
-  var width = element.getAttribute('width');
-  var height = element.getAttribute('height');
-  var type = opt_type || element.getAttribute('type');
-  assert(type, 'Attribute type required for <amp-ad>: %s', element);
+  var width = element.getAttribute("width");
+  var height = element.getAttribute("height");
+  var type = opt_type || element.getAttribute("type");
+  assert(type, "Attribute type required for <amp-ad>: %s", element);
   var attributes = {};
   // Do these first, as the other attributes have precedence.
   addDataAndJsonAttributes_(element, attributes);
@@ -54,11 +51,11 @@ function getFrameAttributes(parentWindow, element, opt_type) {
   attributes.type = type;
   attributes._context = {
     location: {
-      href: documentInfoFor(parentWindow).canonicalUrl
+      href: documentInfoFor(parentWindow).canonicalUrl,
     },
-    mode: getMode()
+    mode: getMode(),
   };
-  var adSrc = element.getAttribute('src');
+  var adSrc = element.getAttribute("src");
   if (adSrc) {
     attributes.src = adSrc;
   }
@@ -75,24 +72,24 @@ function getFrameAttributes(parentWindow, element, opt_type) {
  */
 export function getIframe(parentWindow, element, opt_type) {
   var attributes = getFrameAttributes(parentWindow, element, opt_type);
-  var iframe = document.createElement('iframe');
+  var iframe = document.createElement("iframe");
   if (!count[attributes.type]) {
     count[attributes.type] = 0;
   }
-  iframe.name = 'frame_' + attributes.type + '_' + count[attributes.type]++;
+  iframe.name = "frame_" + attributes.type + "_" + count[attributes.type]++;
 
   // Pass ad attributes to iframe via the fragment.
-  var src = getBootstrapBaseUrl(parentWindow) + '#' +
-      JSON.stringify(attributes);
+  var src =
+    getBootstrapBaseUrl(parentWindow) + "#" + JSON.stringify(attributes);
 
   iframe.src = src;
   iframe.width = attributes.width;
   iframe.height = attributes.height;
-  iframe.style.border = 'none';
-  iframe.setAttribute('scrolling', 'no');
-  iframe.onload = function() {
+  iframe.style.border = "none";
+  iframe.setAttribute("scrolling", "no");
+  iframe.onload = function () {
     // Chrome does not reflect the iframe readystate.
-    this.readyState = 'complete';
+    this.readyState = "complete";
   };
   return iframe;
 }
@@ -107,14 +104,14 @@ export function getIframe(parentWindow, element, opt_type) {
 export function listen(iframe, typeOfMessage, callback) {
   var win = iframe.ownerDocument.defaultView;
   var origin = parseUrl(getBootstrapBaseUrl(win)).origin;
-  win.addEventListener('message', function(event) {
+  win.addEventListener("message", function (event) {
     if (event.origin != origin) {
       return;
     }
     if (event.source != iframe.contentWindow) {
       return;
     }
-    if (!event.data || event.data.sentinel != 'amp-3p') {
+    if (!event.data || event.data.sentinel != "amp-3p") {
       return;
     }
     if (event.data.type != typeOfMessage) {
@@ -136,19 +133,22 @@ export function listen(iframe, typeOfMessage, callback) {
 export function addDataAndJsonAttributes_(element, attributes) {
   for (var i = 0; i < element.attributes.length; i++) {
     var attr = element.attributes[i];
-    if (attr.name.indexOf('data-') != 0) {
+    if (attr.name.indexOf("data-") != 0) {
       continue;
     }
     attributes[dashToCamelCase(attr.name.substr(5))] = attr.value;
   }
-  var json = element.getAttribute('json');
+  var json = element.getAttribute("json");
   if (json) {
     var obj;
     try {
       obj = JSON.parse(json);
     } catch (e) {
-      assert(false, 'Error parsing JSON in json attribute in element %s',
-          element);
+      assert(
+        false,
+        "Error parsing JSON in json attribute in element %s",
+        element
+      );
     }
     for (var key in obj) {
       attributes[key] = obj[key];
@@ -163,13 +163,14 @@ export function addDataAndJsonAttributes_(element, attributes) {
  */
 function getBootstrapBaseUrl(parentWindow) {
   // TODO(malteubl): Change to final URL.
-  var url =
-      'https://3p.ampproject.net/$internalRuntimeVersion$/frame.html';
+  var url = "https://3p.ampproject.net/$internalRuntimeVersion$/frame.html";
   if (getMode().localDev) {
-    url = 'http://ads.localhost:' + parentWindow.location.port +
-        '/dist.3p/current' +
-        (getMode().minified ? '-min/frame' : '/frame.max') +
-        '.html';
+    url =
+      "http://ads.localhost:" +
+      parentWindow.location.port +
+      "/dist.3p/current" +
+      (getMode().minified ? "-min/frame" : "/frame.max") +
+      ".html";
   }
   return url;
 }

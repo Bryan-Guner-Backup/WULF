@@ -1,5 +1,5 @@
 .divider {
-  content: '';
+  content: "";
   height: 2px;
   width: 55px;
   border-radius: 3px;
@@ -10,10 +10,8 @@
   }
 }
 
-
 hr {
   margin: 2em 0;
   border: 0;
   border-top: 1px solid $gray;
 }
-

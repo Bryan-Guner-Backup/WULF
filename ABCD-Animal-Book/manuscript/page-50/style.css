@@ -46,7 +46,7 @@ body {
   height: 6.5vw;
   background: black;
   border-radius: 300vw 0vw 500vw;
-  margin: .3vw 0vw;
+  margin: 0.3vw 0vw;
   -webkit-transform: rotate(-3deg);
   -moz-transform: rotate(-3deg);
   transform: rotate(-3deg);
@@ -82,7 +82,7 @@ body {
   height: 6vw;
   border-radius: 100vw;
   background: black;
-  margin: 3vw .3vw;
+  margin: 3vw 0.3vw;
 }
 
 .ojo::after {
@@ -124,7 +124,6 @@ body {
   width: 30vw;
   height: 16vw;
   border-top: 5vw solid #c97f4e;
-  ;
   border-left: 5vw solid transparent;
   border-right: 5vw solid transparent;
   -moz-border-radius: 172vw / 100vw;
@@ -133,7 +132,7 @@ body {
   -webkit-transform: rotate(-112deg);
   -moz-transform: rotate(-112ddeg);
   transform: rotate(-112deg);
-  margin: -38vw -9.7vw
+  margin: -38vw -9.7vw;
 }
 
 .legs {
@@ -142,7 +141,7 @@ body {
   height: 19vw;
   border-radius: 100%;
   background: #d3905d;
-  margin: 53vw 33vw
+  margin: 53vw 33vw;
 }
 
 .legs::before {
@@ -152,7 +151,7 @@ body {
   height: 7vw;
   border-radius: 90vw;
   background: #d3905d;
-  margin: 16vw -3vw
+  margin: 16vw -3vw;
 }
 
 .oreja {
@@ -164,7 +163,7 @@ body {
   -webkit-transform: rotate(70deg);
   -moz-transform: rotate(70deg);
   transform: rotate(70deg);
-  margin: 12vw 39vw
+  margin: 12vw 39vw;
 }
 
 .oreja::before {
@@ -174,7 +173,7 @@ body {
   height: 5vw;
   border-radius: 300vw 500vw 500vw 500vw;
   background: #efb88f;
-  margin: 1.5vw 1.5vw
+  margin: 1.5vw 1.5vw;
 }
 
 .oreja3 {
@@ -186,7 +185,7 @@ body {
   -webkit-transform: rotate(40deg);
   -moz-transform: rotate(40deg);
   transform: rotate(40deg);
-  margin: 9vw 33vw
+  margin: 9vw 33vw;
 }
 
 .oreja3::before {
@@ -204,7 +203,6 @@ body {
   width: 13vw;
   height: 16vw;
   border-top: 6.5vw solid #c97f4e;
-  ;
   border-left: 6.5vw solid transparent;
   border-right: 6.5vw solid transparent;
   -moz-border-radius: 112vw / 100vw;
@@ -230,8 +228,7 @@ body {
   position: absolute;
   width: 13vw;
   height: 16vw;
-  border-top: 6.5vw solid #C66121;
-  ;
+  border-top: 6.5vw solid #c66121;
   border-left: 6.5vw solid transparent;
   border-right: 6.5vw solid transparent;
   -moz-border-radius: 112vw / 100vw;
@@ -249,7 +246,7 @@ body {
   width: 6.5vw;
   height: 6.5vw;
   border-radius: 100vw;
-  background: #C66121;
+  background: #c66121;
   margin: -4vw -4vw;
 }
 
@@ -258,7 +255,7 @@ body {
   width: 55vw;
   height: 55vw;
   border-radius: 100vw;
-  border-right: 12vw solid #C66121;
+  border-right: 12vw solid #c66121;
   margin: 12vw 9vw;
   animation: rotar 3s alternate infinite;
   -moz-animation: rotar 3s alternate infinite;
@@ -270,7 +267,7 @@ body {
   width: 9vw;
   height: 9vw;
   border-radius: 300vw 500vw 500vw 500vw;
-  background: #59210F;
+  background: #59210f;
   margin: 40.5vw 19vw;
   -webkit-transform: rotate(45deg);
   -moz-transform: rotate(45deg);

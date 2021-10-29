@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import {GestureRecognizer} from './gesture';
-import {assert} from './asserts';
-import {calcVelocity} from './motion';
-import {timer} from './timer';
-
+import { GestureRecognizer } from "./gesture";
+import { assert } from "./asserts";
+import { calcVelocity } from "./motion";
+import { timer } from "./timer";
 
 /**
  * A "tap" gesture.
@@ -29,7 +28,6 @@ import {timer} from './timer';
  */
 var Tap;
 
-
 /**
  * Recognizes "tap" gestures.
  * @extends {GestureRecognizer<Tap>}
@@ -39,7 +37,7 @@ export class TapRecognizer extends GestureRecognizer {
    * @param {!Gestures} manager
    */
   constructor(manager) {
-    super('tap', manager);
+    super("tap", manager);
 
     /** @private {number} */
     this.startX_ = 0;
@@ -87,12 +85,10 @@ export class TapRecognizer extends GestureRecognizer {
 
   /** @override */
   acceptStart() {
-    this.signalEmit({clientX: this.lastX_, clientY: this.lastY_}, null);
+    this.signalEmit({ clientX: this.lastX_, clientY: this.lastY_ }, null);
     this.signalEnd();
   }
 }
-
-
 
 /**
  * A "doubletap" gesture.
@@ -102,7 +98,6 @@ export class TapRecognizer extends GestureRecognizer {
  * }}
  */
 var Doubletap;
-
 
 /**
  * Recognizes a "doubletap" gesture. This gesture will block a single "tap"
@@ -114,7 +109,7 @@ export class DoubletapRecognizer extends GestureRecognizer {
    * @param {!Gestures} manager
    */
   constructor(manager) {
-    super('doubletap', manager);
+    super("doubletap", manager);
 
     /** @private {number} */
     this.startX_ = 0;
@@ -175,7 +170,7 @@ export class DoubletapRecognizer extends GestureRecognizer {
   /** @override */
   acceptStart() {
     this.tapCount_ = 0;
-    this.signalEmit({clientX: this.lastX_, clientY: this.lastY_}, null);
+    this.signalEmit({ clientX: this.lastX_, clientY: this.lastY_ }, null);
     this.signalEnd();
   }
 
@@ -184,8 +179,6 @@ export class DoubletapRecognizer extends GestureRecognizer {
     this.tapCount_ = 0;
   }
 }
-
-
 
 /**
  * A "swipe-xy", "swipe-x" or "swipe-y" gesture. A number of these gestures
@@ -200,7 +193,6 @@ export class DoubletapRecognizer extends GestureRecognizer {
  * }}
  */
 var Swipe;
-
 
 /**
  * Recognizes swipe gestures. This gesture will yield about 10ms to other
@@ -343,11 +335,17 @@ class SwipeRecognizer extends GestureRecognizer {
     let deltaTime = this.lastTime_ - this.prevTime_;
     // It's often that `touchend` arrives on the next frame. These should
     // be ignored to avoid a significant velocity downgrade.
-    if (!last && deltaTime > 4 || last && deltaTime > 16) {
-      this.velocityX_ = calcVelocity(this.lastX_ - this.prevX_, deltaTime,
-          this.velocityX_);
-      this.velocityY_ = calcVelocity(this.lastY_ - this.prevY_, deltaTime,
-          this.velocityY_);
+    if ((!last && deltaTime > 4) || (last && deltaTime > 16)) {
+      this.velocityX_ = calcVelocity(
+        this.lastX_ - this.prevX_,
+        deltaTime,
+        this.velocityX_
+      );
+      this.velocityY_ = calcVelocity(
+        this.lastY_ - this.prevY_,
+        deltaTime,
+        this.velocityY_
+      );
       this.velocityX_ = Math.abs(this.velocityX_) > 1e-4 ? this.velocityX_ : 0;
       this.velocityY_ = Math.abs(this.velocityY_) > 1e-4 ? this.velocityY_ : 0;
       this.prevX_ = this.lastX_;
@@ -355,15 +353,18 @@ class SwipeRecognizer extends GestureRecognizer {
       this.prevTime_ = this.lastTime_;
     }
 
-    this.signalEmit({
-      first: first,
-      last: last,
-      time: this.lastTime_,
-      deltaX: this.horiz_ ? this.lastX_ - this.startX_ : 0,
-      deltaY: this.vert_ ? this.lastY_ - this.startY_ : 0,
-      velocityX: this.horiz_ ? this.velocityX_ : 0,
-      velocityY: this.vert_ ? this.velocityY_ : 0
-    }, event);
+    this.signalEmit(
+      {
+        first: first,
+        last: last,
+        time: this.lastTime_,
+        deltaX: this.horiz_ ? this.lastX_ - this.startX_ : 0,
+        deltaY: this.vert_ ? this.lastY_ - this.startY_ : 0,
+        velocityX: this.horiz_ ? this.velocityX_ : 0,
+        velocityY: this.vert_ ? this.velocityY_ : 0,
+      },
+      event
+    );
   }
 
   /**
@@ -379,7 +380,6 @@ class SwipeRecognizer extends GestureRecognizer {
   }
 }
 
-
 /**
  * Recognizes "swipe-xy" gesture. Yields about 10ms to other gestures.
  */
@@ -388,10 +388,9 @@ export class SwipeXYRecognizer extends SwipeRecognizer {
    * @param {!Gestures} manager
    */
   constructor(manager) {
-    super('swipe-xy', manager, true, true);
+    super("swipe-xy", manager, true, true);
   }
 }
-
 
 /**
  * Recognizes "swipe-x" gesture. Yields about 10ms to other gestures.
@@ -401,10 +400,9 @@ export class SwipeXRecognizer extends SwipeRecognizer {
    * @param {!Gestures} manager
    */
   constructor(manager) {
-    super('swipe-x', manager, true, false);
+    super("swipe-x", manager, true, false);
   }
 }
-
 
 /**
  * Recognizes "swipe-y" gesture. Yields about 10ms to other gestures.
@@ -414,11 +412,9 @@ export class SwipeYRecognizer extends SwipeRecognizer {
    * @param {!Gestures} manager
    */
   constructor(manager) {
-    super('swipe-y', manager, false, true);
+    super("swipe-y", manager, false, true);
   }
 }
-
-
 
 /**
  * A "tapzoom" gesture. It has a center, delta off the center center and
@@ -436,7 +432,6 @@ export class SwipeYRecognizer extends SwipeRecognizer {
  */
 var Tapzoom;
 
-
 /**
  * Recognizes a "tapzoom" gesture. This gesture will block other gestures
  * for about 400ms after first "tap" while it's expecting swipe.
@@ -447,7 +442,7 @@ export class TapzoomRecognizer extends GestureRecognizer {
    * @param {!Gestures} manager
    */
   constructor(manager) {
-    super('tapzoom', manager);
+    super("tapzoom", manager);
 
     /** @private {boolean} */
     this.eventing_ = false;
@@ -576,25 +571,34 @@ export class TapzoomRecognizer extends GestureRecognizer {
       this.startTime_ = this.lastTime_;
       this.velocityX_ = this.velocityY_ = 0;
     } else if (this.lastTime_ - this.prevTime_ > 2) {
-      this.velocityX_ = calcVelocity(this.lastX_ - this.prevX_,
-          this.lastTime_ - this.prevTime_, this.velocityX_);
-      this.velocityY_ = calcVelocity(this.lastY_ - this.prevY_,
-          this.lastTime_ - this.prevTime_, this.velocityY_);
+      this.velocityX_ = calcVelocity(
+        this.lastX_ - this.prevX_,
+        this.lastTime_ - this.prevTime_,
+        this.velocityX_
+      );
+      this.velocityY_ = calcVelocity(
+        this.lastY_ - this.prevY_,
+        this.lastTime_ - this.prevTime_,
+        this.velocityY_
+      );
     }
     this.prevX_ = this.lastX_;
     this.prevY_ = this.lastY_;
     this.prevTime_ = this.lastTime_;
 
-    this.signalEmit({
-      first: first,
-      last: last,
-      centerClientX: this.startX_,
-      centerClientY: this.startY_,
-      deltaX: this.lastX_ - this.startX_,
-      deltaY: this.lastY_ - this.startY_,
-      velocityX: this.velocityX_,
-      velocityY: this.velocityY_
-    }, event);
+    this.signalEmit(
+      {
+        first: first,
+        last: last,
+        centerClientX: this.startX_,
+        centerClientY: this.startY_,
+        deltaX: this.lastX_ - this.startX_,
+        deltaY: this.lastY_ - this.startY_,
+        velocityX: this.velocityX_,
+        velocityY: this.velocityY_,
+      },
+      event
+    );
   }
 
   /**

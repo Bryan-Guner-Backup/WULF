@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import * as tr from '../../src/transition';
+import * as tr from "../../src/transition";
 
-describe('Transition', () => {
-
+describe("Transition", () => {
   let sandbox;
 
   beforeEach(() => {
@@ -29,7 +28,7 @@ describe('Transition', () => {
     sandbox = null;
   });
 
-  it('all', () => {
+  it("all", () => {
     let func1 = sinon.spy();
     let func2 = sinon.spy();
     let all = tr.all([func1, func2]);
@@ -56,42 +55,46 @@ describe('Transition', () => {
     expect(func2.calledWithExactly(1, true)).to.equal(true);
   });
 
-  it('withCurve', () => {
+  it("withCurve", () => {
     let func1 = (time, complete) => `${time * 2};${complete}`;
     let curve = (time) => 0.2;
     let curved = tr.withCurve(func1, curve);
 
-    expect(curved(0, false)).to.equal('0.4;false');
-    expect(curved(0.5, false)).to.equal('0.4;false');
-    expect(curved(1, false)).to.equal('0.4;false');
-    expect(curved(1, true)).to.equal('2;true');
+    expect(curved(0, false)).to.equal("0.4;false");
+    expect(curved(0.5, false)).to.equal("0.4;false");
+    expect(curved(1, false)).to.equal("0.4;false");
+    expect(curved(1, true)).to.equal("2;true");
   });
 
-  it('setStyles', () => {
-    let element = document.createElement('div');
+  it("setStyles", () => {
+    let element = document.createElement("div");
     let func = tr.setStyles(element, {
-      width: tr.px(function(n) {return n * 100 + 1;}),
-      height: tr.px(function(n) {return n * 100 + 2;}),
+      width: tr.px(function (n) {
+        return n * 100 + 1;
+      }),
+      height: tr.px(function (n) {
+        return n * 100 + 2;
+      }),
     });
 
     func(0);
-    expect(element.style.width).to.equal('1px');
-    expect(element.style.height).to.equal('2px');
+    expect(element.style.width).to.equal("1px");
+    expect(element.style.height).to.equal("2px");
 
     func(0.2);
-    expect(element.style.width).to.equal('21px');
-    expect(element.style.height).to.equal('22px');
+    expect(element.style.width).to.equal("21px");
+    expect(element.style.height).to.equal("22px");
 
     func(0.9);
-    expect(element.style.width).to.equal('91px');
-    expect(element.style.height).to.equal('92px');
+    expect(element.style.width).to.equal("91px");
+    expect(element.style.height).to.equal("92px");
 
     func(1);
-    expect(element.style.width).to.equal('101px');
-    expect(element.style.height).to.equal('102px');
+    expect(element.style.width).to.equal("101px");
+    expect(element.style.height).to.equal("102px");
   });
 
-  it('numeric', () => {
+  it("numeric", () => {
     let func = tr.numeric(2, 10);
     expect(func(0)).to.equal(2);
     expect(func(0.3)).to.be.closeTo(4.4, 1e-3);
@@ -107,12 +110,12 @@ describe('Transition', () => {
     expect(func(1)).to.equal(-10);
   });
 
-  it('spring', () => {
+  it("spring", () => {
     let func = tr.spring(2, 10, 12, 0.8);
     expect(func(0)).to.equal(2);
     expect(func(0.3)).to.be.closeTo(5.75, 1e-3);
     expect(func(0.6)).to.be.closeTo(9.5, 1e-3);
-    expect(func(0.8)).to.be.closeTo(12, 1e-3);  // Summit.
+    expect(func(0.8)).to.be.closeTo(12, 1e-3); // Summit.
     expect(func(0.9)).to.be.closeTo(11, 1e-3);
     expect(func(1)).to.equal(10);
 
@@ -120,53 +123,64 @@ describe('Transition', () => {
     expect(func(0)).to.equal(-2);
     expect(func(0.3)).to.be.closeTo(-5.75, 1e-3);
     expect(func(0.6)).to.be.closeTo(-9.5, 1e-3);
-    expect(func(0.8)).to.be.closeTo(-12, 1e-3);  // Summit.
+    expect(func(0.8)).to.be.closeTo(-12, 1e-3); // Summit.
     expect(func(0.9)).to.be.closeTo(-11, 1e-3);
     expect(func(1)).to.equal(-10);
   });
 
-  it('px', () => {
+  it("px", () => {
     let func = tr.px(tr.numeric(0, 10));
-    expect(func(0)).to.equal('0px');
-    expect(func(0.3)).to.equal('3px');
-    expect(func(0.6)).to.equal('6px');
-    expect(func(0.9)).to.equal('9px');
-    expect(func(1)).to.equal('10px');
+    expect(func(0)).to.equal("0px");
+    expect(func(0.3)).to.equal("3px");
+    expect(func(0.6)).to.equal("6px");
+    expect(func(0.9)).to.equal("9px");
+    expect(func(1)).to.equal("10px");
   });
 
-  it('translateX', () => {
+  it("translateX", () => {
     let func = tr.translateX(tr.numeric(0, 10));
-    expect(func(0)).to.equal('translateX(0px)');
-    expect(func(0.3)).to.equal('translateX(3px)');
-    expect(func(0.6)).to.equal('translateX(6px)');
-    expect(func(0.9)).to.equal('translateX(9px)');
-    expect(func(1)).to.equal('translateX(10px)');
+    expect(func(0)).to.equal("translateX(0px)");
+    expect(func(0.3)).to.equal("translateX(3px)");
+    expect(func(0.6)).to.equal("translateX(6px)");
+    expect(func(0.9)).to.equal("translateX(9px)");
+    expect(func(1)).to.equal("translateX(10px)");
 
-    func = tr.translateX(() => {return '101vw';});
-    expect(func(0)).to.equal('translateX(101vw)');
+    func = tr.translateX(() => {
+      return "101vw";
+    });
+    expect(func(0)).to.equal("translateX(101vw)");
   });
 
-  it('should translate with X and Y', () => {
+  it("should translate with X and Y", () => {
     let func = tr.translate(tr.numeric(0, 10), tr.numeric(20, 30));
-    expect(func(0)).to.equal('translate(0px,20px)');
-    expect(func(0.3)).to.equal('translate(3px,23px)');
-    expect(func(0.6)).to.equal('translate(6px,26px)');
-    expect(func(0.9)).to.equal('translate(9px,29px)');
-    expect(func(1)).to.equal('translate(10px,30px)');
+    expect(func(0)).to.equal("translate(0px,20px)");
+    expect(func(0.3)).to.equal("translate(3px,23px)");
+    expect(func(0.6)).to.equal("translate(6px,26px)");
+    expect(func(0.9)).to.equal("translate(9px,29px)");
+    expect(func(1)).to.equal("translate(10px,30px)");
 
-    func = tr.translate(() => {return '101vw';}, () => {return '201em';});
-    expect(func(0)).to.equal('translate(101vw,201em)');
+    func = tr.translate(
+      () => {
+        return "101vw";
+      },
+      () => {
+        return "201em";
+      }
+    );
+    expect(func(0)).to.equal("translate(101vw,201em)");
   });
 
-  it('should translate with only X', () => {
+  it("should translate with only X", () => {
     let func = tr.translate(tr.numeric(0, 10));
-    expect(func(0)).to.equal('translate(0px)');
-    expect(func(0.3)).to.equal('translate(3px)');
-    expect(func(0.6)).to.equal('translate(6px)');
-    expect(func(0.9)).to.equal('translate(9px)');
-    expect(func(1)).to.equal('translate(10px)');
+    expect(func(0)).to.equal("translate(0px)");
+    expect(func(0.3)).to.equal("translate(3px)");
+    expect(func(0.6)).to.equal("translate(6px)");
+    expect(func(0.9)).to.equal("translate(9px)");
+    expect(func(1)).to.equal("translate(10px)");
 
-    func = tr.translate(() => {return '101vw';});
-    expect(func(0)).to.equal('translate(101vw)');
+    func = tr.translate(() => {
+      return "101vw";
+    });
+    expect(func(0)).to.equal("translate(101vw)");
   });
 });

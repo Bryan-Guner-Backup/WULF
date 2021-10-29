@@ -35,6 +35,7 @@ order: 1
         Explore Beaker's new Web APIs for building peer-to-peer apps.
       </p>
     </a>
+
   </div>
 </div>
 
@@ -115,5 +116,6 @@ order: 1
         </li>
       </ul>
     </div>
+
   </div>
 </div>

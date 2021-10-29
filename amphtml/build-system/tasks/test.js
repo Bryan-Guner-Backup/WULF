@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-var argv = require('minimist')(process.argv.slice(2));
-var gulp = require('gulp');
-var karma = require('karma').server;
-var config = require('../config');
+var argv = require("minimist")(process.argv.slice(2));
+var gulp = require("gulp");
+var karma = require("karma").server;
+var config = require("../config");
 var karmaConfig = config.karma;
-var extend = require('util')._extend;
+var extend = require("util")._extend;
 
 function getConfig() {
   var obj = Object.create(null);
@@ -34,8 +34,7 @@ function getConfig() {
   return extend(obj, karmaConfig.default);
 }
 
-
-gulp.task('test', ['build'], function(done) {
+gulp.task("test", ["build"], function (done) {
   var config = getConfig();
   var browsers = [];
 

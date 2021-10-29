@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-var _ = require('lodash');
+var _ = require("lodash");
 
-var interfacer = require('./../util/interfacer');
+var interfacer = require("./../util/interfacer");
 
 var unalias = {
   exec: function exec(args, options) {
@@ -14,33 +14,33 @@ var unalias = {
 
     if (!vorpal) {
       /* istanbul ignore next */
-      throw new Error('Unalias is not programatically supported.');
+      throw new Error("Unalias is not programatically supported.");
     }
 
     vorpal._aliases = vorpal._aliases || [];
 
     if (_.isString(args)) {
-      args = String(args).split(' ');
+      args = String(args).split(" ");
       args = args.filter(function (str) {
-        return String(str).trim() !== '';
+        return String(str).trim() !== "";
       });
     }
 
     // Validate no input with help.
-    if ((args === undefined || args.length < 1 || args === '') && !options.a) {
-      this.log('unalias: usage: unalias [-a] name [name ...]');
+    if ((args === undefined || args.length < 1 || args === "") && !options.a) {
+      this.log("unalias: usage: unalias [-a] name [name ...]");
       return 1;
     }
 
     // Pull list of aliases
     var all = undefined;
     try {
-      all = JSON.parse(vorpal.localStorage.getItem('aliases') || []);
+      all = JSON.parse(vorpal.localStorage.getItem("aliases") || []);
     } catch (e) {
       /* istanbul ignore next */
       all = [];
       /* istanbul ignore next */
-      vorpal.localStorage.removeItem('aliases');
+      vorpal.localStorage.removeItem("aliases");
     }
 
     if (options.a) {
@@ -51,11 +51,11 @@ var unalias = {
 
     var _loop = function _loop(i) {
       var key = args[i];
-      var item = vorpal.localStorage.getItem('alias|' + key);
+      var item = vorpal.localStorage.getItem("alias|" + key);
       if (item !== undefined && item !== null) {
-        vorpal.localStorage.removeItem('alias|' + key);
+        vorpal.localStorage.removeItem("alias|" + key);
       } else {
-        _this.log('-cash: unalias: ' + key + ': not found');
+        _this.log("-cash: unalias: " + key + ": not found");
       }
       all = all.filter(function (str) {
         return !(str === key);
@@ -70,16 +70,16 @@ var unalias = {
     var aliases = {};
     /* istanbul ignore next */
     for (var i = 0; i < all.length; ++i) {
-      var item = vorpal.localStorage.getItem('alias|' + all[i]);
+      var item = vorpal.localStorage.getItem("alias|" + all[i]);
       if (item !== undefined && item !== null) {
         aliases[all[i]] = item;
       }
     }
     vorpal._aliases = aliases;
 
-    vorpal.localStorage.setItem('aliases', JSON.stringify(all));
+    vorpal.localStorage.setItem("aliases", JSON.stringify(all));
     return 0;
-  }
+  },
 };
 
 module.exports = function (vorpal) {
@@ -87,14 +87,17 @@ module.exports = function (vorpal) {
     return unalias;
   }
   vorpal.api.unalias = unalias;
-  vorpal.command('unalias [name...]').option('-a', 'remove all alias definitions').action(function (args, callback) {
-    args.options = args.options || {};
-    args.options.vorpal = vorpal;
-    return interfacer.call(this, {
-      command: unalias,
-      args: args.name,
-      options: args.options,
-      callback: callback
+  vorpal
+    .command("unalias [name...]")
+    .option("-a", "remove all alias definitions")
+    .action(function (args, callback) {
+      args.options = args.options || {};
+      args.options.vorpal = vorpal;
+      return interfacer.call(this, {
+        command: unalias,
+        args: args.name,
+        options: args.options,
+        callback: callback,
+      });
     });
-  });
 };

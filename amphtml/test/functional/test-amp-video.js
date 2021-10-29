@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-import {createIframePromise} from '../../testing/iframe';
-import {installVideo} from '../../builtins/amp-video';
+import { createIframePromise } from "../../testing/iframe";
+import { installVideo } from "../../builtins/amp-video";
 
-describe('amp-video', () => {
-
+describe("amp-video", () => {
   function getFooVideoSrc(mediatype) {
-    return '//someHost/foo.' + mediatype.slice(mediatype.indexOf('/') + 1); // assumes no optional params
+    return "//someHost/foo." + mediatype.slice(mediatype.indexOf("/") + 1); // assumes no optional params
   }
 
   function getVideo(attributes, children) {
     return createIframePromise().then((iframe) => {
       installVideo(iframe.win);
-      var v = iframe.doc.createElement('amp-video');
+      var v = iframe.doc.createElement("amp-video");
       for (let key in attributes) {
         v.setAttribute(key, attributes[key]);
       }
@@ -39,92 +38,100 @@ describe('amp-video', () => {
     });
   }
 
-  it('should load a video', () => {
+  it("should load a video", () => {
     return getVideo({
-      src: 'video.mp4',
-      width: 160,
-      height: 90
-    }).then(v => {
-      var video = v.querySelector('video');
-      expect(video).to.be.an.instanceof(Element);
-      expect(video.tagName).to.equal('VIDEO');
-      expect(video.getAttribute('src')).to.equal('video.mp4');
-      expect(video.hasAttribute('controls')).to.be.false;
-    });
-  });
-
-  it('should load a video', () => {
-    return getVideo({
-      src: 'video.mp4',
+      src: "video.mp4",
       width: 160,
       height: 90,
-      'controls': '',
-      'autoplay': '',
-      'muted': '',
-      'loop': ''
-    }).then(v => {
-      var video = v.querySelector('video');
+    }).then((v) => {
+      var video = v.querySelector("video");
       expect(video).to.be.an.instanceof(Element);
-      expect(video.tagName).to.equal('VIDEO');
-      expect(video.hasAttribute('controls')).to.be.true;
-      expect(video.hasAttribute('autoplay')).to.be.true;
-      expect(video.hasAttribute('muted')).to.be.true;
-      expect(video.hasAttribute('loop')).to.be.true;
+      expect(video.tagName).to.equal("VIDEO");
+      expect(video.getAttribute("src")).to.equal("video.mp4");
+      expect(video.hasAttribute("controls")).to.be.false;
     });
   });
 
-  it('should load a video with source children', () => {
+  it("should load a video", () => {
+    return getVideo({
+      src: "video.mp4",
+      width: 160,
+      height: 90,
+      controls: "",
+      autoplay: "",
+      muted: "",
+      loop: "",
+    }).then((v) => {
+      var video = v.querySelector("video");
+      expect(video).to.be.an.instanceof(Element);
+      expect(video.tagName).to.equal("VIDEO");
+      expect(video.hasAttribute("controls")).to.be.true;
+      expect(video.hasAttribute("autoplay")).to.be.true;
+      expect(video.hasAttribute("muted")).to.be.true;
+      expect(video.hasAttribute("loop")).to.be.true;
+    });
+  });
+
+  it("should load a video with source children", () => {
     var sources = [];
-    var mediatypes = ['video/ogg', 'video/mp4', 'video/webm'];
+    var mediatypes = ["video/ogg", "video/mp4", "video/webm"];
     for (var i = 0; i < mediatypes.length; i++) {
       var mediatype = mediatypes[i];
-      var source = document.createElement('source');
-      source.setAttribute('src',  getFooVideoSrc(mediatype));
-      source.setAttribute('type', mediatype);
+      var source = document.createElement("source");
+      source.setAttribute("src", getFooVideoSrc(mediatype));
+      source.setAttribute("type", mediatype);
       sources.push(source);
     }
-    return getVideo({
-      src: 'video.mp4',
-      width: 160,
-      height: 90,
-      'controls': '',
-      'autoplay': '',
-      'muted': '',
-      'loop': ''
-    }, sources).then(v => {
-      var video = v.querySelector('video');
+    return getVideo(
+      {
+        src: "video.mp4",
+        width: 160,
+        height: 90,
+        controls: "",
+        autoplay: "",
+        muted: "",
+        loop: "",
+      },
+      sources
+    ).then((v) => {
+      var video = v.querySelector("video");
       // check that the source tags were propogated
       expect(video.children.length).to.equal(mediatypes.length);
       for (var i = 0; i < mediatypes.length; i++) {
         var mediatype = mediatypes[i];
-        expect(video.children.item(i).tagName).to.equal('SOURCE');
-        expect(video.children.item(i).hasAttribute('src')).to.be.true;
-        expect(video.children.item(i).getAttribute('src'))
-            .to.equal(getFooVideoSrc(mediatype));
-        expect(video.children.item(i).getAttribute('type')).to.equal(mediatype);
+        expect(video.children.item(i).tagName).to.equal("SOURCE");
+        expect(video.children.item(i).hasAttribute("src")).to.be.true;
+        expect(video.children.item(i).getAttribute("src")).to.equal(
+          getFooVideoSrc(mediatype)
+        );
+        expect(video.children.item(i).getAttribute("type")).to.equal(mediatype);
       }
     });
   });
 
-  it('should not load a video with http source children', () => {
+  it("should not load a video with http source children", () => {
     var sources = [];
-    var mediatypes = ['video/ogg', 'video/mp4', 'video/webm'];
+    var mediatypes = ["video/ogg", "video/mp4", "video/webm"];
     for (var i = 0; i < mediatypes.length; i++) {
       var mediatype = mediatypes[i];
-      var source = document.createElement('source');
-      source.setAttribute('src', 'http:' + getFooVideoSrc(mediatype));
-      source.setAttribute('type', mediatype);
+      var source = document.createElement("source");
+      source.setAttribute("src", "http:" + getFooVideoSrc(mediatype));
+      source.setAttribute("type", mediatype);
       sources.push(source);
     }
-    return expect(getVideo({
-      src: 'video.mp4',
-      width: 160,
-      height: 90,
-      'controls': '',
-      'autoplay': '',
-      'muted': '',
-      'loop': ''
-    }, sources)).to.be.rejectedWith(/start with/);
+    return expect(
+      getVideo(
+        {
+          src: "video.mp4",
+          width: 160,
+          height: 90,
+          controls: "",
+          autoplay: "",
+          muted: "",
+          loop: "",
+        },
+        sources
+      )
+    ).to.be.rejectedWith(/start with/);
   });
-
 });

@@ -27,14 +27,14 @@ $gray--light: mix($black, $white, 3.5%);
 $gray--very-light: mix($black, $white, 2.5%);
 
 // text colors
-$text--dark-bg: transparentize($white, .03);
-$text--dark-bg-hover: transparentize($white, .4);
-$text--light-bg: transparentize($black, .1);
-$text--light-bg-muted: transparentize($black, .3);
-$text--light-bg-transparent: transparentize($black, .75);
+$text--dark-bg: transparentize($white, 0.03);
+$text--dark-bg-hover: transparentize($white, 0.4);
+$text--light-bg: transparentize($black, 0.1);
+$text--light-bg-muted: transparentize($black, 0.3);
+$text--light-bg-transparent: transparentize($black, 0.75);
 $text--button-action: $primary;
 $text--link: $primary;
-$text--mark-bg: #FFF59D;
+$text--mark-bg: #fff59d;
 
 // background colors
 $header-bg: $primary;
@@ -46,7 +46,7 @@ $latest-bg: $gray--light;
 $community-bg: $gray--light;
 $download-bg: $primary;
 $doc-nav-bg: $gray--light;
-$button-bg: transparentize($white, .8);
-$button-bg-hover: transparentize($white, .7);
-$button-bg--action: transparentize($white, .03);
+$button-bg: transparentize($white, 0.8);
+$button-bg-hover: transparentize($white, 0.7);
+$button-bg--action: transparentize($white, 0.03);
 $button-bg--action-hover: $white;

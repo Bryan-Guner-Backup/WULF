@@ -14,23 +14,25 @@
  * limitations under the License.
  */
 
-var table = require('text-table');
-var del = require('del');
-var fs = require('fs');
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var gzipSize = require('gzip-size');
-var prettyBytes = require('pretty-bytes');
-var through = require('through2');
+var table = require("text-table");
+var del = require("del");
+var fs = require("fs");
+var gulp = require("gulp");
+var gutil = require("gulp-util");
+var gzipSize = require("gzip-size");
+var prettyBytes = require("pretty-bytes");
+var through = require("through2");
 
+var tempFolderName = "__size-temp";
 
-var tempFolderName = '__size-temp';
-
-var tableHeaders = [['size', 'gzip', 'file'], ['---', '---', '---']];
+var tableHeaders = [
+  ["size", "gzip", "file"],
+  ["---", "---", "---"],
+];
 
 var tableOptions = {
-  align: ['r', 'r', 'l'],
-  hsep: '   |   ',
+  align: ["r", "r", "l"],
+  hsep: "   |   ",
 };
 
 function onFileThrough(rows, file, enc, cb) {
@@ -40,7 +42,7 @@ function onFileThrough(rows, file, enc, cb) {
   }
 
   if (file.isStream()) {
-    callback(new gutil.PluginError('size-task', 'Stream not supported'));
+    callback(new gutil.PluginError("size-task", "Stream not supported"));
     return;
   }
 
@@ -53,27 +55,29 @@ function onFileThrough(rows, file, enc, cb) {
   cb(null, file);
 }
 
-function onFileThroughEnd(rows , cb) {
+function onFileThroughEnd(rows, cb) {
   rows.unshift.apply(rows, tableHeaders);
   var tbl = table(rows, tableOptions);
-  console/*OK*/.log(tbl);
-  fs.writeFileSync('test/size.txt', tbl);
+  console /*OK*/
+    .log(tbl);
+  fs.writeFileSync("test/size.txt", tbl);
   cb();
 }
 
 function sizer() {
   var rows = [];
   return through.obj(
-      onFileThrough.bind(null, rows),
-      onFileThroughEnd.bind(null, rows)
+    onFileThrough.bind(null, rows),
+    onFileThroughEnd.bind(null, rows)
   );
 }
 
 function sizeTask() {
-  gulp.src(['dist/**/*.js', 'dist.3p/{current,current-min}/**/*.js'])
+  gulp
+    .src(["dist/**/*.js", "dist.3p/{current,current-min}/**/*.js"])
     .pipe(sizer())
     .pipe(gulp.dest(tempFolderName))
-    .on('end', del.bind(null, [tempFolderName]));
+    .on("end", del.bind(null, [tempFolderName]));
 }
 
-gulp.task('size', sizeTask);
+gulp.task("size", sizeTask);

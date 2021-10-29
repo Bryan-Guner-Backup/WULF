@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-var Buffer = require('./buffer').Buffer;
+var Buffer = require("./buffer").Buffer;
 
 function assertEncoding(encoding) {
   // Do not cache `Buffer.isEncoding`, some modules monkey-patch it to support
   // additional encodings
   if (encoding && !Buffer.isEncoding(encoding)) {
-    throw new Error('Unknown encoding: ' + encoding);
+    throw new Error("Unknown encoding: " + encoding);
   }
 }
 
@@ -18,21 +18,21 @@ function assertEncoding(encoding) {
 // to reason about this code, so it should be split up in the future.
 // @TODO There should be a utf8-strict encoding that rejects invalid UTF-8 code
 // points as used by CESU-8.
-var StringDecoder = exports.StringDecoder = function(encoding) {
-  this.encoding = (encoding || 'utf8').toLowerCase().replace(/[-_]/, '');
+var StringDecoder = (exports.StringDecoder = function (encoding) {
+  this.encoding = (encoding || "utf8").toLowerCase().replace(/[-_]/, "");
   assertEncoding(encoding);
   switch (this.encoding) {
-    case 'utf8':
+    case "utf8":
       // CESU-8 represents each of Surrogate Pair by 3-bytes
       this.surrogateSize = 3;
       break;
-    case 'ucs2':
-    case 'utf16le':
+    case "ucs2":
+    case "utf16le":
       // UTF-16 represents each of Surrogate Pair by 2-bytes
       this.surrogateSize = 2;
       this.detectIncompleteChar = utf16DetectIncompleteChar;
       break;
-    case 'base64':
+    case "base64":
       // Base-64 stores 3 bytes in 4 chars, and pads the remainder.
       this.surrogateSize = 3;
       this.detectIncompleteChar = base64DetectIncompleteChar;
@@ -49,8 +49,7 @@ var StringDecoder = exports.StringDecoder = function(encoding) {
   this.charReceived = 0;
   // Number of bytes expected for the current incomplete multi-byte character.
   this.charLength = 0;
-};
-
+});
 
 // write decodes the given buffer and returns it as JS string that is
 // guaranteed to not contain any partial multi-byte characters. Any partial
@@ -61,8 +60,8 @@ var StringDecoder = exports.StringDecoder = function(encoding) {
 // currently works, but converting a String to a Buffer (via `new Buffer`, or
 // Buffer#write) will replace incomplete surrogates with the unicode
 // replacement character. See https://codereview.chromium.org/121173009/ .
-StringDecoder.prototype.write = function(buffer) {
-  var charStr = '';
+StringDecoder.prototype.write = function (buffer) {
+  var charStr = "";
   var buflen = buffer.length;
   var charBuffer = this.charBuffer;
   var charLength = this.charLength;
@@ -73,7 +72,7 @@ StringDecoder.prototype.write = function(buffer) {
   while (charLength) {
     // determine how many remaining bytes this buffer has to offer for this char
     var diff = charLength - charReceived;
-    var available = (buflen >= diff) ? diff : buflen;
+    var available = buflen >= diff ? diff : buflen;
 
     // add the new bytes to the char buffer
     buffer.copy(charBuffer, charReceived, 0, available);
@@ -85,7 +84,7 @@ StringDecoder.prototype.write = function(buffer) {
       this.charLength = charLength;
       this.charReceived = charReceived;
 
-      return '';
+      return "";
     }
 
     // remove bytes belonging to the current character from the buffer
@@ -97,9 +96,9 @@ StringDecoder.prototype.write = function(buffer) {
 
     // CESU-8: lead surrogate (D800-DBFF) is also the incomplete character
     var charCode = charStr.charCodeAt(charStr.length - 1);
-    if (charCode >= 0xD800 && charCode <= 0xDBFF) {
+    if (charCode >= 0xd800 && charCode <= 0xdbff) {
       charLength += surrogateSize;
-      charStr = '';
+      charStr = "";
       continue;
     }
     charReceived = charLength = 0;
@@ -114,8 +113,7 @@ StringDecoder.prototype.write = function(buffer) {
   }
 
   // determine and set charLength / charReceived
-  if (this.detectIncompleteChar(buffer))
-    charLength = this.charLength;
+  if (this.detectIncompleteChar(buffer)) charLength = this.charLength;
   charReceived = this.charReceived;
 
   var end = buflen;
@@ -131,7 +129,7 @@ StringDecoder.prototype.write = function(buffer) {
   var end = charStr.length - 1;
   var charCode = charStr.charCodeAt(end);
   // CESU-8: lead surrogate (D800-DBFF) is also the incomplete character
-  if (charCode >= 0xD800 && charCode <= 0xDBFF) {
+  if (charCode >= 0xd800 && charCode <= 0xdbff) {
     charLength += surrogateSize;
     charReceived += surrogateSize;
     charBuffer.copy(charBuffer, surrogateSize, 0, surrogateSize);
@@ -151,10 +149,10 @@ StringDecoder.prototype.write = function(buffer) {
 // the end of the given buffer. If so, it sets this.charLength to the byte
 // length that character, and sets this.charReceived to the number of bytes
 // that are available for this character.
-StringDecoder.prototype.detectIncompleteChar = function(buffer) {
+StringDecoder.prototype.detectIncompleteChar = function (buffer) {
   var buflen = buffer.length;
   // determine how many bytes we have to check at the end of this buffer
-  var i = (buflen >= 3) ? 3 : buflen;
+  var i = buflen >= 3 ? 3 : buflen;
   var newlen = false;
 
   // Figure out if one of the last i bytes of our buffer announces an
@@ -172,14 +170,14 @@ StringDecoder.prototype.detectIncompleteChar = function(buffer) {
     }
 
     // 1110XXXX
-    if (i <= 2 && c >> 4 === 0x0E) {
+    if (i <= 2 && c >> 4 === 0x0e) {
       this.charLength = 3;
       newlen = true;
       break;
     }
 
     // 11110XXX
-    if (i <= 3 && c >> 3 === 0x1E) {
+    if (i <= 3 && c >> 3 === 0x1e) {
       this.charLength = 4;
       newlen = true;
       break;
@@ -191,10 +189,9 @@ StringDecoder.prototype.detectIncompleteChar = function(buffer) {
   return newlen;
 };
 
-StringDecoder.prototype.end = function(buffer) {
-  var res = '';
-  if (buffer && buffer.length)
-    res = this.write(buffer);
+StringDecoder.prototype.end = function (buffer) {
+  var res = "";
+  if (buffer && buffer.length) res = this.write(buffer);
 
   var charReceived = this.charReceived;
   if (charReceived) {
@@ -212,13 +209,13 @@ function passThroughWrite(buffer) {
 }
 
 function utf16DetectIncompleteChar(buffer) {
-  var charReceived = this.charReceived = buffer.length % 2;
+  var charReceived = (this.charReceived = buffer.length % 2);
   this.charLength = charReceived ? 2 : 0;
   return true;
 }
 
 function base64DetectIncompleteChar(buffer) {
-  var charReceived = this.charReceived = buffer.length % 3;
+  var charReceived = (this.charReceived = buffer.length % 3);
   this.charLength = charReceived ? 3 : 0;
   return true;
 }

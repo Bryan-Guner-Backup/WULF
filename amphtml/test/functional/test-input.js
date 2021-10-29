@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-import {Input} from '../../src/input';
-import * as sinon from 'sinon';
+import { Input } from "../../src/input";
+import * as sinon from "sinon";
 
-
-describe('Input', () => {
-
+describe("Input", () => {
   let sandbox;
   let clock;
   let input;
@@ -41,13 +39,13 @@ describe('Input', () => {
         if (eventListeners[eventType] == handler) {
           delete eventListeners[eventType];
         }
-      }
+      },
     };
 
     windowApi = {
       document: documentApi,
       navigator: {},
-      ontouchstart: ''
+      ontouchstart: "",
     };
 
     input = new Input(windowApi);
@@ -61,18 +59,18 @@ describe('Input', () => {
     sandbox = null;
   });
 
-  it('should initialize in touch mode', () => {
+  it("should initialize in touch mode", () => {
     expect(input.isTouchDetected()).to.equal(true);
     expect(input.isMouseDetected()).to.equal(false);
     expect(input.isKeyboardActive()).to.equal(false);
 
-    expect(eventListeners['keydown']).to.not.equal(undefined);
-    expect(eventListeners['mousedown']).to.not.equal(undefined);
-    expect(eventListeners['mousemove']).to.not.equal(undefined);
-    expect(eventListeners['click']).to.equal(undefined);
+    expect(eventListeners["keydown"]).to.not.equal(undefined);
+    expect(eventListeners["mousedown"]).to.not.equal(undefined);
+    expect(eventListeners["mousemove"]).to.not.equal(undefined);
+    expect(eventListeners["click"]).to.equal(undefined);
   });
 
-  it('should fire states immediately', () => {
+  it("should fire states immediately", () => {
     let touchDetected = undefined;
     input.onTouchDetected((detected) => {
       touchDetected = detected;
@@ -92,13 +90,13 @@ describe('Input', () => {
     expect(kbActive).to.equal(false);
   });
 
-  it('should release mousemove event asap', () => {
-    expect(eventListeners['mousemove']).to.not.equal(undefined);
-    eventListeners['mousemove']();
-    expect(eventListeners['mousemove']).to.equal(undefined);
+  it("should release mousemove event asap", () => {
+    expect(eventListeners["mousemove"]).to.not.equal(undefined);
+    eventListeners["mousemove"]();
+    expect(eventListeners["mousemove"]).to.equal(undefined);
   });
 
-  it('should detect mouse', () => {
+  it("should detect mouse", () => {
     expect(input.isMouseDetected()).to.equal(false);
     let mouseDetected = undefined;
     input.onMouseDetected((detected) => {
@@ -107,18 +105,18 @@ describe('Input', () => {
     expect(mouseDetected).to.equal(undefined);
 
     let p = input.onMouseMove_();
-    expect(eventListeners['click']).to.not.equal(undefined);
+    expect(eventListeners["click"]).to.not.equal(undefined);
     clock.tick(350);
 
     return p.then(() => {
       expect(input.mouseConfirmAttemptCount_).to.equal(0);
       expect(input.isMouseDetected()).to.equal(true);
       expect(mouseDetected).to.equal(true);
-      expect(eventListeners['click']).to.equal(undefined);
+      expect(eventListeners["click"]).to.equal(undefined);
     });
   });
 
-  it('should try to detect mouse again', () => {
+  it("should try to detect mouse again", () => {
     expect(input.isMouseDetected()).to.equal(false);
     let mouseDetected = undefined;
     input.onMouseDetected((detected) => {
@@ -127,18 +125,18 @@ describe('Input', () => {
     expect(mouseDetected).to.equal(undefined);
 
     let p = input.onMouseMove_();
-    eventListeners['click']();
+    eventListeners["click"]();
 
     return p.then(() => {
       expect(input.mouseConfirmAttemptCount_).to.equal(1);
       expect(input.isMouseDetected()).to.equal(false);
       expect(mouseDetected).to.equal(undefined);
-      expect(eventListeners['click']).to.equal(undefined);
-      expect(eventListeners['mousemove']).to.not.equal(undefined);
+      expect(eventListeners["click"]).to.equal(undefined);
+      expect(eventListeners["mousemove"]).to.not.equal(undefined);
     });
   });
 
-  it('should stop trying to detect mouse after few attempts', () => {
+  it("should stop trying to detect mouse after few attempts", () => {
     expect(input.isMouseDetected()).to.equal(false);
     let mouseDetected = undefined;
     input.onMouseDetected((detected) => {
@@ -148,19 +146,19 @@ describe('Input', () => {
 
     let p = input.onMouseMove_();
     input.mouseConfirmAttemptCount_ = 100;
-    eventListeners['mousemove'] = undefined;
-    eventListeners['click']();
+    eventListeners["mousemove"] = undefined;
+    eventListeners["click"]();
 
     return p.then(() => {
       expect(input.mouseConfirmAttemptCount_).to.equal(101);
       expect(input.isMouseDetected()).to.equal(false);
       expect(mouseDetected).to.equal(undefined);
-      expect(eventListeners['click']).to.equal(undefined);
-      expect(eventListeners['mousemove']).to.equal(undefined);
+      expect(eventListeners["click"]).to.equal(undefined);
+      expect(eventListeners["mousemove"]).to.equal(undefined);
     });
   });
 
-  it('should detect keyboard states', () => {
+  it("should detect keyboard states", () => {
     expect(input.isKeyboardActive()).to.equal(false);
     let kbActive = undefined;
     input.onKeyboardStateChanged((active) => {
@@ -169,24 +167,24 @@ describe('Input', () => {
     expect(kbActive).to.equal(undefined);
 
     // Should send active.
-    eventListeners['keydown']({});
+    eventListeners["keydown"]({});
     expect(input.isKeyboardActive()).to.equal(true);
     expect(kbActive).to.equal(true);
 
     // Should not resend active.
     kbActive = undefined;
-    eventListeners['keydown']({});
+    eventListeners["keydown"]({});
     expect(input.isKeyboardActive()).to.equal(true);
     expect(kbActive).to.equal(undefined);
 
     // Should send inactive.
     kbActive = undefined;
-    eventListeners['mousedown']({});
+    eventListeners["mousedown"]({});
     expect(input.isKeyboardActive()).to.equal(false);
     expect(kbActive).to.equal(false);
   });
 
-  it('should ignore keyboard state on input', () => {
+  it("should ignore keyboard state on input", () => {
     expect(input.isKeyboardActive()).to.equal(false);
     let kbActive = undefined;
     input.onKeyboardStateChanged((active) => {
@@ -195,7 +193,7 @@ describe('Input', () => {
     expect(kbActive).to.equal(undefined);
 
     // Should send active.
-    eventListeners['keydown']({target: {tagName: 'INPUT'}});
+    eventListeners["keydown"]({ target: { tagName: "INPUT" } });
     expect(input.isKeyboardActive()).to.equal(false);
     expect(kbActive).to.equal(undefined);
   });

@@ -1,5 +1,4 @@
 .layout-post {
-
   .header .container {
     border-bottom: 0;
   }
@@ -30,7 +29,7 @@
   main {
     min-height: calc(100vh - 56px - 70px);
     margin: 2rem 1rem;
-    font-size: .9rem;
+    font-size: 0.9rem;
     word-wrap: break-word;
 
     pre {
@@ -73,7 +72,7 @@
   .post-meta {
     @extend %flex-container;
     align-items: center;
-    font-size: .8rem;
+    font-size: 0.8rem;
     color: $text--light-bg-muted;
 
     .avatar {
@@ -90,7 +89,7 @@
     }
 
     .info {
-      margin-left: .5rem;
+      margin-left: 0.5rem;
     }
   }
 
@@ -139,7 +138,7 @@
 
   .highlight {
     padding: 1rem;
-    font-size: .825rem;
+    font-size: 0.825rem;
     background: $gray--light;
     border: 1px solid $gray--mid;
     margin-bottom: 1.5rem;

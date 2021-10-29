@@ -14,10 +14,10 @@ The `.fog` file is written in YAML. The keys are particular to the service that 
 
 ```yaml
 default:
-  vsphere_server: 'vsphere.example.com'
-  vsphere_username: 'joe'
-  vsphere_password: 'MyP@$$w0rd'
-  vmpooler_token: 'randomtokentext'
+  vsphere_server: "vsphere.example.com"
+  vsphere_username: "joe"
+  vsphere_password: "MyP@$$w0rd"
+  vmpooler_token: "randomtokentext"
 ```
 
 Note: keys can be specified as either Strings or as Ruby Symbols (e.g. `:vsphere_server`). For interoprability with other systems, however, it is prudent to use Strings.
@@ -32,17 +32,16 @@ In order to offset this, we've made a listing of gems and community-supported fo
 
 ### Hypervisor gems made by puppet (pre-included in beaker 3.x):
 
-| Hypervisor               | Fork                                                               |
-| :----------------------: | :---------------------------------------------------------:        |
-| Vmpooler                 | [beaker-vmpooler](https://github.com/puppetlabs/beaker-vmpooler)   |
-| Vcloud                   | [beaker-vcloud](https://github.com/puppetlabs/beaker-vcloud)       |
-| AWS                      | [beaker-aws](https://github.com/puppetlabs/beaker-aws)             |
-| Vagrant                  | [beaker-vagrant](https://github.com/puppetlabs/beaker-vagrant)     |
-| VMware/Vsphere           | [beaker-vmware](https://github.com/puppetlabs/beaker-vmware)       |
-| Docker                   | [beaker-docker](https://github.com/puppetlabs/beaker-docker)       |
-| Openstack                | [beaker-openstack](https://github.com/puppetlabs/beaker-openstack) |
-| Google Compute           | [beaker-google](https://github.com/puppetlabs/beaker-google)       |
-
+|   Hypervisor   |                                Fork                                |
+| :------------: | :----------------------------------------------------------------: |
+|    Vmpooler    |  [beaker-vmpooler](https://github.com/puppetlabs/beaker-vmpooler)  |
+|     Vcloud     |    [beaker-vcloud](https://github.com/puppetlabs/beaker-vcloud)    |
+|      AWS       |       [beaker-aws](https://github.com/puppetlabs/beaker-aws)       |
+|    Vagrant     |   [beaker-vagrant](https://github.com/puppetlabs/beaker-vagrant)   |
+| VMware/Vsphere |    [beaker-vmware](https://github.com/puppetlabs/beaker-vmware)    |
+|     Docker     |    [beaker-docker](https://github.com/puppetlabs/beaker-docker)    |
+|   Openstack    | [beaker-openstack](https://github.com/puppetlabs/beaker-openstack) |
+| Google Compute |    [beaker-google](https://github.com/puppetlabs/beaker-google)    |
 
 ### beaker-abs
 
@@ -52,7 +51,7 @@ You do that by requiring beaker-abs in your Gemfile as a sibling to beaker itsel
 
 ### Hypervisor gems and beaker forks made by community:
 
-| Hypervisor   | Fork                                                                 |
-|:------------:|:--------------------------------------------------------------------:|
-| LXC          | [Obmondo](https://github.com/Obmondo/beaker)                         |
+|  Hypervisor  |                                 Fork                                 |
+| :----------: | :------------------------------------------------------------------: |
+|     LXC      |             [Obmondo](https://github.com/Obmondo/beaker)             |
 | DigitalOcean | [beaker-digitalocean](https://github.com/tiengo/beaker-digitalocean) |

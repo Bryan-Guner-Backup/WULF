@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-import {Observable} from './observable';
-import {getService} from './service';
-import {log} from './log';
-import {listenOnce, listenOncePromise} from './event-helper';
-import {timer} from './timer';
+import { Observable } from "./observable";
+import { getService } from "./service";
+import { log } from "./log";
+import { listenOnce, listenOncePromise } from "./event-helper";
+import { timer } from "./timer";
 
-
-let TAG_ = 'Input';
+let TAG_ = "Input";
 
 let MAX_MOUSE_CONFIRM_ATTEMPS_ = 3;
 let CLICK_TIMEOUT_ = 300;
-
 
 /**
  * Detects and maintains different types of input such as touch, mouse or
@@ -55,16 +53,17 @@ export class Input {
     this.boundMouseConfirmed_ = this.mouseConfirmed_.bind(this);
 
     /** @private {boolean} */
-    this.hasTouch_ = ('ontouchstart' in win ||
-        (win.navigator['maxTouchPoints'] !== undefined &&
-            win.navigator['maxTouchPoints'] > 0) ||
-        win['DocumentTouch'] !== undefined);
-    log.fine(TAG_, 'touch detected:', this.hasTouch_);
+    this.hasTouch_ =
+      "ontouchstart" in win ||
+      (win.navigator["maxTouchPoints"] !== undefined &&
+        win.navigator["maxTouchPoints"] > 0) ||
+      win["DocumentTouch"] !== undefined;
+    log.fine(TAG_, "touch detected:", this.hasTouch_);
 
     /** @private {boolean} */
     this.keyboardActive_ = false;
-    this.win.document.addEventListener('keydown', this.boundOnKeyDown_);
-    this.win.document.addEventListener('mousedown', this.boundOnMouseDown_);
+    this.win.document.addEventListener("keydown", this.boundOnKeyDown_);
+    this.win.document.addEventListener("mousedown", this.boundOnMouseDown_);
 
     /** @private {boolean} */
     this.hasMouse_ = true;
@@ -85,14 +84,14 @@ export class Input {
     // mouse events.
     if (this.hasTouch_) {
       this.hasMouse_ = !this.hasTouch_;
-      listenOnce(win.document, 'mousemove', this.boundOnMouseMove_);
+      listenOnce(win.document, "mousemove", this.boundOnMouseMove_);
     }
   }
 
   /** @private */
   cleanup_() {
-    this.win.document.removeEventListener('keydown', this.boundOnKeyDown_);
-    this.win.document.removeEventListener('mousedown', this.boundOnMouseDown_);
+    this.win.document.removeEventListener("keydown", this.boundOnKeyDown_);
+    this.win.document.removeEventListener("mousedown", this.boundOnMouseDown_);
   }
 
   /**
@@ -173,17 +172,20 @@ export class Input {
 
     // Ignore inputs.
     let target = e.target;
-    if (target && (target.tagName == 'INPUT' ||
-          target.tagName == 'TEXTAREA' ||
-          target.tagName == 'SELECT' ||
-          target.tagName == 'OPTION' ||
-          target.hasAttribute('contenteditable'))) {
+    if (
+      target &&
+      (target.tagName == "INPUT" ||
+        target.tagName == "TEXTAREA" ||
+        target.tagName == "SELECT" ||
+        target.tagName == "OPTION" ||
+        target.hasAttribute("contenteditable"))
+    ) {
       return;
     }
 
     this.keyboardActive_ = true;
     this.keyboardStateObservable_.fire(true);
-    log.fine(TAG_, 'keyboard activated');
+    log.fine(TAG_, "keyboard activated");
   }
 
   /** @private */
@@ -193,7 +195,7 @@ export class Input {
     }
     this.keyboardActive_ = false;
     this.keyboardStateObservable_.fire(false);
-    log.fine(TAG_, 'keyboard deactivated');
+    log.fine(TAG_, "keyboard deactivated");
   }
 
   /** @private */
@@ -201,15 +203,19 @@ export class Input {
     // If "click" arrives within a timeout time, this is most likely a
     // touch/mouse emulation. Otherwise, if timeout exceeded, this looks
     // like a legitimate mouse event.
-    return listenOncePromise(this.win.document, 'click', false, CLICK_TIMEOUT_).
-        then(this.boundMouseCanceled_, this.boundMouseConfirmed_);
+    return listenOncePromise(
+      this.win.document,
+      "click",
+      false,
+      CLICK_TIMEOUT_
+    ).then(this.boundMouseCanceled_, this.boundMouseConfirmed_);
   }
 
   /** @private */
   mouseConfirmed_() {
     this.hasMouse_ = true;
     this.mouseDetectedObservable_.fire(true);
-    log.fine(TAG_, 'mouse detected');
+    log.fine(TAG_, "mouse detected");
   }
 
   /** @private */
@@ -217,20 +223,19 @@ export class Input {
     // Repeat, if attempts allow.
     this.mouseConfirmAttemptCount_++;
     if (this.mouseConfirmAttemptCount_ <= MAX_MOUSE_CONFIRM_ATTEMPS_) {
-      listenOnce(this.win.document, 'mousemove', this.boundOnMouseMove_);
+      listenOnce(this.win.document, "mousemove", this.boundOnMouseMove_);
     } else {
-      log.fine(TAG_, 'mouse detection failed');
+      log.fine(TAG_, "mouse detection failed");
     }
   }
 }
-
 
 /**
  * @param {!Window} window
  * @return {!Input}
  */
 export function inputFor(window) {
-  return getService(window, 'input', () => {
+  return getService(window, "input", () => {
     return new Input(window);
   });
-};
+}

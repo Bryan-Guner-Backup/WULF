@@ -4,8 +4,9 @@ AMP HTML components make it simple for you to control your content.
 Learn how to include common features in your pages using these elements.
 
 Make sure to review the documentation for each component individually as a reference:
-* [AMP HTML Built-in Components](../builtins/README.md)
-* [AMP HTML Extended Components](../extensions/README.md).
+
+- [AMP HTML Built-in Components](../builtins/README.md)
+- [AMP HTML Extended Components](../extensions/README.md).
 
 # Display an iframe
 
@@ -14,28 +15,35 @@ Display an iframe in your page using the
 
 `amp-iframe` requirements:
 
-* Must be at least 600px or 75% of the first viewport away from the top.
-* Can only request resources via HTTPS, and they must not be in the same origin as the container,
-unless they do not specify allow-same-origin.
+- Must be at least 600px or 75% of the first viewport away from the top.
+- Can only request resources via HTTPS, and they must not be in the same origin as the container,
+  unless they do not specify allow-same-origin.
 
 To include an `amp-iframe` in your page,
 first include the following script to the `<head>`, which loads the additional code for the extended component:
 
 ```html
-<script async custom-element="amp-iframe" src="https://cdn.ampproject.org/v0/amp-iframe-0.1.js"></script>
+<script
+  async
+  custom-element="amp-iframe"
+  src="https://cdn.ampproject.org/v0/amp-iframe-0.1.js"
+></script>
 ```
 
 An example `amp-iframe` from the
 [released.amp example](https://github.com/ampproject/amphtml/blob/master/examples/released.amp.html):
 
-  ```html
-  <amp-iframe width=300 height=300
-      sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-      layout="responsive"
-      frameborder="0"
-      src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDG9YXIhKBhqclZizcSzJ0ROiE0qgVfwzI&q=Alameda,%20CA">
-  </amp-iframe>
-  ```
+```html
+<amp-iframe
+  width="300"
+  height="300"
+  sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+  layout="responsive"
+  frameborder="0"
+  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDG9YXIhKBhqclZizcSzJ0ROiE0qgVfwzI&q=Alameda,%20CA"
+>
+</amp-iframe>
+```
 
 # Media
 
@@ -48,8 +56,8 @@ using the [`amp-img`](../builtins/amp-img.md) element.
 
 `amp-img` requirements:
 
-* Must include an explicit width and height.
-* Recommended: include a placeholder in case the image resource fails to load.
+- Must include an explicit width and height.
+- Recommended: include a placeholder in case the image resource fails to load.
 
 Responsive image example:
 
@@ -89,7 +97,11 @@ To include an `amp-anim` in your page,
 first include the following script to the `<head>`:
 
 ```html
-<script async custom-element="amp-anim" src="https://cdn.ampproject.org/v0/amp-anim-0.1.js"></script>
+<script
+  async
+  custom-element="amp-anim"
+  src="https://cdn.ampproject.org/v0/amp-anim-0.1.js"
+></script>
 ```
 
 The `amp-anim` component can also have an optional placeholder child
@@ -110,7 +122,11 @@ To include a tweet in your page,
 first include the following script to the `<head>`:
 
 ```html
-<script async custom-element="amp-twitter" src="https://cdn.ampproject.org/v0/amp-twitter-0.1.js"></script>
+<script
+  async
+  custom-element="amp-twitter"
+  src="https://cdn.ampproject.org/v0/amp-twitter-0.1.js"
+></script>
 ```
 
 Currently tweets are automatically proportionally scaled
@@ -126,7 +142,6 @@ Example `amp-twitter` from the
         layout="responsive"
         data-tweetid="638793490521001985">
     </amp-twitter>
-
 
 <!--## Embed an Instagram
 
@@ -164,11 +179,11 @@ Include a placeholder before the video starts, and a fallback,
 if the browser doesn't support HTML5 video, for example:
 
     <amp-video width=400 height=300 src=”https://yourhost.com/videos/myvideo.mp4”>
-	
+
       <amp-img placeholder width=400 height=300 src=”myvideo-poster.jpg”></amp-img>
-	  <div fallback>
-		<p>Your browser doesn’t support HTML5 video</p>
-	  </div>
+      <div fallback>
+    	<p>Your browser doesn’t support HTML5 video</p>
+      </div>
     </amp-video>
 
 ## Include a youtube video
@@ -179,7 +194,11 @@ using the [`amp-youtube`](../extensions/amp-youtube/amp-youtube.md) element.
 You must include the following script in the `<head>`:
 
 ```html
-<script async custom-element="amp-youtube" src="https://cdn.ampproject.org/v0/amp-youtube-0.1.js"></script>
+<script
+  async
+  custom-element="amp-youtube"
+  src="https://cdn.ampproject.org/v0/amp-youtube-0.1.js"
+></script>
 ```
 
 The Youtube `video-id` can be found in every Youtube video page URL.
@@ -200,9 +219,13 @@ Include an audio resource in your page,
 using the [`amp-audio`](../extensions/amp-audio/amp-audio.md) element.
 
 You must include the following script in the `<head>`:
- 
+
 ```html
-<script async custom-element="amp-audio" src="https://cdn.ampproject.org/v0/amp-audio-0.1.js"></script>
+<script
+  async
+  custom-element="amp-audio"
+  src="https://cdn.ampproject.org/v0/amp-audio-0.1.js"
+></script>
 ```
 
 Only use this element for direct HTML5 audio file embeds.

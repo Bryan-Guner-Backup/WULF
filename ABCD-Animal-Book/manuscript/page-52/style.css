@@ -29,7 +29,7 @@ body {
 
 .yak {
   position: absolute;
-  margin: 0vw 4vw
+  margin: 0vw 4vw;
 }
 
 .head {
@@ -47,7 +47,7 @@ body {
   -webkit-border-radius: 63vw 63vw 63vw 63vw / 108vw 108vw 72vw 72vw;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
   background: #502d16;
-  margin: 18vw 27.5vw
+  margin: 18vw 27.5vw;
 }
 
 .ojos {
@@ -56,8 +56,8 @@ body {
   height: 4vw;
   border-radius: 100vw;
   background: white;
-  border: .5vw solid black;
-  margin: 9vw 5vw
+  border: 0.5vw solid black;
+  margin: 9vw 5vw;
 }
 
 .ojos::before {
@@ -68,8 +68,8 @@ body {
   border-radius: 100vw;
   background: white;
   background: white;
-  border: .5vw solid black;
-  margin: -.5vw 7vw
+  border: 0.5vw solid black;
+  margin: -0.5vw 7vw;
 }
 
 .iris {
@@ -78,7 +78,7 @@ body {
   height: 3vw;
   border-radius: 100vw;
   background: #b37345;
-  margin: .7vw .5vw;
+  margin: 0.7vw 0.5vw;
 }
 
 .iris::before {
@@ -98,7 +98,7 @@ body {
   height: 1vw;
   border-radius: 100vw;
   background: white;
-  margin: .3vw 9.5vw;
+  margin: 0.3vw 9.5vw;
 }
 
 .iris3 {
@@ -127,7 +127,7 @@ body {
   height: 1vw;
   border-radius: 100vw;
   background: white;
-  margin: -.6vw -.9vw;
+  margin: -0.6vw -0.9vw;
 }
 
 .cabeza3 {
@@ -136,7 +136,7 @@ body {
   height: 9vw;
   border-radius: 100%;
   background: #784421;
-  margin: 14vw 2.5vw
+  margin: 14vw 2.5vw;
 }
 
 .nariz {
@@ -145,7 +145,7 @@ body {
   height: 1.7vw;
   border-radius: 100vw;
   background: black;
-  margin: 4vw 6vw
+  margin: 4vw 6vw;
 }
 
 .nariz::before {
@@ -155,7 +155,7 @@ body {
   height: 1.7vw;
   border-radius: 100vw;
   background: black;
-  margin: 0vw 4vw
+  margin: 0vw 4vw;
 }
 
 .orejas {
@@ -194,7 +194,7 @@ body {
   height: 3.8vw;
   border-radius: 30vw 300vw 300vw 500vw;
   background: #784421;
-  margin: 19vw 27vw
+  margin: 19vw 27vw;
 }
 
 .cuernos::before {
@@ -216,7 +216,7 @@ body {
   height: 3.8vw;
   border-radius: 300vw 30vw 500vw 300vw;
   background: #784421;
-  margin: 19vw 42vw
+  margin: 19vw 42vw;
 }
 
 .cuernos3::before {
@@ -239,7 +239,7 @@ body {
   border-left: 1.2vw solid transparent;
   border-right: 1.2vw solid transparent;
   border-bottom: 5vw solid #502d16;
-  margin: 14vw 36.5vw
+  margin: 14vw 36.5vw;
 }
 
 .crin::before {
@@ -250,7 +250,7 @@ body {
   border-left: 1.2vw solid transparent;
   border-right: 1.2vw solid transparent;
   border-bottom: 5vw solid #502d16;
-  margin: .5vw 0vw;
+  margin: 0.5vw 0vw;
 }
 
 .crin::after {
@@ -261,7 +261,7 @@ body {
   border-left: 1.2vw solid transparent;
   border-right: 1.2vw solid transparent;
   border-bottom: 5vw solid #502d16;
-  margin: -.3vw 1.2vw
+  margin: -0.3vw 1.2vw;
 }
 
 .body {
@@ -269,8 +269,8 @@ body {
   width: 30vw;
   height: 33vw;
   border-radius: 300vw 300vw 0 0;
-  background: #421C00;
-  margin: 30vw 23.5vw
+  background: #421c00;
+  margin: 30vw 23.5vw;
 }
 
 .crin3,
@@ -288,47 +288,47 @@ body {
   height: 0;
   border-left: 2vw solid transparent;
   border-right: 2vw solid transparent;
-  border-top: 12vw solid #421C00;
+  border-top: 12vw solid #421c00;
 }
 
 .crin3 {
-  margin: 30vw .5vw
+  margin: 30vw 0.5vw;
 }
 
 .crin7 {
-  margin: 27vw 3vw
+  margin: 27vw 3vw;
 }
 
 .crin9 {
-  margin: 25vw 5vw
+  margin: 25vw 5vw;
 }
 
 .crin12 {
-  margin: 27vw 7vw
+  margin: 27vw 7vw;
 }
 
 .crin21 {
-  margin: 28vw 9vw
+  margin: 28vw 9vw;
 }
 
 .crin30 {
-  margin: 29vw 16vw
+  margin: 29vw 16vw;
 }
 
 .crin33 {
-  margin: 25vw 19vw
+  margin: 25vw 19vw;
 }
 
 .crin36 {
-  margin: 27vw 21vw
+  margin: 27vw 21vw;
 }
 
 .crin39 {
-  margin: 29vw 24vw
+  margin: 29vw 24vw;
 }
 
 .crin43 {
-  margin: 30vw 25.5vw
+  margin: 30vw 25.5vw;
 }
 
 .legs {
@@ -337,7 +337,7 @@ body {
   height: 6vw;
   border-radius: 40vw 40vw 0 0;
   background: #784421;
-  margin: 30vw 5vw
+  margin: 30vw 5vw;
 }
 
 .legs::before {
@@ -347,7 +347,7 @@ body {
   height: 6vw;
   border-radius: 40vw 40vw 0 0;
   background: #784421;
-  margin: 0vw 10.2vw
+  margin: 0vw 10.2vw;
 }
 
 @keyframes sube {
@@ -430,27 +430,27 @@ body {
 
 @keyframes sube7 {
   0% {
-    margin: 0 0
+    margin: 0 0;
   }
   100% {
-    margin: 3.5vw 0
+    margin: 3.5vw 0;
   }
 }
 
 @-moz-keyframes sube7 {
   0% {
-    margin: 0 0
+    margin: 0 0;
   }
   100% {
-    margin: 3.5vw 0
+    margin: 3.5vw 0;
   }
 }
 
 @-webkit-keyframes sube7 {
   0% {
-    margin: 0 0
+    margin: 0 0;
   }
   100% {
-    margin: 3.5vw 0
+    margin: 3.5vw 0;
   }
 }

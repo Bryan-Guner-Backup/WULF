@@ -13,7 +13,6 @@ in support for Markdown formatting to Beaker.
 
 Markdown rendering is turned on by default for all `.md` files, but you can easily switch between the raw and formatted file content.
 
-
 <figure>
   <img src="/img/posts/markdown-sites/markdown.jpg"/>
   <figcaption>Formatted Markdown vs. raw Markdown in Beaker</figcaption>

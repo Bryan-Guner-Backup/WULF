@@ -50,7 +50,6 @@ body {
   height: 27vw;
   border-radius: 0 0 400vw 400vw;
   border-bottom: 14.9vw solid#667b99;
-  ;
   margin: 14.5vw 14.9vw;
 }
 
@@ -60,7 +59,6 @@ body {
   width: 17vw;
   height: 24vw;
   border-bottom: 7.9vw solid#667b99;
-  ;
   border-left: 7.9vw solid transparent;
   border-right: 8vw solid transparent;
   -moz-border-radius: 152vw / 100vw;
@@ -146,7 +144,7 @@ body {
   height: 1.2vw;
   border-radius: 100vw;
   background: white;
-  margin: 0vw .5vw;
+  margin: 0vw 0.5vw;
 }
 
 .iris3::before {
@@ -164,9 +162,9 @@ body {
   width: 4.5vw;
   height: 2.5vw;
   border-radius: 0 0 121vw 121vw;
-  background: #D87778;
-  border: .3vw solid #ff6666;
-  margin: 21vw 17vw
+  background: #d87778;
+  border: 0.3vw solid #ff6666;
+  margin: 21vw 17vw;
 }
 
 .cuerno {
@@ -178,7 +176,7 @@ body {
   -moz-border-radius: 100vw / 50vw;
   -webkit-border-radius: 100vw / 50vw;
   border-radius: 100vw/ 50vw;
-  margin: -18vw 17.5vw
+  margin: -18vw 17.5vw;
 }
 
 .rayas {
@@ -186,8 +184,8 @@ body {
   width: 4vw;
   height: 2vw;
   border-radius: 100%;
-  border-bottom: .5vw solid gray;
-  margin: 16vw -2vw
+  border-bottom: 0.5vw solid gray;
+  margin: 16vw -2vw;
 }
 
 .rayas::before {
@@ -196,8 +194,8 @@ body {
   width: 3vw;
   height: 1vw;
   border-radius: 100%;
-  border-bottom: .5vw solid gray;
-  margin: -4vw 0.5vw
+  border-bottom: 0.5vw solid gray;
+  margin: -4vw 0.5vw;
 }
 
 .rayas::after {
@@ -206,8 +204,8 @@ body {
   width: 2vw;
   height: 1vw;
   border-radius: 100%;
-  border-bottom: .5vw solid gray;
-  margin: -9vw 1vw
+  border-bottom: 0.5vw solid gray;
+  margin: -9vw 1vw;
 }
 
 .cabeza3 {

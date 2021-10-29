@@ -14,132 +14,143 @@
  * limitations under the License.
  */
 
-import {SizeList, parseSizeList} from '../../src/size-list';
+import { SizeList, parseSizeList } from "../../src/size-list";
 
-
-describe('SizeList parseSizeList', () => {
-
-  it('should accept single option', () => {
-    var res = parseSizeList(' \n 111px \n ');
+describe("SizeList parseSizeList", () => {
+  it("should accept single option", () => {
+    var res = parseSizeList(" \n 111px \n ");
     expect(res.sizes_.length).to.equal(1);
     expect(res.sizes_[0].mediaQuery).to.equal(undefined);
-    expect(res.sizes_[0].size).to.equal('111px');
+    expect(res.sizes_[0].size).to.equal("111px");
   });
 
-  it('should accept multiple options', () => {
-    var res = parseSizeList(' \n print 222px \n, 111px \n');
+  it("should accept multiple options", () => {
+    var res = parseSizeList(" \n print 222px \n, 111px \n");
     expect(res.sizes_.length).to.equal(2);
-    expect(res.sizes_[0].mediaQuery).to.equal('print');
-    expect(res.sizes_[0].size).to.equal('222px');
+    expect(res.sizes_[0].mediaQuery).to.equal("print");
+    expect(res.sizes_[0].size).to.equal("222px");
     expect(res.sizes_[1].mediaQuery).to.equal(undefined);
-    expect(res.sizes_[1].size).to.equal('111px');
+    expect(res.sizes_[1].size).to.equal("111px");
   });
 
-  it('should accept even more multiple options', () => {
-    var res = parseSizeList(' \n screen 333px, print 222px \n, 111px \n');
+  it("should accept even more multiple options", () => {
+    var res = parseSizeList(" \n screen 333px, print 222px \n, 111px \n");
     expect(res.sizes_.length).to.equal(3);
-    expect(res.sizes_[0].mediaQuery).to.equal('screen');
-    expect(res.sizes_[0].size).to.equal('333px');
-    expect(res.sizes_[1].mediaQuery).to.equal('print');
-    expect(res.sizes_[1].size).to.equal('222px');
+    expect(res.sizes_[0].mediaQuery).to.equal("screen");
+    expect(res.sizes_[0].size).to.equal("333px");
+    expect(res.sizes_[1].mediaQuery).to.equal("print");
+    expect(res.sizes_[1].size).to.equal("222px");
     expect(res.sizes_[2].mediaQuery).to.equal(undefined);
-    expect(res.sizes_[2].size).to.equal('111px');
+    expect(res.sizes_[2].size).to.equal("111px");
   });
 
-  it('should accept complicated media conditions', () => {
+  it("should accept complicated media conditions", () => {
     var res = parseSizeList(
-        ' \n screen and (min-width: 1000px) \t ' +
-        ' and    (max-width: 2000px) 222px \n,' +
-        ' 111px \n');
+      " \n screen and (min-width: 1000px) \t " +
+        " and    (max-width: 2000px) 222px \n," +
+        " 111px \n"
+    );
     expect(res.sizes_.length).to.equal(2);
     expect(res.sizes_[0].mediaQuery).to.equal(
-        'screen and (min-width: 1000px) and (max-width: 2000px)');
-    expect(res.sizes_[0].size).to.equal('222px');
+      "screen and (min-width: 1000px) and (max-width: 2000px)"
+    );
+    expect(res.sizes_[0].size).to.equal("222px");
     expect(res.sizes_[1].mediaQuery).to.equal(undefined);
-    expect(res.sizes_[1].size).to.equal('111px');
+    expect(res.sizes_[1].size).to.equal("111px");
   });
 
-  it('should accept different length units', () => {
-    var res = parseSizeList(' \n 111vw \n ');
+  it("should accept different length units", () => {
+    var res = parseSizeList(" \n 111vw \n ");
     expect(res.sizes_.length).to.equal(1);
     expect(res.sizes_[0].mediaQuery).to.equal(undefined);
-    expect(res.sizes_[0].size).to.equal('111vw');
+    expect(res.sizes_[0].size).to.equal("111vw");
   });
 
-  it('should fail bad length', () => {
+  it("should fail bad length", () => {
     expect(() => {
-      parseSizeList(' \n 111 \n ');
+      parseSizeList(" \n 111 \n ");
     }).to.throw(/Invalid length value/);
   });
 });
 
-
-describe('SizeList construct', () => {
-
-  it('should have at least one option', () => {
+describe("SizeList construct", () => {
+  it("should have at least one option", () => {
     expect(() => {
       new SizeList([]);
     }).to.throw(/SizeList must have at least one option/);
   });
 
-  it('the last option must not have a query', () => {
+  it("the last option must not have a query", () => {
     expect(() => {
-      new SizeList([{mediaQuery: 'screen', size: '111px'}]);
+      new SizeList([{ mediaQuery: "screen", size: "111px" }]);
     }).to.throw(/The last option must not have a media condition/);
     expect(() => {
-      new SizeList([{mediaQuery: 'print', size: '222px'},
-          {mediaQuery: 'screen', size: '111px'}]);
+      new SizeList([
+        { mediaQuery: "print", size: "222px" },
+        { mediaQuery: "screen", size: "111px" },
+      ]);
     }).to.throw(/The last option must not have a media condition/);
   });
 
-  it('non-last options must have media query', () => {
+  it("non-last options must have media query", () => {
     expect(() => {
-      new SizeList([{size: '222px'}, {size: '111px'}]);
+      new SizeList([{ size: "222px" }, { size: "111px" }]);
     }).to.throw(/All options except for the last must have a media condition/);
   });
 });
 
-
-describe('SizeList select', () => {
-  it('should select default last option', () => {
+describe("SizeList select", () => {
+  it("should select default last option", () => {
     let sizeList = new SizeList([
-        {mediaQuery: 'media1', size: '444px'},
-        {mediaQuery: 'media2', size: '333px'},
-        {mediaQuery: 'media3', size: '222px'},
-        {size: '111px'}
-      ]);
-    expect(sizeList.select({matchMedia: () => {
-      return {};
-    }})).to.equal('111px');
+      { mediaQuery: "media1", size: "444px" },
+      { mediaQuery: "media2", size: "333px" },
+      { mediaQuery: "media3", size: "222px" },
+      { size: "111px" },
+    ]);
+    expect(
+      sizeList.select({
+        matchMedia: () => {
+          return {};
+        },
+      })
+    ).to.equal("111px");
   });
 
-  it('should select a matching option', () => {
+  it("should select a matching option", () => {
     let sizeList = new SizeList([
-        {mediaQuery: 'media1', size: '444px'},
-        {mediaQuery: 'media2', size: '333px'},
-        {mediaQuery: 'media3', size: '222px'},
-        {size: '111px'}
-      ]);
-    expect(sizeList.select({matchMedia: (mq) => {
-      if (mq == 'media2') {
-        return {matches: true};
-      }
-      return {};
-    }})).to.equal('333px');
+      { mediaQuery: "media1", size: "444px" },
+      { mediaQuery: "media2", size: "333px" },
+      { mediaQuery: "media3", size: "222px" },
+      { size: "111px" },
+    ]);
+    expect(
+      sizeList.select({
+        matchMedia: (mq) => {
+          if (mq == "media2") {
+            return { matches: true };
+          }
+          return {};
+        },
+      })
+    ).to.equal("333px");
   });
 
-  it('should select first matching option', () => {
+  it("should select first matching option", () => {
     let sizeList = new SizeList([
-        {mediaQuery: 'media1', size: '444px'},
-        {mediaQuery: 'media2', size: '333px'},
-        {mediaQuery: 'media3', size: '222px'},
-        {size: '111px'}
-      ]);
-    expect(sizeList.select({matchMedia: (mq) => {
-      if (mq == 'media1' || mq == 'media2') {
-        return {matches: true};
-      }
-      return {};
-    }})).to.equal('444px');
+      { mediaQuery: "media1", size: "444px" },
+      { mediaQuery: "media2", size: "333px" },
+      { mediaQuery: "media3", size: "222px" },
+      { size: "111px" },
+    ]);
+    expect(
+      sizeList.select({
+        matchMedia: (mq) => {
+          if (mq == "media1" || mq == "media2") {
+            return { matches: true };
+          }
+          return {};
+        },
+      })
+    ).to.equal("444px");
   });
 });

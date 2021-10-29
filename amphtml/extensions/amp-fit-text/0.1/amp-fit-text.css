@@ -17,7 +17,8 @@
 .-amp-fit-text-content,
 .-amp-fit-text-content.-amp-fill-content {
   display: block;
-  /* @alternative */ display: flex;
+  /* @alternative */
+  display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   justify-content: center;
@@ -27,7 +28,8 @@
    work in WebKit, but unfortunately there's no alternative. */
 .-amp-fit-text-content-overflown {
   display: block;
-  /* @alternative */ display: -webkit-box;
+  /* @alternative */
+  display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

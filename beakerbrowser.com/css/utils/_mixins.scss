@@ -5,9 +5,7 @@
     @media #{inspect(map-get($breakpoints, $name))} {
       @content;
     }
+  } @else {
+    @warn "`#{$name}` does not exist in ``$breakpoints`.";
   }
-
-  @else {
-    @warn "`#{$name}` does not exist in ``$breakpoints`."
-  }
-};
+} ;

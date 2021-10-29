@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const interfacer = require('./../util/interfacer');
+const interfacer = require("./../util/interfacer");
 
 /**
  * This is a boilerplate for implementing a new command.
@@ -13,7 +13,6 @@ const interfacer = require('./../util/interfacer');
  */
 
 const cmdName = {
-
   /**
    * The cmdName.exec method is exposed by Cash
    * as the only public interfacer to your command.
@@ -62,7 +61,7 @@ const cmdName = {
      *
      *    return 0;
      */
-  }
+  },
 };
 
 module.exports = function (vorpal) {
@@ -82,8 +81,8 @@ module.exports = function (vorpal) {
    * existing commands.
    */
   vorpal
-    .command('cmdName [files...]')
-    .option('-o, --option', 'option description')
+    .command("cmdName [files...]")
+    .option("-o, --option", "option description")
     .action(function (args, callback) {
       args.options = args.options || {};
       /**
@@ -95,7 +94,7 @@ module.exports = function (vorpal) {
         command: cmdName,
         args: args.files, // only pass in what you need from Vorpal
         options: args.options, // split the options into their own arg
-        callback
+        callback,
       });
     });
 };

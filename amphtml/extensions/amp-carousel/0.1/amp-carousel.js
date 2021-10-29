@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import {AmpSlides} from './slides';
-import {AmpCarousel} from './carousel';
-
+import { AmpSlides } from "./slides";
+import { AmpCarousel } from "./carousel";
 
 class CarouselSelector {
-
   constructor(element) {
-    if (element.hasAttribute('type') &&
-        element.getAttribute('type') == 'slides') {
+    if (
+      element.hasAttribute("type") &&
+      element.getAttribute("type") == "slides"
+    ) {
       return new AmpSlides(...arguments);
     }
     return new AmpCarousel(...arguments);
   }
 }
 
-AMP.registerElement('amp-carousel', CarouselSelector, $CSS$);
+AMP.registerElement("amp-carousel", CarouselSelector, $CSS$);

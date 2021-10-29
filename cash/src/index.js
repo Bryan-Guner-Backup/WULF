@@ -1,17 +1,16 @@
-'use strict';
+"use strict";
 
-const _ = require('lodash');
-const os = require('os');
-const Vorpal = require('vorpal');
+const _ = require("lodash");
+const os = require("os");
+const Vorpal = require("vorpal");
 
-const commands = require('./../commands.json');
-const help = require('./help');
-const interfacer = require('./util/interfacer');
+const commands = require("./../commands.json");
+const help = require("./help");
+const interfacer = require("./util/interfacer");
 
 let cmds;
 
 const app = {
-
   commands: commands.commands,
 
   importedCommands: commands.importedCommands,
@@ -25,19 +24,19 @@ const app = {
   export(str, cbk) {
     cbk = cbk || function () {};
     const options = {
-      fatal: app._fatal || false
+      fatal: app._fatal || false,
     };
     // Hook stdin, execute the command and
     // then return it all.
-    const intercept = require('./util/intercept');
-    let out = '';
+    const intercept = require("./util/intercept");
+    let out = "";
     const unhook = intercept(function (str) {
       out += `${str}\n`;
-      return '';
+      return "";
     });
     app.vorpal.execSync(str, options);
     unhook();
-    return String(out).replace(/\n$/, '');
+    return String(out).replace(/\n$/, "");
   },
 
   load() {
@@ -52,12 +51,12 @@ const app = {
         let help;
         try {
           help = require(`./help/${cmd}.js`);
-          help = String(help).replace(/^\n|\n$/g, '');
+          help = String(help).replace(/^\n|\n$/g, "");
         } catch (e) {
           // .. whatever
         }
         self.vorpal.use(mod, {
-          parent: self
+          parent: self,
         });
         const cmdObj = self.vorpal.find(cmd);
         if (cmdObj && help) {
@@ -75,7 +74,7 @@ const app = {
       try {
         const mod = require(`vorpal-${cmd}`);
         self.vorpal.use(mod, {
-          parent: self
+          parent: self,
         });
       } catch (e) {
         /* istanbul ignore next */
@@ -86,7 +85,7 @@ const app = {
     // If we're running Windows, register
     // process spawning for Windows child processes.
     // If on Linux, just does registers the .catch command.
-    const windows = require('./windows');
+    const windows = require("./windows");
     windows.registerCommands(self);
 
     for (const cmd in app.vorpal.api) {
@@ -101,33 +100,28 @@ const app = {
             options,
             callback,
             async: app.vorpal.api[cmd].async || false,
-            silent: true
+            silent: true,
           });
         };
       }
     }
 
-    app.vorpal
-      .history('cash')
-      .localStorage('cash')
-      .help(help);
+    app.vorpal.history("cash").localStorage("cash").help(help);
 
-    app.vorpal
-      .find('exit')
-      .action(function () {
-        /* istanbul ignore next */
-        process.exit(1);
-      });
+    app.vorpal.find("exit").action(function () {
+      /* istanbul ignore next */
+      process.exit(1);
+    });
 
     // Load aliases
     let all;
     try {
-      all = JSON.parse(app.vorpal.localStorage.getItem('aliases') || []);
+      all = JSON.parse(app.vorpal.localStorage.getItem("aliases") || []);
     } catch (e) {
       /* istanbul ignore next */
       all = [];
       /* istanbul ignore next */
-      app.vorpal.localStorage.removeItem('aliases');
+      app.vorpal.localStorage.removeItem("aliases");
     }
     const aliases = {};
     /* istanbul ignore next */
@@ -147,14 +141,14 @@ const app = {
     // Skip this on linux, as its mainly
     // for dev testing.
     /* istanbul ignore next */
-    if (os.platform().indexOf('win') > -1) {
+    if (os.platform().indexOf("win") > -1) {
       let counter = 0;
       setInterval(function () {
-        counter = (counter > 0) ? 0 : counter;
+        counter = counter > 0 ? 0 : counter;
       }, 3000);
       app.vorpal.sigint(function () {
         counter++;
-        app.vorpal.ui.submit('');
+        app.vorpal.ui.submit("");
         if (counter > 5) {
           app.vorpal.log('(to quit Cash, use the "exit" command)');
           counter -= 10000;
@@ -166,7 +160,7 @@ const app = {
     app.export.vorpal = app.vorpal;
     _.extend(app.export, cmds);
     return this;
-  }
+  },
 };
 
 cmds = {
@@ -174,7 +168,7 @@ cmds = {
   show() {
     /* istanbul ignore next */
     app.vorpal.show();
-  }
+  },
 };
 
 app.load();

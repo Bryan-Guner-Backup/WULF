@@ -34,17 +34,17 @@ You can now download a dat:// site as a .zip file.
 
 We made some tweaks to the UI and UX to make Beaker nicer to use.
 
- - ([#615](https://github.com/beakerbrowser/beaker/pull/615)) New tabs aesthetic. Tabs UI should also perform better now. <a class="thumbnail" href="#" data-src="/img/releases/0-7-4_1.png">(click to preview)</a>
- - ([#588](https://github.com/beakerbrowser/beaker/pull/588)) Revamped the "Select Archive" modal. <a class="thumbnail" href="#" data-src="/img/releases/0-7-4_2.png">(click to preview)</a>
- - ([#599](https://github.com/beakerbrowser/beaker/pull/599)) Dat.json is now exported to the staging area, for you to edit as a site author.
- - ([#596](https://github.com/beakerbrowser/beaker/pull/596)) The auto-download behaviors of a saved site are now configurable.
+- ([#615](https://github.com/beakerbrowser/beaker/pull/615)) New tabs aesthetic. Tabs UI should also perform better now. <a class="thumbnail" href="#" data-src="/img/releases/0-7-4_1.png">(click to preview)</a>
+- ([#588](https://github.com/beakerbrowser/beaker/pull/588)) Revamped the "Select Archive" modal. <a class="thumbnail" href="#" data-src="/img/releases/0-7-4_2.png">(click to preview)</a>
+- ([#599](https://github.com/beakerbrowser/beaker/pull/599)) Dat.json is now exported to the staging area, for you to edit as a site author.
+- ([#596](https://github.com/beakerbrowser/beaker/pull/596)) The auto-download behaviors of a saved site are now configurable.
 
 <h2>Security model updates<span class="tag updated">updated</span></h2>
 
-We relaxed certain constraints to make Beaker more accessible to developers. We also removed some metadata from the dat.json manifest 
+We relaxed certain constraints to make Beaker more accessible to developers. We also removed some metadata from the dat.json manifest
 
- - ([#586](https://github.com/beakerbrowser/beaker/pull/586)) The `DatArchive` API is now accessible from HTTPS.
- - ([#590](https://github.com/beakerbrowser/beaker/pull/590)) The `DatArchive` API is now accessible from http://localhost.
- - ([#617](https://github.com/beakerbrowser/beaker/pull/617)) Added the ability to embed HTTPS assets in a dat:// site.
- - ([#598](https://github.com/beakerbrowser/beaker/pull/598)) Deprecated `createdBy` and `forkOf` from the dat.json manifest, to avoid accidentally leaking the address of private archives or apps.
- - ([#619](https://github.com/beakerbrowser/beaker/pull/619)) Deprecated custom `navigator.permissions` perms (no longer relevant).
+- ([#586](https://github.com/beakerbrowser/beaker/pull/586)) The `DatArchive` API is now accessible from HTTPS.
+- ([#590](https://github.com/beakerbrowser/beaker/pull/590)) The `DatArchive` API is now accessible from http://localhost.
+- ([#617](https://github.com/beakerbrowser/beaker/pull/617)) Added the ability to embed HTTPS assets in a dat:// site.
+- ([#598](https://github.com/beakerbrowser/beaker/pull/598)) Deprecated `createdBy` and `forkOf` from the dat.json manifest, to avoid accidentally leaking the address of private archives or apps.
+- ([#619](https://github.com/beakerbrowser/beaker/pull/619)) Deprecated custom `navigator.permissions` perms (no longer relevant).

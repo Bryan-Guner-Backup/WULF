@@ -42,4 +42,3 @@ To use the more generic test task, you will need to pass in the type as the 2nd 
 This will assume that you have created the file:
 
     acceptance/beaker-smoke.cfg
-

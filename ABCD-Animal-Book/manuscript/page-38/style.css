@@ -1,6 +1,6 @@
 body {
-  height:100vh;
-  width:100vw;
+  height: 100vh;
+  width: 100vw;
   background: #92b2ff;
   background: -webkit-radial-gradient(right 60%, #02b2ff, #66ad83);
   background: radial-gradient(at right 60%, #02b2ff, #66ad83);
@@ -30,7 +30,7 @@ body {
 
 .conejo {
   position: absolute;
-  margin: 19vw 7vw
+  margin: 19vw 7vw;
 }
 
 .cabeza {
@@ -76,7 +76,7 @@ body {
   height: 5vw;
   border-radius: 100vw;
   background: #560337;
-  margin: 3.5vw 1vw
+  margin: 3.5vw 1vw;
 }
 
 .iris::before {
@@ -86,7 +86,7 @@ body {
   height: 5vw;
   border-radius: 100vw;
   background: #560337;
-  margin: 2.7vw 10.6vw
+  margin: 2.7vw 10.6vw;
 }
 
 .iris3 {
@@ -95,7 +95,7 @@ body {
   height: 1.7vw;
   border-radius: 100vw;
   background: black;
-  margin: 1.5vw 1.7vw
+  margin: 1.5vw 1.7vw;
 }
 
 .iris3::before {
@@ -105,7 +105,7 @@ body {
   height: 1.7vw;
   border-radius: 100vw;
   background: black;
-  margin: 2.5vw 10.5vw
+  margin: 2.5vw 10.5vw;
 }
 
 .iris7 {
@@ -114,7 +114,7 @@ body {
   height: 1vw;
   border-radius: 100vw;
   background: white;
-  margin: -.5vw 0vw
+  margin: -0.5vw 0vw;
 }
 
 .iris7::before {
@@ -124,26 +124,26 @@ body {
   height: 1vw;
   border-radius: 100vw;
   background: white;
-  margin: 2.7vw 11.7vw
+  margin: 2.7vw 11.7vw;
 }
 
 .iris9 {
   position: absolute;
-  width: .6vw;
-  height: .6vw;
+  width: 0.6vw;
+  height: 0.6vw;
   border-radius: 100vw;
   background: white;
-  margin: .5vw -.7vw
+  margin: 0.5vw -0.7vw;
 }
 
 .iris9::before {
   content: "";
   position: absolute;
-  width: .6vw;
-  height: .6vw;
+  width: 0.6vw;
+  height: 0.6vw;
   border-radius: 100vw;
   background: white;
-  margin: 3vw 13vw
+  margin: 3vw 13vw;
 }
 
 .hocico {
@@ -152,7 +152,7 @@ body {
   height: 5vw;
   border-radius: 100%;
   background: white;
-  margin: 17.5vw 7.3vw
+  margin: 17.5vw 7.3vw;
 }
 
 .hocico::before {
@@ -162,7 +162,7 @@ body {
   height: 5vw;
   border-radius: 100%;
   background: white;
-  margin: 0vw 4.5vw
+  margin: 0vw 4.5vw;
 }
 
 .hocico::after {
@@ -173,17 +173,17 @@ body {
   -webkit-border-radius: 63vw 63vw 63vw 63vw / 108vw 108vw 72vw 72vw;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
   background: #ee68ad;
-  margin: 0vw 3.3vw
+  margin: 0vw 3.3vw;
 }
 
 .hocico3 {
   position: absolute;
-  width: .9vw;
-  height: .9vw;
+  width: 0.9vw;
+  height: 0.9vw;
   border-radius: 100vw;
   background: white;
-  margin: .5vw 5.7vw;
-  z-index: 333
+  margin: 0.5vw 5.7vw;
+  z-index: 333;
 }
 
 .ore {
@@ -253,7 +253,7 @@ body {
   -webkit-border-radius: 63vw 63vw 63vw 63vw / 108vw 108vw 72vw 72vw;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
   background: #ccc;
-  margin: 37vw 30vw
+  margin: 37vw 30vw;
 }
 
 .body::before {
@@ -264,7 +264,7 @@ body {
   -webkit-border-radius: 63vw 63vw 63vw 63vw / 108vw 108vw 72vw 72vw;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
   background: #ddd;
-  margin: .5vw 2.1vw
+  margin: 0.5vw 2.1vw;
 }
 
 .legs {
@@ -273,7 +273,7 @@ body {
   height: 21vw;
   -webkit-border-radius: 63vw 63vw 63vw 63vw / 108vw 108vw 72vw 72vw;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  background: #BCBCBC;
+  background: #bcbcbc;
   margin: 50vw 25vw;
   transform: rotate(-212deg);
   -moz-transform: rotate(-212deg);
@@ -287,7 +287,7 @@ body {
   height: 21vw;
   -webkit-border-radius: 63vw 63vw 63vw 63vw / 108vw 108vw 72vw 72vw;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  background: #BCBCBC;
+  background: #bcbcbc;
   margin: -12vw -19vw;
   transform: rotate(424deg);
   -moz-transform: rotate(424deg);

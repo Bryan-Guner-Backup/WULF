@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import {Observable} from '../../src/observable';
+import { Observable } from "../../src/observable";
 
-describe('Observable', () => {
-
+describe("Observable", () => {
   let sandbox;
   let observable;
 
@@ -32,7 +31,7 @@ describe('Observable', () => {
     sandbox = null;
   });
 
-  it('add-remove-fire', () => {
+  it("add-remove-fire", () => {
     let observer1Called = 0;
     let observer1 = () => {
       observer1Called++;
@@ -48,19 +47,18 @@ describe('Observable', () => {
     expect(observer1Called).to.equal(0);
     expect(observer2Called).to.equal(0);
 
-    observable.fire('A');
+    observable.fire("A");
     expect(observer1Called).to.equal(1);
     expect(observer2Called).to.equal(1);
 
     observable.remove(observer1);
-    observable.fire('B');
+    observable.fire("B");
     expect(observer1Called).to.equal(1);
     expect(observer2Called).to.equal(2);
 
     observer2Key();
-    observable.fire('C');
+    observable.fire("C");
     expect(observer1Called).to.equal(1);
     expect(observer2Called).to.equal(2);
   });
-
 });

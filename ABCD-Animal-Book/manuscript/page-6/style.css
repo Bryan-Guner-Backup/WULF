@@ -1,8 +1,8 @@
 body {
   height: 100vh;
   width: 100vw;
-  background: #efe7d2; 
-  background: -webkit-radial-gradient(right 60%, #efe7d2, #66ad83); 
+  background: #efe7d2;
+  background: -webkit-radial-gradient(right 60%, #efe7d2, #66ad83);
   background: radial-gradient(at right 60%, #efe7d2, #66ad83);
   display: -webkit-box;
   display: -webkit-flex;
@@ -35,7 +35,6 @@ body {
   animation: anim-body-wrapper 2s ease-in-out infinite alternate;
 }
 
-
 /*HEAD*/
 
 .head-wrapper {
@@ -61,7 +60,6 @@ body {
   z-index: 10;
   top: 3.75vw;
 }
-
 
 /*Ears*/
 
@@ -109,7 +107,6 @@ body {
   float: left;
 }
 
-
 /*Eyes*/
 
 .eyes {
@@ -120,7 +117,7 @@ body {
 .eye1,
 .eye2 {
   border-radius: 5vw 5vw 50% 50%;
-  border-top: 1.25vw solid #89542A;
+  border-top: 1.25vw solid #89542a;
   background: #e2a04c;
   /* Old browsers */
   background: -webkit-linear-gradient(315deg, #e2a04c 0%, #efaf58 99%);
@@ -173,7 +170,7 @@ body {
   height: 2vw;
   border-radius: 50%;
   display: inline-block;
-  background-color: #FFF;
+  background-color: #fff;
   position: absolute;
   top: 2.5vw;
   left: 50%;
@@ -182,11 +179,10 @@ body {
   transform: translatex(-50%);
 }
 
-
 /*Muzzle*/
 
 .muzzle {
-  background-color: #E5CA9D;
+  background-color: #e5ca9d;
   border-radius: 50%;
   display: block;
   height: 13.5vw;
@@ -197,7 +193,7 @@ body {
 }
 
 .nose {
-  background-color: #6A4528;
+  background-color: #6a4528;
   border-radius: 70% / 70% 70% 131% 131%;
   height: 9vw;
   width: 14.5vw;
@@ -218,7 +214,7 @@ body {
 }
 
 .nose:after {
-  background-color: #FF0000;
+  background-color: #ff0000;
   content: "";
   display: block;
   height: 3.5vw;
@@ -229,7 +225,6 @@ body {
   background-color: #78421c;
 }
 
-
 /*BELLY*/
 
 #belly {
@@ -238,7 +233,12 @@ body {
   height: 50vw;
   background: #d38442;
   /* Old browsers */
-  background: -webkit-radial-gradient(center, ellipse, #d38442 48%, #b75b26 99%);
+  background: -webkit-radial-gradient(
+    center,
+    ellipse,
+    #d38442 48%,
+    #b75b26 99%
+  );
   background: radial-gradient(ellipse at center, #d38442 48%, #b75b26 99%);
   /* W3C */
   clear: both;
@@ -249,7 +249,7 @@ body {
 
 .belly_inner1,
 .belly_inner2 {
-  background-color: #FDEDD3;
+  background-color: #fdedd3;
   border-radius: 60% / 90% 90% 30% 30%;
   height: 30vw;
   position: relative;
@@ -259,7 +259,7 @@ body {
 }
 
 .belly_inner1:after {
-  background-color: #FDEDD3;
+  background-color: #fdedd3;
   border-radius: 50%;
   content: "";
   display: block;
@@ -277,7 +277,6 @@ body {
 .belly_inner2 {
   right: 3.75vw;
 }
-
 
 /*HANDS*/
 
@@ -321,7 +320,6 @@ body {
   float: right;
 }
 
-
 /*LEGS*/
 
 .legs {
@@ -350,8 +348,10 @@ body {
   transform-origin: 50% 80%;
   -webkit-transform: translate3d(-25%, -10%, 0) rotate(45deg);
   transform: translate3d(-25%, -10%, 0) rotate(45deg);
-  -webkit-animation: leg-anim1 2s cubic-bezier(0.62, 0.34, 0.28, 0.82) infinite alternate;
-  animation: leg-anim1 2s cubic-bezier(0.62, 0.34, 0.28, 0.82) infinite alternate;
+  -webkit-animation: leg-anim1 2s cubic-bezier(0.62, 0.34, 0.28, 0.82) infinite
+    alternate;
+  animation: leg-anim1 2s cubic-bezier(0.62, 0.34, 0.28, 0.82) infinite
+    alternate;
 }
 
 .leg2 {
@@ -360,8 +360,10 @@ body {
   transform-origin: 50% 80%;
   -webkit-transform: translate3d(25%, -10%, 0) rotate(-45deg);
   transform: translate3d(25%, -10%, 0) rotate(-45deg);
-  -webkit-animation: leg-anim2 2s cubic-bezier(0.62, 0.34, 0.28, 0.82) infinite alternate;
-  animation: leg-anim2 2s cubic-bezier(0.62, 0.34, 0.28, 0.82) infinite alternate;
+  -webkit-animation: leg-anim2 2s cubic-bezier(0.62, 0.34, 0.28, 0.82) infinite
+    alternate;
+  animation: leg-anim2 2s cubic-bezier(0.62, 0.34, 0.28, 0.82) infinite
+    alternate;
 }
 
 .foot {
@@ -376,7 +378,6 @@ body {
   top: 2.5vw;
   left: 2.5vw;
 }
-
 
 /*Shadow*/
 
@@ -394,7 +395,6 @@ body {
   -webkit-animation: shadow-anim 2s ease infinite alternate;
   animation: shadow-anim 2s ease infinite alternate;
 }
-
 
 /*Animation*/
 

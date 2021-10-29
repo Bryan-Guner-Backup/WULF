@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import * as lr from '../../src/layout-rect';
+import * as lr from "../../src/layout-rect";
 
-describe('LayoutRect', () => {
-
-  it('layoutRectLtwh', () => {
+describe("LayoutRect", () => {
+  it("layoutRectLtwh", () => {
     let rect = lr.layoutRectLtwh(1, 2, 3, 4);
     expect(rect.left).to.equal(1);
     expect(rect.top).to.equal(2);
@@ -28,7 +27,7 @@ describe('LayoutRect', () => {
     expect(rect.right).to.equal(4);
   });
 
-  it('layoutRectsOverlap', () => {
+  it("layoutRectsOverlap", () => {
     let rect1 = lr.layoutRectLtwh(10, 20, 30, 40);
     let rect2 = lr.layoutRectLtwh(40, 60, 10, 10);
     let rect3 = lr.layoutRectLtwh(41, 60, 10, 10);
@@ -37,7 +36,7 @@ describe('LayoutRect', () => {
     expect(lr.layoutRectsOverlap(rect2, rect3)).to.equal(true);
   });
 
-  it('expandLayoutRect', () => {
+  it("expandLayoutRect", () => {
     let rect1 = lr.layoutRectLtwh(10, 20, 30, 40);
     let rect2 = lr.expandLayoutRect(rect1, 2, 3);
     expect(rect2.left).to.equal(10 - 30 * 2);
@@ -48,7 +47,7 @@ describe('LayoutRect', () => {
     expect(rect2.height).to.equal(40 + 40 * 6);
   });
 
-  it('moveLayoutRect', () => {
+  it("moveLayoutRect", () => {
     let rect1 = lr.layoutRectLtwh(10, 20, 30, 40);
     let rect2 = lr.moveLayoutRect(rect1, 2, 3);
     expect(rect2.left).to.equal(rect1.left + 2);
@@ -59,9 +58,13 @@ describe('LayoutRect', () => {
     expect(rect2.height).to.equal(rect1.height);
   });
 
-  it('layoutRectFromDomRect', () => {
-    let rect = lr.layoutRectFromDomRect({top: 11, left: 12, width: 111,
-        height: 222});
+  it("layoutRectFromDomRect", () => {
+    let rect = lr.layoutRectFromDomRect({
+      top: 11,
+      left: 12,
+      width: 111,
+      height: 222,
+    });
     expect(rect.top).to.equal(11);
     expect(rect.left).to.equal(12);
     expect(rect.width).to.equal(111);

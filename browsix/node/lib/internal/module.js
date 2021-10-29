@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports.stripBOM = stripBOM;
 
@@ -8,7 +8,7 @@ module.exports.stripBOM = stripBOM;
  * translates it to FEFF, the UTF-16 BOM.
  */
 function stripBOM(content) {
-  if (content.charCodeAt(0) === 0xFEFF) {
+  if (content.charCodeAt(0) === 0xfeff) {
     content = content.slice(1);
   }
   return content;

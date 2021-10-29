@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-import {getCurve} from './curve';
-import {log} from './log';
-import {timer} from './timer';
-import {vsync} from './vsync';
+import { getCurve } from "./curve";
+import { log } from "./log";
+import { timer } from "./timer";
+import { vsync } from "./vsync";
 
-let TAG_ = 'Animation';
+let TAG_ = "Animation";
 
-let NOOP_CALLBACK = function() {};
-
+let NOOP_CALLBACK = function () {};
 
 /**
  * The animation class allows construction of arbitrary animation processes.
@@ -32,7 +31,6 @@ let NOOP_CALLBACK = function() {};
  * achieve the desired effect.
  */
 export class Animation {
-
   /**
    * Creates and starts animation with a single segment. Returns AnimationPlayer
    * object that can be used to monitor or control animation.
@@ -44,10 +42,10 @@ export class Animation {
    * @return {!AnimationPlayer}
    */
   static animate(transition, duration, opt_curve) {
-    return new Animation().
-        setCurve(opt_curve).
-        add(0, transition, 1).
-        start(duration);
+    return new Animation()
+      .setCurve(opt_curve)
+      .add(0, transition, 1)
+      .start(duration);
   }
 
   /**
@@ -93,8 +91,12 @@ export class Animation {
    * @return {!Animation}
    */
   add(delay, transition, duration, opt_curve) {
-    this.segments_.push({delay: delay, func: transition, duration: duration,
-        curve: getCurve(opt_curve)});
+    this.segments_.push({
+      delay: delay,
+      func: transition,
+      duration: duration,
+      curve: getCurve(opt_curve),
+    });
     return this;
   }
 
@@ -106,13 +108,16 @@ export class Animation {
    * @return {!AnimationPlayer}
    */
   start(duration) {
-    let player = new AnimationPlayer(this.vsync_, this.segments_, this.curve_,
-        duration);
+    let player = new AnimationPlayer(
+      this.vsync_,
+      this.segments_,
+      this.curve_,
+      duration
+    );
     player.start_();
     return player;
   }
 }
-
 
 /**
  * AnimationPlayer allows tracking and monitoring of the running animation.
@@ -123,7 +128,6 @@ export class Animation {
  * @implements {IThenable}
  */
 class AnimationPlayer {
-
   /**
    * @param {!Vsync} vsync
    * @param {!Array<!Segment_>} segments
@@ -131,7 +135,6 @@ class AnimationPlayer {
    * @param {time} duration
    */
   constructor(vsync, segments, defaultCurve, duration) {
-
     /** @private @const {!Array<!SegmentRuntime_>} */
     this.segments_ = [];
     for (let i = 0; i < segments.length; i++) {
@@ -142,7 +145,7 @@ class AnimationPlayer {
         duration: segment.duration,
         curve: segment.curve || defaultCurve,
         started: false,
-        completed: false
+        completed: false,
       });
     }
 
@@ -178,7 +181,7 @@ class AnimationPlayer {
 
     /** @const */
     this.task_ = vsync.createTask({
-      mutate: this.stepMutate_.bind(this)
+      mutate: this.stepMutate_.bind(this),
     });
 
     // TODO(dvoytenko): slow requestAnimationFrame buster, e.g. when Tab becomes
@@ -246,7 +249,7 @@ class AnimationPlayer {
       // Sort in the completion order.
       if (this.segments_.length > 1) {
         this.segments_.sort((s1, s2) => {
-          return (s1.delay + s1.duration) - (s2.delay + s2.duration);
+          return s1.delay + s1.duration - (s2.delay + s2.duration);
         });
       }
       try {
@@ -261,8 +264,8 @@ class AnimationPlayer {
             this.segments_[i].func(0, false);
           }
         }
-      } catch(e) {
-        log.error(TAG_, 'completion failed: ' + e, e);
+      } catch (e) {
+        log.error(TAG_, "completion failed: " + e, e);
         success = false;
       }
     }
@@ -282,8 +285,10 @@ class AnimationPlayer {
       return;
     }
     let currentTime = timer.now();
-    let normLinearTime = Math.min((currentTime - this.startTime_) /
-        this.duration_, 1);
+    let normLinearTime = Math.min(
+      (currentTime - this.startTime_) / this.duration_,
+      1
+    );
 
     // Start segments due to be started
     for (let i = 0; i < this.segments_.length; i++) {
@@ -318,14 +323,16 @@ class AnimationPlayer {
     let normLinearTime;
     let normTime;
     if (segment.duration > 0) {
-      normLinearTime = Math.min((totalLinearTime - segment.delay) /
-          segment.duration, 1);
+      normLinearTime = Math.min(
+        (totalLinearTime - segment.delay) / segment.duration,
+        1
+      );
       normTime = normLinearTime;
       if (segment.curve && normTime != 1) {
         try {
           normTime = segment.curve(normLinearTime);
-        } catch(e) {
-          log.error(TAG_, 'step curve failed: ' + e, e);
+        } catch (e) {
+          log.error(TAG_, "step curve failed: " + e, e);
           this.complete_(/* success */ false, /* dir */ 0);
           return;
         }
@@ -339,14 +346,13 @@ class AnimationPlayer {
     }
     try {
       segment.func(normTime, segment.completed);
-    } catch(e) {
-      log.error(TAG_, 'step mutate failed: ' + e, e);
+    } catch (e) {
+      log.error(TAG_, "step mutate failed: " + e, e);
       this.complete_(/* success */ false, /* dir */ 0);
       return;
     }
   }
 }
-
 
 /**
  * @typedef {{
@@ -357,7 +363,6 @@ class AnimationPlayer {
  * }}
  */
 class Segment_ {}
-
 
 /**
  * @typedef {{

@@ -1,9 +1,9 @@
 .btn {
   @extend %transition;
   transition-property: background;
-  border-radius: .2em;
-  padding: .4em .7em;
-  margin-right: .5em;
+  border-radius: 0.2em;
+  padding: 0.4em 0.7em;
+  margin-right: 0.5em;
   background: $button-bg;
   border: 1px solid transparent;
   cursor: pointer;
@@ -15,12 +15,12 @@
 
   &--action {
     @extend %box-shadow;
-    background: transparentize($white, .05);
+    background: transparentize($white, 0.05);
     color: $primary;
     font-weight: 500;
 
     &:hover {
-      background: transparentize($white, .075);
+      background: transparentize($white, 0.075);
       box-shadow: none;
       color: $primary;
     }
@@ -31,14 +31,14 @@
     border: 2px solid $primary;
     background: $white;
 
-   &:hover {
-     background: $white;
-   }
+    &:hover {
+      background: $white;
+    }
   }
 
   &--primary {
     -webkit-font-smoothing: antialiased;
-    color: transparentize($white, .05);
+    color: transparentize($white, 0.05);
     background: $primary;
     font-weight: 500;
 
@@ -47,4 +47,3 @@
     }
   }
 }
-

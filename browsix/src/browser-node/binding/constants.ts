@@ -2,7 +2,7 @@
 // Use of this source code is governed by the ISC
 // license that can be found in the LICENSE file.
 
-'use strict';
+"use strict";
 
 // from node 4.1.1
 export const E2BIG = 7;

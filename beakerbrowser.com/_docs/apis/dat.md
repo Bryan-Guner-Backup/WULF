@@ -18,8 +18,8 @@ order: 3
 
 By default, any `dat://` app can read other Dat sites via HTML embeds, Ajax, or the `DatArchive` read commands. By default, a Dat app is given permission to write to sites that it created. The user will be prompted to give permission to:
 
- 1. Create a new Dat site
- 2. Modify a Dat site created by another site
+1.  Create a new Dat site
+2.  Modify a Dat site created by another site
 
 The user must be the owner of a Dat site to modify it.
 

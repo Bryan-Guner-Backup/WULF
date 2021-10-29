@@ -81,40 +81,40 @@
 .col mark,
 .col audio,
 .col video {
-	font-size: 100%;
-	font: inherit;
-	border: 0;
-	vertical-align: baseline;
-	margin: 0;
-	padding: 0;
+  font-size: 100%;
+  font: inherit;
+  border: 0;
+  vertical-align: baseline;
+  margin: 0;
+  padding: 0;
 }
 .col sub,
 .col sup {
-	font-size: 75%;
-	line-height: 0;
-	position: relative;
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
 }
 .col sup {
-	top: -0.5em;
+  top: -0.5em;
 }
 .col sub {
-	bottom: -0.25em;
+  bottom: -0.25em;
 }
 .col blockquote,
 .col q {
-	quotes: none;
+  quotes: none;
 }
 .col blockquote:before,
 .col blockquote:after,
 .col q:before,
 .col q:after {
-	content: '';
-	content: none;
+  content: "";
+  content: none;
 }
 .col a {
-	text-decoration: none;
-	outline: none;
-	-webkit-tap-highlight-color: rgba(0,0,0,0);
+  text-decoration: none;
+  outline: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .col h1 a,
 .col h2 a,
@@ -122,64 +122,64 @@
 .col h4 a,
 .col h5 a,
 .col h6 a {
-	font-weight: inherit;
+  font-weight: inherit;
 }
 .col address,
 .col p.address {
-	font-size: 13px;
-	line-height: 1.500;
-	margin-right: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-right: 0;
 }
 .col p.blockquote {
-	margin-right: 0;
+  margin-right: 0;
 }
 .col h1 {
-	font-size: 56px;
-	line-height: 1.200;
-	padding: 0;
+  font-size: 56px;
+  line-height: 1.2;
+  padding: 0;
 }
 .col h2 {
-	font-size: 26px;
-	line-height: 1.200;
-	padding: 0;
+  font-size: 26px;
+  line-height: 1.2;
+  padding: 0;
 }
 .col h3 {
-	font-size: 17px;
-	line-height: 1.200;
-	padding: 0;
+  font-size: 17px;
+  line-height: 1.2;
+  padding: 0;
 }
 .col h4 {
-	text-transform: uppercase;
-	padding: 0;
+  text-transform: uppercase;
+  padding: 0;
 }
 .col h5 {
-	font-variant: small-caps;
-	letter-spacing: 1px;
-	padding: 0;
+  font-variant: small-caps;
+  letter-spacing: 1px;
+  padding: 0;
 }
 .col h6,
 .col dl dt {
-	text-decoration: underline;
-	padding: 0;
+  text-decoration: underline;
+  padding: 0;
 }
 .col h4,
 .col h5,
 .col h6 {
-	font-size: 16px;
-	line-height: 1.200;
+  font-size: 16px;
+  line-height: 1.2;
 }
 .col caption,
 .col label,
 .col p.smaller,
 .col table td,
 .col table th {
-	font-size: 14px;
-	line-height: 1.500;
+  font-size: 14px;
+  line-height: 1.5;
 }
 .col p.larger,
 .col blockquote {
-	font-size: 18px;
-	line-height: 1.500;
+  font-size: 18px;
+  line-height: 1.5;
 }
 .col p,
 .col p.blockquote,
@@ -187,66 +187,66 @@
 .col dl dd,
 .col ul li,
 .col ol li {
-	font-size: 16px;
-	line-height: 1.500;
+  font-size: 16px;
+  line-height: 1.5;
 }
 .col ul {
-	list-style: disc outside;
+  list-style: disc outside;
 }
 .col ol {
-	list-style: decimal inside;
+  list-style: decimal inside;
 }
 .col pre {
-	white-space: pre;
-	white-space: pre-wrap;
-	word-wrap: inherit;
-	overflow: -moz-scrollbars-horizontal;
-	overflow-x: auto;
-	border: 0;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	box-shadow: none;
-	-moz-tab-size: 4;
-	-o-tab-size: 4;
-	tab-size: 4;
-	padding: 16px 24px;
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: inherit;
+  overflow: -moz-scrollbars-horizontal;
+  overflow-x: auto;
+  border: 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  padding: 16px 24px;
 }
 .col pre code {
-	text-shadow: none;
+  text-shadow: none;
 }
 .col pre a {
-	text-decoration: none;
-	outline: none;
-	-webkit-tap-highlight-color: rgba(0,0,0,0);
+  text-decoration: none;
+  outline: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .col table {
-	width: auto;
-	border-collapse: collapse;
-	border-spacing: 0;
+  width: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 .col caption,
 .col table th,
 .col table td {
-	text-align: left;
+  text-align: left;
 }
 .col table td,
 .col table th {
-	padding: 5px 16px;
-	vertical-align: top;
+  padding: 5px 16px;
+  vertical-align: top;
 }
 .col pre {
-	font-size: 13px;
-	line-height: 1.500;
+  font-size: 13px;
+  line-height: 1.5;
 }
 .col table th a:hover,
 .col table th a:active,
 .col table th a:focus {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 .col img {
-	border: 0;
-	vertical-align: bottom;
-	padding: 0;
+  border: 0;
+  vertical-align: bottom;
+  padding: 0;
 }
 .col input[type^="text"],
 .col input[type^="search"],
@@ -264,23 +264,23 @@
 .col input[type^="datetime-local"],
 .col select,
 .col textarea {
-	font-size: 14px;
-	line-height: 1.500;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-ms-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	padding: 8px;
-	vertical-align: baseline;
-	*vertical-align: middle;
-	outline: none;
-	-webkit-tap-highlight-color: rgba(0,0,0,0);
+  font-size: 14px;
+  line-height: 1.5;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding: 8px;
+  vertical-align: baseline;
+  *vertical-align: middle;
+  outline: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .col optgroup {
-	margin: 3px;
+  margin: 3px;
 }
 .col input[type="color"] {
-	padding: 0;
+  padding: 0;
 }
 .col button,
 .col input[type="button"],
@@ -301,69 +301,69 @@
 .col input[type^="datetime"],
 .col input[type^="datetime-local"],
 .col select {
-	height: 40px;
+  height: 40px;
 }
 .col button,
 .col input[type="button"],
 .col input[type="reset"],
 .col input[type="submit"] {
-	font-size: 14px;
-	line-height: 1.500;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-ms-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	padding: 8px 16px;
-	vertical-align: baseline;
-	*vertical-align: middle;
-	outline: none;
-	-webkit-tap-highlight-color: rgba(0,0,0,0);
-	cursor: pointer;
+  font-size: 14px;
+  line-height: 1.5;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding: 8px 16px;
+  vertical-align: baseline;
+  *vertical-align: middle;
+  outline: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  cursor: pointer;
 }
 .col label {
-	display: block;
-	margin-bottom: 2px;
+  display: block;
+  margin-bottom: 2px;
 }
 .col textarea {
-	width: 95%;
+  width: 95%;
 }
 .col ul,
 .col ol,
 .col dl {
-	margin-left: auto;
+  margin-left: auto;
 }
 .col dl dd:before {
-	content: "\2014\00a0";
+  content: "\2014\00a0";
 }
 .col address,
 .col p.address,
 .col p.blockquote,
 .col dl dd,
 .col blockquote {
-	margin-left: 24px;
+  margin-left: 24px;
 }
 .col ol {
-	padding-left: 24px;
+  padding-left: 24px;
 }
 .col .indent {
-	text-indent: 24px;
+  text-indent: 24px;
 }
 .col ul {
-	padding-left: 40px;
+  padding-left: 40px;
 }
 .col td ul {
-	margin-top: 0 !important;
+  margin-top: 0 !important;
 }
 .col td ul li {
-	font-size: inherit !important;
-	line-height: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
 }
 .col td ol {
-	margin-top: 0 !important;
+  margin-top: 0 !important;
 }
 .col td ol li {
-	font-size: inherit !important;
-	line-height: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
 }
 .col.textcenter address,
 .col.textcenter p.address,
@@ -371,7 +371,7 @@
 .col.textcenter pre,
 .col.textcenter blockquote,
 .col.textcenter p.blockquote {
-	margin-left: 0;
+  margin-left: 0;
 }
 .col img,
 .col input,
@@ -382,7 +382,7 @@
 .col table td ol,
 .col table td ul,
 .col table td dl {
-	margin: 0;
+  margin: 0;
 }
 .col address,
 .col p.address,
@@ -404,182 +404,182 @@
 .col pre,
 .col table,
 .col ul {
-	margin-top: 0;
+  margin-top: 0;
 }
-.col h2+div,
-.col h2+p,
-.col h2+table,
-.col h3+div,
-.col h3+p,
-.col h3+table,
-.col h4+div,
-.col h4+p,
-.col h4+table,
-.col h5+div,
-.col h5+p,
-.col h5+table,
-.col h6+div,
-.col h6+p,
-.col h6+table {
-	margin-top: 8px;
+.col h2 + div,
+.col h2 + p,
+.col h2 + table,
+.col h3 + div,
+.col h3 + p,
+.col h3 + table,
+.col h4 + div,
+.col h4 + p,
+.col h4 + table,
+.col h5 + div,
+.col h5 + p,
+.col h5 + table,
+.col h6 + div,
+.col h6 + p,
+.col h6 + table {
+  margin-top: 8px;
 }
 .col address:first-child,
-.col div+address,
-.col h1+blockquote,
-.col h1+div,
-.col h1+div.hr,
-.col h1+dl,
-.col h1+ol,
-.col h1+p,
-.col h1+pre,
-.col h1+table,
-.col h1+ul,
-.col h2+blockquote,
-.col h2+dl,
-.col h2+h3,
-.col h2+ol,
-.col h2+pre,
-.col h2+ul,
-.col h3+blockquote,
-.col h3+dl,
-.col h3+h4,
-.col h3+ol,
-.col h3+pre,
-.col h3+ul,
-.col h4+blockquote,
-.col h4+dl,
-.col h4+h3,
-.col h4+h5,
-.col h4+ol,
-.col h4+pre,
-.col h4+ul,
-.col h5+blockquote,
-.col h5+dl,
-.col h5+h6,
-.col h5+h2,
-.col h5+ol,
-.col h5+pre,
-.col h5+ul,
-.col h6+blockquote,
-.col h6+dl,
-.col h6+ol,
-.col h6+pre,
-.col h6+ul,
-.col p+address,
-.col p+p,
+.col div + address,
+.col h1 + blockquote,
+.col h1 + div,
+.col h1 + div.hr,
+.col h1 + dl,
+.col h1 + ol,
+.col h1 + p,
+.col h1 + pre,
+.col h1 + table,
+.col h1 + ul,
+.col h2 + blockquote,
+.col h2 + dl,
+.col h2 + h3,
+.col h2 + ol,
+.col h2 + pre,
+.col h2 + ul,
+.col h3 + blockquote,
+.col h3 + dl,
+.col h3 + h4,
+.col h3 + ol,
+.col h3 + pre,
+.col h3 + ul,
+.col h4 + blockquote,
+.col h4 + dl,
+.col h4 + h3,
+.col h4 + h5,
+.col h4 + ol,
+.col h4 + pre,
+.col h4 + ul,
+.col h5 + blockquote,
+.col h5 + dl,
+.col h5 + h6,
+.col h5 + h2,
+.col h5 + ol,
+.col h5 + pre,
+.col h5 + ul,
+.col h6 + blockquote,
+.col h6 + dl,
+.col h6 + ol,
+.col h6 + pre,
+.col h6 + ul,
+.col p + address,
+.col p + p,
 .col p.address,
 .col p.blockquote,
-.col pre+address,
-.col table+address,
-.col table+p.address,
-.col table+p.blockquote {
-	margin-top: 16px;
+.col pre + address,
+.col table + address,
+.col table + p.address,
+.col table + p.blockquote {
+  margin-top: 16px;
 }
-.col blockquote+blockquote,
-.col blockquote+dl,
-.col blockquote+h1,
-.col blockquote+h2,
-.col blockquote+h3,
-.col blockquote+h4,
-.col blockquote+h5,
-.col blockquote+h6,
-.col blockquote+ol,
-.col blockquote+p,
-.col blockquote+pre,
-.col blockquote+table,
-.col blockquote+ul,
-.col div+blockquote,
-.col div+dl,
-.col div+h1,
-.col div+h2,
-.col div+h3,
-.col div+h4,
-.col div+h5,
-.col div+h6,
-.col div+ol,
-.col div+p,
-.col div+pre,
-.col div+table,
-.col div+ul,
-.col dl+blockquote,
-.col dl+dl,
-.col dl+h1,
-.col dl+h2,
-.col dl+h3,
-.col dl+h4,
-.col dl+h5,
-.col dl+h6,
-.col dl+ol,
-.col dl+p,
-.col dl+pre,
-.col dl+table,
-.col dl+ul,
-.col ol+blockquote,
-.col ol+dl,
-.col ol+h1,
-.col ol+h2,
-.col ol+h3,
-.col ol+h4,
-.col ol+h5,
-.col ol+h6,
-.col ol+ol,
-.col ol+p,
-.col ol+pre,
-.col ol+table,
-.col ol+ul,
-.col p+blockquote,
-.col p+dl,
-.col p+figcaption,
-.col p+figure,
-.col p+h1,
-.col p+h2,
-.col p+h3,
-.col p+h4,
-.col p+h5,
-.col p+h6,
-.col p+ol,
-.col p+pre,
-.col p+table,
-.col p+ul,
-.col pre+blockquote,
-.col pre+dl,
-.col pre+h1,
-.col pre+h2,
-.col pre+h3,
-.col pre+h4,
-.col pre+h5,
-.col pre+h6,
-.col pre+ol,
-.col pre+p,
-.col pre+pre,
-.col pre+table,
-.col pre+ul,
-.col table+blockquote,
-.col table+dl,
-.col table+h1,
-.col table+h2,
-.col table+h3,
-.col table+h4,
-.col table+h5,
-.col table+h6,
-.col table+ol,
-.col table+p,
-.col table+pre,
-.col table+table,
-.col table+ul,
-.col ul+blockquote,
-.col ul+dl,
-.col ul+h1,
-.col ul+h2,
-.col ul+h3,
-.col ul+h4,
-.col ul+h5,
-.col ul+h6,
-.col ul+ol,
-.col ul+p,
-.col ul+pre,
-.col ul+table,
-.col ul+ul,
+.col blockquote + blockquote,
+.col blockquote + dl,
+.col blockquote + h1,
+.col blockquote + h2,
+.col blockquote + h3,
+.col blockquote + h4,
+.col blockquote + h5,
+.col blockquote + h6,
+.col blockquote + ol,
+.col blockquote + p,
+.col blockquote + pre,
+.col blockquote + table,
+.col blockquote + ul,
+.col div + blockquote,
+.col div + dl,
+.col div + h1,
+.col div + h2,
+.col div + h3,
+.col div + h4,
+.col div + h5,
+.col div + h6,
+.col div + ol,
+.col div + p,
+.col div + pre,
+.col div + table,
+.col div + ul,
+.col dl + blockquote,
+.col dl + dl,
+.col dl + h1,
+.col dl + h2,
+.col dl + h3,
+.col dl + h4,
+.col dl + h5,
+.col dl + h6,
+.col dl + ol,
+.col dl + p,
+.col dl + pre,
+.col dl + table,
+.col dl + ul,
+.col ol + blockquote,
+.col ol + dl,
+.col ol + h1,
+.col ol + h2,
+.col ol + h3,
+.col ol + h4,
+.col ol + h5,
+.col ol + h6,
+.col ol + ol,
+.col ol + p,
+.col ol + pre,
+.col ol + table,
+.col ol + ul,
+.col p + blockquote,
+.col p + dl,
+.col p + figcaption,
+.col p + figure,
+.col p + h1,
+.col p + h2,
+.col p + h3,
+.col p + h4,
+.col p + h5,
+.col p + h6,
+.col p + ol,
+.col p + pre,
+.col p + table,
+.col p + ul,
+.col pre + blockquote,
+.col pre + dl,
+.col pre + h1,
+.col pre + h2,
+.col pre + h3,
+.col pre + h4,
+.col pre + h5,
+.col pre + h6,
+.col pre + ol,
+.col pre + p,
+.col pre + pre,
+.col pre + table,
+.col pre + ul,
+.col table + blockquote,
+.col table + dl,
+.col table + h1,
+.col table + h2,
+.col table + h3,
+.col table + h4,
+.col table + h5,
+.col table + h6,
+.col table + ol,
+.col table + p,
+.col table + pre,
+.col table + table,
+.col table + ul,
+.col ul + blockquote,
+.col ul + dl,
+.col ul + h1,
+.col ul + h2,
+.col ul + h3,
+.col ul + h4,
+.col ul + h5,
+.col ul + h6,
+.col ul + ol,
+.col ul + p,
+.col ul + pre,
+.col ul + table,
+.col ul + ul,
 .col h1:first-child,
 .col h2:first-child,
 .col h3:first-child,
@@ -595,7 +595,7 @@
 .col table:first-child,
 .col figcaption:first-child,
 .col figure:first-child {
-	margin-top: 24px;
+  margin-top: 24px;
 }
 .col dl dd,
 .col address:first-of-type,
@@ -614,7 +614,7 @@
 .col table:last-child,
 .col figcaption:last-child,
 .col figure:last-child {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 .col address,
 .col blockquote,
@@ -624,61 +624,61 @@
 .col ol,
 .col pre,
 .col ul {
-	margin-bottom: 24px;
+  margin-bottom: 24px;
 }
-.col blockquote+p,
-.col div+p,
-.col dl+p,
-.col h1+p,
-.col h2+p,
-.col h3+p,
-.col h4+p,
-.col h5+p,
-.col h6+p,
-.col ol+p,
-.col p+p,
-.col pre+p,
-.col table+p,
-.col ul+p {
-	margin-bottom: 16px;
+.col blockquote + p,
+.col div + p,
+.col dl + p,
+.col h1 + p,
+.col h2 + p,
+.col h3 + p,
+.col h4 + p,
+.col h5 + p,
+.col h6 + p,
+.col ol + p,
+.col p + p,
+.col pre + p,
+.col table + p,
+.col ul + p {
+  margin-bottom: 16px;
 }
 .col .indent {
-	display: inline-block;
+  display: inline-block;
 }
 .col .holder {
-	margin: 0 auto;
+  margin: 0 auto;
 }
 .col .holder select {
-	width: 100%;
+  width: 100%;
 }
 .col .textleft {
-	text-align: left;
+  text-align: left;
 }
 .col .textright {
-	text-align: right;
+  text-align: right;
 }
 .col .textcenter {
-	text-align: center;
+  text-align: center;
 }
 .col .larger {
-	font-size: 120%;
+  font-size: 120%;
 }
 .col .smaller {
-	font-size: 80%;
+  font-size: 80%;
 }
 .col .fade {
-	opacity: 1;
-	transition: opacity .25s ease-in-out;
-	-moz-transition: opacity .25s ease-in-out;
-	-webkit-transition: opacity .25s ease-in-out;
+  opacity: 1;
+  transition: opacity 0.25s ease-in-out;
+  -moz-transition: opacity 0.25s ease-in-out;
+  -webkit-transition: opacity 0.25s ease-in-out;
 }
 .col .fade:hover {
-	opacity: .5;
+  opacity: 0.5;
 }
 .col .hr {
-	height: 1px;
-	padding: 0;
-	margin: 24px 0 0;
+  height: 1px;
+  padding: 0;
+  margin: 24px 0 0;
 }
 /*!
  * font weights
@@ -714,7 +714,7 @@
 .col select,
 .col textarea,
 .col label {
-	font-weight: normal;
+  font-weight: normal;
 }
 .col h3,
 .col a,
@@ -727,7 +727,7 @@
 .col strong,
 .col .bolder,
 .col .highlight {
-	font-weight: bolder;
+  font-weight: bolder;
 }
 /*!
  * font styles
@@ -741,26 +741,26 @@
 .col i,
 .col em,
 .col .italic {
-	font-style: italic;
+  font-style: italic;
 }
 /*!
  * font families
  */
 .col h1 {
-	font-family: serif;
+  font-family: serif;
 }
 .col pre,
 .col pre code {
-	font-family: monospace;
+  font-family: monospace;
 }
 .col select {
-	font-family: sans-serif;
+  font-family: sans-serif;
 }
 .col button,
 .col input[type="button"],
 .col input[type="reset"],
 .col input[type="submit"] {
-	font-family: inherit;
+  font-family: inherit;
 }
 .col input[type^="text"],
 .col input[type^="search"],
@@ -777,26 +777,26 @@
 .col input[type^="datetime"],
 .col input[type^="datetime-local"],
 .col textarea {
-	font-family: inherit;
+  font-family: inherit;
 }
 .col caption,
 .col table th,
 .col table td {
-	font-family: inherit;
+  font-family: inherit;
 }
 .col .phonetic {
-	font-family: "Calibri","Voces","Judson","ConstructiumRegular",sans-serif;
+  font-family: "Calibri", "Voces", "Judson", "ConstructiumRegular", sans-serif;
 }
 /*!
  * colors
  */
 .col a {
-	color: #1F3A93;
+  color: #1f3a93;
 }
 .col a:hover,
 .col a:focus,
 .col a:active {
-	color: #EF4836;
+  color: #ef4836;
 }
 .col h1,
 .col h2,
@@ -863,20 +863,20 @@
 .col textarea:active,
 .col select:active,
 .col select:focus {
-	color: inherit;
+  color: inherit;
 }
 .col pre {
-	color: inherit;
-	background: #ECF0F1;
+  color: inherit;
+  background: #ecf0f1;
 }
 .col pre a:hover,
 .col pre a:active,
 .col pre a:focus {
-	color: inherit;
+  color: inherit;
 }
 .col select {
-	background: #FFF;
-	border: 1px solid #59ABE3;
+  background: #fff;
+  border: 1px solid #59abe3;
 }
 .col input[type^="text"],
 .col input[type^="search"],
@@ -893,8 +893,8 @@
 .col input[type^="datetime"],
 .col input[type^="datetime-local"],
 .col textarea {
-	background: #FFF;
-	border: 1px solid #59ABE3;
+  background: #fff;
+  border: 1px solid #59abe3;
 }
 .col button:hover,
 .col input[type="button"]:hover,
@@ -908,17 +908,17 @@
 .col input[type="button"]:focus,
 .col input[type="reset"]:focus,
 .col input[type="submit"]:focus {
-	color: #FFF;
-	background: #6DBFF7;
-	border: 1px solid #6DBFF7;
+  color: #fff;
+  background: #6dbff7;
+  border: 1px solid #6dbff7;
 }
 .col button,
 .col input[type="button"],
 .col input[type="reset"],
 .col input[type="submit"] {
-	color: #FFF;
-	background: #59ABE3;
-	border: 1px solid #59ABE3;
+  color: #fff;
+  background: #59abe3;
+  border: 1px solid #59abe3;
 }
 .col input[type^="text"]:focus,
 .col input[type^="search"]:focus,
@@ -950,17 +950,17 @@
 .col input[type^="datetime"]:active,
 .col input[type^="datetime-local"]:active,
 .col textarea:active {
-	background: #ECF0F1;
-	border: 1px solid #59ABE3;
+  background: #ecf0f1;
+  border: 1px solid #59abe3;
 }
 .col select:hover {
-	background: #ECF0F1;
-	border: 1px solid #59ABE3;
+  background: #ecf0f1;
+  border: 1px solid #59abe3;
 }
 .col select:active,
 .col select:focus {
-	background: #ECF0F1;
-	border: 1px solid #59ABE3;
+  background: #ecf0f1;
+  border: 1px solid #59abe3;
 }
 .col select:disabled,
 .col input[type^="text"]:disabled,
@@ -978,39 +978,38 @@
 .col input[type^="datetime"]:disabled,
 .col input[type^="datetime-local"]:disabled,
 .col textarea:disabled {
-	background: #D2D7D3;
-	border-color: #D2D7D3;
+  background: #d2d7d3;
+  border-color: #d2d7d3;
 }
-.col
-.col button:disabled,
+.col .col button:disabled,
 .col input[type="button"]:disabled,
 .col input[type="reset"]:disabled,
 .col input[type="submit"]:disabled {
-	background: #D2D7D3;
-	border-color: #D2D7D3;
+  background: #d2d7d3;
+  border-color: #d2d7d3;
 }
 .col table tr,
 .col table tr:nth-of-type(odd) {
-	background-color: transparent;
+  background-color: transparent;
 }
 .col table th {
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-	border-bottom-color: inherit;
-	background-color: transparent;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: inherit;
+  background-color: transparent;
 }
 .col table td {
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-	border-bottom-color: inherit;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: inherit;
 }
 .col img {
-	background-color: inherit;
-	border: 0;
+  background-color: inherit;
+  border: 0;
 }
 .col .highlight {
-	color: #EF4836;
+  color: #ef4836;
 }
 .col .hr {
-	background: #59ABE3;
+  background: #59abe3;
 }

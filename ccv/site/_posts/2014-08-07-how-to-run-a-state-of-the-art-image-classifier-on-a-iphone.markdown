@@ -1,11 +1,11 @@
 ---
-date: '2014-08-07 00:55:00'
+date: "2014-08-07 00:55:00"
 layout: post
 slug: how-to-run-a-state-of-the-art-image-classifier-on-a-iphone
 status: publish
 title: how to run a state of the art image classifier on a iPhone
 categories:
-- post
+  - post
 ---
 
 For a while, ccv's open-source deep learning based image classifier has a pretty good score on imageNet 2012. But how to run it on a mobile device such as iPhone? Is it possible? And how?
@@ -36,7 +36,7 @@ With this code snippet: <https://gist.github.com/liuliu/9c737fa53a62d7165f2c>, t
 
 It turns out that the loss of accuracy is not much.
 
-8-bit: 41.15% (1), 18.18% (5) *(for one guess, it has 58.85% chances to get it right, for 5 guesses, it has 81.82% changes to get it right)*
+8-bit: 41.15% (1), 18.18% (5) _(for one guess, it has 58.85% chances to get it right, for 5 guesses, it has 81.82% changes to get it right)_
 
 4-bit: 41.38% (1), 18.28% (5)
 

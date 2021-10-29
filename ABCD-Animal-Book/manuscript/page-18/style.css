@@ -47,9 +47,9 @@ body {
   width: 80vw;
   height: 35vw;
   border-radius: 100%;
-  background: #44BFFC;
+  background: #44bffc;
   margin: 50vw 10vw;
-  border-top: 2vw inset #3390BF;
+  border-top: 2vw inset #3390bf;
 }
 
 .agua::before {
@@ -58,7 +58,7 @@ body {
   width: 45vw;
   height: 18vw;
   border-radius: 100%;
-  background: rgba(255, 255, 255, .3);
+  background: rgba(255, 255, 255, 0.3);
   margin: 3vw 12vw;
 }
 
@@ -68,7 +68,7 @@ body {
   height: 21vw;
   border-radius: 300vw;
   background: #646d76;
-  border: .45vw solid #333;
+  border: 0.45vw solid #333;
   margin: -4.5vw 18vw;
 }
 
@@ -78,7 +78,7 @@ body {
   height: 7.5vw;
   border-radius: 150vw;
   border-left: 2.25vw solid #333;
-  margin: -4.5vw 18vw
+  margin: -4.5vw 18vw;
 }
 
 .cabeza {
@@ -87,8 +87,8 @@ body {
   height: 12vw;
   background: #646d76;
   border-radius: 168vw 168vw 0 0;
-  border: .45vw solid #333;
-  margin: -13.5vw 39vw
+  border: 0.45vw solid #333;
+  margin: -13.5vw 39vw;
 }
 
 .cabeza::before {
@@ -97,9 +97,9 @@ body {
   width: 22.39vw;
   height: 15vw;
   border-radius: 100%;
-  border: .45vw solid #333;
+  border: 0.45vw solid #333;
   background: #646d76;
-  margin: 7.5vw -1.8vw
+  margin: 7.5vw -1.8vw;
 }
 
 .ojos {
@@ -146,7 +146,7 @@ body {
   height: 10.5vw;
   border-radius: 100%;
   background: #808080;
-  margin: 8.85vw -1.25vw
+  margin: 8.85vw -1.25vw;
 }
 
 .boca::before {
@@ -156,8 +156,8 @@ body {
   height: 3vw;
   border-radius: 150vw;
   background: #646d76;
-  border: .45vw solid #333;
-  margin: 1.8vw 3.15vw
+  border: 0.45vw solid #333;
+  margin: 1.8vw 3.15vw;
 }
 
 .boca::after {
@@ -167,8 +167,8 @@ body {
   height: 3vw;
   border-radius: 150vw;
   background: #646d76;
-  border: .45vw solid #333;
-  margin: -5.25vw 15.75vw
+  border: 0.45vw solid #333;
+  margin: -5.25vw 15.75vw;
 }
 
 .boca3 {
@@ -178,7 +178,7 @@ body {
   border-radius: 0 0 143.5vw 143.5vw;
   background: #ff9999;
   border: 2vw solid #555;
-  margin: 15vw .75vw;
+  margin: 15vw 0.75vw;
   animation: baja 3s alternate infinite;
   -moz-animation: baja 3s alternate infinite;
   -webkit-animation: baja 3s alternate infinite;
@@ -200,11 +200,11 @@ body {
   height: 3.75vw;
   border-radius: 100%;
   background: #646d76;
-  border: .45vw solid #333;
+  border: 0.45vw solid #333;
   transform: rotate(45deg);
   -moz-transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
-  margin: -12vw 36vw
+  margin: -12vw 36vw;
 }
 
 .orejas::before {
@@ -214,11 +214,11 @@ body {
   height: 3.75vw;
   border-radius: 100%;
   background: #646d76;
-  border: .45vw solid #333;
+  border: 0.45vw solid #333;
   transform: rotate(90deg);
   -moz-transform: rotate(90deg);
   -webkit-transform: rotate(90deg);
-  margin: -15vw 15vw
+  margin: -15vw 15vw;
 }
 
 .sol {
@@ -231,7 +231,7 @@ body {
   background: -webkit-linear-gradient(top, #eaad3a -1%, #f7d083 100%);
   background: linear-gradient(to bottom, #eaad3a -1%, #f7d083 100%);
   filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#eaad3a', endColorstr='#f7d083', GradientType=0);
-  margin: 25.55vw 25vw
+  margin: 25.55vw 25vw;
 }
 
 @keyframes baja {

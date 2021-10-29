@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import {assert} from './asserts';
-import {timer} from './timer';
-import {vsync} from './vsync';
+import { assert } from "./asserts";
+import { timer } from "./timer";
+import { vsync } from "./vsync";
 
 /** @const {!Funtion} */
-const NOOP_CALLBACK_ = function() {};
+const NOOP_CALLBACK_ = function () {};
 
 /** @const {number} */
 const MIN_VELOCITY_ = 0.02;
@@ -36,7 +36,6 @@ const EXP_FRAME_CONST_ = Math.round(-FRAME_CONST_ / Math.log(0.95));
  * @const {number}
  */
 const VELOCITY_DEPR_FACTOR_ = FRAME_CONST_ * 2;
-
 
 /**
  * Calculates velocity for an object traveling the distance deltaV in the
@@ -65,7 +64,6 @@ export function calcVelocity(deltaV, deltaTime, prevVelocity) {
   return speed * depr + prevVelocity * (1 - depr);
 }
 
-
 /**
  * Returns a motion process that will yield when the velocity has run down to
  * zerp. For each iteration, the velocity is depreciated and the coordinates
@@ -80,11 +78,16 @@ export function calcVelocity(deltaV, deltaTime, prevVelocity) {
  * @param {!Vsync=} opt_vsync Mostly for testing only.
  * @return {!Motion}
  */
-export function continueMotion(startX, startY, veloX, veloY, callback,
-    opt_vsync) {
+export function continueMotion(
+  startX,
+  startY,
+  veloX,
+  veloY,
+  callback,
+  opt_vsync
+) {
   return new Motion(startX, startY, veloX, veloY, callback, opt_vsync).start_();
 }
-
 
 /**
  * Motion process that allows tracking and monitoring of the running motion.
@@ -151,8 +154,10 @@ class Motion {
   /** @private */
   start_() {
     this.continuing_ = true;
-    if (Math.abs(this.maxVelocityX_) <= MIN_VELOCITY_ &&
-            Math.abs(this.maxVelocityY_) <= MIN_VELOCITY_) {
+    if (
+      Math.abs(this.maxVelocityX_) <= MIN_VELOCITY_ &&
+      Math.abs(this.maxVelocityY_) <= MIN_VELOCITY_
+    ) {
       this.fireMove_();
       this.completeContinue_(true);
     } else {
@@ -204,8 +209,9 @@ class Motion {
     this.velocityY_ = this.maxVelocityY_;
     let boundStep = this.stepContinue_.bind(this);
     let boundComplete = this.completeContinue_.bind(this, true);
-    return this.vsync_.runMutateSeries(boundStep, 5000).
-        then(boundComplete, boundComplete);
+    return this.vsync_
+      .runMutateSeries(boundStep, 5000)
+      .then(boundComplete, boundComplete);
   }
 
   /**
@@ -233,8 +239,10 @@ class Motion {
     let decel = Math.exp(-timeSinceStart / EXP_FRAME_CONST_);
     this.velocityX_ = this.maxVelocityX_ * decel;
     this.velocityY_ = this.maxVelocityY_ * decel;
-    return (Math.abs(this.velocityX_) > MIN_VELOCITY_ ||
-        Math.abs(this.velocityY_) > MIN_VELOCITY_);
+    return (
+      Math.abs(this.velocityX_) > MIN_VELOCITY_ ||
+      Math.abs(this.velocityY_) > MIN_VELOCITY_
+    );
   }
 
   /**

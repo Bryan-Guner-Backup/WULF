@@ -14,42 +14,39 @@
  * limitations under the License.
  */
 
-
-import {loadPromise} from '../../src/event-helper';
-
+import { loadPromise } from "../../src/event-helper";
 
 // TODO(@cramforce): Use local version. This is non-hermetic
 // and really bad. When the validator is open source we can
 // use it directly.
 if (!window.validatorLoad) {
-  window.validatorLoad = (function() {
-    var s = document.createElement('script');
-    s.src = 'https://www.gstatic.com/amphtml/v0/validator.js';
+  window.validatorLoad = (function () {
+    var s = document.createElement("script");
+    s.src = "https://www.gstatic.com/amphtml/v0/validator.js";
     document.body.appendChild(s);
     return loadPromise(s);
   })();
 }
 
-describe('example', function() {
+describe("example", function () {
   // TODO(@cramforce): Remove when test is hermetic.
   this.timeout(5000);
 
   var examples = [
-    'ads.amp.html',
-    'article-metadata/json-ld.amp.html',
-    'article-metadata/microdata.amp.html',
-    'article.amp.html',
-    'everything.amp.html',
-    'instagram.amp.html',
-    'released.amp.html',
-    'twitter.amp.html',
+    "ads.amp.html",
+    "article-metadata/json-ld.amp.html",
+    "article-metadata/microdata.amp.html",
+    "article.amp.html",
+    "everything.amp.html",
+    "instagram.amp.html",
+    "released.amp.html",
+    "twitter.amp.html",
   ];
 
   // Only add to this whitelist to temporarily manage discrepancies
   // between validator and runtime.
   /** @constructor {!Array<RegExp>}  */
-  var errorWhitelist = [
-  ];
+  var errorWhitelist = [];
 
   var usedWhitelist = [];
 
@@ -57,21 +54,23 @@ describe('example', function() {
     return window.validatorLoad;
   });
 
-  examples.forEach(filename => {
-    it(filename + ' should validate', () => {
-      var url = '/base/examples/' + filename;
+  examples.forEach((filename) => {
+    it(filename + " should validate", () => {
+      var url = "/base/examples/" + filename;
       return get(url).then((html) => {
         var validationResult = amp.validator.validateString(html);
-        var rendered = amp.validator.renderValidationResult(validationResult,
-            url);
+        var rendered = amp.validator.renderValidationResult(
+          validationResult,
+          url
+        );
 
         var errors = [];
         LINES: for (let i = 0; i < rendered.length; i++) {
           var line = rendered[i];
-          if (line == 'PASS') {
+          if (line == "PASS") {
             continue;
           }
-          if (line == 'FAIL') {
+          if (line == "FAIL") {
             // We only look at individual error lines.
             continue;
           }
@@ -93,13 +92,13 @@ describe('example', function() {
           }
           errors.push(line);
         }
-        expect(errors.join('\n')).to.equal('');
+        expect(errors.join("\n")).to.equal("");
       });
     });
   });
 
-  it('should use all items in the whitelist', () => {
-    errorWhitelist.forEach(item => {
+  it("should use all items in the whitelist", () => {
+    errorWhitelist.forEach((item) => {
       expect(usedWhitelist).to.contain(item);
     });
   });
@@ -112,13 +111,14 @@ describe('example', function() {
     return new Promise((resolve, reject) => {
       var xhr = new XMLHttpRequest();
 
-      xhr.onreadystatechange = function() {
+      xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
           if (xhr.status == 200) {
             resolve(xhr.responseText);
           } else {
-            reject(new Error('Fetching file for validation failed: ' +
-                filename));
+            reject(
+              new Error("Fetching file for validation failed: " + filename)
+            );
           }
         }
       };

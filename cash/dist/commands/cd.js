@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-var fsAutocomplete = require('vorpal-autocomplete-fs');
-var delimiter = require('./../delimiter');
+var fsAutocomplete = require("vorpal-autocomplete-fs");
+var delimiter = require("./../delimiter");
 
-var interfacer = require('./../util/interfacer');
+var interfacer = require("./../util/interfacer");
 
 var cd = {
   exec: function exec(dir, options) {
@@ -25,16 +25,16 @@ var cd = {
   error: function error(e, dir) {
     var status = undefined;
     var stdout = undefined;
-    if (e.code === 'ENOENT' && e.syscall === 'uv_chdir') {
+    if (e.code === "ENOENT" && e.syscall === "uv_chdir") {
       status = 1;
-      stdout = '-bash: cd: ' + dir + ': No such file or directory';
+      stdout = "-bash: cd: " + dir + ": No such file or directory";
     } else {
       status = 2;
       stdout = e.stack;
     }
     this.log(stdout);
     return status;
-  }
+  },
 };
 
 module.exports = function (vorpal) {
@@ -42,14 +42,17 @@ module.exports = function (vorpal) {
     return cd;
   }
   vorpal.api.cd = cd;
-  vorpal.command('cd [dir]').autocomplete(fsAutocomplete({ directory: true })).action(function (args, callback) {
-    args.options = args.options || {};
-    args.options.vorpal = vorpal;
-    return interfacer.call(this, {
-      command: cd,
-      args: args.dir,
-      options: args.options,
-      callback: callback
+  vorpal
+    .command("cd [dir]")
+    .autocomplete(fsAutocomplete({ directory: true }))
+    .action(function (args, callback) {
+      args.options = args.options || {};
+      args.options.vorpal = vorpal;
+      return interfacer.call(this, {
+        command: cd,
+        args: args.dir,
+        options: args.options,
+        callback: callback,
+      });
     });
-  });
 };

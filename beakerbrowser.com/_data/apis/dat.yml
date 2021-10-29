@@ -1,6 +1,5 @@
 toplevel_methods:
-  -
-    name: "DatArchive"
+  - name: "DatArchive"
     signature: "new DatArchive(url)"
     desc: |
       Create an archive instance from an existing archive.
@@ -11,8 +10,7 @@ toplevel_methods:
       ```js
       var archive = new DatArchive(datUrl)
       ```
-  -
-    name: "DatArchive.create"
+  - name: "DatArchive.create"
     signature: "DatArchive.create(opts?)"
     desc: |
       Create a new Dat archive, and return the archive instance.
@@ -31,8 +29,7 @@ toplevel_methods:
         description: 'My new site'
       })
       ```
-  -
-    name: "DatArchive.fork"
+  - name: "DatArchive.fork"
     signature: "DatArchive.fork(url, opts?)"
     desc: |
       Fork an existing archive to create a new Dat archive, and return the archive instance.
@@ -55,8 +52,7 @@ toplevel_methods:
         description: 'My new fork'
       })
       ```
-  -
-    name: "DatArchive.selectArchive"
+  - name: "DatArchive.selectArchive"
     signature: "DatArchive.selectArchive(opts?)"
     desc: |
       Select a Dat archive from the library, or create a new Dat,
@@ -79,8 +75,7 @@ toplevel_methods:
       <img src="/img/posts/beaker-0-7-2/dat-picker.jpg" >
       <figcaption>The Dat picker modal for selectArchive()</figcaption>
       </figure>
-  -
-    name: "DatArchive.resolveName"
+  - name: "DatArchive.resolveName"
     signature: "DatArchive.resolveName(url)"
     desc: |
       Resolves a Dat shortname to its "raw" public-key URL using
@@ -94,8 +89,7 @@ toplevel_methods:
       var rawDatUrl = await DatArchive.resolveName(datUrl)
       ```
 instance_methods:
-  -
-    name: "url"
+  - name: "url"
     signature: "url"
     desc: |
       The URL of the archive.
@@ -105,8 +99,7 @@ instance_methods:
       var archive = new DatArchive(datUrl)
       archive.url
       ```
-  -
-    name: "getInfo"
+  - name: "getInfo"
     signature: "getInfo(opts?)"
     desc: |
       Fetches information about the archive.
@@ -146,8 +139,7 @@ instance_methods:
       var archive = new DatArchive(datUrl)
       await archive.getInfo()
       ```
-  -
-    name: "stat"
+  - name: "stat"
     signature: "stat(path, opts?)"
     desc: |
       Fetches information about the file or directory at `path`.
@@ -179,8 +171,7 @@ instance_methods:
       var archive = new DatArchive(datUrl)
       await archive.stat('/hello.txt')
       ```
-  -
-    name: "readFile"
+  - name: "readFile"
     signature: readFile(path, opts?)
     desc: |
       Reads the file’s contents.
@@ -206,8 +197,7 @@ instance_methods:
       var str = await archive.readFile('/picture.png', 'base64')
       document.querySelector('img').src = 'data:image/png;base64,'+str
       ```
-  -
-    name: "readdir"
+  - name: "readdir"
     signature: "readdir(path, opts?)"
     desc: |
       Reads the contents of a directory.
@@ -226,8 +216,7 @@ instance_methods:
       var allFiles = await archive.readdir('/', {recursive: true})
       var stats = await archive.readdir('/', {stat: true})
       ```
-  -
-    name: "writeFile"
+  - name: "writeFile"
     signature: "writeFile(path, data, opts?)"
     desc: |
       Replaces the file’  s contents with `data` in the staging area.
@@ -250,8 +239,7 @@ instance_methods:
       var archive = new DatArchive(datUrl)
       await archive.writeFile('/hello.txt', 'world')
       ```
-  -
-    name: "mkdir"
+  - name: "mkdir"
     signature: "mkdir(path)"
     desc: |
       Creates a new directory at `path` in the staging area.
@@ -267,8 +255,7 @@ instance_methods:
       var archive = new DatArchive(datUrl)
       await archive.mkdir('/subdir')
       ```
-  -
-    name: "unlink"
+  - name: "unlink"
     signature: "unlink(path)"
     desc: |
       Deletes the file at `path`.
@@ -284,8 +271,7 @@ instance_methods:
       var archive = new DatArchive(datUrl)
       await archive.unlink('/hello.txt')
       ```
-  -
-    name: "rmdir"
+  - name: "rmdir"
     signature: "rmdir(path, opts?)"
     desc: |
       Deletes the directory at `path`.
@@ -303,8 +289,7 @@ instance_methods:
       await archive.rmdir('/subdir')
       await archive.rmdir('/', {recursive: true})
       ```
-  -
-    name: "diff"
+  - name: "diff"
     signature: "diff(opts?)"
     desc: |
       Compare the current staging area to the published archive, and provide a list of the differences.
@@ -334,8 +319,7 @@ instance_methods:
       var archive = new DatArchive(datUrl)
       await archive.diff()
       ```
-  -
-    name: "commit"
+  - name: "commit"
     signature: "commit()"
     desc: |
       Publish all changes in the staging area to the archive, and provide a list of the applied changes.
@@ -363,8 +347,7 @@ instance_methods:
       var archive = new DatArchive(datUrl)
       await archive.commit()
       ```
-  -
-    name: "revert"
+  - name: "revert"
     signature: "revert()"
     desc: |
       Undo all changes in the staging area, and provide a list of the reversions.
@@ -392,8 +375,7 @@ instance_methods:
       var archive = new DatArchive(datUrl)
       await archive.revert()
       ```
-  -
-    name: "history"
+  - name: "history"
     signature: "history(opts?)"
     desc: |
       Fetch the history of changes to this archive.
@@ -425,8 +407,7 @@ instance_methods:
       var archive = new DatArchive(datUrl)
       await archive.history({start: 0, end: 100, reverse: true})
       ```
-  -
-    name: "download"
+  - name: "download"
     signature: "download(path, opts?)"
     desc: |
       Download the given file or folder, and return when finished.
@@ -440,8 +421,7 @@ instance_methods:
       await archive.download('/foo.txt')
       await archive.download('/') // download everything
       ```
-  -
-    name: "createFileActivityStream"
+  - name: "createFileActivityStream"
     signature: "createFileActivityStream(pattern?)"
     desc: |
       Watch the given path or path-pattern for file events.
@@ -476,8 +456,7 @@ instance_methods:
       // later:
       evts.close()
       ```
-  -
-    name: "createNetworkActivityStream"
+  - name: "createNetworkActivityStream"
     signature: "createNetworkActivityStream()"
     desc: |
       Watch for network events. Provides an `EventTarget` with a `.close()` method and the following events:

@@ -18,7 +18,6 @@
  * Helper with all things Timer.
  */
 export class Timer {
-
   /**
    * @param {!Window} win
    */
@@ -57,7 +56,7 @@ export class Timer {
     if (!opt_delay) {
       // For a delay of zero,  schedule a promise based micro task since
       // they are predictably fast.
-      var id = 'p' + this.taskCount_++;
+      var id = "p" + this.taskCount_++;
       this.resolved_.then(() => {
         if (this.canceled_[id]) {
           delete this.canceled_[id];
@@ -75,7 +74,7 @@ export class Timer {
    * @param {number|string} timeoutId
    */
   cancel(timeoutId) {
-    if (typeof timeoutId == 'string') {
+    if (typeof timeoutId == "string") {
       this.canceled_[timeoutId] = true;
       return;
     }
@@ -98,7 +97,7 @@ export class Timer {
         resolve(opt_result);
       }, opt_delay);
       if (timerKey == -1) {
-        reject(new Error('Failed to schedule timer.'));
+        reject(new Error("Failed to schedule timer."));
       }
     }).catch((error) => {
       // Clear the timer. The most likely reason is "cancel" signal.
@@ -124,10 +123,10 @@ export class Timer {
     var delayPromise = new Promise((resolve, reject) => {
       timerKey = this.delay(() => {
         timerKey = -1;
-        reject('timeout');
+        reject("timeout");
       }, delay);
       if (timerKey == -1) {
-        reject(new Error('Failed to schedule timer.'));
+        reject(new Error("Failed to schedule timer."));
       }
     }).catch((error) => {
       // Clear the timer. The most likely reason is "cancel" signal.
@@ -142,6 +141,5 @@ export class Timer {
     return Promise.race([delayPromise, opt_racePromise]);
   }
 }
-
 
 export const timer = new Timer(window);

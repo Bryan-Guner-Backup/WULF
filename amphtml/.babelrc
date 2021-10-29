@@ -1,5 +1,5 @@
 {
-  optional: ["utility.inlineEnvironmentVariables"],
-  externalHelpers: true,
-  blacklist: ["regenerator"]
+  "optional": ["utility.inlineEnvironmentVariables"],
+  "externalHelpers": true,
+  "blacklist": ["regenerator"]
 }

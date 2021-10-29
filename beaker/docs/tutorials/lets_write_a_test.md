@@ -11,12 +11,12 @@ Note: We will exclude Windows OS from our testing due to variation of package na
 
 What needs to happen in this test:
 
-* Install and run HTTPD
-  * Install HTTPD if its not available on our SUT
-  * Start HTTPD service
-* Testing
-  * Test HTTPD is installed
-  * Test HTTPD service is running
+- Install and run HTTPD
+  - Install HTTPD if its not available on our SUT
+  - Start HTTPD service
+- Testing
+  - Test HTTPD is installed
+  - Test HTTPD service is running
 
 ## Create a host configuration file
 

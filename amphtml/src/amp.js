@@ -14,53 +14,58 @@
  * limitations under the License.
  */
 
-import './polyfills';
+import "./polyfills";
 
-import {historyFor} from './history';
-import {viewerFor} from './viewer';
-import {installPullToRefreshBlocker} from './pull-to-refresh';
+import { historyFor } from "./history";
+import { viewerFor } from "./viewer";
+import { installPullToRefreshBlocker } from "./pull-to-refresh";
 
-import {installAd} from '../builtins/amp-ad';
-import {installGlobalClickListener} from './document-click';
-import {installImg} from '../builtins/amp-img';
-import {installVideo} from '../builtins/amp-video';
-import {installPixel} from '../builtins/amp-pixel';
-import {installStyles, makeBodyVisible} from './styles';
-import {installErrorReporting} from './error';
-import {stubElements} from './custom-element';
-import {adopt} from './runtime';
-import {cssText} from '../build/css.js';
-import {action} from './action';
-import {maybeValidate} from './validator-integration';
+import { installAd } from "../builtins/amp-ad";
+import { installGlobalClickListener } from "./document-click";
+import { installImg } from "../builtins/amp-img";
+import { installVideo } from "../builtins/amp-video";
+import { installPixel } from "../builtins/amp-pixel";
+import { installStyles, makeBodyVisible } from "./styles";
+import { installErrorReporting } from "./error";
+import { stubElements } from "./custom-element";
+import { adopt } from "./runtime";
+import { cssText } from "../build/css.js";
+import { action } from "./action";
+import { maybeValidate } from "./validator-integration";
 
 // We must under all circumstances call makeBodyVisible.
 // It is much better to have AMP tags not rendered than having
 // a completely blank page.
 try {
   // Should happen first.
-  installErrorReporting(window);  // Also calls makeBodyVisible on errors.
-  installStyles(document, cssText, () => {
-    try {
-      historyFor(window);
-      viewerFor(window);
+  installErrorReporting(window); // Also calls makeBodyVisible on errors.
+  installStyles(
+    document,
+    cssText,
+    () => {
+      try {
+        historyFor(window);
+        viewerFor(window);
 
-      installImg(window);
-      installAd(window);
-      installPixel(window);
-      installVideo(window);
+        installImg(window);
+        installAd(window);
+        installPixel(window);
+        installVideo(window);
 
-      adopt(window);
-      stubElements(window);
-      action.addEvent('tap');
+        adopt(window);
+        stubElements(window);
+        action.addEvent("tap");
 
-      installPullToRefreshBlocker(window);
-      installGlobalClickListener(window);
+        installPullToRefreshBlocker(window);
+        installGlobalClickListener(window);
 
-      maybeValidate(window);
-    } finally {
-      makeBodyVisible(document);
-    }
-  }, /* opt_isRuntimeCss */ true);
+        maybeValidate(window);
+      } finally {
+        makeBodyVisible(document);
+      }
+    },
+    /* opt_isRuntimeCss */ true
+  );
 } catch (e) {
   // In case of an error call this.
   makeBodyVisible(document);
@@ -71,8 +76,12 @@ try {
 // tag to give some information that can be used in error reports.
 // (At least by sophisticated users).
 if (window.console) {
-  (console.info || console.log).call(console,
-      'Powered by AMP ⚡ HTML – Version $internalRuntimeVersion$');
+  (console.info || console.log).call(
+    console,
+    "Powered by AMP ⚡ HTML – Version $internalRuntimeVersion$"
+  );
 }
-document.documentElement.setAttribute('amp-version',
-      '$internalRuntimeVersion$');
+document.documentElement.setAttribute(
+  "amp-version",
+  "$internalRuntimeVersion$"
+);

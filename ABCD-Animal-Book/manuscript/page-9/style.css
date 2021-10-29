@@ -22,7 +22,8 @@ body {
 }
 
 .stroke {
-  text-shadow: 3px 3px 0 #f00, -1px -1px 0 #f00, 1px -1px 0 #f00, -1px 1px 0 #f00, 1px 1px 0 #f00;
+  text-shadow: 3px 3px 0 #f00, -1px -1px 0 #f00, 1px -1px 0 #f00,
+    -1px 1px 0 #f00, 1px 1px 0 #f00;
 }
 
 .stars {
@@ -45,12 +46,12 @@ body {
 .s12 {
   position: absolute;
   width: 1vw;
-  height: .9vw;
+  height: 0.9vw;
   border-radius: 100vw;
   background: white;
-  box-shadow: 0 0 3vw #FFf;
-  -moz-box-shadow: 0 0 3vw #FFf;
-  -webkit-box-shadow: 0 0 3vw #FFf;
+  box-shadow: 0 0 3vw #fff;
+  -moz-box-shadow: 0 0 3vw #fff;
+  -webkit-box-shadow: 0 0 3vw #fff;
 }
 
 .s1,
@@ -128,7 +129,7 @@ body {
     -webkit-transform: rotate(3deg);
     -moz-transform: rotate(3deg);
     transform: rotate(3deg);
-    margin-left: 32vw
+    margin-left: 32vw;
   }
   100% {
     -webkit-transform: rotate(19deg);
@@ -143,7 +144,7 @@ body {
     -webkit-transform: rotate(3deg);
     -moz-transform: rotate(3deg);
     transform: rotate(3deg);
-    margin-left: 32vw
+    margin-left: 32vw;
   }
   100% {
     -webkit-transform: rotate(19deg);
@@ -158,7 +159,7 @@ body {
     -webkit-transform: rotate(3deg);
     -moz-transform: rotate(3deg);
     transform: rotate(3deg);
-    margin-left: 32vw
+    margin-left: 32vw;
   }
   100% {
     -webkit-transform: rotate(19deg);
@@ -209,7 +210,7 @@ body {
 
 @keyframes brillo {
   0% {
-    opacity: .3;
+    opacity: 0.3;
   }
   100% {
     opacity: 1;
@@ -218,7 +219,7 @@ body {
 
 @-moz-keyframes brillo {
   0% {
-    opacity: .3;
+    opacity: 0.3;
   }
   100% {
     opacity: 1;
@@ -227,7 +228,7 @@ body {
 
 @-webkit-keyframes brillo {
   0% {
-    opacity: .3;
+    opacity: 0.3;
   }
   100% {
     opacity: 1;

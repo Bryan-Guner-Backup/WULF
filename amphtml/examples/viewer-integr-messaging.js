@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 /**
  * This is a very simple messaging protocol between viewer and viewer client.
  * @param {!Window} target
@@ -23,9 +22,9 @@
  * @constructor
  */
 function ViewerMessaging(target, requestProcessor) {
-  this.sentinel_ = '__AMP__';
-  this.requestSentinel_ = this.sentinel_ + 'REQUEST';
-  this.responseSentinel_ = this.sentinel_ + 'RESPONSE';
+  this.sentinel_ = "__AMP__";
+  this.requestSentinel_ = this.sentinel_ + "REQUEST";
+  this.responseSentinel_ = this.sentinel_ + "RESPONSE";
 
   this.requestIdCounter_ = 0;
   this.waitingForResponse_ = {};
@@ -33,9 +32,8 @@ function ViewerMessaging(target, requestProcessor) {
   this.target_ = target;
   this.requestProcessor_ = requestProcessor;
 
-  window.addEventListener('message', this.onMessage_.bind(this), false);
+  window.addEventListener("message", this.onMessage_.bind(this), false);
 }
-
 
 /**
  * @param {string} eventType
@@ -43,28 +41,45 @@ function ViewerMessaging(target, requestProcessor) {
  * @param {boolean} awaitResponse
  * @return {!Promise<*>|undefined}
  */
-ViewerMessaging.prototype.sendRequest = function(eventType, payload,
-    awaitResponse) {
+ViewerMessaging.prototype.sendRequest = function (
+  eventType,
+  payload,
+  awaitResponse
+) {
   var requestId = ++this.requestIdCounter_;
   if (awaitResponse) {
-    var promise = new Promise(function(resolve, reject) {
-      this.waitingForResponse_[requestId] = {resolve: resolve, reject: reject};
-    }.bind(this));
-    this.sendMessage_(this.requestSentinel_, requestId, eventType, payload,
-        true);
+    var promise = new Promise(
+      function (resolve, reject) {
+        this.waitingForResponse_[requestId] = {
+          resolve: resolve,
+          reject: reject,
+        };
+      }.bind(this)
+    );
+    this.sendMessage_(
+      this.requestSentinel_,
+      requestId,
+      eventType,
+      payload,
+      true
+    );
     return promise;
   }
-  this.sendMessage_(this.requestSentinel_, requestId, eventType, payload,
-      false);
+  this.sendMessage_(
+    this.requestSentinel_,
+    requestId,
+    eventType,
+    payload,
+    false
+  );
   return undefined;
 };
-
 
 /**
  * @param {!Event} event
  * @private
  */
-ViewerMessaging.prototype.onMessage_ = function(event) {
+ViewerMessaging.prototype.onMessage_ = function (event) {
   // TODO: must check for origin/target.
   var message = event.data;
   if (message.sentinel == this.requestSentinel_) {
@@ -74,46 +89,49 @@ ViewerMessaging.prototype.onMessage_ = function(event) {
   }
 };
 
-
 /**
  * @param {*} message
  * @private
  */
-ViewerMessaging.prototype.onRequest_ = function(message) {
+ViewerMessaging.prototype.onRequest_ = function (message) {
   var requestId = message.requestId;
-  var promise = this.requestProcessor_(message.type, message.payload,
-      message.rsvp);
+  var promise = this.requestProcessor_(
+    message.type,
+    message.payload,
+    message.rsvp
+  );
   if (message.rsvp) {
     if (!promise) {
-      this.sendResponseError_(requestId, 'no response');
-      throw new Error('expected response but none given: ' + message.type);
+      this.sendResponseError_(requestId, "no response");
+      throw new Error("expected response but none given: " + message.type);
     }
-    promise.then(function(payload) {
-      this.sendResponse_(requestId, payload);
-    }.bind(this), function(reason) {
-      this.sendResponseError_(requestId, reason);
-    }.bind(this));
+    promise.then(
+      function (payload) {
+        this.sendResponse_(requestId, payload);
+      }.bind(this),
+      function (reason) {
+        this.sendResponseError_(requestId, reason);
+      }.bind(this)
+    );
   }
 };
 
-
 /**
  * @param {*} message
  * @private
  */
-ViewerMessaging.prototype.onResponse_ = function(message) {
+ViewerMessaging.prototype.onResponse_ = function (message) {
   var requestId = message.requestId;
   var pending = this.waitingForResponse_[requestId];
   if (pending) {
     delete this.waitingForResponse_[requestId];
-    if (message.type == 'ERROR') {
+    if (message.type == "ERROR") {
       pending.reject(message.payload);
     } else {
       pending.resolve(message.payload);
     }
   }
 };
-
 
 /**
  * @param {string} sentinel
@@ -123,44 +141,46 @@ ViewerMessaging.prototype.onResponse_ = function(message) {
  * @param {boolean} awaitResponse
  * @private
  */
-ViewerMessaging.prototype.sendMessage_ = function(sentinel, requestId,
-      eventType, payload, awaitResponse) {
+ViewerMessaging.prototype.sendMessage_ = function (
+  sentinel,
+  requestId,
+  eventType,
+  payload,
+  awaitResponse
+) {
   // TODO: must check for origin/target.
   var message = {
     sentinel: sentinel,
     requestId: requestId,
     type: eventType,
     payload: payload,
-    rsvp: awaitResponse
+    rsvp: awaitResponse,
   };
-  this.target_./*TODO-REVIEW*/postMessage(message, '*');
+  this.target_./*TODO-REVIEW*/ postMessage(message, "*");
 };
-
 
 /**
  * @param {number} requestId
  * @param {*} payload
  * @private
  */
-ViewerMessaging.prototype.sendResponse_ = function(requestId, payload) {
+ViewerMessaging.prototype.sendResponse_ = function (requestId, payload) {
   this.sendMessage_(this.responseSentinel_, requestId, null, payload, false);
 };
-
 
 /**
  * @param {number} requestId
  * @param {*} reason
  * @private
  */
-ViewerMessaging.prototype.sendResponseError_ = function(requestId, reason) {
-  this.sendMessage_(this.responseSentinel_, requestId, 'ERROR', reason, false);
+ViewerMessaging.prototype.sendResponseError_ = function (requestId, reason) {
+  this.sendMessage_(this.responseSentinel_, requestId, "ERROR", reason, false);
 };
-
 
 /**
  * Super crude way to share ViewerMessaging class without any kind of module
  * system or packaging.
  */
-if (window['__AMP_VIEWER_MESSAGING_CALLBACK']) {
-  window['__AMP_VIEWER_MESSAGING_CALLBACK'](ViewerMessaging);
+if (window["__AMP_VIEWER_MESSAGING_CALLBACK"]) {
+  window["__AMP_VIEWER_MESSAGING_CALLBACK"](ViewerMessaging);
 }

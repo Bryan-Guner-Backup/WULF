@@ -19,21 +19,19 @@
  * details.
  */
 
-import {assert} from './asserts';
-
+import { assert } from "./asserts";
 
 /**
  * @enum {string}
  */
 export const Layout = {
-  NODISPLAY: 'nodisplay',
-  FIXED: 'fixed',
-  FIXED_HEIGHT: 'fixed-height',
-  RESPONSIVE: 'responsive',
-  CONTAINER: 'container',
-  FILL: 'fill'
+  NODISPLAY: "nodisplay",
+  FIXED: "fixed",
+  FIXED_HEIGHT: "fixed-height",
+  RESPONSIVE: "responsive",
+  CONTAINER: "container",
+  FILL: "fill",
 };
-
 
 /**
  * @param {string} s
@@ -49,15 +47,13 @@ export function parseLayout(s) {
   return undefined;
 }
 
-
 /**
  * @param {!Layout} layout
  * @return {string}
  */
 export function getLayoutClass(layout) {
-  return '-amp-layout-' + layout;
+  return "-amp-layout-" + layout;
 }
-
 
 /**
  * Whether an element with this layout inherently defines the size.
@@ -65,12 +61,13 @@ export function getLayoutClass(layout) {
  * @return {boolean}
  */
 export function isLayoutSizeDefined(layout) {
-  return (layout == Layout.FIXED ||
-      layout == Layout.FIXED_HEIGHT ||
-      layout == Layout.RESPONSIVE ||
-      layout == Layout.FILL);
+  return (
+    layout == Layout.FIXED ||
+    layout == Layout.FIXED_HEIGHT ||
+    layout == Layout.RESPONSIVE ||
+    layout == Layout.FILL
+  );
 }
-
 
 /**
  * Whether the tag is an internal (service) AMP tag.
@@ -78,17 +75,15 @@ export function isLayoutSizeDefined(layout) {
  * @return {boolean}
  */
 export function isInternalElement(tag) {
-  let tagName = (typeof tag == 'string') ? tag : tag.tagName;
-  return tagName && tagName.toLowerCase().indexOf('i-') == 0;
+  let tagName = typeof tag == "string" ? tag : tag.tagName;
+  return tagName && tagName.toLowerCase().indexOf("i-") == 0;
 }
-
 
 /**
  * CSS Length type. E.g. "1px" or "20vh".
  * @typedef {string}
  */
 var Length;
-
 
 /**
  * Parses the CSS length value. If no units specified, the assumed value is
@@ -97,8 +92,8 @@ var Length;
  * @return {!Length|undefined}
  */
 export function parseLength(s) {
-  if (typeof s == 'number') {
-    return s + 'px';
+  if (typeof s == "number") {
+    return s + "px";
   }
   if (!s) {
     return undefined;
@@ -107,11 +102,10 @@ export function parseLength(s) {
     return undefined;
   }
   if (/^\d+(\.\d+)?$/.test(s)) {
-    return s + 'px';
+    return s + "px";
   }
   return s;
 }
-
 
 /**
  * Asserts that the supplied value is a CSS Length value.
@@ -119,11 +113,13 @@ export function parseLength(s) {
  * @return {!Length}
  */
 export function assertLength(length) {
-  assert(/^\d+(\.\d+)?(px|em|rem|vh|vw|vmin|vmax)$/.test(length),
-      'Invalid length value: %s', length);
+  assert(
+    /^\d+(\.\d+)?(px|em|rem|vh|vw|vmin|vmax)$/.test(length),
+    "Invalid length value: %s",
+    length
+  );
   return length;
 }
-
 
 /**
  * Returns units from the CSS length value.
@@ -132,11 +128,13 @@ export function assertLength(length) {
  */
 export function getLengthUnits(length) {
   assertLength(length);
-  let m = assert(length.match(/[a-z]+/i),
-      'Failed to read units from %s', length);
+  let m = assert(
+    length.match(/[a-z]+/i),
+    "Failed to read units from %s",
+    length
+  );
   return m[0];
 }
-
 
 /**
  * Returns the numeric value of a CSS length value.
@@ -146,7 +144,6 @@ export function getLengthUnits(length) {
 export function getLengthNumeral(length) {
   return parseFloat(length);
 }
-
 
 /**
  * @typedef {{
@@ -167,10 +164,9 @@ var Dimensions;
  * @private
  */
 export const naturalDimensions_ = {
-  'AMP-PIXEL': {width: 1, height: 1},
-  'AMP-AUDIO': null
+  "AMP-PIXEL": { width: 1, height: 1 },
+  "AMP-AUDIO": null,
 };
-
 
 /**
  * Determines whether the tagName is a known element that has natural dimensions
@@ -183,7 +179,6 @@ export function hasNaturalDimensions(tagName) {
   return naturalDimensions_[tagName] !== undefined;
 }
 
-
 /**
  * Determines the default dimensions for an element which could vary across
  * different browser implementations, like <audio> for instance.
@@ -193,16 +188,16 @@ export function hasNaturalDimensions(tagName) {
 export function getNaturalDimensions(tagName) {
   tagName = tagName.toUpperCase();
   if (!naturalDimensions_[tagName]) {
-    let naturalTagName = tagName.replace(/^AMP\-/, '');
+    let naturalTagName = tagName.replace(/^AMP\-/, "");
     let temp = document.createElement(naturalTagName);
     // For audio, should no-op elsewhere.
     temp.controls = true;
-    temp.style.position = 'absolute';
-    temp.style.visibility = 'hidden';
+    temp.style.position = "absolute";
+    temp.style.visibility = "hidden";
     document.body.appendChild(temp);
     naturalDimensions_[tagName] = {
-      width: temp./*OK*/offsetWidth,
-      height: temp./*OK*/offsetHeight
+      width: temp./*OK*/ offsetWidth,
+      height: temp./*OK*/ offsetHeight,
     };
     document.body.removeChild(temp);
   }

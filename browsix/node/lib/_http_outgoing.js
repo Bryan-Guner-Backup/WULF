@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-var assert = require('./assert').ok;
-var Stream = require('./stream');
-var timers = require('./timers');
-var util = require('./util');
-var internalUtil = require('./internal/util');
-var Buffer = require('./buffer').Buffer;
-var common = require('./_http_common');
+var assert = require("./assert").ok;
+var Stream = require("./stream");
+var timers = require("./timers");
+var util = require("./util");
+var internalUtil = require("./internal/util");
+var Buffer = require("./buffer").Buffer;
+var common = require("./_http_common");
 
 var CRLF = common.CRLF;
 var chunkExpression = common.chunkExpression;
@@ -22,11 +22,10 @@ var trailerExpression = /^Trailer$/i;
 
 var automaticHeaders = {
   connection: true,
-  'content-length': true,
-  'transfer-encoding': true,
-  date: true
+  "content-length": true,
+  "transfer-encoding": true,
+  date: true,
 };
-
 
 var dateCache;
 function utcDate() {
@@ -38,10 +37,9 @@ function utcDate() {
   }
   return dateCache;
 }
-utcDate._onTimeout = function() {
+utcDate._onTimeout = function () {
   dateCache = undefined;
 };
-
 
 function OutgoingMessage() {
   Stream.call(this);
@@ -69,7 +67,7 @@ function OutgoingMessage() {
 
   this._contentLength = null;
   this._hasBody = true;
-  this._trailer = '';
+  this._trailer = "";
 
   this.finished = false;
   this._headerSent = false;
@@ -84,16 +82,13 @@ function OutgoingMessage() {
 }
 util.inherits(OutgoingMessage, Stream);
 
-
 exports.OutgoingMessage = OutgoingMessage;
 
-
-OutgoingMessage.prototype.setTimeout = function(msecs, callback) {
-  if (callback)
-    this.on('timeout', callback);
+OutgoingMessage.prototype.setTimeout = function (msecs, callback) {
+  if (callback) this.on("timeout", callback);
 
   if (!this.socket) {
-    this.once('socket', function(socket) {
+    this.once("socket", function (socket) {
       socket.setTimeout(msecs);
     });
   } else {
@@ -102,33 +97,32 @@ OutgoingMessage.prototype.setTimeout = function(msecs, callback) {
   return this;
 };
 
-
 // It's possible that the socket will be destroyed, and removed from
 // any messages, before ever calling this.  In that case, just skip
 // it, since something else is destroying this connection anyway.
-OutgoingMessage.prototype.destroy = function(error) {
-  if (this.socket)
-    this.socket.destroy(error);
+OutgoingMessage.prototype.destroy = function (error) {
+  if (this.socket) this.socket.destroy(error);
   else
-    this.once('socket', function(socket) {
+    this.once("socket", function (socket) {
       socket.destroy(error);
     });
 };
 
-
 // This abstract either writing directly to the socket or buffering it.
-OutgoingMessage.prototype._send = function(data, encoding, callback) {
+OutgoingMessage.prototype._send = function (data, encoding, callback) {
   // This is a shameful hack to get the headers and first body chunk onto
   // the same packet. Future versions of Node are going to take care of
   // this at a lower level and in a more general way.
   if (!this._headerSent) {
-    if (typeof data === 'string' &&
-        encoding !== 'hex' &&
-        encoding !== 'base64') {
+    if (
+      typeof data === "string" &&
+      encoding !== "hex" &&
+      encoding !== "base64"
+    ) {
       data = this._header + data;
     } else {
       this.output.unshift(this._header);
-      this.outputEncodings.unshift('binary');
+      this.outputEncodings.unshift("binary");
       this.outputCallbacks.unshift(null);
       this.outputSize += this._header.length;
       if (this._onPendingData !== null)
@@ -139,18 +133,19 @@ OutgoingMessage.prototype._send = function(data, encoding, callback) {
   return this._writeRaw(data, encoding, callback);
 };
 
-
-OutgoingMessage.prototype._writeRaw = function(data, encoding, callback) {
-  if (typeof encoding === 'function') {
+OutgoingMessage.prototype._writeRaw = function (data, encoding, callback) {
+  if (typeof encoding === "function") {
     callback = encoding;
     encoding = null;
   }
 
   var connection = this.connection;
-  if (connection &&
-      connection._httpMessage === this &&
-      connection.writable &&
-      !connection.destroyed) {
+  if (
+    connection &&
+    connection._httpMessage === this &&
+    connection.writable &&
+    !connection.destroyed
+  ) {
     // There might be pending data in the this.output buffer.
     var outputLength = this.output.length;
     if (outputLength > 0) {
@@ -159,20 +154,17 @@ OutgoingMessage.prototype._writeRaw = function(data, encoding, callback) {
       var outputCallbacks = this.outputCallbacks;
       connection.cork();
       for (var i = 0; i < outputLength; i++) {
-        connection.write(output[i], outputEncodings[i],
-                         outputCallbacks[i]);
+        connection.write(output[i], outputEncodings[i], outputCallbacks[i]);
       }
       connection.uncork();
 
       this.output = [];
       this.outputEncodings = [];
       this.outputCallbacks = [];
-      if (this._onPendingData !== null)
-        this._onPendingData(-this.outputSize);
+      if (this._onPendingData !== null) this._onPendingData(-this.outputSize);
       this.outputSize = 0;
     } else if (data.length === 0) {
-      if (typeof callback === 'function')
-        process.nextTick(callback);
+      if (typeof callback === "function") process.nextTick(callback);
       return true;
     }
 
@@ -188,19 +180,16 @@ OutgoingMessage.prototype._writeRaw = function(data, encoding, callback) {
   }
 };
 
-
-OutgoingMessage.prototype._buffer = function(data, encoding, callback) {
+OutgoingMessage.prototype._buffer = function (data, encoding, callback) {
   this.output.push(data);
   this.outputEncodings.push(encoding);
   this.outputCallbacks.push(callback);
   this.outputSize += data.length;
-  if (this._onPendingData !== null)
-    this._onPendingData(data.length);
+  if (this._onPendingData !== null) this._onPendingData(data.length);
   return false;
 };
 
-
-OutgoingMessage.prototype._storeHeader = function(firstLine, headers) {
+OutgoingMessage.prototype._storeHeader = function (firstLine, headers) {
   // firstLine in the case of request is: 'GET /index.html HTTP/1.1\r\n'
   // in the case of response it is: 'HTTP/1.1 200 OK\r\n'
   var state = {
@@ -210,7 +199,7 @@ OutgoingMessage.prototype._storeHeader = function(firstLine, headers) {
     sentDateHeader: false,
     sentExpect: false,
     sentTrailer: false,
-    messageHeader: firstLine
+    messageHeader: firstLine,
   };
 
   if (headers) {
@@ -240,7 +229,7 @@ OutgoingMessage.prototype._storeHeader = function(firstLine, headers) {
 
   // Date header
   if (this.sendDate === true && state.sentDateHeader === false) {
-    state.messageHeader += 'Date: ' + utcDate() + CRLF;
+    state.messageHeader += "Date: " + utcDate() + CRLF;
   }
 
   // Force the connection to close when the response is a 204 No Content or
@@ -255,10 +244,15 @@ OutgoingMessage.prototype._storeHeader = function(firstLine, headers) {
   // of creating security liabilities, so suppress the zero chunk and force
   // the connection to close.
   var statusCode = this.statusCode;
-  if ((statusCode === 204 || statusCode === 304) &&
-      this.chunkedEncoding === true) {
-    debug(statusCode + ' response should not use chunked encoding,' +
-          ' closing connection.');
+  if (
+    (statusCode === 204 || statusCode === 304) &&
+    this.chunkedEncoding === true
+  ) {
+    debug(
+      statusCode +
+        " response should not use chunked encoding," +
+        " closing connection."
+    );
     this.chunkedEncoding = false;
     this.shouldKeepAlive = false;
   }
@@ -268,39 +262,44 @@ OutgoingMessage.prototype._storeHeader = function(firstLine, headers) {
     this._last = true;
     this.shouldKeepAlive = false;
   } else if (state.sentConnectionHeader === false) {
-    var shouldSendKeepAlive = this.shouldKeepAlive &&
-        (state.sentContentLengthHeader ||
-         this.useChunkedEncodingByDefault ||
-         this.agent);
+    var shouldSendKeepAlive =
+      this.shouldKeepAlive &&
+      (state.sentContentLengthHeader ||
+        this.useChunkedEncodingByDefault ||
+        this.agent);
     if (shouldSendKeepAlive) {
-      state.messageHeader += 'Connection: keep-alive\r\n';
+      state.messageHeader += "Connection: keep-alive\r\n";
     } else {
       this._last = true;
-      state.messageHeader += 'Connection: close\r\n';
+      state.messageHeader += "Connection: close\r\n";
     }
   }
 
-  if (state.sentContentLengthHeader === false &&
-      state.sentTransferEncodingHeader === false) {
+  if (
+    state.sentContentLengthHeader === false &&
+    state.sentTransferEncodingHeader === false
+  ) {
     if (!this._hasBody) {
       // Make sure we don't end the 0\r\n\r\n at the end of the message.
       this.chunkedEncoding = false;
     } else if (!this.useChunkedEncodingByDefault) {
       this._last = true;
     } else {
-      if (!state.sentTrailer &&
-          !this._removedHeader['content-length'] &&
-          typeof this._contentLength === 'number') {
-        state.messageHeader += 'Content-Length: ' + this._contentLength +
-                               '\r\n';
-      } else if (!this._removedHeader['transfer-encoding']) {
-        state.messageHeader += 'Transfer-Encoding: chunked\r\n';
+      if (
+        !state.sentTrailer &&
+        !this._removedHeader["content-length"] &&
+        typeof this._contentLength === "number"
+      ) {
+        state.messageHeader +=
+          "Content-Length: " + this._contentLength + "\r\n";
+      } else if (!this._removedHeader["transfer-encoding"]) {
+        state.messageHeader += "Transfer-Encoding: chunked\r\n";
         this.chunkedEncoding = true;
       } else {
         // We should only be able to get here if both Content-Length and
         // Transfer-Encoding are removed by the user.
         // See: test/parallel/test-http-remove-header-stays-removed.js
-        debug('Both Content-Length and Transfer-Encoding are removed');
+        debug("Both Content-Length and Transfer-Encoding are removed");
       }
     }
   }
@@ -310,12 +309,12 @@ OutgoingMessage.prototype._storeHeader = function(firstLine, headers) {
 
   // wait until the first body chunk, or close(), is sent to flush,
   // UNLESS we're sending Expect: 100-continue.
-  if (state.sentExpect) this._send('');
+  if (state.sentExpect) this._send("");
 };
 
 function storeHeader(self, state, field, value) {
   value = escapeHeaderValue(value);
-  state.messageHeader += field + ': ' + value + CRLF;
+  state.messageHeader += field + ": " + value + CRLF;
 
   if (connectionExpression.test(field)) {
     state.sentConnectionHeader = true;
@@ -324,11 +323,9 @@ function storeHeader(self, state, field, value) {
     } else {
       self.shouldKeepAlive = true;
     }
-
   } else if (transferEncodingExpression.test(field)) {
     state.sentTransferEncodingHeader = true;
     if (chunkExpression.test(value)) self.chunkedEncoding = true;
-
   } else if (contentLengthExpression.test(field)) {
     state.sentContentLengthHeader = true;
   } else if (dateExpression.test(field)) {
@@ -340,30 +337,25 @@ function storeHeader(self, state, field, value) {
   }
 }
 
-
-OutgoingMessage.prototype.setHeader = function(name, value) {
-  if (typeof name !== 'string')
-    throw new TypeError('`name` should be a string in setHeader(name, value).');
+OutgoingMessage.prototype.setHeader = function (name, value) {
+  if (typeof name !== "string")
+    throw new TypeError("`name` should be a string in setHeader(name, value).");
   if (value === undefined)
     throw new Error('`value` required in setHeader("' + name + '", value).');
-  if (this._header)
-    throw new Error('Can\'t set headers after they are sent.');
+  if (this._header) throw new Error("Can't set headers after they are sent.");
 
-  if (this._headers === null)
-    this._headers = {};
+  if (this._headers === null) this._headers = {};
 
   var key = name.toLowerCase();
   this._headers[key] = value;
   this._headerNames[key] = name;
 
-  if (automaticHeaders[key])
-    this._removedHeader[key] = false;
+  if (automaticHeaders[key]) this._removedHeader[key] = false;
 };
 
-
-OutgoingMessage.prototype.getHeader = function(name) {
+OutgoingMessage.prototype.getHeader = function (name) {
   if (arguments.length < 1) {
-    throw new Error('`name` is required for getHeader(name).');
+    throw new Error("`name` is required for getHeader(name).");
   }
 
   if (!this._headers) return;
@@ -372,22 +364,19 @@ OutgoingMessage.prototype.getHeader = function(name) {
   return this._headers[key];
 };
 
-
-OutgoingMessage.prototype.removeHeader = function(name) {
+OutgoingMessage.prototype.removeHeader = function (name) {
   if (arguments.length < 1) {
-    throw new Error('`name` is required for removeHeader(name).');
+    throw new Error("`name` is required for removeHeader(name).");
   }
 
   if (this._header) {
-    throw new Error('Can\'t remove headers after they are sent.');
+    throw new Error("Can't remove headers after they are sent.");
   }
 
   var key = name.toLowerCase();
 
-  if (key === 'date')
-    this.sendDate = false;
-  else if (automaticHeaders[key])
-    this._removedHeader[key] = true;
+  if (key === "date") this.sendDate = false;
+  else if (automaticHeaders[key]) this._removedHeader[key] = true;
 
   if (this._headers) {
     delete this._headers[key];
@@ -395,10 +384,9 @@ OutgoingMessage.prototype.removeHeader = function(name) {
   }
 };
 
-
-OutgoingMessage.prototype._renderHeaders = function() {
+OutgoingMessage.prototype._renderHeaders = function () {
   if (this._header) {
-    throw new Error('Can\'t render headers after they are sent to the client.');
+    throw new Error("Can't render headers after they are sent to the client.");
   }
 
   var headersMap = this._headers;
@@ -415,17 +403,17 @@ OutgoingMessage.prototype._renderHeaders = function() {
   return headers;
 };
 
-
-Object.defineProperty(OutgoingMessage.prototype, 'headersSent', {
+Object.defineProperty(OutgoingMessage.prototype, "headersSent", {
   configurable: true,
   enumerable: true,
-  get: function() { return !!this._header; }
+  get: function () {
+    return !!this._header;
+  },
 });
 
-
-OutgoingMessage.prototype.write = function(chunk, encoding, callback) {
+OutgoingMessage.prototype.write = function (chunk, encoding, callback) {
   if (this.finished) {
-    var err = new Error('write after end');
+    var err = new Error("write after end");
     process.nextTick(writeAfterEndNT, this, err, callback);
 
     return true;
@@ -436,15 +424,15 @@ OutgoingMessage.prototype.write = function(chunk, encoding, callback) {
   }
 
   if (!this._hasBody) {
-    debug('This type of response MUST NOT have a body. ' +
-          'Ignoring write() calls.');
+    debug(
+      "This type of response MUST NOT have a body. " + "Ignoring write() calls."
+    );
     return true;
   }
 
-  if (typeof chunk !== 'string' && !(chunk instanceof Buffer)) {
-    throw new TypeError('first argument must be a string or Buffer');
+  if (typeof chunk !== "string" && !(chunk instanceof Buffer)) {
+    throw new TypeError("first argument must be a string or Buffer");
   }
-
 
   // If we get an empty string or buffer, then just do nothing, and
   // signal the user to keep writing.
@@ -452,25 +440,25 @@ OutgoingMessage.prototype.write = function(chunk, encoding, callback) {
 
   var len, ret;
   if (this.chunkedEncoding) {
-    if (typeof chunk === 'string' &&
-        encoding !== 'hex' &&
-        encoding !== 'base64' &&
-        encoding !== 'binary') {
+    if (
+      typeof chunk === "string" &&
+      encoding !== "hex" &&
+      encoding !== "base64" &&
+      encoding !== "binary"
+    ) {
       len = Buffer.byteLength(chunk, encoding);
       chunk = len.toString(16) + CRLF + chunk + CRLF;
       ret = this._send(chunk, encoding, callback);
     } else {
       // buffer, or a non-toString-friendly encoding
-      if (typeof chunk === 'string')
-        len = Buffer.byteLength(chunk, encoding);
-      else
-        len = chunk.length;
+      if (typeof chunk === "string") len = Buffer.byteLength(chunk, encoding);
+      else len = chunk.length;
 
       if (this.connection && !this.connection.corked) {
         this.connection.cork();
         process.nextTick(connectionCorkNT, this.connection);
       }
-      this._send(len.toString(16), 'binary', null);
+      this._send(len.toString(16), "binary", null);
       this._send(crlf_buf, null, null);
       this._send(chunk, encoding, null);
       ret = this._send(crlf_buf, null, callback);
@@ -479,32 +467,27 @@ OutgoingMessage.prototype.write = function(chunk, encoding, callback) {
     ret = this._send(chunk, encoding, callback);
   }
 
-  debug('write ret = ' + ret);
+  debug("write ret = " + ret);
   return ret;
 };
 
-
 function writeAfterEndNT(self, err, callback) {
-  self.emit('error', err);
+  self.emit("error", err);
   if (callback) callback(err);
 }
 
-
 function connectionCorkNT(conn) {
-  if (conn)
-    conn.uncork();
+  if (conn) conn.uncork();
 }
-
 
 function escapeHeaderValue(value) {
   // Protect against response splitting. The regex test is there to
   // minimize the performance impact in the common case.
-  return /[\r\n]/.test(value) ? value.replace(/[\r\n]+[ \t]*/g, '') : value;
+  return /[\r\n]/.test(value) ? value.replace(/[\r\n]+[ \t]*/g, "") : value;
 }
 
-
-OutgoingMessage.prototype.addTrailers = function(headers) {
-  this._trailer = '';
+OutgoingMessage.prototype.addTrailers = function (headers) {
+  this._trailer = "";
   var keys = Object.keys(headers);
   var isArray = Array.isArray(headers);
   var field, value;
@@ -518,25 +501,23 @@ OutgoingMessage.prototype.addTrailers = function(headers) {
       value = headers[key];
     }
 
-    this._trailer += field + ': ' + escapeHeaderValue(value) + CRLF;
+    this._trailer += field + ": " + escapeHeaderValue(value) + CRLF;
   }
 };
 
+var crlf_buf = new Buffer("\r\n");
 
-var crlf_buf = new Buffer('\r\n');
-
-
-OutgoingMessage.prototype.end = function(data, encoding, callback) {
-  if (typeof data === 'function') {
+OutgoingMessage.prototype.end = function (data, encoding, callback) {
+  if (typeof data === "function") {
     callback = data;
     data = null;
-  } else if (typeof encoding === 'function') {
+  } else if (typeof encoding === "function") {
     callback = encoding;
     encoding = null;
   }
 
-  if (data && typeof data !== 'string' && !(data instanceof Buffer)) {
-    throw new TypeError('first argument must be a string or Buffer');
+  if (data && typeof data !== "string" && !(data instanceof Buffer)) {
+    throw new TypeError("first argument must be a string or Buffer");
   }
 
   if (this.finished) {
@@ -545,18 +526,16 @@ OutgoingMessage.prototype.end = function(data, encoding, callback) {
 
   var self = this;
   function finish() {
-    self.emit('finish');
+    self.emit("finish");
   }
 
-  if (typeof callback === 'function')
-    this.once('finish', callback);
+  if (typeof callback === "function") this.once("finish", callback);
 
   if (!this._header) {
     if (data) {
-      if (typeof data === 'string')
+      if (typeof data === "string")
         this._contentLength = Buffer.byteLength(data, encoding);
-      else
-        this._contentLength = data.length;
+      else this._contentLength = data.length;
     } else {
       this._contentLength = 0;
     }
@@ -564,13 +543,14 @@ OutgoingMessage.prototype.end = function(data, encoding, callback) {
   }
 
   if (data && !this._hasBody) {
-    debug('This type of response MUST NOT have a body. ' +
-          'Ignoring data passed to end().');
+    debug(
+      "This type of response MUST NOT have a body. " +
+        "Ignoring data passed to end()."
+    );
     data = null;
   }
 
-  if (this.connection && data)
-    this.connection.cork();
+  if (this.connection && data) this.connection.cork();
 
   var ret;
   if (data) {
@@ -579,35 +559,34 @@ OutgoingMessage.prototype.end = function(data, encoding, callback) {
   }
 
   if (this._hasBody && this.chunkedEncoding) {
-    ret = this._send('0\r\n' + this._trailer + '\r\n', 'binary', finish);
+    ret = this._send("0\r\n" + this._trailer + "\r\n", "binary", finish);
   } else {
     // Force a flush, HACK.
-    ret = this._send('', 'binary', finish);
+    ret = this._send("", "binary", finish);
   }
 
-  if (this.connection && data)
-    this.connection.uncork();
+  if (this.connection && data) this.connection.uncork();
 
   this.finished = true;
 
   // There is the first message on the outgoing queue, and we've sent
   // everything to the socket.
-  debug('outgoing message end.');
-  if (this.output.length === 0 &&
-      this.connection &&
-      this.connection._httpMessage === this) {
+  debug("outgoing message end.");
+  if (
+    this.output.length === 0 &&
+    this.connection &&
+    this.connection._httpMessage === this
+  ) {
     this._finish();
   }
 
   return ret;
 };
 
-
-OutgoingMessage.prototype._finish = function() {
+OutgoingMessage.prototype._finish = function () {
   assert(this.connection);
-  this.emit('prefinish');
+  this.emit("prefinish");
 };
-
 
 // This logic is probably a bit confusing. Let me explain a bit:
 //
@@ -628,7 +607,7 @@ OutgoingMessage.prototype._finish = function() {
 //
 // This function, outgoingFlush(), is called by both the Server and Client
 // to attempt to flush any pending messages out to the socket.
-OutgoingMessage.prototype._flush = function() {
+OutgoingMessage.prototype._flush = function () {
   var socket = this.socket;
   var outputLength, ret;
 
@@ -641,8 +620,7 @@ OutgoingMessage.prototype._flush = function() {
       var outputCallbacks = this.outputCallbacks;
       socket.cork();
       for (var i = 0; i < outputLength; i++) {
-        ret = socket.write(output[i], outputEncodings[i],
-                           outputCallbacks[i]);
+        ret = socket.write(output[i], outputEncodings[i], outputCallbacks[i]);
       }
       socket.uncork();
 
@@ -656,21 +634,20 @@ OutgoingMessage.prototype._flush = function() {
       this._finish();
     } else if (ret) {
       // This is necessary to prevent https from breaking
-      this.emit('drain');
+      this.emit("drain");
     }
   }
 };
 
-
-OutgoingMessage.prototype.flushHeaders = function() {
+OutgoingMessage.prototype.flushHeaders = function () {
   if (!this._header) {
     this._implicitHeader();
   }
 
   // Force-flush the headers.
-  this._send('');
+  this._send("");
 };
 
-OutgoingMessage.prototype.flush = internalUtil.deprecate(function() {
+OutgoingMessage.prototype.flush = internalUtil.deprecate(function () {
   this.flushHeaders();
-}, 'OutgoingMessage.flush is deprecated. Use flushHeaders instead.');
+}, "OutgoingMessage.flush is deprecated. Use flushHeaders instead.");

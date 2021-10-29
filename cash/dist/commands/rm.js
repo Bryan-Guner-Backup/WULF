@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
-var fs = require('fs');
-var fsAutocomplete = require('vorpal-autocomplete-fs');
+var fs = require("fs");
+var fsAutocomplete = require("vorpal-autocomplete-fs");
 
-var expand = require('./../util/expand');
-var interfacer = require('./../util/interfacer');
-var unlinkSync = require('./../util/unlinkSync');
+var expand = require("./../util/expand");
+var interfacer = require("./../util/interfacer");
+var unlinkSync = require("./../util/unlinkSync");
 
 var rm = {
   exec: function exec(args, options) {
@@ -15,7 +15,7 @@ var rm = {
 
     var files = args;
     files = files === undefined ? [] : files;
-    files = typeof files === 'string' ? [files] : files;
+    files = typeof files === "string" ? [files] : files;
 
     files = expand(files);
 
@@ -23,7 +23,7 @@ var rm = {
       if (!fs.existsSync(file)) {
         // Path does not exist, no force flag given
         if (!options.force) {
-          self.log('rm: cannot remove ' + file + ': No such file or directory');
+          self.log("rm: cannot remove " + file + ": No such file or directory");
           return 2;
         }
         /* istanbul ignore next */
@@ -41,7 +41,7 @@ var rm = {
           unlinkSync(file);
         } else {
           /* istanbul ignore next */
-          self.log('rm: cannot remove ' + file + ': permission denied');
+          self.log("rm: cannot remove " + file + ": permission denied");
           /* istanbul ignore next */
           return 2;
         }
@@ -50,7 +50,7 @@ var rm = {
 
       // Path is an existing directory, but no -r flag given
       if (stats.isDirectory() && !options.recursive) {
-        self.log('rm: cannot remove: path is a directory');
+        self.log("rm: cannot remove: path is a directory");
         return 2;
       }
 
@@ -59,7 +59,7 @@ var rm = {
         rmdirSyncRecursive.call(self, file, options.force, options.dir);
       }
     });
-  }
+  },
 };
 
 function rmdirSyncRecursive(dir, force, removeEmptyDir) {
@@ -69,7 +69,7 @@ function rmdirSyncRecursive(dir, force, removeEmptyDir) {
 
   // Loop through and delete everything in the sub-tree after checking it
   for (var i = 0; i < files.length; i++) {
-    var file = dir + '/' + files[i];
+    var file = dir + "/" + files[i];
     var currFile = fs.lstatSync(file);
 
     if (currFile.isDirectory()) {
@@ -82,7 +82,7 @@ function rmdirSyncRecursive(dir, force, removeEmptyDir) {
         try {
           unlinkSync(file);
         } catch (e) {
-          self.log('rm: cannot remove ' + file + ': code ' + e.code);
+          self.log("rm: cannot remove " + file + ": code " + e.code);
           return 2;
         }
       }
@@ -92,7 +92,7 @@ function rmdirSyncRecursive(dir, force, removeEmptyDir) {
         unlinkSync(file);
       } catch (e) {
         /* istanbul ignore next */
-        self.log('rm: cannot remove ' + file + ': code ' + e.code);
+        self.log("rm: cannot remove " + file + ": code " + e.code);
         /* istanbul ignore next */
         return 2;
       }
@@ -110,29 +110,35 @@ function rmdirSyncRecursive(dir, force, removeEmptyDir) {
         result = fs.rmdirSync(dir);
         /* istanbul ignore next */
         if (fs.existsSync(dir)) {
-          throw new Error('EAGAIN');
+          throw new Error("EAGAIN");
         }
         break;
       } catch (er) {
         // In addition to error codes, also check if the directory still exists and loop again if true
         /* istanbul ignore next */
-        if (process.platform === 'win32' && (er.code === 'ENOTEMPTY' || er.code === 'EBUSY' || er.code === 'EPERM' || er.code === 'EAGAIN')) {
+        if (
+          process.platform === "win32" &&
+          (er.code === "ENOTEMPTY" ||
+            er.code === "EBUSY" ||
+            er.code === "EPERM" ||
+            er.code === "EAGAIN")
+        ) {
           if (Date.now() - start > 1000) {
             throw er;
           }
           /* istanbul ignore next */
-        } else if (er.code === 'ENOENT') {
-            // Directory did not exist, deletion was successful
-            break;
-            /* istanbul ignore next */
-          } else {
-              throw er;
-            }
+        } else if (er.code === "ENOENT") {
+          // Directory did not exist, deletion was successful
+          break;
+          /* istanbul ignore next */
+        } else {
+          throw er;
+        }
       }
     }
   } catch (e) {
     /* istanbul ignore next */
-    self.log('rm: cannot remove directory ' + dir + ': code ' + e.code);
+    self.log("rm: cannot remove directory " + dir + ": code " + e.code);
     /* istanbul ignore next */
     return 2;
   }
@@ -144,7 +150,7 @@ function rmdirSyncRecursive(dir, force, removeEmptyDir) {
 function isWriteable(file) {
   var writePermission = true;
   try {
-    var __fd = fs.openSync(file, 'a');
+    var __fd = fs.openSync(file, "a");
     fs.closeSync(__fd);
   } catch (e) {
     /* istanbul ignore next */
@@ -159,13 +165,25 @@ module.exports = function (vorpal) {
     return rm;
   }
   vorpal.api.rm = rm;
-  vorpal.command('rm [files...]').option('-f, --force', 'ignore nonexistent files and arguments, never prompt').option('-r, --recursive', 'remove directories and their contents recursively').option('-R', 'remove directories and their contents recursively').autocomplete(fsAutocomplete()).action(function (args, callback) {
-    args.options = args.options || {};
-    return interfacer.call(this, {
-      command: rm,
-      args: args.files,
-      options: args.options,
-      callback: callback
+  vorpal
+    .command("rm [files...]")
+    .option(
+      "-f, --force",
+      "ignore nonexistent files and arguments, never prompt"
+    )
+    .option(
+      "-r, --recursive",
+      "remove directories and their contents recursively"
+    )
+    .option("-R", "remove directories and their contents recursively")
+    .autocomplete(fsAutocomplete())
+    .action(function (args, callback) {
+      args.options = args.options || {};
+      return interfacer.call(this, {
+        command: rm,
+        args: args.files,
+        options: args.options,
+        callback: callback,
+      });
     });
-  });
 };

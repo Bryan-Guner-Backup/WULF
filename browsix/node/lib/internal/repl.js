@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
-var Interface = require('./readline').Interface;
-var REPL = require('./repl');
-var path = require('./path');
-var fs = require('./fs');
-var os = require('./os');
-var debug = require('./util').debuglog('repl');
+var Interface = require("./readline").Interface;
+var REPL = require("./repl");
+var path = require("./path");
+var fs = require("./fs");
+var os = require("./os");
+var debug = require("./util").debuglog("repl");
 
 module.exports = Object.create(REPL);
 module.exports.createInternalRepl = createRepl;
@@ -21,14 +21,14 @@ function replStart() {
 }
 
 function createRepl(env, opts, cb) {
-  if (typeof opts === 'function') {
+  if (typeof opts === "function") {
     cb = opts;
     opts = null;
   }
   opts = opts || {
     ignoreUndefined: false,
     terminal: process.stdout.isTTY,
-    useGlobal: true
+    useGlobal: true,
   };
 
   if (parseInt(env.NODE_NO_READLINE)) {
@@ -37,14 +37,14 @@ function createRepl(env, opts, cb) {
   // the "dumb" special terminal, as defined by terminfo, doesn't support
   // ANSI colour control codes.
   // see http://invisible-island.net/ncurses/terminfo.ti.html#toc-_Specials
-  if (parseInt(env.NODE_DISABLE_COLORS) || env.TERM === 'dumb') {
+  if (parseInt(env.NODE_DISABLE_COLORS) || env.TERM === "dumb") {
     opts.useColors = false;
   }
 
   opts.replMode = {
-    'strict': REPL.REPL_MODE_STRICT,
-    'sloppy': REPL.REPL_MODE_SLOPPY,
-    'magic': REPL.REPL_MODE_MAGIC
+    strict: REPL.REPL_MODE_STRICT,
+    sloppy: REPL.REPL_MODE_SLOPPY,
+    magic: REPL.REPL_MODE_MAGIC,
   }[String(env.NODE_REPL_MODE).toLowerCase().trim()];
 
   if (opts.replMode === undefined) {
@@ -61,9 +61,13 @@ function createRepl(env, opts, cb) {
   }
 
   var repl = REPL.start(opts);
-  if (opts.terminal && env.NODE_REPL_HISTORY !== '') {
-    return setupHistory(repl, env.NODE_REPL_HISTORY,
-                        env.NODE_REPL_HISTORY_FILE, cb);
+  if (opts.terminal && env.NODE_REPL_HISTORY !== "") {
+    return setupHistory(
+      repl,
+      env.NODE_REPL_HISTORY,
+      env.NODE_REPL_HISTORY_FILE,
+      cb
+    );
   }
   repl._historyPrev = _replHistoryMessage;
   cb(null, repl);
@@ -72,10 +76,12 @@ function createRepl(env, opts, cb) {
 function setupHistory(repl, historyPath, oldHistoryPath, ready) {
   if (!historyPath) {
     try {
-      historyPath = path.join(os.homedir(), '.node_repl_history');
+      historyPath = path.join(os.homedir(), ".node_repl_history");
     } catch (err) {
-      repl._writeToOutput('\nError: Could not get the home directory.\n' +
-                          'REPL session history will not be persisted.\n');
+      repl._writeToOutput(
+        "\nError: Could not get the home directory.\n" +
+          "REPL session history will not be persisted.\n"
+      );
       repl._refreshLine();
 
       debug(err.stack);
@@ -88,7 +94,7 @@ function setupHistory(repl, historyPath, oldHistoryPath, ready) {
   var writing = false;
   var pending = false;
   repl.pause();
-  fs.open(historyPath, 'a+', oninit);
+  fs.open(historyPath, "a+", oninit);
 
   function oninit(err, hnd) {
     if (err) {
@@ -101,7 +107,7 @@ function setupHistory(repl, historyPath, oldHistoryPath, ready) {
     if (err) {
       return ready(err);
     }
-    fs.readFile(historyPath, 'utf8', onread);
+    fs.readFile(historyPath, "utf8", onread);
   }
 
   function onread(err, data) {
@@ -114,25 +120,27 @@ function setupHistory(repl, historyPath, oldHistoryPath, ready) {
     } else if (oldHistoryPath) {
       // Grab data from the older pre-v3.0 JSON NODE_REPL_HISTORY_FILE format.
       repl._writeToOutput(
-          '\nConverting old JSON repl history to line-separated history.\n' +
-          `The new repl history file can be found at ${historyPath}.\n`);
+        "\nConverting old JSON repl history to line-separated history.\n" +
+          `The new repl history file can be found at ${historyPath}.\n`
+      );
       repl._refreshLine();
 
       try {
-        repl.history = JSON.parse(fs.readFileSync(oldHistoryPath, 'utf8'));
+        repl.history = JSON.parse(fs.readFileSync(oldHistoryPath, "utf8"));
         if (!Array.isArray(repl.history)) {
-          throw new Error('Expected array, got ' + typeof repl.history);
+          throw new Error("Expected array, got " + typeof repl.history);
         }
         repl.history = repl.history.slice(-repl.historySize);
       } catch (err) {
-        if (err.code !== 'ENOENT') {
+        if (err.code !== "ENOENT") {
           return ready(
-            new Error(`Could not parse history data in ${oldHistoryPath}.`));
+            new Error(`Could not parse history data in ${oldHistoryPath}.`)
+          );
         }
       }
     }
 
-    fs.open(historyPath, 'w', onhandle);
+    fs.open(historyPath, "w", onhandle);
   }
 
   function onhandle(err, hnd) {
@@ -140,10 +148,10 @@ function setupHistory(repl, historyPath, oldHistoryPath, ready) {
       return ready(err);
     }
     repl._historyHandle = hnd;
-    repl.on('line', online);
+    repl.on("line", online);
 
     // reading the file data out erases it
-    repl.once('flushHistory', function() {
+    repl.once("flushHistory", function () {
       repl.resume();
       ready(null, repl);
     });
@@ -169,7 +177,7 @@ function setupHistory(repl, historyPath, oldHistoryPath, ready) {
     }
     writing = true;
     var historyData = repl.history.join(os.EOL);
-    fs.write(repl._historyHandle, historyData, 0, 'utf8', onwritten);
+    fs.write(repl._historyHandle, historyData, 0, "utf8", onwritten);
   }
 
   function onwritten(err, data) {
@@ -180,19 +188,18 @@ function setupHistory(repl, historyPath, oldHistoryPath, ready) {
     } else {
       repl._flushing = Boolean(timer);
       if (!repl._flushing) {
-        repl.emit('flushHistory');
+        repl.emit("flushHistory");
       }
     }
   }
 }
 
-
 function _replHistoryMessage() {
   if (this.history.length === 0) {
     this._writeToOutput(
-        '\nPersistent history support disabled. ' +
-        'Set the NODE_REPL_HISTORY environment\nvariable to ' +
-        'a valid, user-writable path to enable.\n'
+      "\nPersistent history support disabled. " +
+        "Set the NODE_REPL_HISTORY environment\nvariable to " +
+        "a valid, user-writable path to enable.\n"
     );
     this._refreshLine();
   }

@@ -1,5 +1,5 @@
 ---
-title: 'Example: Listen for file changes'
+title: "Example: Listen for file changes"
 section: webAPIs
 sectionTitle: Web APIs
 order: 9

@@ -14,24 +14,21 @@
  * limitations under the License.
  */
 
-import {Timer} from '../../../../src/timer';
-import {createIframePromise} from '../../../../testing/iframe';
-require('../../../../build/all/v0/amp-image-lightbox-0.1.max');
-import {ImageViewer}
-    from '../../../../build/all/v0/amp-image-lightbox-0.1.max';
-import {adopt} from '../../../../src/runtime';
-import {parseSrcset} from '../../../../src/srcset';
-import * as sinon from 'sinon';
+import { Timer } from "../../../../src/timer";
+import { createIframePromise } from "../../../../testing/iframe";
+require("../../../../build/all/v0/amp-image-lightbox-0.1.max");
+import { ImageViewer } from "../../../../build/all/v0/amp-image-lightbox-0.1.max";
+import { adopt } from "../../../../src/runtime";
+import { parseSrcset } from "../../../../src/srcset";
+import * as sinon from "sinon";
 
 adopt(window);
 
-
-describe('amp-image-lightbox component', () => {
-
+describe("amp-image-lightbox component", () => {
   function getImageLightbox() {
-    return createIframePromise().then(iframe => {
-      var el = iframe.doc.createElement('amp-image-lightbox');
-      el.setAttribute('layout', 'nodisplay');
+    return createIframePromise().then((iframe) => {
+      var el = iframe.doc.createElement("amp-image-lightbox");
+      el.setAttribute("layout", "nodisplay");
       iframe.doc.body.appendChild(el);
       return new Timer(window).promise(16).then(() => {
         el.implementation_.buildCallback();
@@ -40,49 +37,55 @@ describe('amp-image-lightbox component', () => {
     });
   }
 
-  it('should render correctly', () => {
-    return getImageLightbox().then(lightbox => {
-      let container = lightbox.querySelector('.-amp-image-lightbox-container');
+  it("should render correctly", () => {
+    return getImageLightbox().then((lightbox) => {
+      let container = lightbox.querySelector(".-amp-image-lightbox-container");
       expect(container).to.not.equal(null);
 
-      let caption = container.querySelector('.-amp-image-lightbox-caption');
+      let caption = container.querySelector(".-amp-image-lightbox-caption");
       expect(caption).to.not.equal(null);
-      expect(caption.classList.contains('amp-image-lightbox-caption')).to.
-          equal(true);
+      expect(caption.classList.contains("amp-image-lightbox-caption")).to.equal(
+        true
+      );
 
-      let viewer = container.querySelector('.-amp-image-lightbox-viewer');
+      let viewer = container.querySelector(".-amp-image-lightbox-viewer");
       expect(viewer).to.not.equal(null);
 
-      let image = viewer.querySelector('.-amp-image-lightbox-viewer-image');
+      let image = viewer.querySelector(".-amp-image-lightbox-viewer-image");
       expect(image).to.not.equal(null);
 
       // Very important. Image must have transform-origin=50% 50%.
       let win = image.ownerDocument.defaultView;
-      expect(win.getComputedStyle(image)['transform-origin']).to.equal(
-          '50% 50%');
+      expect(win.getComputedStyle(image)["transform-origin"]).to.equal(
+        "50% 50%"
+      );
     });
   });
 
-  it('should activate all steps', () => {
-    return getImageLightbox().then(lightbox => {
+  it("should activate all steps", () => {
+    return getImageLightbox().then((lightbox) => {
       let impl = lightbox.implementation_;
       let requestFullOverlay = sinon.spy();
       impl.requestFullOverlay = requestFullOverlay;
       let viewportOnChanged = sinon.spy();
-      impl.getViewport = () => {return {onChanged: viewportOnChanged};};
+      impl.getViewport = () => {
+        return { onChanged: viewportOnChanged };
+      };
       let historyPush = sinon.spy();
       impl.getHistory_ = () => {
-        return {push: () => {
-          historyPush();
-          return Promise.resolve(11);
-        }};
+        return {
+          push: () => {
+            historyPush();
+            return Promise.resolve(11);
+          },
+        };
       };
       let enter = sinon.spy();
       impl.enter_ = enter;
 
-      let ampImage = document.createElement('amp-img');
-      ampImage.setAttribute('src', 'data:');
-      impl.activate({source: ampImage});
+      let ampImage = document.createElement("amp-img");
+      ampImage.setAttribute("src", "data:");
+      impl.activate({ source: ampImage });
 
       expect(requestFullOverlay.callCount).to.equal(1);
       expect(viewportOnChanged.callCount).to.equal(1);
@@ -93,8 +96,8 @@ describe('amp-image-lightbox component', () => {
     });
   });
 
-  it('should deactivate all steps', () => {
-    return getImageLightbox().then(lightbox => {
+  it("should deactivate all steps", () => {
+    return getImageLightbox().then((lightbox) => {
       let impl = lightbox.implementation_;
       impl.active_ = true;
       impl.historyId_ = 11;
@@ -104,13 +107,13 @@ describe('amp-image-lightbox component', () => {
       impl.unlistenViewport_ = viewportOnChangedUnsubscribed;
       let historyPop = sinon.spy();
       impl.getHistory_ = () => {
-        return {pop: historyPop};
+        return { pop: historyPop };
       };
       let exit = sinon.spy();
       impl.exit_ = exit;
 
-      let ampImage = document.createElement('amp-img');
-      ampImage.setAttribute('src', 'data:');
+      let ampImage = document.createElement("amp-img");
+      ampImage.setAttribute("src", "data:");
       impl.close();
 
       expect(impl.active_).to.equal(false);
@@ -123,9 +126,7 @@ describe('amp-image-lightbox component', () => {
   });
 });
 
-
-describe('amp-image-lightbox image viewer', () => {
-
+describe("amp-image-lightbox image viewer", () => {
   let sandbox;
   let clock;
   let lightbox;
@@ -137,7 +138,7 @@ describe('amp-image-lightbox image viewer', () => {
     clock = sandbox.useFakeTimers();
 
     lightbox = {
-      getDpr: () => 1
+      getDpr: () => 1,
     };
     lightboxMock = sandbox.mock(lightbox);
 
@@ -156,98 +157,96 @@ describe('amp-image-lightbox image viewer', () => {
     sandbox = null;
   });
 
-
-  it('should have 0 initial dimensions', () => {
-    expect(imageViewer.getImage().src).to.equal('');
+  it("should have 0 initial dimensions", () => {
+    expect(imageViewer.getImage().src).to.equal("");
     expect(imageViewer.getViewerBox().width).to.equal(0);
     expect(imageViewer.getImageBox().width).to.equal(0);
     expect(imageViewer.sourceWidth_).to.equal(0);
     expect(imageViewer.sourceHeight_).to.equal(0);
   });
 
-
-  it('should init to the source element without image', () => {
+  it("should init to the source element without image", () => {
     let sourceElement = {
       offsetWidth: 101,
       offsetHeight: 201,
       getAttribute: (name) => {
-        if (name == 'src') {
-          return 'image1';
+        if (name == "src") {
+          return "image1";
         }
         return undefined;
-      }
+      },
     };
 
     imageViewer.init(sourceElement, null);
 
     expect(imageViewer.sourceWidth_).to.equal(101);
     expect(imageViewer.sourceHeight_).to.equal(201);
-    expect(imageViewer.srcset_.getLast().url).to.equal('image1');
-    expect(imageViewer.getImage().src).to.equal('');
+    expect(imageViewer.srcset_.getLast().url).to.equal("image1");
+    expect(imageViewer.getImage().src).to.equal("");
   });
 
-  it('should init to the source element with unloaded image', () => {
+  it("should init to the source element with unloaded image", () => {
     let sourceElement = {
       offsetWidth: 101,
       offsetHeight: 201,
       getAttribute: (name) => {
-        if (name == 'src') {
-          return 'image1';
+        if (name == "src") {
+          return "image1";
         }
         return undefined;
-      }
+      },
     };
     let sourceImage = {
       complete: false,
-      src: 'image1-smaller'
+      src: "image1-smaller",
     };
 
     imageViewer.init(sourceElement, sourceImage);
 
-    expect(imageViewer.getImage().src).to.equal('');
+    expect(imageViewer.getImage().src).to.equal("");
   });
 
-  it('should init to the source element with loaded image', () => {
+  it("should init to the source element with loaded image", () => {
     let sourceElement = {
       offsetWidth: 101,
       offsetHeight: 201,
       getAttribute: (name) => {
-        if (name == 'src') {
-          return 'image1';
+        if (name == "src") {
+          return "image1";
         }
         return undefined;
-      }
+      },
     };
     let sourceImage = {
       complete: true,
-      src: 'image1-smaller'
+      src: "image1-smaller",
     };
 
     imageViewer.init(sourceElement, sourceImage);
 
-    expect(imageViewer.getImage().getAttribute('src')).to.
-        equal('image1-smaller');
+    expect(imageViewer.getImage().getAttribute("src")).to.equal(
+      "image1-smaller"
+    );
   });
 
-  it('should reset', () => {
+  it("should reset", () => {
     imageViewer.sourceWidth_ = 101;
     imageViewer.sourceHeight_ = 201;
-    imageViewer.getImage().setAttribute('src', 'image1');
+    imageViewer.getImage().setAttribute("src", "image1");
 
     imageViewer.reset();
 
     expect(imageViewer.sourceWidth_).to.equal(0);
     expect(imageViewer.sourceHeight_).to.equal(0);
-    expect(imageViewer.getImage().getAttribute('src')).to.equal('');
+    expect(imageViewer.getImage().getAttribute("src")).to.equal("");
     expect(imageViewer.srcset_).to.equal(null);
     expect(imageViewer.imageBox_.width).to.equal(0);
   });
 
-
-  it('should measure horiz aspect ratio and assign image.src', () => {
-    imageViewer.getElement().style.width = '100px';
-    imageViewer.getElement().style.height = '200px';
-    imageViewer.srcset_ = parseSrcset('image1');
+  it("should measure horiz aspect ratio and assign image.src", () => {
+    imageViewer.getElement().style.width = "100px";
+    imageViewer.getElement().style.height = "200px";
+    imageViewer.srcset_ = parseSrcset("image1");
     imageViewer.sourceWidth_ = 80;
     imageViewer.sourceHeight_ = 60;
 
@@ -261,22 +260,22 @@ describe('amp-image-lightbox image viewer', () => {
     expect(imageViewer.imageBox_.left).to.equal(0);
     expect(imageViewer.imageBox_.top).to.be.closeTo(62.5, 1);
 
-    expect(imageViewer.getImage().style.left).to.equal('0px');
-    expect(imageViewer.getImage().style.top).to.equal('63px');
-    expect(imageViewer.getImage().style.width).to.equal('100px');
-    expect(imageViewer.getImage().style.height).to.equal('75px');
+    expect(imageViewer.getImage().style.left).to.equal("0px");
+    expect(imageViewer.getImage().style.top).to.equal("63px");
+    expect(imageViewer.getImage().style.width).to.equal("100px");
+    expect(imageViewer.getImage().style.height).to.equal("75px");
 
     clock.tick(10);
     let checkSrc = () => {
-      expect(imageViewer.getImage().getAttribute('src')).to.equal('image1');
+      expect(imageViewer.getImage().getAttribute("src")).to.equal("image1");
     };
     return promise.then(checkSrc, checkSrc);
   });
 
-  it('should measure vert aspect ratio but small height', () => {
-    imageViewer.getElement().style.width = '100px';
-    imageViewer.getElement().style.height = '200px';
-    imageViewer.srcset_ = parseSrcset('image1');
+  it("should measure vert aspect ratio but small height", () => {
+    imageViewer.getElement().style.width = "100px";
+    imageViewer.getElement().style.height = "200px";
+    imageViewer.srcset_ = parseSrcset("image1");
     imageViewer.sourceWidth_ = 80;
     imageViewer.sourceHeight_ = 120;
 
@@ -287,10 +286,10 @@ describe('amp-image-lightbox image viewer', () => {
     expect(imageViewer.imageBox_.top).to.be.closeTo(25, 1);
   });
 
-  it('should measure vert aspect ratio but high height', () => {
-    imageViewer.getElement().style.width = '100px';
-    imageViewer.getElement().style.height = '200px';
-    imageViewer.srcset_ = parseSrcset('image1');
+  it("should measure vert aspect ratio but high height", () => {
+    imageViewer.getElement().style.width = "100px";
+    imageViewer.getElement().style.height = "200px";
+    imageViewer.srcset_ = parseSrcset("image1");
     imageViewer.sourceWidth_ = 40;
     imageViewer.sourceHeight_ = 100;
 
@@ -302,9 +301,7 @@ describe('amp-image-lightbox image viewer', () => {
   });
 });
 
-
-describe('amp-image-lightbox image viewer gestures', () => {
-
+describe("amp-image-lightbox image viewer gestures", () => {
   let sandbox;
   let clock;
   let lightbox;
@@ -318,16 +315,16 @@ describe('amp-image-lightbox image viewer gestures', () => {
     lightbox = {
       getDpr: () => 1,
       close: () => {},
-      toggleViewMode: () => {}
+      toggleViewMode: () => {},
     };
     lightboxMock = sandbox.mock(lightbox);
 
     imageViewer = new ImageViewer(lightbox);
     document.body.appendChild(imageViewer.getElement());
 
-    imageViewer.getElement().style.width = '100px';
-    imageViewer.getElement().style.height = '200px';
-    imageViewer.srcset_ = parseSrcset('image1');
+    imageViewer.getElement().style.width = "100px";
+    imageViewer.getElement().style.height = "200px";
+    imageViewer.srcset_ = parseSrcset("image1");
     imageViewer.sourceWidth_ = 100;
     imageViewer.sourceHeight_ = 80;
     imageViewer.measure();
@@ -344,15 +341,14 @@ describe('amp-image-lightbox image viewer gestures', () => {
     sandbox = null;
   });
 
-
-  it('should have initial bounds', () => {
+  it("should have initial bounds", () => {
     expect(imageViewer.minX_).to.equal(0);
     expect(imageViewer.maxX_).to.equal(0);
     expect(imageViewer.minY_).to.equal(0);
     expect(imageViewer.maxY_).to.equal(0);
   });
 
-  it('should update bounds but fits Y-axis', () => {
+  it("should update bounds but fits Y-axis", () => {
     imageViewer.updatePanZoomBounds_(2);
     expect(imageViewer.minX_).to.equal(-50);
     expect(imageViewer.maxX_).to.equal(50);
@@ -360,7 +356,7 @@ describe('amp-image-lightbox image viewer gestures', () => {
     expect(imageViewer.maxY_).to.equal(0);
   });
 
-  it('should update bounds and covers both axis', () => {
+  it("should update bounds and covers both axis", () => {
     imageViewer.updatePanZoomBounds_(3);
     expect(imageViewer.minX_).to.equal(-100);
     expect(imageViewer.maxX_).to.equal(100);
@@ -368,8 +364,7 @@ describe('amp-image-lightbox image viewer gestures', () => {
     expect(imageViewer.maxY_).to.equal(20);
   });
 
-
-  it('should pan on swipe', () => {
+  it("should pan on swipe", () => {
     imageViewer.updatePanZoomBounds_(2);
     imageViewer.onMove_(-25, -25, false);
 
@@ -382,7 +377,7 @@ describe('amp-image-lightbox image viewer gestures', () => {
     expect(imageViewer.startY_).to.equal(0);
   });
 
-  it('should correct pan on swipe within bounds', () => {
+  it("should correct pan on swipe within bounds", () => {
     imageViewer.updatePanZoomBounds_(2);
     imageViewer.onMove_(-100, -100, false);
 
@@ -391,14 +386,13 @@ describe('amp-image-lightbox image viewer gestures', () => {
     expect(imageViewer.posY_).to.equal(-50);
   });
 
-  it('should cancel lightbox when pulled down at scale = 1', () => {
-    lightboxMock.expects('close').once();
+  it("should cancel lightbox when pulled down at scale = 1", () => {
+    lightboxMock.expects("close").once();
     imageViewer.onMove_(0, -100, false);
     imageViewer.onMoveRelease_(0, 0.5);
   });
 
-
-  it('should zoom step', () => {
+  it("should zoom step", () => {
     imageViewer.onZoomInc_(10, 10, -10, -10);
 
     expect(imageViewer.posX_).to.be.closeTo(6.5, 1e-1);
@@ -411,7 +405,7 @@ describe('amp-image-lightbox image viewer gestures', () => {
     expect(imageViewer.startScale_).to.equal(1);
   });
 
-  it('should zoom release', () => {
+  it("should zoom release", () => {
     let updateSrc = sinon.spy();
     imageViewer.updateSrc_ = updateSrc;
     imageViewer.onZoomInc_(10, 10, -10, -10);

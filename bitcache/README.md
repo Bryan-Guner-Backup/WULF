@@ -24,7 +24,6 @@ Because the portable TXT tape encapsulates an entire API stack in a single porta
 
 You can archive or pass it around easily, such as through USB drives, email attachments, BitTorrent, etc. After all, it's just a single file.
 
-
 ---
 
 # Demo
@@ -45,11 +44,9 @@ Bitpic.txt is a cache for [Bitpic](https://bitpic.network) protocol. The actual 
 
 <a href='https://txt.bitpic.network' class='btn'>Check out bitpic.txt</a>
 
-
 ---
 
 # Quickstart
-
 
 ## 1. Install Docker
 
@@ -214,7 +211,7 @@ In the examples above, the queries included an attribute named "limit", which is
 1. In the demo we used it only for showing what's possible without crawling everything (only crawl 100).
 2. In most cases you probably want to filter ALL transactions that match your condition, not just 100.
 
-So instead of 
+So instead of
 
 ```javascript
 const bitcache = require('bitcache')
@@ -318,52 +315,55 @@ bitcache.init({
   bus: {
     from: 638000,
     url: "https://txo.bitbus.network",
-    token: 'eyJhbciOi1UINksiLCJ0eXAiOiJKV1QfQ.ey4zWIiOiIxRzZhYldrNE5iOExzURTWmQdGN5dUt5QpaFzZdzIiwiaXNzdWVyIjoiZ2VuZXJpYy1iaXRhdXRoIn0.SHpINkRSbEJ3UE5rMJektGclFSWlBRUlWY1RMZFgwL1FVVV1dNalhJMjV1Nbjd3N2TE1VXI5WEVZUU5VRFhidEg0OHhrWTlQVTJdT22Tk1uMWpjPQ',
+    token:
+      "eyJhbciOi1UINksiLCJ0eXAiOiJKV1QfQ.ey4zWIiOiIxRzZhYldrNE5iOExzURTWmQdGN5dUt5QpaFzZdzIiwiaXNzdWVyIjoiZ2VuZXJpYy1iaXRhdXRoIn0.SHpINkRSbEJ3UE5rMJektGclFSWlBRUlWY1RMZFgwL1FVVV1dNalhJMjV1Nbjd3N2TE1VXI5WEVZUU5VRFhidEg0OHhrWTlQVTJdT22Tk1uMWpjPQ",
     query: {
-      "q": {
-        "find": {
+      q: {
+        find: {
           "out.s2": "19HxigV4QyBv3tHpQVcUEQyq1pzZVdoAut",
-          "out.f3": { $exists: true }
+          "out.f3": { $exists: true },
         },
-        "project": { "out.f3": 1, "tx.h": 1 }
-      }
+        project: { "out.f3": 1, "tx.h": 1 },
+      },
     },
     transform: (tx) => {
       let filtered = tx.out.filter((o) => {
-        return o.f3
-      })
-      let f = filtered[0]
+        return o.f3;
+      });
+      let f = filtered[0];
       return {
-        meta: {}, data: { uri: f.f3 }
-      }
-    }
+        meta: {},
+        data: { uri: f.f3 },
+      };
+    },
   },
   socket: {
     url: "https://txo.bitsocket.network",
     query: {
-      "q": {
-        "find": {
+      q: {
+        find: {
           "out.s2": "19HxigV4QyBv3tHpQVcUEQyq1pzZVdoAut",
-          "out.f3": { $exists: true }
+          "out.f3": { $exists: true },
         },
-        "project": { "out.f3": 1, "tx.h": 1 }
-      }
+        project: { "out.f3": 1, "tx.h": 1 },
+      },
     },
     transform: (tx) => {
       let filtered = tx.out.filter((o) => {
-        return o.f3
-      })
-      let f = filtered[0]
+        return o.f3;
+      });
+      let f = filtered[0];
       return {
-        meta: {}, data: { uri: f.f3 }
-      }
-    }
+        meta: {},
+        data: { uri: f.f3 },
+      };
+    },
   },
   txt: {
     channel: "b",
     url: "http://localhost:3013",
   },
-})
+});
 ```
 
 ---

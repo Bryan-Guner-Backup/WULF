@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 /**
  * Intercepts stdout, passes thru callback
@@ -21,21 +21,22 @@ module.exports = function (callback) {
       args[0] = interceptor(string);
       write.apply(process.stdout, args);
     };
-  }(process.stdout.write));
+  })(process.stdout.write);
 
   console.error = (function () {
     return function () {
       const args = _.toArray(arguments);
-      args.unshift('\x1b[31m[ERROR]\x1b[0m');
+      args.unshift("\x1b[31m[ERROR]\x1b[0m");
       console.log.apply(console.log, args);
     };
-  }(console.error));
+  })(console.error);
 
   function interceptor(string) {
     // only intercept the string
     const result = callback(string);
-    if (typeof result === 'string') {
-      string = result.replace(/\n$/, '') + (result && (/\n$/).test(string) ? '\n' : '');
+    if (typeof result === "string") {
+      string =
+        result.replace(/\n$/, "") + (result && /\n$/.test(string) ? "\n" : "");
     }
     return string;
   }

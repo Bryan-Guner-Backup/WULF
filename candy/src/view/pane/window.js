@@ -9,7 +9,7 @@
  *   (c) 2011 Amiado Group AG. All rights reserved.
  *   (c) 2012-2014 Patrick Stadler & Michael Weibel. All rights reserved.
  */
-'use strict';
+"use strict";
 
 /* global Candy, document, jQuery */
 
@@ -20,8 +20,7 @@
  *   (Candy.View.Pane) self - itself
  *   (jQuery) $ - jQuery
  */
-Candy.View.Pane = (function(self) {
-
+Candy.View.Pane = (function (self) {
   /** Class: Candy.View.Pane.Window
    * Window related view updates
    */
@@ -50,14 +49,14 @@ Candy.View.Pane = (function(self) {
      * Returns:
      *   (Boolean)
      */
-    hasFocus: function() {
+    hasFocus: function () {
       return self.Window._hasFocus;
     },
 
     /** Function: increaseUnreadMessages
      * Increases unread message count in window title by one.
      */
-    increaseUnreadMessages: function() {
+    increaseUnreadMessages: function () {
       self.Window.renderUnreadMessages(++self.Window._unreadMessagesCount);
     },
 
@@ -67,9 +66,9 @@ Candy.View.Pane = (function(self) {
      * Parameters:
      *   (Integer) num - Unread message count will be reduced by this value
      */
-    reduceUnreadMessages: function(num) {
+    reduceUnreadMessages: function (num) {
       self.Window._unreadMessagesCount -= num;
-      if(self.Window._unreadMessagesCount <= 0) {
+      if (self.Window._unreadMessagesCount <= 0) {
         self.Window.clearUnreadMessages();
       } else {
         self.Window.renderUnreadMessages(self.Window._unreadMessagesCount);
@@ -79,7 +78,7 @@ Candy.View.Pane = (function(self) {
     /** Function: clearUnreadMessages
      * Clear unread message count in window title.
      */
-    clearUnreadMessages: function() {
+    clearUnreadMessages: function () {
       self.Window._unreadMessagesCount = 0;
       document.title = self.Window._plainTitle;
     },
@@ -90,14 +89,16 @@ Candy.View.Pane = (function(self) {
      * Parameters:
      *   (Integer) count - Number of unread messages to show in window title
      */
-    renderUnreadMessages: function(count) {
-      document.title = Candy.View.Template.Window.unreadmessages.replace('{{count}}', count).replace('{{title}}', self.Window._plainTitle);
+    renderUnreadMessages: function (count) {
+      document.title = Candy.View.Template.Window.unreadmessages
+        .replace("{{count}}", count)
+        .replace("{{title}}", self.Window._plainTitle);
     },
 
     /** Function: onFocus
      * Window focus event handler.
      */
-    onFocus: function() {
+    onFocus: function () {
       self.Window._hasFocus = true;
       if (Candy.View.getCurrent().roomJid) {
         self.Room.setFocusToForm(Candy.View.getCurrent().roomJid);
@@ -108,10 +109,10 @@ Candy.View.Pane = (function(self) {
     /** Function: onBlur
      * Window blur event handler.
      */
-    onBlur: function() {
+    onBlur: function () {
       self.Window._hasFocus = false;
-    }
+    },
   };
 
   return self;
-}(Candy.View.Pane || {}, jQuery));
+})(Candy.View.Pane || {}, jQuery);

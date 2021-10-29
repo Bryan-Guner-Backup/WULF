@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-var _ = require('lodash');
+var _ = require("lodash");
 
-var interfacer = require('./../util/interfacer');
+var interfacer = require("./../util/interfacer");
 
 var alias = {
   exec: function exec(args, options) {
@@ -11,7 +11,7 @@ var alias = {
     var vorpal = options.vorpal;
 
     if (!vorpal) {
-      throw new Error('Alias is not programatically supported.');
+      throw new Error("Alias is not programatically supported.");
     }
 
     vorpal._aliases = vorpal._aliases || [];
@@ -27,58 +27,58 @@ var alias = {
     // Parse incoming args. Accept either:
     // alias foo=bar, or
     // alias foo 'bar and so on'.
-    var key = args.join(' ');
+    var key = args.join(" ");
     var value = undefined;
-    if (String(key).indexOf('=') > -1) {
-      var parts = String(key).trim().split('=');
+    if (String(key).indexOf("=") > -1) {
+      var parts = String(key).trim().split("=");
       key = parts[0];
       value = parts[1] || value;
     } else {
-      var parts = String(key).trim().split(' ');
+      var parts = String(key).trim().split(" ");
       key = parts.shift();
-      value = parts.join(' ');
+      value = parts.join(" ");
     }
 
     // Remove wrapped quotes from value.
     if (value !== undefined) {
-      value = String(value).replace(/^[\"|\']|[\"|\']$/g, '');
+      value = String(value).replace(/^[\"|\']|[\"|\']$/g, "");
     }
 
     // Pull list of aliases
     var all = undefined;
     try {
-      all = JSON.parse(vorpal.localStorage.getItem('aliases') || []);
+      all = JSON.parse(vorpal.localStorage.getItem("aliases") || []);
     } catch (e) {
       all = [];
-      vorpal.localStorage.removeItem('aliases');
+      vorpal.localStorage.removeItem("aliases");
     }
 
     if (options.p) {
       for (var i = 0; i < all.length; ++i) {
-        var item = vorpal.localStorage.getItem('alias|' + all[i]);
+        var item = vorpal.localStorage.getItem("alias|" + all[i]);
         if (item !== undefined && item !== null) {
-          this.log('alias ' + all[i] + '=\'' + item + '\'');
+          this.log("alias " + all[i] + "='" + item + "'");
         }
       }
     } else {
       if (value) {
-        vorpal.localStorage.setItem('alias|' + key, value);
+        vorpal.localStorage.setItem("alias|" + key, value);
         _.remove(all, function (val) {
           return val === key;
         });
         all.push(key);
       } else {
-        var item = vorpal.localStorage.getItem('alias|' + key);
+        var item = vorpal.localStorage.getItem("alias|" + key);
         if (item !== undefined && item !== null) {
-          this.log('alias ' + key + '=\'' + item + '\'');
+          this.log("alias " + key + "='" + item + "'");
         } else {
-          this.log('-cash: alias: ' + key + ': not found');
+          this.log("-cash: alias: " + key + ": not found");
         }
       }
 
       var aliases = {};
       for (var i = 0; i < all.length; ++i) {
-        var item = vorpal.localStorage.getItem('alias|' + all[i]);
+        var item = vorpal.localStorage.getItem("alias|" + all[i]);
         if (item !== undefined && item !== null) {
           aliases[all[i]] = item;
         }
@@ -86,9 +86,9 @@ var alias = {
       vorpal._aliases = aliases;
     }
 
-    vorpal.localStorage.setItem('aliases', JSON.stringify(all));
+    vorpal.localStorage.setItem("aliases", JSON.stringify(all));
     return 0;
-  }
+  },
 };
 
 module.exports = function (vorpal) {
@@ -96,14 +96,17 @@ module.exports = function (vorpal) {
     return alias;
   }
   vorpal.api.alias = alias;
-  vorpal.command('alias [name...]').option('-p', 'print all defined aliases in a reusable format').action(function (args, callback) {
-    args.options = args.options || {};
-    args.options.vorpal = vorpal;
-    return interfacer.call(this, {
-      command: alias,
-      args: args.name,
-      options: args.options,
-      callback: callback
+  vorpal
+    .command("alias [name...]")
+    .option("-p", "print all defined aliases in a reusable format")
+    .action(function (args, callback) {
+      args.options = args.options || {};
+      args.options.vorpal = vorpal;
+      return interfacer.call(this, {
+        command: alias,
+        args: args.name,
+        options: args.options,
+        callback: callback,
+      });
     });
-  });
 };

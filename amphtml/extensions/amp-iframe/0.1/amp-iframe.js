@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import {getLengthNumeral, isLayoutSizeDefined} from '../../../src/layout';
-import {loadPromise} from '../../../src/event-helper';
-import {parseUrl} from '../../../src/url';
-
+import { getLengthNumeral, isLayoutSizeDefined } from "../../../src/layout";
+import { loadPromise } from "../../../src/event-helper";
+import { parseUrl } from "../../../src/url";
 
 /** @type {number}  */
 var count = 0;
@@ -34,38 +33,45 @@ class AmpIframe extends AMP.BaseElement {
   assertSource(src, containerSrc, sandbox) {
     var url = parseUrl(src);
     assert(
-        url.protocol == 'https:' ||
-            url.origin.startsWith('http://iframe.localhost:'),
-        'Invalid <amp-iframe> src. Must start with https://. Found %s',
-        this.element);
+      url.protocol == "https:" ||
+        url.origin.startsWith("http://iframe.localhost:"),
+      "Invalid <amp-iframe> src. Must start with https://. Found %s",
+      this.element
+    );
     var containerUrl = parseUrl(containerSrc);
     assert(
-        !((' ' + sandbox + ' ').match(/\s+allow-same-origin\s+/)) ||
+      !(" " + sandbox + " ").match(/\s+allow-same-origin\s+/) ||
         url.origin != containerUrl.origin,
-        'Origin of <amp-iframe> must not be equal to container %s.',
-        this.element);
+      "Origin of <amp-iframe> must not be equal to container %s.",
+      this.element
+    );
     return src;
   }
 
   assertPosition() {
     var pos = this.element.getLayoutBox();
-    var minTop = Math.min(600, this.getViewport().getSize().height * .75);
-    assert(pos.top >= minTop,
-        '<amp-iframe> elements must be positioned outside the first 75% ' +
-        'of the viewport or 600px from the top (whichever is smaller): %s ' +
-        'Please contact the AMP team if that is a problem in your project.' +
-        ' We\'d love to learn about your use case. Current position %s. Min:' +
-        ' %s',
-        this.element,
-        pos.top,
-        minTop);
+    var minTop = Math.min(600, this.getViewport().getSize().height * 0.75);
+    assert(
+      pos.top >= minTop,
+      "<amp-iframe> elements must be positioned outside the first 75% " +
+        "of the viewport or 600px from the top (whichever is smaller): %s " +
+        "Please contact the AMP team if that is a problem in your project." +
+        " We'd love to learn about your use case. Current position %s. Min:" +
+        " %s",
+      this.element,
+      pos.top,
+      minTop
+    );
   }
 
   /** @override */
   firstAttachedCallback() {
-    var iframeSrc = this.element.getAttribute('src');
-    this.iframeSrc = this.assertSource(iframeSrc, window.location.href,
-        this.element.getAttribute('sandbox'));
+    var iframeSrc = this.element.getAttribute("src");
+    this.iframeSrc = this.assertSource(
+      iframeSrc,
+      window.location.href,
+      this.element.getAttribute("sandbox")
+    );
     this.preconnect.url(this.iframeSrc);
   }
 
@@ -76,27 +82,28 @@ class AmpIframe extends AMP.BaseElement {
       // This failed already, lets not signal another error.
       return Promise.resolve();
     }
-    var width = this.element.getAttribute('width');
-    var height = this.element.getAttribute('height');
-    var iframe = document.createElement('iframe');
+    var width = this.element.getAttribute("width");
+    var height = this.element.getAttribute("height");
+    var iframe = document.createElement("iframe");
     this.applyFillContent(iframe);
     iframe.width = getLengthNumeral(width);
     iframe.height = getLengthNumeral(height);
-    iframe.name = 'amp_iframe' + count++;
-    iframe.onload = function() {
+    iframe.name = "amp_iframe" + count++;
+    iframe.onload = function () {
       // Chrome does not reflect the iframe readystate.
-      this.readyState = 'complete';
+      this.readyState = "complete";
     };
     /** @const {!Element} */
     this.propagateAttributes(
-        ['frameborder', 'allowfullscreen', 'allowtransparency', 'scrolling'],
-        iframe);
+      ["frameborder", "allowfullscreen", "allowtransparency", "scrolling"],
+      iframe
+    );
     setSandbox(this.element, iframe);
     iframe.src = this.iframeSrc;
     this.element.appendChild(makeIOsScrollable(this.element, iframe));
     return loadPromise(iframe);
   }
-};
+}
 
 /**
  * We always set a sandbox. Default is that none of the things that need
@@ -105,10 +112,9 @@ class AmpIframe extends AMP.BaseElement {
  * @param {!Element} iframe
  */
 function setSandbox(element, iframe) {
-  var allows = element.getAttribute('sandbox') || '';
-  iframe.setAttribute('sandbox', allows);
+  var allows = element.getAttribute("sandbox") || "";
+  iframe.setAttribute("sandbox", allows);
 }
-
 
 /**
  * If scrolling is allowed for the iframe, wraps it into a container
@@ -118,12 +124,12 @@ function setSandbox(element, iframe) {
  * @return {!Element} The wrapper or the iframe.
  */
 function makeIOsScrollable(element, iframe) {
-  if (element.getAttribute('scrolling') != 'no') {
-    var wrapper = document.createElement('i-amp-scroll-container');
+  if (element.getAttribute("scrolling") != "no") {
+    var wrapper = document.createElement("i-amp-scroll-container");
     wrapper.appendChild(iframe);
     return wrapper;
   }
   return iframe;
 }
 
-AMP.registerElement('amp-iframe', AmpIframe);
+AMP.registerElement("amp-iframe", AmpIframe);

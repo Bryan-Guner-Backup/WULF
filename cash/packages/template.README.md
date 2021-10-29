@@ -2,7 +2,6 @@
 
 ---
 
-
 This is a cross-platform, 100% ES6 implementation of the Unix `{command-name}` command.
 
 ```bash
@@ -21,11 +20,9 @@ For help on the command, type:
 
 This module is part of [Cash](https://github.com/dthree/cash), a project providing cross-platform implementations of all major Unix-based commands in pure Javascript.
 
-
 ## Related
 
 {related}
-
 
 ## License
 

@@ -1,24 +1,24 @@
-'use strict'
+"use strict";
 
-var inherits = require('inherits')
+var inherits = require("inherits");
 
-var $ = require('../../util/preconditions')
+var $ = require("../../util/preconditions");
 
-var Input = require('./input')
-var Output = require('../output')
-var Sighash = require('../sighash')
-var Script = require('../../script')
-var Signature = require('../../crypto/signature')
-var TransactionSignature = require('../signature')
+var Input = require("./input");
+var Output = require("../output");
+var Sighash = require("../sighash");
+var Script = require("../../script");
+var Signature = require("../../crypto/signature");
+var TransactionSignature = require("../signature");
 
 /**
  * Represents a special kind of input of PayToPublicKey kind.
  * @constructor
  */
-function PublicKeyInput () {
-  Input.apply(this, arguments)
+function PublicKeyInput() {
+  Input.apply(this, arguments);
 }
-inherits(PublicKeyInput, Input)
+inherits(PublicKeyInput, Input);
 
 /**
  * @param {Transaction} transaction - the transaction to be signed
@@ -27,22 +27,38 @@ inherits(PublicKeyInput, Input)
  * @param {number=} sigtype - the type of signature, defaults to Signature.SIGHASH_ALL
  * @return {Array} of objects that can be
  */
-PublicKeyInput.prototype.getSignatures = function (transaction, privateKey, index, sigtype) {
-  $.checkState(this.output instanceof Output)
-  sigtype = sigtype || (Signature.SIGHASH_ALL | Signature.SIGHASH_FORKID)
-  var publicKey = privateKey.toPublicKey()
-  if (publicKey.toString() === this.output.script.getPublicKey().toString('hex')) {
-    return [new TransactionSignature({
-      publicKey: publicKey,
-      prevTxId: this.prevTxId,
-      outputIndex: this.outputIndex,
-      inputIndex: index,
-      signature: Sighash.sign(transaction, privateKey, sigtype, index, this.output.script, this.output.satoshisBN),
-      sigtype: sigtype
-    })]
+PublicKeyInput.prototype.getSignatures = function (
+  transaction,
+  privateKey,
+  index,
+  sigtype
+) {
+  $.checkState(this.output instanceof Output);
+  sigtype = sigtype || Signature.SIGHASH_ALL | Signature.SIGHASH_FORKID;
+  var publicKey = privateKey.toPublicKey();
+  if (
+    publicKey.toString() === this.output.script.getPublicKey().toString("hex")
+  ) {
+    return [
+      new TransactionSignature({
+        publicKey: publicKey,
+        prevTxId: this.prevTxId,
+        outputIndex: this.outputIndex,
+        inputIndex: index,
+        signature: Sighash.sign(
+          transaction,
+          privateKey,
+          sigtype,
+          index,
+          this.output.script,
+          this.output.satoshisBN
+        ),
+        sigtype: sigtype,
+      }),
+    ];
   }
-  return []
-}
+  return [];
+};
 
 /**
  * Add the provided signature
@@ -54,30 +70,32 @@ PublicKeyInput.prototype.getSignatures = function (transaction, privateKey, inde
  * @return {PublicKeyInput} this, for chaining
  */
 PublicKeyInput.prototype.addSignature = function (transaction, signature) {
-  $.checkState(this.isValidSignature(transaction, signature), 'Signature is invalid')
-  this.setScript(Script.buildPublicKeyIn(
-    signature.signature.toDER(),
-    signature.sigtype
-  ))
-  return this
-}
+  $.checkState(
+    this.isValidSignature(transaction, signature),
+    "Signature is invalid"
+  );
+  this.setScript(
+    Script.buildPublicKeyIn(signature.signature.toDER(), signature.sigtype)
+  );
+  return this;
+};
 
 /**
  * Clear the input's signature
  * @return {PublicKeyHashInput} this, for chaining
  */
 PublicKeyInput.prototype.clearSignatures = function () {
-  this.setScript(Script.empty())
-  return this
-}
+  this.setScript(Script.empty());
+  return this;
+};
 
 /**
  * Query whether the input is signed
  * @return {boolean}
  */
 PublicKeyInput.prototype.isFullySigned = function () {
-  return this.script.isPublicKeyIn()
-}
+  return this.script.isPublicKeyIn();
+};
 
 // 32   txid
 // 4    output index
@@ -87,10 +105,10 @@ PublicKeyInput.prototype.isFullySigned = function () {
 // <=72 signature (DER + SIGHASH type)
 // ---
 // 4    sequence number
-PublicKeyInput.SCRIPT_MAX_SIZE = 74
+PublicKeyInput.SCRIPT_MAX_SIZE = 74;
 
 PublicKeyInput.prototype._estimateSize = function () {
-  return Input.BASE_SIZE + PublicKeyInput.SCRIPT_MAX_SIZE
-}
+  return Input.BASE_SIZE + PublicKeyInput.SCRIPT_MAX_SIZE;
+};
 
-module.exports = PublicKeyInput
+module.exports = PublicKeyInput;

@@ -1,14 +1,13 @@
-'use strict';
+"use strict";
 
-const _ = require('lodash');
-const fs = require('fs-extra');
-const fsAutocomplete = require('vorpal-autocomplete-fs');
+const _ = require("lodash");
+const fs = require("fs-extra");
+const fsAutocomplete = require("vorpal-autocomplete-fs");
 
-const interfacer = require('./../util/interfacer');
-require('./../lib/sugar');
+const interfacer = require("./../util/interfacer");
+require("./../lib/sugar");
 
 const touch = {
-
   /**
    * Main command execution.
    *
@@ -19,29 +18,32 @@ const touch = {
 
   exec(files, options) {
     const self = this;
-    files = files || ['.'];
-    files = (!_.isArray(files)) ? [files] : files;
+    files = files || ["."];
+    files = !_.isArray(files) ? [files] : files;
     options = options || {};
 
     // If any version of --no-create is passed, change it to false.
-    options.create = (options.create === true) ? false : options.create;
+    options.create = options.create === true ? false : options.create;
 
     // If --time is passed, ensure a valid param is called in
     // and map it to -a or -m, as this is the equivalent of these.
     // Throw an error if nothing valid passed.
     if (options.time) {
-      const a = ['access', 'atime', 'use'];
-      const m = ['modify', 'mtime'];
-      const opt = (a.indexOf(options.time) > -1) ? 'a' :
-        (m.indexOf(options.time) > -1) ? 'm' :
-        undefined;
+      const a = ["access", "atime", "use"];
+      const m = ["modify", "mtime"];
+      const opt =
+        a.indexOf(options.time) > -1
+          ? "a"
+          : m.indexOf(options.time) > -1
+          ? "m"
+          : undefined;
       if (!opt) {
         const error =
           `touch: invalid argument "${options.time}" for "--time"\n` +
-          'Valid arguments are:\n' +
+          "Valid arguments are:\n" +
           '  - "atime", "access", "use"\n' +
           '  - "mtime", "modify"\n' +
-          'Try \'touch --help\' for more information.';
+          "Try 'touch --help' for more information.";
         // I think this is the stupidest thing
         // I've ever written.
         try {
@@ -106,34 +108,34 @@ const touch = {
         if (options.create === false) {
           throw new Error(e);
         } else {
-          fs.closeSync(fs.openSync(path, 'wx'));
+          fs.closeSync(fs.openSync(path, "wx"));
         }
       }
 
       const stat = fs.statSync(path);
-      const dateToSet = (options.date) ?
-        Date.create(options.date) :
-        new Date();
+      const dateToSet = options.date ? Date.create(options.date) : new Date();
 
-      if (String(dateToSet) === 'Invalid Date') {
+      if (String(dateToSet) === "Invalid Date") {
         throw new Error(`touch: invalid date format ${options.date}`);
       }
 
       // If -m, keep access time current.
-      let atime = (options.m === true) ? new Date(stat.atime) : dateToSet;
+      let atime = options.m === true ? new Date(stat.atime) : dateToSet;
 
       // If -a, keep mod time to current.
-      let mtime = (options.a === true) ? new Date(stat.mtime) : dateToSet;
+      let mtime = options.a === true ? new Date(stat.mtime) : dateToSet;
 
       if (options.reference !== undefined) {
         let reference;
         try {
           reference = fs.statSync(options.reference);
         } catch (e) {
-          throw new Error(`touch: failed to get attributes of ${options.reference}: No such file or directory`);
+          throw new Error(
+            `touch: failed to get attributes of ${options.reference}: No such file or directory`
+          );
         }
-        atime = (options.m === true) ? atime : reference.atime;
-        mtime = (options.a === true) ? mtime : reference.mtime;
+        atime = options.m === true ? atime : reference.atime;
+        mtime = options.a === true ? mtime : reference.mtime;
       }
 
       fs.utimesSync(path, atime, mtime);
@@ -141,7 +143,7 @@ const touch = {
     } catch (e) {
       throw new Error(e);
     }
-  }
+  },
 };
 
 module.exports = function (vorpal) {
@@ -150,20 +152,29 @@ module.exports = function (vorpal) {
   }
   vorpal.api.touch = touch;
   vorpal
-    .command('touch <files...>')
-    .option('-a', 'change only the access time')
-    .option('-c, --no-create', 'do not create any files')
-    .option('-d, --date [STRING]', 'parse STRING and use it instead of current time')
-    .option('-m', 'change only the modification time')
-    .option('-r, --reference [FILE]', 'use this file\'s times instead of current time')
-    .option('--time [WORD]', 'change the specified time: WORD is access, atime, or use: equivalent to -a WORD is modify or mtime: equivalent to -m')
+    .command("touch <files...>")
+    .option("-a", "change only the access time")
+    .option("-c, --no-create", "do not create any files")
+    .option(
+      "-d, --date [STRING]",
+      "parse STRING and use it instead of current time"
+    )
+    .option("-m", "change only the modification time")
+    .option(
+      "-r, --reference [FILE]",
+      "use this file's times instead of current time"
+    )
+    .option(
+      "--time [WORD]",
+      "change the specified time: WORD is access, atime, or use: equivalent to -a WORD is modify or mtime: equivalent to -m"
+    )
     .autocomplete(fsAutocomplete())
     .action(function (args, callback) {
       return interfacer.call(this, {
         command: touch,
         args: args.files || [],
         options: args.options,
-        callback
+        callback,
       });
     });
 };

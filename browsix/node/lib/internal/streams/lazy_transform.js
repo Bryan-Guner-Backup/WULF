@@ -1,10 +1,10 @@
 // LazyTransform is a special type of Transform stream that is lazily loaded.
 // This is used for performance with bi-API-ship: when two APIs are available
 // for the stream, one conventional and one non-conventional.
-'use strict';
+"use strict";
 
-var stream = require('./stream');
-var util = require('./util');
+var stream = require("./stream");
+var util = require("./util");
 
 module.exports = LazyTransform;
 
@@ -13,27 +13,27 @@ function LazyTransform(options) {
 }
 util.inherits(LazyTransform, stream.Transform);
 
-[
-  '_readableState',
-  '_writableState',
-  '_transformState'
-].forEach(function(prop, i, props) {
+["_readableState", "_writableState", "_transformState"].forEach(function (
+  prop,
+  i,
+  props
+) {
   Object.defineProperty(LazyTransform.prototype, prop, {
-    get: function() {
+    get: function () {
       stream.Transform.call(this, this._options);
       this._writableState.decodeStrings = false;
-      this._writableState.defaultEncoding = 'binary';
+      this._writableState.defaultEncoding = "binary";
       return this[prop];
     },
-    set: function(val) {
+    set: function (val) {
       Object.defineProperty(this, prop, {
         value: val,
         enumerable: true,
         configurable: true,
-        writable: true
+        writable: true,
       });
     },
     configurable: true,
-    enumerable: true
+    enumerable: true,
   });
 });

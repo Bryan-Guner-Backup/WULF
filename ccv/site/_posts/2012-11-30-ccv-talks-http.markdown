@@ -1,11 +1,11 @@
 ---
-date: '2012-11-30 22:35:00'
+date: "2012-11-30 22:35:00"
 layout: post
 slug: ccv-talks-http
 status: publish
 title: In 0.4, ccv talks HTTP
 categories:
-- post
+  - post
 ---
 
 For even number of ccv release, it often comes with bug fixes and API renovation. In the next two days, I am going to cut ccv 0.4 release, which brings you a major API renovation: an API over HTTP.

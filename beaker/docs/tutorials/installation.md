@@ -4,10 +4,10 @@ In most cases, beaker is running on a system separate from the SUT; we will comm
 
 ## Beaker Requirements
 
-* Ruby >= 2.1.8 (but we [only test on >= 2.2.5](installation.md#ruby-version))
-* libxml2, libxslt (needed for the [Nokogiri](http://nokogiri.org/tutorials/installing_nokogiri.html) gem)
-* g++ (needed for the [unf_ext](http://rubydoc.info/gems/unf_ext/) gem)
-* curl (needed for some DSL functions to be able to execute successfully)
+- Ruby >= 2.1.8 (but we [only test on >= 2.2.5](installation.md#ruby-version))
+- libxml2, libxslt (needed for the [Nokogiri](http://nokogiri.org/tutorials/installing_nokogiri.html) gem)
+- g++ (needed for the [unf_ext](http://rubydoc.info/gems/unf_ext/) gem)
+- curl (needed for some DSL functions to be able to execute successfully)
 
 On a Debian or Ubuntu system you can install these using the command
 
@@ -36,7 +36,7 @@ These instructions apply to installing Beaker for use; to set up a development e
 
 If you need the latest and greatest (and mostly likely broken/untested/no warranty) beaker code.
 
-* Uses <a href = "http://bundler.io/">bundler</a>
+- Uses <a href = "http://bundler.io/">bundler</a>
 
 ```console
   $ git clone https://github.com/puppetlabs/beaker
@@ -84,15 +84,15 @@ It may be necessary to test Beaker against multiple versions of Ruby. The mainta
 
 While most users will use Beaker as a Gem installed from some repository, you will need a live repo to work with. Here's how to configure Beaker and its dependencies so you can start contributing:
 
-* Clone your fork of Beaker
-* Install Beaker's dependencies into `vendor/bundle`:
+- Clone your fork of Beaker
+- Install Beaker's dependencies into `vendor/bundle`:
   ```console
     $ cd beaker/
     $ bundle install --path vendor/bundle
   ```
-  * Installing the dependencies globally ~~may~~ *will probably* cause conflicts and is not recommended.
-  * Please use `vendor/bundle`, not `_vendor` or `.vendor`.
-* Test your new environment by seeing if the spec tests pass (beaker/master is maintained in an always-passing state):
+  - Installing the dependencies globally ~~may~~ _will probably_ cause conflicts and is not recommended.
+  - Please use `vendor/bundle`, not `_vendor` or `.vendor`.
+- Test your new environment by seeing if the spec tests pass (beaker/master is maintained in an always-passing state):
   ```console
     $ rake test:spec # assuming you have rbenv-bundler
     # or

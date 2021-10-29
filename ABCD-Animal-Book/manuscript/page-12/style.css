@@ -1,8 +1,12 @@
 body {
   margin: 0;
-  background-color: #A5B396;
-  background: -webkit-radial-gradient(right 60%, #A5B396, rgba(0, 141, 210, 0.93));
-  background: radial-gradient(at right 60%, #A5B396, rgba(0, 141, 210, 0.93));
+  background-color: #a5b396;
+  background: -webkit-radial-gradient(
+    right 60%,
+    #a5b396,
+    rgba(0, 141, 210, 0.93)
+  );
+  background: radial-gradient(at right 60%, #a5b396, rgba(0, 141, 210, 0.93));
 }
 
 .ele-container {
@@ -24,7 +28,8 @@ body {
 }
 
 .ele-body {
-  -webkit-animation: body-movement 1s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93);
+  -webkit-animation: body-movement 1s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93);
   animation: body-movement 1s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93);
   background: -webkit-linear-gradient(top, #cfcfcf 0%, #9c9c9c 70%);
   background: linear-gradient(to bottom, #cfcfcf 0%, #9c9c9c 70%);
@@ -37,7 +42,8 @@ body {
 }
 
 .ele-tail {
-  -webkit-animation: tail-movement 1s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93);
+  -webkit-animation: tail-movement 1s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93);
   animation: tail-movement 1s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93);
   border-top: 1.4vh solid #808080;
   border-radius: 50%;
@@ -49,9 +55,9 @@ body {
 }
 
 .ele-tail:before {
-  border-top: 1vh solid #C2C2C2;
+  border-top: 1vh solid #c2c2c2;
   border-radius: 50%;
-  content: '';
+  content: "";
   height: 10vh;
   position: absolute;
   width: 12.8vh;
@@ -61,7 +67,7 @@ body {
 .ele-head {
   -webkit-animation: head-movement 2s infinite linear;
   animation: head-movement 2s infinite linear;
-  background: #C2C2C2;
+  background: #c2c2c2;
   border-radius: 50%;
   border-top: 0.2vh solid #808080;
   box-shadow: -0.2vh 0.2vh 0.4vh #808080;
@@ -76,20 +82,21 @@ body {
 .ele-eyes:after {
   -webkit-animation: eyes-blink 3.5s infinite linear;
   animation: eyes-blink 3.5s infinite linear;
-  background-color: #FDFDFD;
+  background-color: #fdfdfd;
   border-radius: 50%;
   bottom: -9.6vh;
-  content: '';
+  content: "";
   height: 2vh;
   position: absolute;
   width: 2vh;
 }
 
 .ele-eyebrows {
-  -webkit-animation: eyebrows-movement 1s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93);
+  -webkit-animation: eyebrows-movement 1s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93);
   animation: eyebrows-movement 1s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93);
-  background: -webkit-linear-gradient(bottom, #C2C2C2 20%, #9c9c9c 100%);
-  background: linear-gradient(to top, #C2C2C2 20%, #9c9c9c 100%);
+  background: -webkit-linear-gradient(bottom, #c2c2c2 20%, #9c9c9c 100%);
+  background: linear-gradient(to top, #c2c2c2 20%, #9c9c9c 100%);
   border-radius: 2vh;
   border-top: 0.2vh solid #808080;
   bottom: 17.6vh;
@@ -116,8 +123,8 @@ body {
 .ele-ear {
   -webkit-animation: ear-movement 1s infinite linear;
   animation: ear-movement 1s infinite linear;
-  background: -webkit-linear-gradient(right, #C2C2C2 10%, darkgray 100%);
-  background: linear-gradient(to left, #C2C2C2 10%, darkgray 100%);
+  background: -webkit-linear-gradient(right, #c2c2c2 10%, darkgray 100%);
+  background: linear-gradient(to left, #c2c2c2 10%, darkgray 100%);
   border-bottom: 0.2vh solid #808080;
   border-left: 0.2vh solid #808080;
   border-top: 0.2vh solid #808080;
@@ -134,8 +141,8 @@ body {
 .ele-mouth {
   -webkit-animation: mouth-movement 1s infinite linear;
   animation: mouth-movement 1s infinite linear;
-  background: -webkit-linear-gradient(top, #C2C2C2 50%, darkgray 100%);
-  background: linear-gradient(to bottom, #C2C2C2 50%, darkgray 100%);
+  background: -webkit-linear-gradient(top, #c2c2c2 50%, darkgray 100%);
+  background: linear-gradient(to bottom, #c2c2c2 50%, darkgray 100%);
   border-radius: 0 100% 0 0;
   border-top: 0.4vh solid #808080;
   height: 32vh;
@@ -153,7 +160,7 @@ body {
   border-left: 0.2vh solid #808080;
   border-radius: 1.6vh;
   bottom: 0;
-  content: '';
+  content: "";
   height: 3vh;
   left: -1vh;
   position: absolute;
@@ -162,7 +169,7 @@ body {
 
 .ele-fang-front,
 .ele-fang-back {
-  border-bottom: 2.4vh solid #FFF;
+  border-bottom: 2.4vh solid #fff;
   border-radius: 50%;
   height: 8vh;
   position: absolute;
@@ -178,9 +185,9 @@ body {
 }
 
 .ele-fang-front:before {
-  background-color: #C2C2C2;
+  background-color: #c2c2c2;
   bottom: -2vh;
-  content: '';
+  content: "";
   height: 9vh;
   left: -1vh;
   position: absolute;
@@ -188,11 +195,11 @@ body {
 }
 
 .ele-fang-front:after {
-  background-color: #C2C2C2;
+  background-color: #c2c2c2;
   border-radius: 0 50% 50% 0;
   bottom: -2.8vh;
   box-shadow: 0.2vh 0.2vh 0 #808080;
-  content: '';
+  content: "";
   height: 4.2vh;
   left: 1.2vh;
   position: absolute;
@@ -209,9 +216,9 @@ body {
 }
 
 .ele-fang-back:before {
-  background-color: #C2C2C2;
+  background-color: #c2c2c2;
   bottom: -2vh;
-  content: '';
+  content: "";
   height: 5vh;
   position: absolute;
   width: 6vh;
@@ -229,7 +236,7 @@ div[class^="ele-leg-"]:before {
   border-radius: 50%;
   bottom: -6vh;
   box-shadow: 0 0 0.4vh rgba(74, 74, 74, 0.53);
-  content: '';
+  content: "";
   height: 2vh;
   left: 50%;
   position: absolute;
@@ -263,75 +270,91 @@ div[class^="ele-leg-"]:before {
 }
 
 .ele-leg-1 {
-  -webkit-animation: leg-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
+  -webkit-animation: leg-animation 2s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
   animation: leg-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
   right: 57.5%;
 }
 
 .ele-leg-1:before {
-  -webkit-animation: foot-shadow-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
-  animation: foot-shadow-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
+  -webkit-animation: foot-shadow-animation 2s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
+  animation: foot-shadow-animation 2s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
 }
 
 .ele-leg-1 .ele-foot {
-  -webkit-animation: foot-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
+  -webkit-animation: foot-animation 2s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
   animation: foot-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
 }
 
 .ele-leg-2 {
-  -webkit-animation: leg-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
+  -webkit-animation: leg-animation 2s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
   animation: leg-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
   right: 67.5%;
 }
 
 .ele-leg-2:before {
-  -webkit-animation: foot-shadow-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
-  animation: foot-shadow-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
+  -webkit-animation: foot-shadow-animation 2s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
+  animation: foot-shadow-animation 2s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
 }
 
 .ele-leg-2 .ele-foot {
-  -webkit-animation: foot-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
+  -webkit-animation: foot-animation 2s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
   animation: foot-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
 }
 
 .ele-leg-3 {
-  -webkit-animation: leg-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
+  -webkit-animation: leg-animation 2s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
   animation: leg-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
   right: 5%;
 }
 
 .ele-leg-3:before {
-  -webkit-animation: foot-shadow-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
-  animation: foot-shadow-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
+  -webkit-animation: foot-shadow-animation 2s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
+  animation: foot-shadow-animation 2s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
 }
 
 .ele-leg-3 .ele-foot {
-  -webkit-animation: foot-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
+  -webkit-animation: foot-animation 2s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
   animation: foot-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) -1s;
 }
 
 .ele-leg-4 {
-  -webkit-animation: leg-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
+  -webkit-animation: leg-animation 2s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
   animation: leg-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
   right: 15%;
 }
 
 .ele-leg-4:before {
-  -webkit-animation: foot-shadow-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
-  animation: foot-shadow-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
+  -webkit-animation: foot-shadow-animation 2s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
+  animation: foot-shadow-animation 2s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
 }
 
 .ele-leg-4 .ele-foot {
-  -webkit-animation: foot-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
+  -webkit-animation: foot-animation 2s infinite
+    cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
   animation: foot-animation 2s infinite cubic-bezier(0.63, 0.15, 0.49, 0.93) 0s;
 }
 
 .ele-foot:before,
 .ele-foot:after {
-  background-color: #E0E0E0;
+  background-color: #e0e0e0;
   border-radius: 2vh 2vh 0 0;
   bottom: 0;
-  content: '';
+  content: "";
   height: 3vh;
   position: absolute;
   width: 2.2vh;
@@ -362,48 +385,60 @@ div[class^="ele-leg-"]:before {
 @-webkit-keyframes leg-animation {
   0% {
     height: 13vh;
-    -webkit-transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, 10deg) translate3d(0, 30%, 0);
-    transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, 10deg) translate3d(0, 30%, 0);
+    -webkit-transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, 10deg)
+      translate3d(0, 30%, 0);
+    transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, 10deg)
+      translate3d(0, 30%, 0);
   }
   25% {
     height: 8vh;
   }
   50% {
     height: 13vh;
-    -webkit-transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, -15deg) translate3d(0, 30%, 0);
-    transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, -15deg) translate3d(0, 30%, 0);
+    -webkit-transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, -15deg)
+      translate3d(0, 30%, 0);
+    transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, -15deg)
+      translate3d(0, 30%, 0);
   }
   75% {
     height: 13vh;
   }
   100% {
     height: 13vh;
-    -webkit-transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, 10deg) translate3d(0, 30%, 0);
-    transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, 10deg) translate3d(0, 30%, 0);
+    -webkit-transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, 10deg)
+      translate3d(0, 30%, 0);
+    transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, 10deg)
+      translate3d(0, 30%, 0);
   }
 }
 
 @keyframes leg-animation {
   0% {
     height: 13vh;
-    -webkit-transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, 10deg) translate3d(0, 30%, 0);
-    transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, 10deg) translate3d(0, 30%, 0);
+    -webkit-transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, 10deg)
+      translate3d(0, 30%, 0);
+    transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, 10deg)
+      translate3d(0, 30%, 0);
   }
   25% {
     height: 8vh;
   }
   50% {
     height: 13vh;
-    -webkit-transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, -15deg) translate3d(0, 30%, 0);
-    transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, -15deg) translate3d(0, 30%, 0);
+    -webkit-transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, -15deg)
+      translate3d(0, 30%, 0);
+    transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, -15deg)
+      translate3d(0, 30%, 0);
   }
   75% {
     height: 13vh;
   }
   100% {
     height: 13vh;
-    -webkit-transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, 10deg) translate3d(0, 30%, 0);
-    transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, 10deg) translate3d(0, 30%, 0);
+    -webkit-transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, 10deg)
+      translate3d(0, 30%, 0);
+    transform: translate3d(0, -90%, 0) rotate3d(0, 0, 1, 10deg)
+      translate3d(0, 30%, 0);
   }
 }
 

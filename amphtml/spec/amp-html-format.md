@@ -46,44 +46,65 @@ In concrete terms this means that:
 ### Sample document
 
 ```html
-<!doctype html>
+<!DOCTYPE html>
 <html amp>
-<head>
-  <meta charset="utf-8">
-  <title>Sample document</title>
-  <link rel="canonical" href="./regular-html-version.html">
-  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
-  <style amp-custom>
-    h1 {color: red}
-  </style>
-  <script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "NewsArticle",
-    "headline": "Article headline",
-    "image": [
-      "thumbnail1.jpg"
-    ],
-    "datePublished": "2015-02-05T08:00:00+08:00"
-  }
-  </script>
-  <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
-  <style>body {opacity: 0}</style><noscript><style>body {opacity: 1}</style></noscript>
-  <script async src="https://cdn.ampproject.org/v0.js"></script>
-</head>
-<body>
-<h1>Sample document</h1>
-<p>
-  Some text
-  <amp-img src=sample.jpg width=300 height=300></amp-img>
-</p>
-<amp-ad width=300 height=250
-    type="a9"
-    data-aax_size="300x250"
-    data-aax_pubname="test123"
-    data-aax_src="302">
-</amp-ad>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Sample document</title>
+    <link rel="canonical" href="./regular-html-version.html" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"
+    />
+    <style amp-custom>
+      h1 {
+        color: red;
+      }
+    </style>
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "NewsArticle",
+        "headline": "Article headline",
+        "image": ["thumbnail1.jpg"],
+        "datePublished": "2015-02-05T08:00:00+08:00"
+      }
+    </script>
+    <script
+      async
+      custom-element="amp-carousel"
+      src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"
+    ></script>
+    <style>
+      body {
+        opacity: 0;
+      }
+    </style>
+    <noscript
+      ><style>
+        body {
+          opacity: 1;
+        }
+      </style></noscript
+    >
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+  </head>
+  <body>
+    <h1>Sample document</h1>
+    <p>
+      Some text
+      <amp-img src="sample.jpg" width="300" height="300"></amp-img>
+    </p>
+    <amp-ad
+      width="300"
+      height="250"
+      type="a9"
+      data-aax_size="300x250"
+      data-aax_pubname="test123"
+      data-aax_src="302"
+    >
+    </amp-ad>
+  </body>
 </html>
 ```
 
@@ -130,28 +151,28 @@ It is encouraged that AMP HTML documents are annotated with Open Graph Protocol,
 
 Most HTML tags can be used unchanged in AMP HTML. Certain tags, however, have equivalent custom tags (such as `<img>` and `<amp-img>`) and other tags are outright banned:
 
-| Tag       | Status in AMP HTML                             |
-|-----------|------------------------------------------------|
-| script    | Banned unless the type is `application/ld+json` (Other non-executable values may be added as needed.). Exception is the mandatory script tag to load the AMP runtime and the script tags to load extended components. |
-| base      | Banned |
-| img       | Replaced with amp-img |
-| video     | Replaced with amp-video |
-| audio     | Replaced with amp-audio |
-| iframe    | Banned. May be replaced with amp-iframe in the future. |
-| frame     | Banned. |
-| frameset  | Banned. |
-| object    | Banned. |
-| param     | Banned. |
-| applet    | Banned. |
-| embed     | Banned. |
-| form      | Banned. |
-| input elements | Banned. Includes input, textarea, select, option. Notably, button element is allowed. |
-| button    | Allowed. |
-| <a name="cust"></a>style     | [Required style tags for adjusting opacity](#opacity) One additional style tag is allowed in head tag for the purpose of custom styling. This style tag must have the attribute `amp-custom`. [🔗](#cust) |
-| link      | Allowed for certain values of rel: `canonical`. `stylesheet` is generally disallowed, but some values may be whitelisted for font providers. |
-| meta      | The `http-equiv` attribute is banned. Otherwise allowed. |
-| <a name="ancr"></a>a         | The `href` attribute value must not begin with `javascript:`. If set, the `target` attribute value must be `_blank`. Otherwise allowed. [🔗](#ancr) |
-| svg       | Most SVG elements are allowed | 
+| Tag                      | Status in AMP HTML                                                                                                                                                                                                    |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| script                   | Banned unless the type is `application/ld+json` (Other non-executable values may be added as needed.). Exception is the mandatory script tag to load the AMP runtime and the script tags to load extended components. |
+| base                     | Banned                                                                                                                                                                                                                |
+| img                      | Replaced with amp-img                                                                                                                                                                                                 |
+| video                    | Replaced with amp-video                                                                                                                                                                                               |
+| audio                    | Replaced with amp-audio                                                                                                                                                                                               |
+| iframe                   | Banned. May be replaced with amp-iframe in the future.                                                                                                                                                                |
+| frame                    | Banned.                                                                                                                                                                                                               |
+| frameset                 | Banned.                                                                                                                                                                                                               |
+| object                   | Banned.                                                                                                                                                                                                               |
+| param                    | Banned.                                                                                                                                                                                                               |
+| applet                   | Banned.                                                                                                                                                                                                               |
+| embed                    | Banned.                                                                                                                                                                                                               |
+| form                     | Banned.                                                                                                                                                                                                               |
+| input elements           | Banned. Includes input, textarea, select, option. Notably, button element is allowed.                                                                                                                                 |
+| button                   | Allowed.                                                                                                                                                                                                              |
+| <a name="cust"></a>style | [Required style tags for adjusting opacity](#opacity) One additional style tag is allowed in head tag for the purpose of custom styling. This style tag must have the attribute `amp-custom`. [🔗](#cust)             |
+| link                     | Allowed for certain values of rel: `canonical`. `stylesheet` is generally disallowed, but some values may be whitelisted for font providers.                                                                          |
+| meta                     | The `http-equiv` attribute is banned. Otherwise allowed.                                                                                                                                                              |
+| <a name="ancr"></a>a     | The `href` attribute value must not begin with `javascript:`. If set, the `target` attribute value must be `_blank`. Otherwise allowed. [🔗](#ancr)                                                                   |
+| svg                      | Most SVG elements are allowed                                                                                                                                                                                         |
 
 Validator implementations should use a whitelist based on the HTML5 specification with the above tags removed. See [AMP Tag Addendum](amp-tag-addendum.md).
 
@@ -178,6 +199,7 @@ Major semantic tags and the AMP custom elements come with default styles to make
 Authors may add custom styles to a document using a single `<style amp-custom>` tag in the head of the document.
 
 #### Selectors
+
 The initial version of AMP will only allow very simple CSS selectors in AMPs. The restriction is in place to make overall performance easier to reason about. It may be opened up in the future.
 
 Allowed selectors are of the form:
@@ -200,6 +222,7 @@ forbidden by these components' spec.
 Usage of the !important qualifier is not allowed.
 
 #### Properties
+
 These CSS properties are permanently banned:
 
 - `behavior`
@@ -214,6 +237,7 @@ The initial version of AMP will prohibit the use of the following CSS properties
 `overflow` (and `overflow-y`, etc.) may not be styled as “auto” or “scroll”. No user defined element in an AMP document may have a scrollbar.
 
 ##### Maximum size
+
 It is a validation error if the author stylesheet is larger than 50,000 bytes.
 
 ### Custom fonts
@@ -223,7 +247,10 @@ Authors may include stylesheets for custom fonts. The 2 supported methods are li
 Example:
 
 ```html
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Tangerine"
+/>
 ```
 
 Font providers can be whitelisted if they support CSS-only integrations and serve over HTTPS. The following origins are currently allowed for font serving via link tags:
@@ -231,7 +258,6 @@ Font providers can be whitelisted if they support CSS-only integrations and serv
 - https://fonts.googleapis.com
 
 Authors are free to include all custom fonts via a `@font-face` CSS instruction via their custom CSS. Fonts included via `@font-face` must be fetched via the HTTP or HTTPS scheme.
-
 
 ## AMP runtime
 
@@ -241,7 +267,6 @@ The AMP runtime is loaded via the mandatory `<script src="https://cdn.ampproject
 
 Development mode is triggered by adding "#development=1" to the URL of the page.
 
-
 ## Resources
 
 Resources such as images, videos, audio files or ads must be included into an AMP HTML file through custom elements such as `<amp-img>`. We call them managed resources because whether and when they will be loaded and displayed to the user is decided by the AMP runtime.
@@ -249,7 +274,6 @@ Resources such as images, videos, audio files or ads must be included into an AM
 There are no particular guarantees as to the loading behavior of the AMP runtime, but it should generally strive to load resources quickly enough, so that they are loaded by the time the user would like to see them if possible. The runtime should prioritize resources currently in viewport and attempt to predict changes to the viewport and preload resources accordingly.
 
 The AMP runtime may at any time decide to unload resources that are not currently in viewport or reuse the resource containers such as iframes to reduce overall RAM consumption.
-
 
 ## AMP Components
 
@@ -289,16 +313,20 @@ All AMP custom elements support the media attribute. It takes a media query as a
 Example: Here we have 2 images with mutually exclusive media queries. Depending on the screen width one or the other will be fetched and rendered. Note that the media attribute is available on all custom elements, so it can be used with non-image elements such as ads.
 
 ```html
-    <amp-img
-        media="(min-width: 650px)"
-        src="wide.jpg"
-        width=466
-        height=355 layout="responsive" ></amp-img>
-    <amp-img
-        media="(max-width: 649px)"
-        src="narrow.jpg"
-        width=527
-        height=193 layout="responsive" ></amp-img>
+<amp-img
+  media="(min-width: 650px)"
+  src="wide.jpg"
+  width="466"
+  height="355"
+  layout="responsive"
+></amp-img>
+<amp-img
+  media="(max-width: 649px)"
+  src="narrow.jpg"
+  width="527"
+  height="193"
+  layout="responsive"
+></amp-img>
 ```
 
 ### `on`
@@ -311,7 +339,6 @@ Example: `on="tap:fooId.showLightbox"`
 If `methodName` is omitted the default method is executed if defined for the element.
 Example: `on="tap:fooId"`
 
-
 ### Extended components
 
 Extended components are components that do not necessarily ship with the AMP runtime but instead must be explicitly included into the document.
@@ -319,7 +346,11 @@ Extended components are components that do not necessarily ship with the AMP run
 Extended components are loaded by including a script tag in the head of the document like this
 
 ```html
-<script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+<script
+  async
+  custom-element="amp-carousel"
+  src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"
+></script>
 ```
 
 The script tag MUST have an async attribute and MUST have a `custom-element` attribute referencing the name of the element.
@@ -351,14 +382,14 @@ The AMP HTML format is designed so that is always the case.
 
 Currently, the following SVG elements are allowed:
 
-* basics: "g", "path", "glyph", "glyphRef", "marker", "view"
-* shapes: "circle", "line", "polygon", "polyline", "rect"
-* text: "text", "textPath", "tref", "tspan"
-* rendering: "clipPath", "filter", "linearGradient", "radialGradient", "mask", "pattern", "vkern", "hkern"
-* special: "defs" (all children above are allowed here), "symbol", "use"
-* aria: "desc", "title"
+- basics: "g", "path", "glyph", "glyphRef", "marker", "view"
+- shapes: "circle", "line", "polygon", "polyline", "rect"
+- text: "text", "textPath", "tref", "tspan"
+- rendering: "clipPath", "filter", "linearGradient", "radialGradient", "mask", "pattern", "vkern", "hkern"
+- special: "defs" (all children above are allowed here), "symbol", "use"
+- aria: "desc", "title"
 
 As well as these attributes:
 
-* "xlink:href": only URIs starting with "#" are allowed
-* "style"
+- "xlink:href": only URIs starting with "#" are allowed
+- "style"

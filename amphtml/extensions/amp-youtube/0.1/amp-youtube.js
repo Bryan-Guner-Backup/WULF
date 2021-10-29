@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-import {isLayoutSizeDefined} from '../../../src/layout';
-import {loadPromise} from '../../../src/event-helper';
-
+import { isLayoutSizeDefined } from "../../../src/layout";
+import { loadPromise } from "../../../src/event-helper";
 
 class AmpYoutube extends AMP.BaseElement {
-
   /** @override */
   createdCallback() {
-    this.preconnect.url('https://www.youtube.com');
+    this.preconnect.url("https://www.youtube.com");
   }
 
   /** @override */
@@ -32,18 +30,22 @@ class AmpYoutube extends AMP.BaseElement {
 
   /** @override */
   layoutCallback() {
-    var width = this.element.getAttribute('width');
-    var height = this.element.getAttribute('height');
-    var videoId = AMP.assert(this.element.getAttribute('video-id'),
-        'The video-id attribute is required for <amp-youtube> %s',
-        this.element);
+    var width = this.element.getAttribute("width");
+    var height = this.element.getAttribute("height");
+    var videoId = AMP.assert(
+      this.element.getAttribute("video-id"),
+      "The video-id attribute is required for <amp-youtube> %s",
+      this.element
+    );
     // See
     // https://developers.google.com/youtube/iframe_api_reference
-    var iframe = document.createElement('iframe');
-    iframe.setAttribute('frameborder', '0');
-    iframe.setAttribute('allowfullscreen', 'true');
-    iframe.src = 'https://www.youtube.com/embed/' + encodeURIComponent(
-        videoId) + '?enablejsapi=1';
+    var iframe = document.createElement("iframe");
+    iframe.setAttribute("frameborder", "0");
+    iframe.setAttribute("allowfullscreen", "true");
+    iframe.src =
+      "https://www.youtube.com/embed/" +
+      encodeURIComponent(videoId) +
+      "?enablejsapi=1";
     this.applyFillContent(iframe);
     iframe.width = width;
     iframe.height = height;
@@ -56,16 +58,19 @@ class AmpYoutube extends AMP.BaseElement {
   /** @override */
   documentInactiveCallback() {
     if (this.iframe_ && this.iframe_.contentWindow) {
-      this.iframe_.contentWindow./*OK*/postMessage(JSON.stringify({
-        'event': 'command',
-        'func': 'pauseVideo',
-        'args': ''
-      }), '*');
+      this.iframe_.contentWindow./*OK*/ postMessage(
+        JSON.stringify({
+          event: "command",
+          func: "pauseVideo",
+          args: "",
+        }),
+        "*"
+      );
     }
     // No need to do layout later - user action will be expect to resume
     // the playback.
     return false;
   }
-};
+}
 
-AMP.registerElement('amp-youtube', AmpYoutube);
+AMP.registerElement("amp-youtube", AmpYoutube);

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * Parses a path and returns just the file
@@ -9,9 +9,9 @@
  */
 
 module.exports = function (path) {
-  let fileShort = String(path).split('/');
+  let fileShort = String(path).split("/");
   fileShort = fileShort[fileShort.length - 1];
-  fileShort = fileShort.split('\\');
+  fileShort = fileShort.split("\\");
   fileShort = fileShort[fileShort.length - 1];
   return fileShort;
 };

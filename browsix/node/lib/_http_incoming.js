@@ -1,20 +1,17 @@
-'use strict';
+"use strict";
 
-var util = require('./util');
-var Stream = require('./stream');
+var util = require("./util");
+var Stream = require("./stream");
 
 function readStart(socket) {
-  if (socket && !socket._paused && socket.readable)
-    socket.resume();
+  if (socket && !socket._paused && socket.readable) socket.resume();
 }
 exports.readStart = readStart;
 
 function readStop(socket) {
-  if (socket)
-    socket.pause();
+  if (socket) socket.pause();
 }
 exports.readStop = readStop;
-
 
 /* Abstract base class for ServerRequest and ClientResponse. */
 function IncomingMessage(socket) {
@@ -41,7 +38,7 @@ function IncomingMessage(socket) {
   this.upgrade = null;
 
   // request (server) only
-  this.url = '';
+  this.url = "";
   this.method = null;
 
   // response (client) only
@@ -58,44 +55,35 @@ function IncomingMessage(socket) {
 }
 util.inherits(IncomingMessage, Stream.Readable);
 
-
 exports.IncomingMessage = IncomingMessage;
 
-
-IncomingMessage.prototype.setTimeout = function(msecs, callback) {
-  if (callback)
-    this.on('timeout', callback);
+IncomingMessage.prototype.setTimeout = function (msecs, callback) {
+  if (callback) this.on("timeout", callback);
   this.socket.setTimeout(msecs);
   return this;
 };
 
-
-IncomingMessage.prototype.read = function(n) {
+IncomingMessage.prototype.read = function (n) {
   this._consuming = true;
   this.read = Stream.Readable.prototype.read;
   return this.read(n);
 };
 
-
-IncomingMessage.prototype._read = function(n) {
+IncomingMessage.prototype._read = function (n) {
   // We actually do almost nothing here, because the parserOnBody
   // function fills up our internal buffer directly.  However, we
   // do need to unpause the underlying socket so that it flows.
-  if (this.socket.readable)
-    readStart(this.socket);
+  if (this.socket.readable) readStart(this.socket);
 };
-
 
 // It's possible that the socket will be destroyed, and removed from
 // any messages, before ever calling this.  In that case, just skip
 // it, since something else is destroying this connection anyway.
-IncomingMessage.prototype.destroy = function(error) {
-  if (this.socket)
-    this.socket.destroy(error);
+IncomingMessage.prototype.destroy = function (error) {
+  if (this.socket) this.socket.destroy(error);
 };
 
-
-IncomingMessage.prototype._addHeaderLines = function(headers, n) {
+IncomingMessage.prototype._addHeaderLines = function (headers, n) {
   if (headers && headers.length) {
     var raw, dest;
     if (this.complete) {
@@ -116,7 +104,6 @@ IncomingMessage.prototype._addHeaderLines = function(headers, n) {
   }
 };
 
-
 // Add the given (field, value) pair to the message
 //
 // Per RFC2616, section 4.2 it is acceptable to join multiple instances of the
@@ -124,11 +111,11 @@ IncomingMessage.prototype._addHeaderLines = function(headers, n) {
 // multiple values this way. If not, we declare the first instance the winner
 // and drop the second. Extended header fields (those beginning with 'x-') are
 // always joined.
-IncomingMessage.prototype._addHeaderLine = function(field, value, dest) {
+IncomingMessage.prototype._addHeaderLine = function (field, value, dest) {
   field = field.toLowerCase();
   switch (field) {
     // Array headers:
-    case 'set-cookie':
+    case "set-cookie":
       if (dest[field] !== undefined) {
         dest[field].push(value);
       } else {
@@ -140,37 +127,35 @@ IncomingMessage.prototype._addHeaderLine = function(field, value, dest) {
     // list is taken from:
     // https://mxr.mozilla.org/mozilla/source/netwerk/protocol/http/src/nsHttpHeaderArray.cpp
     /* eslint-enable max-len */
-    case 'content-type':
-    case 'content-length':
-    case 'user-agent':
-    case 'referer':
-    case 'host':
-    case 'authorization':
-    case 'proxy-authorization':
-    case 'if-modified-since':
-    case 'if-unmodified-since':
-    case 'from':
-    case 'location':
-    case 'max-forwards':
+    case "content-type":
+    case "content-length":
+    case "user-agent":
+    case "referer":
+    case "host":
+    case "authorization":
+    case "proxy-authorization":
+    case "if-modified-since":
+    case "if-unmodified-since":
+    case "from":
+    case "location":
+    case "max-forwards":
       // drop duplicates
-      if (dest[field] === undefined)
-        dest[field] = value;
+      if (dest[field] === undefined) dest[field] = value;
       break;
 
     default:
       // make comma-separated list
       if (dest[field] !== undefined) {
-        dest[field] += ', ' + value;
+        dest[field] += ", " + value;
       } else {
         dest[field] = value;
       }
   }
 };
 
-
 // Call this instead of resume() if we want to just
 // dump all the data to /dev/null
-IncomingMessage.prototype._dump = function() {
+IncomingMessage.prototype._dump = function () {
   if (!this._dumped) {
     this._dumped = true;
     this.resume();

@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import {getMode} from './mode';
+import { getMode } from "./mode";
 
 /** @const Time when this JS loaded.  */
 var start = new Date().getTime();
-
 
 /**
  * Logging.
@@ -28,7 +27,6 @@ var start = new Date().getTime();
  * @final
  */
 export class Log {
-
   /**
    * @param {!Window} win
    */
@@ -51,10 +49,10 @@ export class Log {
     // Search for #log=0 or log=1
     var match = this.win.location.hash.match(/log=(\d)/);
     var shouldLog = match && match[1];
-    if (getMode().localDev && shouldLog != '0') {
+    if (getMode().localDev && shouldLog != "0") {
       return true;
     }
-    if (this.win.location.hash && shouldLog == '1') {
+    if (this.win.location.hash && shouldLog == "1") {
       return true;
     }
     return false;
@@ -69,14 +67,14 @@ export class Log {
   msg_(tag, level, messages) {
     if (this.isEnabled_) {
       var fn = this.win.console.log;
-      if (level == 'ERROR') {
+      if (level == "ERROR") {
         fn = this.win.console.error || fn;
-      } else if (level == 'INFO') {
+      } else if (level == "INFO") {
         fn = this.win.console.info || fn;
-      } else if (level == 'WARN') {
+      } else if (level == "WARN") {
         fn = this.win.console.warn || fn;
       }
-      messages.unshift(new Date().getTime() - start, '[' + tag + ']');
+      messages.unshift(new Date().getTime() - start, "[" + tag + "]");
       fn.apply(this.win.console, messages);
     }
   }
@@ -87,7 +85,7 @@ export class Log {
    */
   fine(tag, var_args) {
     if (this.isEnabled_) {
-      this.msg_(tag, 'FINE', Array.prototype.slice.call(arguments, 1));
+      this.msg_(tag, "FINE", Array.prototype.slice.call(arguments, 1));
     }
   }
 
@@ -97,7 +95,7 @@ export class Log {
    */
   info(tag, var_args) {
     if (this.isEnabled_) {
-      this.msg_(tag, 'INFO', Array.prototype.slice.call(arguments, 1));
+      this.msg_(tag, "INFO", Array.prototype.slice.call(arguments, 1));
     }
   }
 
@@ -107,7 +105,7 @@ export class Log {
    */
   warn(tag, var_args) {
     if (this.isEnabled_) {
-      this.msg_(tag, 'WARN', Array.prototype.slice.call(arguments, 1));
+      this.msg_(tag, "WARN", Array.prototype.slice.call(arguments, 1));
     }
   }
 
@@ -118,10 +116,9 @@ export class Log {
    */
   error(tag, var_args) {
     if (this.isEnabled_) {
-      this.msg_(tag, 'ERROR', Array.prototype.slice.call(arguments, 1));
+      this.msg_(tag, "ERROR", Array.prototype.slice.call(arguments, 1));
     }
   }
-};
-
+}
 
 export const log = new Log(window);

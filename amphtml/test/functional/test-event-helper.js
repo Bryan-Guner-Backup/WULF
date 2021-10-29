@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-import {isLoaded, listenOnce, listenOncePromise, loadPromise}
-    from '../../src/event-helper';
-import {Observable} from '../../src/observable';
+import {
+  isLoaded,
+  listenOnce,
+  listenOncePromise,
+  loadPromise,
+} from "../../src/event-helper";
+import { Observable } from "../../src/observable";
 
-describe('EventHelper', () => {
-
+describe("EventHelper", () => {
   function getEvent(name) {
-    var event = document.createEvent('Event');
+    var event = document.createEvent("Event");
     event.initEvent(name, true, true);
     return event;
   }
@@ -37,25 +40,25 @@ describe('EventHelper', () => {
     errorObservable = new Observable();
     element = {
       complete: false,
-      readyState: '',
-      addEventListener: function(type, callback) {
-        if (type == 'load') {
+      readyState: "",
+      addEventListener: function (type, callback) {
+        if (type == "load") {
           loadObservable.add(callback);
-        } else if (type == 'error') {
+        } else if (type == "error") {
           errorObservable.add(callback);
         } else {
           expect(type).to.equal("load or error");
         }
       },
-      removeEventListener: function(type, callback) {
-        if (type == 'load') {
+      removeEventListener: function (type, callback) {
+        if (type == "load") {
           loadObservable.remove(callback);
-        } else if (type == 'error') {
+        } else if (type == "error") {
           errorObservable.remove(callback);
         } else {
           expect(type).to.equal("load or error");
         }
-      }
+      },
     };
   });
 
@@ -71,14 +74,14 @@ describe('EventHelper', () => {
     sandbox = null;
   });
 
-  it('listenOnce', () => {
-    let event = getEvent('load');
+  it("listenOnce", () => {
+    let event = getEvent("load");
     let c = 0;
     let handler = (e) => {
       c++;
       expect(e).to.equal(event);
     };
-    listenOnce(element, 'load', handler);
+    listenOnce(element, "load", handler);
 
     // Not fired yet.
     expect(c).to.equal(0);
@@ -92,14 +95,14 @@ describe('EventHelper', () => {
     expect(c).to.equal(1);
   });
 
-  it('listenOnce - cancel', () => {
-    let event = getEvent('load');
+  it("listenOnce - cancel", () => {
+    let event = getEvent("load");
     let c = 0;
     let handler = (e) => {
       c++;
       expect(e).to.equal(event);
     };
-    let unlisten = listenOnce(element, 'load', handler);
+    let unlisten = listenOnce(element, "load", handler);
 
     // Not fired yet.
     expect(c).to.equal(0);
@@ -112,56 +115,56 @@ describe('EventHelper', () => {
     expect(c).to.equal(0);
   });
 
-  it('listenOncePromise - load event', () => {
-    let event = getEvent('load');
-    let promise = listenOncePromise(element, 'load').then((result) => {
+  it("listenOncePromise - load event", () => {
+    let event = getEvent("load");
+    let promise = listenOncePromise(element, "load").then((result) => {
       expect(result).to.equal(event);
     });
     loadObservable.fire(event);
     return promise;
   });
 
-  it('isLoaded for complete property', () => {
+  it("isLoaded for complete property", () => {
     expect(isLoaded(element)).to.equal(false);
     element.complete = true;
     expect(isLoaded(element)).to.equal(true);
   });
 
-  it('isLoaded for readyState property', () => {
+  it("isLoaded for readyState property", () => {
     expect(isLoaded(element)).to.equal(false);
-    element.readyState = 'complete';
+    element.readyState = "complete";
     expect(isLoaded(element)).to.equal(true);
   });
 
-  it('loadPromise - already complete', () => {
+  it("loadPromise - already complete", () => {
     element.complete = true;
     return loadPromise(element).then((result) => {
       expect(result).to.equal(element);
     });
   });
 
-  it('loadPromise - already readyState == complete', () => {
-    element.readyState = 'complete';
+  it("loadPromise - already readyState == complete", () => {
+    element.readyState = "complete";
     return loadPromise(element).then((result) => {
       expect(result).to.equal(element);
     });
   });
 
-  it('loadPromise - load event', () => {
+  it("loadPromise - load event", () => {
     let promise = loadPromise(element).then((result) => {
       expect(result).to.equal(element);
     });
-    loadObservable.fire(getEvent('load'));
+    loadObservable.fire(getEvent("load"));
     return promise;
   });
 
-  it('loadPromise - error event', () => {
-    let promise = loadPromise(element).then((result) => {
-      assert.fail('must never be here: ' + result);
-    }).catch((reason) => {
-    });
-    errorObservable.fire(getEvent('error'));
+  it("loadPromise - error event", () => {
+    let promise = loadPromise(element)
+      .then((result) => {
+        assert.fail("must never be here: " + result);
+      })
+      .catch((reason) => {});
+    errorObservable.fire(getEvent("error"));
     return promise;
   });
-
 });

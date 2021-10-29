@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 /**
  * @fileoverview Embeds an instagram photo. Captions are currently
  * not supported.
@@ -34,14 +33,13 @@
  * the example above and will produce the correct aspect ratio.
  */
 
-import {isLayoutSizeDefined} from '../../../src/layout';
-import {loadPromise} from '../../../src/event-helper';
-
+import { isLayoutSizeDefined } from "../../../src/layout";
+import { loadPromise } from "../../../src/event-helper";
 
 class AmpInstagram extends AMP.BaseElement {
   /** @override */
   createdCallback() {
-    this.preconnect.url('https://instagram.com');
+    this.preconnect.url("https://instagram.com");
   }
 
   /** @override */
@@ -51,24 +49,28 @@ class AmpInstagram extends AMP.BaseElement {
 
   /** @override */
   layoutCallback() {
-    var width = this.element.getAttribute('width');
-    var height = this.element.getAttribute('height');
-    var shortCode = AMP.assert(this.element.getAttribute('shortcode'),
-        'The shortcode attribute is required for <amp-instagram> %s',
-        this.element);
+    var width = this.element.getAttribute("width");
+    var height = this.element.getAttribute("height");
+    var shortCode = AMP.assert(
+      this.element.getAttribute("shortcode"),
+      "The shortcode attribute is required for <amp-instagram> %s",
+      this.element
+    );
     // See
     // https://instagram.com/developer/embedding/?hl=en
-    var iframe = document.createElement('iframe');
-    iframe.setAttribute('frameborder', '0');
-    iframe.setAttribute('allowtransparency', 'true');
-    iframe.src = 'https://instagram.com/p/' +
-        encodeURIComponent(shortCode) + '/embed/?v=4';
+    var iframe = document.createElement("iframe");
+    iframe.setAttribute("frameborder", "0");
+    iframe.setAttribute("allowtransparency", "true");
+    iframe.src =
+      "https://instagram.com/p/" +
+      encodeURIComponent(shortCode) +
+      "/embed/?v=4";
     this.applyFillContent(iframe);
     iframe.width = width;
     iframe.height = height;
     this.element.appendChild(iframe);
     return loadPromise(iframe);
   }
-};
+}
 
-AMP.registerElement('amp-instagram', AmpInstagram);
+AMP.registerElement("amp-instagram", AmpInstagram);

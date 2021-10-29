@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-import {BaseElement} from '../src/base-element';
-import {Layout} from '../src/layout';
-import {assert} from '../src/asserts';
-import {documentInfoFor} from '../src/document-info';
-import {registerElement} from '../src/custom-element';
-import {parseUrl, removeFragment} from '../src/url';
-
+import { BaseElement } from "../src/base-element";
+import { Layout } from "../src/layout";
+import { assert } from "../src/asserts";
+import { documentInfoFor } from "../src/document-info";
+import { registerElement } from "../src/custom-element";
+import { parseUrl, removeFragment } from "../src/url";
 
 /**
  * @param {!Window} win Destination window for the new element.
@@ -28,7 +27,6 @@ import {parseUrl, removeFragment} from '../src/url';
  * @return {undefined}
  */
 export function installPixel(win) {
-
   /**
    * @private {!Object<string, function():*>}
    */
@@ -36,21 +34,21 @@ export function installPixel(win) {
     /**
      * Returns a random value for cache busters.
      */
-    'RANDOM': () => {
+    RANDOM: () => {
       return Math.random();
     },
 
     /**
      * Returns the canonical URL for this AMP document.
      */
-    'CANONICAL_URL': () => {
+    CANONICAL_URL: () => {
       return documentInfoFor(win).canonicalUrl;
     },
 
     /**
      * Returns the host of the canonical URL for this AMP document.
      */
-    'CANONICAL_HOST': () => {
+    CANONICAL_HOST: () => {
       let url = parseUrl(documentInfoFor(win).canonicalUrl);
       return url && url.hostname;
     },
@@ -58,7 +56,7 @@ export function installPixel(win) {
     /**
      * Returns the path of the canonical URL for this AMP document.
      */
-    'CANONICAL_PATH': () => {
+    CANONICAL_PATH: () => {
       let url = parseUrl(documentInfoFor(win).canonicalUrl);
       return url && url.pathname;
     },
@@ -66,37 +64,36 @@ export function installPixel(win) {
     /**
      * Returns the title of this AMP document.
      */
-    'TITLE': () => {
+    TITLE: () => {
       return win.document.title;
     },
 
     /**
      * Returns the URL for this AMP document.
      */
-    'AMPDOC_URL': () => {
+    AMPDOC_URL: () => {
       return removeFragment(win.location.href);
     },
 
     /**
      * Returns the host of the URL for this AMP document.
      */
-    'AMPDOC_HOST': () => {
+    AMPDOC_HOST: () => {
       let url = parseUrl(win.location.href);
       return url && url.hostname;
-    }
+    },
   };
 
   /**
    * @private {!RegExp}
    */
   const REPLACEMENT_EXPR = (() => {
-    let all = '';
+    let all = "";
     for (let k in REPLACEMENTS) {
-      all += (all.length > 0 ? '|' : '') + k;
+      all += (all.length > 0 ? "|" : "") + k;
     }
-    return new RegExp('\\$(' + all + ')', 'g');
+    return new RegExp("\\$(" + all + ")", "g");
   })();
-
 
   class AmpPixel extends BaseElement {
     /** @override */
@@ -107,20 +104,20 @@ export function installPixel(win) {
     /** @override */
     buildCallback() {
       // Remove user defined size. Pixels should always be the default size.
-      this.element.style.width = '';
-      this.element.style.height = '';
+      this.element.style.width = "";
+      this.element.style.height = "";
       // Consider the element invisible.
-      this.element.setAttribute('aria-hidden', 'true');
+      this.element.setAttribute("aria-hidden", "true");
     }
 
     /** @override */
     layoutCallback() {
-      var src = this.element.getAttribute('src');
+      var src = this.element.getAttribute("src");
       src = this.assertSource(src);
-      src = src.replace(REPLACEMENT_EXPR, function(match, name) {
+      src = src.replace(REPLACEMENT_EXPR, function (match, name) {
         var val = REPLACEMENTS[name]();
         if (!val && val !== 0) {
-          val = '';
+          val = "";
         }
         return encodeURIComponent(val);
       });
@@ -136,12 +133,14 @@ export function installPixel(win) {
 
     assertSource(src) {
       assert(
-          /^(https\:\/\/|\/\/)/i.test(src),
-          'The <amp-pixel> src attribute must start with ' +
-          '"https://" or "//". Invalid value: ' + src);
+        /^(https\:\/\/|\/\/)/i.test(src),
+        "The <amp-pixel> src attribute must start with " +
+          '"https://" or "//". Invalid value: ' +
+          src
+      );
       return src;
     }
-  };
+  }
 
-  registerElement(win, 'amp-pixel', AmpPixel);
+  registerElement(win, "amp-pixel", AmpPixel);
 }

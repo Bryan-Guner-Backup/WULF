@@ -9,7 +9,7 @@
  *   (c) 2011 Amiado Group AG. All rights reserved.
  *   (c) 2012-2014 Patrick Stadler & Michael Weibel. All rights reserved.
  */
-'use strict';
+"use strict";
 
 /* global Candy, document, Mustache, Strophe, Audio, jQuery */
 
@@ -20,8 +20,7 @@
  *   (Candy.View.Pane) self - itself
  *   (jQuery) $ - jQuery
  */
-Candy.View.Pane = (function(self, $) {
-
+Candy.View.Pane = (function (self, $) {
   /** Class: Candy.View.Pane.Chat
    * Chat-View related view updates
    */
@@ -39,20 +38,22 @@ Candy.View.Pane = (function(self, $) {
      *   (String) roomName - Tab label
      *   (String) roomType - Type of room: `groupchat` or `chat`
      */
-    addTab: function(roomJid, roomName, roomType) {
+    addTab: function (roomJid, roomName, roomType) {
       var roomId = Candy.Util.jidToId(roomJid),
         html = Mustache.to_html(Candy.View.Template.Chat.tab, {
           roomJid: roomJid,
           roomId: roomId,
           name: roomName || Strophe.getNodeFromJid(roomJid),
-          privateUserChat: function() {return roomType === 'chat';},
-          roomType: roomType
+          privateUserChat: function () {
+            return roomType === "chat";
+          },
+          roomType: roomType,
         }),
-        tab = $(html).appendTo('#chat-tabs');
+        tab = $(html).appendTo("#chat-tabs");
 
       tab.click(self.Chat.tabClick);
       // TODO: maybe we find a better way to get the close element.
-      $('a.close', tab).click(self.Chat.tabClose);
+      $("a.close", tab).click(self.Chat.tabClose);
 
       self.Chat.fitTabs();
     },
@@ -66,8 +67,8 @@ Candy.View.Pane = (function(self, $) {
      * Returns:
      *   (jQuery object) - Tab element
      */
-    getTab: function(roomJid) {
-      return $('#chat-tabs').children('li[data-roomjid="' + roomJid + '"]');
+    getTab: function (roomJid) {
+      return $("#chat-tabs").children('li[data-roomjid="' + roomJid + '"]');
     },
 
     /** Function: removeTab
@@ -76,7 +77,7 @@ Candy.View.Pane = (function(self, $) {
      * Parameters:
      *   (String) roomJid - JID of room
      */
-    removeTab: function(roomJid) {
+    removeTab: function (roomJid) {
       self.Chat.getTab(roomJid).remove();
       self.Chat.fitTabs();
     },
@@ -89,15 +90,17 @@ Candy.View.Pane = (function(self, $) {
      * Parameters:
      *   (String) roomJid - JID of room
      */
-    setActiveTab: function(roomJid) {
-      $('#chat-tabs').children().each(function() {
-        var tab = $(this);
-        if(tab.attr('data-roomjid') === roomJid) {
-          tab.addClass('active');
-        } else {
-          tab.removeClass('active');
-        }
-      });
+    setActiveTab: function (roomJid) {
+      $("#chat-tabs")
+        .children()
+        .each(function () {
+          var tab = $(this);
+          if (tab.attr("data-roomjid") === roomJid) {
+            tab.addClass("active");
+          } else {
+            tab.removeClass("active");
+          }
+        });
     },
 
     /** Function: increaseUnreadMessages
@@ -109,11 +112,15 @@ Candy.View.Pane = (function(self, $) {
      * Uses:
      *   - <Window.increaseUnreadMessages>
      */
-    increaseUnreadMessages: function(roomJid) {
-      var unreadElem = this.getTab(roomJid).find('.unread');
-      unreadElem.show().text(unreadElem.text() !== '' ? parseInt(unreadElem.text(), 10) + 1 : 1);
+    increaseUnreadMessages: function (roomJid) {
+      var unreadElem = this.getTab(roomJid).find(".unread");
+      unreadElem
+        .show()
+        .text(
+          unreadElem.text() !== "" ? parseInt(unreadElem.text(), 10) + 1 : 1
+        );
       // only increase window unread messages in private chats
-      if (self.Chat.rooms[roomJid].type === 'chat') {
+      if (self.Chat.rooms[roomJid].type === "chat") {
         self.Window.increaseUnreadMessages();
       }
     },
@@ -127,21 +134,24 @@ Candy.View.Pane = (function(self, $) {
      * Uses:
      *   - <Window.reduceUnreadMessages>
      */
-    clearUnreadMessages: function(roomJid) {
-      var unreadElem = self.Chat.getTab(roomJid).find('.unread');
+    clearUnreadMessages: function (roomJid) {
+      var unreadElem = self.Chat.getTab(roomJid).find(".unread");
       self.Window.reduceUnreadMessages(unreadElem.text());
-      unreadElem.hide().text('');
+      unreadElem.hide().text("");
     },
 
     /** Function: tabClick
      * Tab click event: show the room associated with the tab and stops the event from doing the default.
      */
-    tabClick: function(e) {
+    tabClick: function (e) {
       // remember scroll position of current room
       var currentRoomJid = Candy.View.getCurrent().roomJid;
-      self.Chat.rooms[currentRoomJid].scrollPosition = self.Room.getPane(currentRoomJid, '.message-pane-wrapper').scrollTop();
+      self.Chat.rooms[currentRoomJid].scrollPosition = self.Room.getPane(
+        currentRoomJid,
+        ".message-pane-wrapper"
+      ).scrollTop();
 
-      self.Room.show($(this).attr('data-roomjid'));
+      self.Room.show($(this).attr("data-roomjid"));
       e.preventDefault();
     },
 
@@ -154,12 +164,12 @@ Candy.View.Pane = (function(self, $) {
      * Returns:
      *   (Boolean) - false, this will stop the event from bubbling
      */
-    tabClose: function() {
-      var roomJid = $(this).parent().attr('data-roomjid');
+    tabClose: function () {
+      var roomJid = $(this).parent().attr("data-roomjid");
       // close private user tab
-      if(self.Chat.rooms[roomJid].type === 'chat') {
+      if (self.Chat.rooms[roomJid].type === "chat") {
         self.Room.close(roomJid);
-      // close multi-user room tab
+        // close multi-user room tab
       } else {
         Candy.Core.Action.Jabber.Room.Leave(roomJid);
       }
@@ -174,7 +184,7 @@ Candy.View.Pane = (function(self, $) {
      * Returns:
      *   (Boolean) - false, this will stop the event from bubbling
      */
-    allTabsClosed: function() {
+    allTabsClosed: function () {
       if (Candy.Core.getOptions().disconnectWithoutTabs) {
         Candy.Core.disconnect();
         self.Chat.Toolbar.hide();
@@ -185,18 +195,21 @@ Candy.View.Pane = (function(self, $) {
     /** Function: fitTabs
      * Fit tab size according to window size
      */
-    fitTabs: function() {
-      var availableWidth = $('#chat-tabs').innerWidth(),
+    fitTabs: function () {
+      var availableWidth = $("#chat-tabs").innerWidth(),
         tabsWidth = 0,
-        tabs = $('#chat-tabs').children();
-      tabs.each(function() {
-        tabsWidth += $(this).css({width: 'auto', overflow: 'visible'}).outerWidth(true);
+        tabs = $("#chat-tabs").children();
+      tabs.each(function () {
+        tabsWidth += $(this)
+          .css({ width: "auto", overflow: "visible" })
+          .outerWidth(true);
       });
-      if(tabsWidth > availableWidth) {
+      if (tabsWidth > availableWidth) {
         // tabs.[outer]Width() measures the first element in `tabs`. It's no very readable but nearly two times faster than using :first
         var tabDiffToRealWidth = tabs.outerWidth(true) - tabs.width(),
-          tabWidth = Math.floor((availableWidth) / tabs.length) - tabDiffToRealWidth;
-        tabs.css({width: tabWidth, overflow: 'hidden'});
+          tabWidth =
+            Math.floor(availableWidth / tabs.length) - tabDiffToRealWidth;
+        tabs.css({ width: tabWidth, overflow: "hidden" });
       }
     },
 
@@ -210,19 +223,22 @@ Candy.View.Pane = (function(self, $) {
      * Triggers:
      *   candy:view.chat.admin-message using {subject, message}
      */
-    adminMessage: function(subject, message) {
-      if(Candy.View.getCurrent().roomJid) { // Simply dismiss admin message if no room joined so far. TODO: maybe we should show those messages on a dedicated pane?
+    adminMessage: function (subject, message) {
+      if (Candy.View.getCurrent().roomJid) {
+        // Simply dismiss admin message if no room joined so far. TODO: maybe we should show those messages on a dedicated pane?
         var timestamp = new Date();
         var html = Mustache.to_html(Candy.View.Template.Chat.adminMessage, {
           subject: subject,
           message: message,
-          sender: $.i18n._('administratorMessageSubject'),
+          sender: $.i18n._("administratorMessageSubject"),
           time: Candy.Util.localizedTime(timestamp),
-          timestamp: timestamp.toISOString()
+          timestamp: timestamp.toISOString(),
         });
-        $('#chat-rooms').children().each(function() {
-          self.Room.appendToMessagePane($(this).attr('data-roomjid'), html);
-        });
+        $("#chat-rooms")
+          .children()
+          .each(function () {
+            self.Room.appendToMessagePane($(this).attr("data-roomjid"), html);
+          });
         self.Room.scrollToBottom(Candy.View.getCurrent().roomJid);
 
         /** Event: candy:view.chat.admin-message
@@ -231,9 +247,9 @@ Candy.View.Pane = (function(self, $) {
          * Parameters:
          *   (String) presetJid - Preset user JID
          */
-        $(Candy).triggerHandler('candy:view.chat.admin-message', {
-          'subject' : subject,
-          'message' : message
+        $(Candy).triggerHandler("candy:view.chat.admin-message", {
+          subject: subject,
+          message: message,
         });
       }
     },
@@ -246,7 +262,7 @@ Candy.View.Pane = (function(self, $) {
      *   (String) subject - Subject
      *   (String) message - Message
      */
-    infoMessage: function(roomJid, subject, message) {
+    infoMessage: function (roomJid, subject, message) {
       self.Chat.onInfoMessage(roomJid, subject, message);
     },
 
@@ -259,14 +275,15 @@ Candy.View.Pane = (function(self, $) {
      *   (String) subject - Subject
      *   (String) message - Message
      */
-    onInfoMessage: function(roomJid, subject, message) {
-      if(Candy.View.getCurrent().roomJid && self.Chat.rooms[roomJid]) { // Simply dismiss info message if no room joined so far. TODO: maybe we should show those messages on a dedicated pane?
+    onInfoMessage: function (roomJid, subject, message) {
+      if (Candy.View.getCurrent().roomJid && self.Chat.rooms[roomJid]) {
+        // Simply dismiss info message if no room joined so far. TODO: maybe we should show those messages on a dedicated pane?
         var timestamp = new Date();
         var html = Mustache.to_html(Candy.View.Template.Chat.infoMessage, {
           subject: subject,
           message: $.i18n._(message),
           time: Candy.Util.localizedTime(timestamp),
-          timestamp: timestamp.toISOString()
+          timestamp: timestamp.toISOString(),
         });
         self.Room.appendToMessagePane(roomJid, html);
         if (Candy.View.getCurrent().roomJid === roomJid) {
@@ -284,49 +301,55 @@ Candy.View.Pane = (function(self, $) {
       /** Function: init
        * Register handler and enable or disable sound and status messages.
        */
-      init: function() {
-        $('#emoticons-icon').click(function(e) {
-        self.Chat.Context.showEmoticonsMenu(e.currentTarget);
+      init: function () {
+        $("#emoticons-icon").click(function (e) {
+          self.Chat.Context.showEmoticonsMenu(e.currentTarget);
           e.stopPropagation();
         });
-        $('#chat-autoscroll-control').click(self.Chat.Toolbar.onAutoscrollControlClick);
+        $("#chat-autoscroll-control").click(
+          self.Chat.Toolbar.onAutoscrollControlClick
+        );
 
-        var a = document.createElement('audio');
-        self.Chat.Toolbar._supportsNativeAudio = !!(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, ''));
-        $('#chat-sound-control').click(self.Chat.Toolbar.onSoundControlClick);
-        if(Candy.Util.cookieExists('candy-nosound')) {
-          $('#chat-sound-control').click();
+        var a = document.createElement("audio");
+        self.Chat.Toolbar._supportsNativeAudio = !!(
+          a.canPlayType && a.canPlayType("audio/mpeg;").replace(/no/, "")
+        );
+        $("#chat-sound-control").click(self.Chat.Toolbar.onSoundControlClick);
+        if (Candy.Util.cookieExists("candy-nosound")) {
+          $("#chat-sound-control").click();
         }
-        $('#chat-statusmessage-control').click(self.Chat.Toolbar.onStatusMessageControlClick);
-        if(Candy.Util.cookieExists('candy-nostatusmessages')) {
-          $('#chat-statusmessage-control').click();
+        $("#chat-statusmessage-control").click(
+          self.Chat.Toolbar.onStatusMessageControlClick
+        );
+        if (Candy.Util.cookieExists("candy-nostatusmessages")) {
+          $("#chat-statusmessage-control").click();
         }
       },
 
       /** Function: show
        * Show toolbar.
        */
-      show: function() {
-        $('#chat-toolbar').show();
+      show: function () {
+        $("#chat-toolbar").show();
       },
 
       /** Function: hide
        * Hide toolbar.
        */
-      hide: function() {
-        $('#chat-toolbar').hide();
+      hide: function () {
+        $("#chat-toolbar").hide();
       },
 
       /* Function: update
        * Update toolbar for specific room
        */
-      update: function(roomJid) {
-        var context = $('#chat-toolbar').find('.context'),
+      update: function (roomJid) {
+        var context = $("#chat-toolbar").find(".context"),
           me = self.Room.getUser(roomJid);
-        if(!me || !me.isModerator()) {
+        if (!me || !me.isModerator()) {
           context.hide();
         } else {
-          context.show().click(function(e) {
+          context.show().click(function (e) {
             self.Chat.Context.show(e.currentTarget, roomJid);
             e.stopPropagation();
           });
@@ -337,7 +360,7 @@ Candy.View.Pane = (function(self, $) {
       /** Function: playSound
        * Play sound (default method).
        */
-      playSound: function() {
+      playSound: function () {
         self.Chat.Toolbar.onPlaySound();
       },
 
@@ -347,14 +370,14 @@ Candy.View.Pane = (function(self, $) {
        * Don't call this method directly. Call `playSound()` instead.
        * `playSound()` will only call this method if sound is enabled.
        */
-      onPlaySound: function() {
+      onPlaySound: function () {
         try {
-          if(self.Chat.Toolbar._supportsNativeAudio) {
-            new Audio(Candy.View.getOptions().assets + 'notify.mp3').play();
+          if (self.Chat.Toolbar._supportsNativeAudio) {
+            new Audio(Candy.View.getOptions().assets + "notify.mp3").play();
           } else {
-            var chatSoundPlayer = document.getElementById('chat-sound-player');
-            chatSoundPlayer.SetVariable('method:stop', '');
-            chatSoundPlayer.SetVariable('method:play', '');
+            var chatSoundPlayer = document.getElementById("chat-sound-player");
+            chatSoundPlayer.SetVariable("method:stop", "");
+            chatSoundPlayer.SetVariable("method:play", "");
           }
         } catch (e) {}
       },
@@ -364,18 +387,18 @@ Candy.View.Pane = (function(self, $) {
        *
        * Toggle sound (overwrite `playSound()`) and handle cookies.
        */
-      onSoundControlClick: function() {
-        var control = $('#chat-sound-control');
-        if(control.hasClass('checked')) {
-          self.Chat.Toolbar.playSound = function() {};
-          Candy.Util.setCookie('candy-nosound', '1', 365);
+      onSoundControlClick: function () {
+        var control = $("#chat-sound-control");
+        if (control.hasClass("checked")) {
+          self.Chat.Toolbar.playSound = function () {};
+          Candy.Util.setCookie("candy-nosound", "1", 365);
         } else {
-          self.Chat.Toolbar.playSound = function() {
+          self.Chat.Toolbar.playSound = function () {
             self.Chat.Toolbar.onPlaySound();
           };
-          Candy.Util.deleteCookie('candy-nosound');
+          Candy.Util.deleteCookie("candy-nosound");
         }
-        control.toggleClass('checked');
+        control.toggleClass("checked");
       },
 
       /** Function: onAutoscrollControlClick
@@ -383,21 +406,21 @@ Candy.View.Pane = (function(self, $) {
        *
        * Toggle autoscroll
        */
-      onAutoscrollControlClick: function() {
-        var control = $('#chat-autoscroll-control');
-        if(control.hasClass('checked')) {
-          self.Room.scrollToBottom = function(roomJid) {
+      onAutoscrollControlClick: function () {
+        var control = $("#chat-autoscroll-control");
+        if (control.hasClass("checked")) {
+          self.Room.scrollToBottom = function (roomJid) {
             self.Room.onScrollToStoredPosition(roomJid);
           };
           self.Window.autoscroll = false;
         } else {
-          self.Room.scrollToBottom = function(roomJid) {
+          self.Room.scrollToBottom = function (roomJid) {
             self.Room.onScrollToBottom(roomJid);
           };
           self.Room.scrollToBottom(Candy.View.getCurrent().roomJid);
           self.Window.autoscroll = true;
         }
-        control.toggleClass('checked');
+        control.toggleClass("checked");
       },
 
       /** Function: onStatusMessageControlClick
@@ -405,18 +428,18 @@ Candy.View.Pane = (function(self, $) {
        *
        * Toggle status message
        */
-      onStatusMessageControlClick: function() {
-        var control = $('#chat-statusmessage-control');
-        if(control.hasClass('checked')) {
-          self.Chat.infoMessage = function() {};
-          Candy.Util.setCookie('candy-nostatusmessages', '1', 365);
+      onStatusMessageControlClick: function () {
+        var control = $("#chat-statusmessage-control");
+        if (control.hasClass("checked")) {
+          self.Chat.infoMessage = function () {};
+          Candy.Util.setCookie("candy-nostatusmessages", "1", 365);
         } else {
-          self.Chat.infoMessage = function(roomJid, subject, message) {
+          self.Chat.infoMessage = function (roomJid, subject, message) {
             self.Chat.onInfoMessage(roomJid, subject, message);
           };
-          Candy.Util.deleteCookie('candy-nostatusmessages');
+          Candy.Util.deleteCookie("candy-nostatusmessages");
         }
-        control.toggleClass('checked');
+        control.toggleClass("checked");
       },
 
       /** Function: updateUserCount
@@ -425,9 +448,9 @@ Candy.View.Pane = (function(self, $) {
        * Parameters:
        *   (Integer) count - Current usercount
        */
-      updateUsercount: function(count) {
-        $('#chat-usercount').text(count);
-      }
+      updateUsercount: function (count) {
+        $("#chat-usercount").text(count);
+      },
     },
 
     /** Class: Candy.View.Pane.Modal
@@ -443,13 +466,13 @@ Candy.View.Pane = (function(self, $) {
        *   (Boolean) showSpinner - set to true if a loading spinner should be shown [default false]
        *   (String) modalClass - custom class (or space-separate classes) to attach to the modal
        */
-      show: function(html, showCloseControl, showSpinner, modalClass) {
-        if(showCloseControl) {
+      show: function (html, showCloseControl, showSpinner, modalClass) {
+        if (showCloseControl) {
           self.Chat.Modal.showCloseControl();
         } else {
           self.Chat.Modal.hideCloseControl();
         }
-        if(showSpinner) {
+        if (showSpinner) {
           self.Chat.Modal.showSpinner();
         } else {
           self.Chat.Modal.hideSpinner();
@@ -457,14 +480,14 @@ Candy.View.Pane = (function(self, $) {
         // Reset classes to 'modal-common' only in case .show() is called
         // with different arguments before .hide() can remove the last applied
         // custom class
-        $('#chat-modal').removeClass().addClass('modal-common');
-        if( modalClass ) {
-          $('#chat-modal').addClass(modalClass);
+        $("#chat-modal").removeClass().addClass("modal-common");
+        if (modalClass) {
+          $("#chat-modal").addClass(modalClass);
         }
-        $('#chat-modal').stop(false, true);
-        $('#chat-modal-body').html(html);
-        $('#chat-modal').fadeIn('fast');
-        $('#chat-modal-overlay').show();
+        $("#chat-modal").stop(false, true);
+        $("#chat-modal-body").html(html);
+        $("#chat-modal").fadeIn("fast");
+        $("#chat-modal-overlay").show();
       },
 
       /** Function: hide
@@ -473,16 +496,16 @@ Candy.View.Pane = (function(self, $) {
        * Parameters:
        *   (Function) callback - Calls the specified function after modal window has been hidden.
        */
-      hide: function(callback) {
+      hide: function (callback) {
         // Reset classes to include only `modal-common`.
-        $('#chat-modal').removeClass().addClass('modal-common');
-        $('#chat-modal').fadeOut('fast', function() {
-          $('#chat-modal-body').text('');
-          $('#chat-modal-overlay').hide();
+        $("#chat-modal").removeClass().addClass("modal-common");
+        $("#chat-modal").fadeOut("fast", function () {
+          $("#chat-modal-body").text("");
+          $("#chat-modal-overlay").hide();
         });
         // restore initial esc handling
-        $(document).keydown(function(e) {
-          if(e.which === 27) {
+        $(document).keydown(function (e) {
+          if (e.which === 27) {
             e.preventDefault();
           }
         });
@@ -494,31 +517,33 @@ Candy.View.Pane = (function(self, $) {
       /** Function: showSpinner
        * Show loading spinner
        */
-      showSpinner: function() {
-        $('#chat-modal-spinner').show();
+      showSpinner: function () {
+        $("#chat-modal-spinner").show();
       },
 
       /** Function: hideSpinner
        * Hide loading spinner
        */
-      hideSpinner: function() {
-        $('#chat-modal-spinner').hide();
+      hideSpinner: function () {
+        $("#chat-modal-spinner").hide();
       },
 
       /** Function: showCloseControl
        * Show a close button
        */
-      showCloseControl: function() {
-        $('#admin-message-cancel').show().click(function(e) {
-          self.Chat.Modal.hide();
-          // some strange behaviour on IE7 (and maybe other browsers) triggers onWindowUnload when clicking on the close button.
-          // prevent this.
-          e.preventDefault();
-        });
+      showCloseControl: function () {
+        $("#admin-message-cancel")
+          .show()
+          .click(function (e) {
+            self.Chat.Modal.hide();
+            // some strange behaviour on IE7 (and maybe other browsers) triggers onWindowUnload when clicking on the close button.
+            // prevent this.
+            e.preventDefault();
+          });
 
         // enable esc to close modal
-        $(document).keydown(function(e) {
-          if(e.which === 27) {
+        $(document).keydown(function (e) {
+          if (e.which === 27) {
             self.Chat.Modal.hide();
             e.preventDefault();
           }
@@ -528,8 +553,10 @@ Candy.View.Pane = (function(self, $) {
       /** Function: hideCloseControl
        * Hide the close button
        */
-      hideCloseControl: function() {
-        $('#admin-message-cancel').hide().click(function() {});
+      hideCloseControl: function () {
+        $("#admin-message-cancel")
+          .hide()
+          .click(function () {});
       },
 
       /** Function: showLoginForm
@@ -539,57 +566,75 @@ Candy.View.Pane = (function(self, $) {
        *  (String) message - optional message to display above the form
        *  (String) presetJid - optional user jid. if set, the user will only be prompted for password.
        */
-      showLoginForm: function(message, presetJid) {
+      showLoginForm: function (message, presetJid) {
         var domains = Candy.Core.getOptions().domains;
         var hideDomainList = Candy.Core.getOptions().hideDomainList;
-        domains = domains ? domains.map( function(d) {return {'domain':d};} )
-                           : null;
-        var customClass = domains && !hideDomainList ? 'login-with-domains'
-                                                     : null;
-        self.Chat.Modal.show((message ? message : '') + Mustache.to_html(Candy.View.Template.Login.form, {
-          _labelNickname: $.i18n._('labelNickname'),
-          _labelUsername: $.i18n._('labelUsername'),
-          domains: domains,
-          _labelPassword: $.i18n._('labelPassword'),
-          _loginSubmit: $.i18n._('loginSubmit'),
-          displayPassword: !Candy.Core.isAnonymousConnection(),
-          displayUsername: !presetJid,
-          displayDomain: domains ? true : false,
-          displayNickname: Candy.Core.isAnonymousConnection(),
-          presetJid: presetJid ? presetJid : false
-        }), null, null, customClass);
-        if(hideDomainList) {
-          $('#domain').hide();
-          $('.at-symbol').hide();
+        domains = domains
+          ? domains.map(function (d) {
+              return { domain: d };
+            })
+          : null;
+        var customClass =
+          domains && !hideDomainList ? "login-with-domains" : null;
+        self.Chat.Modal.show(
+          (message ? message : "") +
+            Mustache.to_html(Candy.View.Template.Login.form, {
+              _labelNickname: $.i18n._("labelNickname"),
+              _labelUsername: $.i18n._("labelUsername"),
+              domains: domains,
+              _labelPassword: $.i18n._("labelPassword"),
+              _loginSubmit: $.i18n._("loginSubmit"),
+              displayPassword: !Candy.Core.isAnonymousConnection(),
+              displayUsername: !presetJid,
+              displayDomain: domains ? true : false,
+              displayNickname: Candy.Core.isAnonymousConnection(),
+              presetJid: presetJid ? presetJid : false,
+            }),
+          null,
+          null,
+          customClass
+        );
+        if (hideDomainList) {
+          $("#domain").hide();
+          $(".at-symbol").hide();
         }
-        $('#login-form').children(':input:first').focus();
+        $("#login-form").children(":input:first").focus();
 
         // register submit handler
-        $('#login-form').submit(function() {
-          var username = $('#username').val(),
-            password = $('#password').val(),
-            domain = $('#domain');
-          domain = domain.length ? domain.val().split(' ')[0] : null;
+        $("#login-form").submit(function () {
+          var username = $("#username").val(),
+            password = $("#password").val(),
+            domain = $("#domain");
+          domain = domain.length ? domain.val().split(" ")[0] : null;
 
           if (!Candy.Core.isAnonymousConnection()) {
             var jid;
-            if(domain) { // domain is stipulated
+            if (domain) {
+              // domain is stipulated
               // Ensure there is no domain part in username
-              username = username.split('@')[0];
-              jid = username + '@' + domain;
-            } else {  // domain not stipulated
+              username = username.split("@")[0];
+              jid = username + "@" + domain;
+            } else {
+              // domain not stipulated
               // guess the input and create a jid out of it
-              jid = Candy.Core.getUser() && username.indexOf("@") < 0 ?
-              username + '@' + Strophe.getDomainFromJid(Candy.Core.getUser().getJid()) : username;
+              jid =
+                Candy.Core.getUser() && username.indexOf("@") < 0
+                  ? username +
+                    "@" +
+                    Strophe.getDomainFromJid(Candy.Core.getUser().getJid())
+                  : username;
             }
 
-            if(jid.indexOf("@") < 0 && !Candy.Core.getUser()) {
-              Candy.View.Pane.Chat.Modal.showLoginForm($.i18n._('loginInvalid'));
+            if (jid.indexOf("@") < 0 && !Candy.Core.getUser()) {
+              Candy.View.Pane.Chat.Modal.showLoginForm(
+                $.i18n._("loginInvalid")
+              );
             } else {
               //Candy.View.Pane.Chat.Modal.hide();
               Candy.Core.connect(jid, password);
             }
-          } else { // anonymous login
+          } else {
+            // anonymous login
             Candy.Core.connect(presetJid, null, username);
           }
           return false;
@@ -604,20 +649,28 @@ Candy.View.Pane = (function(self, $) {
        *   (String) roomName - Room name
        *   (String) message - [optional] Message to show as the label
        */
-      showEnterPasswordForm: function(roomJid, roomName, message) {
-        self.Chat.Modal.show(Mustache.to_html(Candy.View.Template.PresenceError.enterPasswordForm, {
-          roomName: roomName,
-          _labelPassword: $.i18n._('labelPassword'),
-          _label: (message ? message : $.i18n._('enterRoomPassword', [roomName])),
-          _joinSubmit: $.i18n._('enterRoomPasswordSubmit')
-        }), true);
-        $('#password').focus();
+      showEnterPasswordForm: function (roomJid, roomName, message) {
+        self.Chat.Modal.show(
+          Mustache.to_html(
+            Candy.View.Template.PresenceError.enterPasswordForm,
+            {
+              roomName: roomName,
+              _labelPassword: $.i18n._("labelPassword"),
+              _label: message
+                ? message
+                : $.i18n._("enterRoomPassword", [roomName]),
+              _joinSubmit: $.i18n._("enterRoomPasswordSubmit"),
+            }
+          ),
+          true
+        );
+        $("#password").focus();
 
         // register submit handler
-        $('#enter-password-form').submit(function() {
-          var password = $('#password').val();
+        $("#enter-password-form").submit(function () {
+          var password = $("#password").val();
 
-          self.Chat.Modal.hide(function() {
+          self.Chat.Modal.hide(function () {
             Candy.Core.Action.Jabber.Room.Join(roomJid, password);
           });
           return false;
@@ -631,19 +684,24 @@ Candy.View.Pane = (function(self, $) {
        * Parameters:
        *   (String) roomJid - Room jid to join
        */
-      showNicknameConflictForm: function(roomJid) {
-        self.Chat.Modal.show(Mustache.to_html(Candy.View.Template.PresenceError.nicknameConflictForm, {
-          _labelNickname: $.i18n._('labelNickname'),
-          _label: $.i18n._('nicknameConflict'),
-          _loginSubmit: $.i18n._('loginSubmit')
-        }));
-        $('#nickname').focus();
+      showNicknameConflictForm: function (roomJid) {
+        self.Chat.Modal.show(
+          Mustache.to_html(
+            Candy.View.Template.PresenceError.nicknameConflictForm,
+            {
+              _labelNickname: $.i18n._("labelNickname"),
+              _label: $.i18n._("nicknameConflict"),
+              _loginSubmit: $.i18n._("loginSubmit"),
+            }
+          )
+        );
+        $("#nickname").focus();
 
         // register submit handler
-        $('#nickname-conflict-form').submit(function() {
-          var nickname = $('#nickname').val();
+        $("#nickname-conflict-form").submit(function () {
+          var nickname = $("#nickname").val();
 
-          self.Chat.Modal.hide(function() {
+          self.Chat.Modal.hide(function () {
             Candy.Core.getUser().data.nick = nickname;
             Candy.Core.Action.Jabber.Room.Join(roomJid);
           });
@@ -658,11 +716,14 @@ Candy.View.Pane = (function(self, $) {
        *   (String) message - key of translation to display
        *   (Array) replacements - array containing replacements for translation (%s)
        */
-      showError: function(message, replacements) {
-        self.Chat.Modal.show(Mustache.to_html(Candy.View.Template.PresenceError.displayError, {
-          _error: $.i18n._(message, replacements)
-        }), true);
-      }
+      showError: function (message, replacements) {
+        self.Chat.Modal.show(
+          Mustache.to_html(Candy.View.Template.PresenceError.displayError, {
+            _error: $.i18n._(message, replacements),
+          }),
+          true
+        );
+      },
     },
 
     /** Class: Candy.View.Pane.Tooltip
@@ -678,40 +739,54 @@ Candy.View.Pane = (function(self, $) {
        *   (Event) event - Triggered event
        *   (String) content - Content to display [optional]
        */
-      show: function(event, content) {
-        var tooltip = $('#tooltip'),
+      show: function (event, content) {
+        var tooltip = $("#tooltip"),
           target = $(event.currentTarget);
 
-        if(!content) {
-          content = target.attr('data-tooltip');
+        if (!content) {
+          content = target.attr("data-tooltip");
         }
 
-        if(tooltip.length === 0) {
+        if (tooltip.length === 0) {
           var html = Mustache.to_html(Candy.View.Template.Chat.tooltip);
-          $('#chat-pane').append(html);
-          tooltip = $('#tooltip');
+          $("#chat-pane").append(html);
+          tooltip = $("#tooltip");
         }
 
-        $('#context-menu').hide();
+        $("#context-menu").hide();
 
         tooltip.stop(false, true);
-        tooltip.children('div').html(content);
+        tooltip.children("div").html(content);
 
         var pos = target.offset(),
-            posLeft = Candy.Util.getPosLeftAccordingToWindowBounds(tooltip, pos.left),
-            posTop  = Candy.Util.getPosTopAccordingToWindowBounds(tooltip, pos.top);
+          posLeft = Candy.Util.getPosLeftAccordingToWindowBounds(
+            tooltip,
+            pos.left
+          ),
+          posTop = Candy.Util.getPosTopAccordingToWindowBounds(
+            tooltip,
+            pos.top
+          );
 
         tooltip
-          .css({'left': posLeft.px, 'top': posTop.px})
-          .removeClass('left-top left-bottom right-top right-bottom')
-          .addClass(posLeft.backgroundPositionAlignment + '-' + posTop.backgroundPositionAlignment)
-          .fadeIn('fast');
+          .css({ left: posLeft.px, top: posTop.px })
+          .removeClass("left-top left-bottom right-top right-bottom")
+          .addClass(
+            posLeft.backgroundPositionAlignment +
+              "-" +
+              posTop.backgroundPositionAlignment
+          )
+          .fadeIn("fast");
 
-        target.mouseleave(function(event) {
+        target.mouseleave(function (event) {
           event.stopPropagation();
-          $('#tooltip').stop(false, true).fadeOut('fast', function() {$(this).css({'top': 0, 'left': 0});});
+          $("#tooltip")
+            .stop(false, true)
+            .fadeOut("fast", function () {
+              $(this).css({ top: 0, left: 0 });
+            });
         });
-      }
+      },
     },
 
     /** Class: Candy.View.Pane.Context
@@ -721,12 +796,12 @@ Candy.View.Pane = (function(self, $) {
       /** Function: init
        * Initialize context menu and setup mouseleave handler.
        */
-      init: function() {
-        if ($('#context-menu').length === 0) {
+      init: function () {
+        if ($("#context-menu").length === 0) {
           var html = Mustache.to_html(Candy.View.Template.Chat.Context.menu);
-          $('#chat-pane').append(html);
-          $('#context-menu').mouseleave(function() {
-            $(this).fadeOut('fast');
+          $("#chat-pane").append(html);
+          $("#context-menu").mouseleave(function () {
+            $(this).fadeOut("fast");
           });
         }
       },
@@ -747,16 +822,16 @@ Candy.View.Pane = (function(self, $) {
        * Triggers:
        *   candy:view.roster.after-context-menu using {roomJid, user, elements}
        */
-      show: function(elem, roomJid, user) {
+      show: function (elem, roomJid, user) {
         elem = $(elem);
         var roomId = self.Chat.rooms[roomJid].id,
-          menu = $('#context-menu'),
-          links = $('ul li', menu);
+          menu = $("#context-menu"),
+          links = $("ul li", menu);
 
-        $('#tooltip').hide();
+        $("#tooltip").hide();
 
         // add specific context-user class if a user is available (when context menu should be opened next to a user)
-        if(!user) {
+        if (!user) {
           user = Candy.Core.getUser();
         }
 
@@ -764,37 +839,51 @@ Candy.View.Pane = (function(self, $) {
 
         var menulinks = this.getMenuLinks(roomJid, user, elem),
           id,
-          clickHandler = function(roomJid, user) {
-            return function(event) {
+          clickHandler = function (roomJid, user) {
+            return function (event) {
               event.data.callback(event, roomJid, user);
-              $('#context-menu').hide();
+              $("#context-menu").hide();
             };
           };
 
-        for(id in menulinks) {
-          if(menulinks.hasOwnProperty(id)) {
+        for (id in menulinks) {
+          if (menulinks.hasOwnProperty(id)) {
             var link = menulinks[id],
-              html = Mustache.to_html(Candy.View.Template.Chat.Context.menulinks, {
-                'roomId'   : roomId,
-                'class'    : link['class'],
-                'id'       : id,
-                'label'    : link.label
-              });
-            $('ul', menu).append(html);
-            $('#context-menu-' + id).bind('click', link, clickHandler(roomJid, user));
+              html = Mustache.to_html(
+                Candy.View.Template.Chat.Context.menulinks,
+                {
+                  roomId: roomId,
+                  class: link["class"],
+                  id: id,
+                  label: link.label,
+                }
+              );
+            $("ul", menu).append(html);
+            $("#context-menu-" + id).bind(
+              "click",
+              link,
+              clickHandler(roomJid, user)
+            );
           }
         }
         // if `id` is set the menu is not empty
-        if(id) {
+        if (id) {
           var pos = elem.offset(),
-            posLeft = Candy.Util.getPosLeftAccordingToWindowBounds(menu, pos.left),
-            posTop  = Candy.Util.getPosTopAccordingToWindowBounds(menu, pos.top);
+            posLeft = Candy.Util.getPosLeftAccordingToWindowBounds(
+              menu,
+              pos.left
+            ),
+            posTop = Candy.Util.getPosTopAccordingToWindowBounds(menu, pos.top);
 
           menu
-            .css({'left': posLeft.px, 'top': posTop.px})
-            .removeClass('left-top left-bottom right-top right-bottom')
-            .addClass(posLeft.backgroundPositionAlignment + '-' + posTop.backgroundPositionAlignment)
-            .fadeIn('fast');
+            .css({ left: posLeft.px, top: posTop.px })
+            .removeClass("left-top left-bottom right-top right-bottom")
+            .addClass(
+              posLeft.backgroundPositionAlignment +
+                "-" +
+                posTop.backgroundPositionAlignment
+            )
+            .fadeIn("fast");
 
           /** Event: candy:view.roster.after-context-menu
            * After context menu display
@@ -804,10 +893,10 @@ Candy.View.Pane = (function(self, $) {
            *   (Candy.Core.ChatUser) user - User
            *   (jQuery.Element) element - Menu element
            */
-          $(Candy).triggerHandler('candy:view.roster.after-context-menu', {
-            'roomJid' : roomJid,
-            'user' : user,
-            'element': menu
+          $(Candy).triggerHandler("candy:view.roster.after-context-menu", {
+            roomJid: roomJid,
+            user: user,
+            element: menu,
           });
 
           return true;
@@ -828,14 +917,14 @@ Candy.View.Pane = (function(self, $) {
        * Returns:
        *   (Object) - object containing the extended menulinks.
        */
-      getMenuLinks: function(roomJid, user, elem) {
+      getMenuLinks: function (roomJid, user, elem) {
         var menulinks, id;
 
         var evtData = {
-          'roomJid' : roomJid,
-          'user' : user,
-          'elem': elem,
-          'menulinks': this.initialMenuLinks(elem)
+          roomJid: roomJid,
+          user: user,
+          elem: elem,
+          menulinks: this.initialMenuLinks(elem),
         };
 
         /** Event: candy:view.roster.context-menu
@@ -849,12 +938,20 @@ Candy.View.Pane = (function(self, $) {
          *   (Candy.Core.ChatUser) user - User
          *   (jQuery.Element) elem - Parent element of the context menu
          */
-        $(Candy).triggerHandler('candy:view.roster.context-menu', evtData);
+        $(Candy).triggerHandler("candy:view.roster.context-menu", evtData);
 
         menulinks = evtData.menulinks;
 
-        for(id in menulinks) {
-          if(menulinks.hasOwnProperty(id) && menulinks[id].requiredPermission !== undefined && !menulinks[id].requiredPermission(user, self.Room.getUser(roomJid), elem)) {
+        for (id in menulinks) {
+          if (
+            menulinks.hasOwnProperty(id) &&
+            menulinks[id].requiredPermission !== undefined &&
+            !menulinks[id].requiredPermission(
+              user,
+              self.Room.getUser(roomJid),
+              elem
+            )
+          ) {
             delete menulinks[id];
           }
         }
@@ -874,95 +971,149 @@ Candy.View.Pane = (function(self, $) {
        * Returns:
        *   (Object) - object containing those menulinks
        */
-      initialMenuLinks: function() {
+      initialMenuLinks: function () {
         return {
-          'private': {
-            requiredPermission: function(user, me) {
-              return me.getNick() !== user.getNick() && Candy.Core.getRoom(Candy.View.getCurrent().roomJid) && !Candy.Core.getUser().isInPrivacyList('ignore', user.getJid());
+          private: {
+            requiredPermission: function (user, me) {
+              return (
+                me.getNick() !== user.getNick() &&
+                Candy.Core.getRoom(Candy.View.getCurrent().roomJid) &&
+                !Candy.Core.getUser().isInPrivacyList("ignore", user.getJid())
+              );
             },
-            'class' : 'private',
-            'label' : $.i18n._('privateActionLabel'),
-            'callback' : function(e, roomJid, user) {
-              $('#user-' + Candy.Util.jidToId(roomJid) + '-' + Candy.Util.jidToId(user.getJid())).click();
-            }
+            class: "private",
+            label: $.i18n._("privateActionLabel"),
+            callback: function (e, roomJid, user) {
+              $(
+                "#user-" +
+                  Candy.Util.jidToId(roomJid) +
+                  "-" +
+                  Candy.Util.jidToId(user.getJid())
+              ).click();
+            },
           },
-          'ignore': {
-            requiredPermission: function(user, me) {
-              return me.getNick() !== user.getNick() && !Candy.Core.getUser().isInPrivacyList('ignore', user.getJid());
+          ignore: {
+            requiredPermission: function (user, me) {
+              return (
+                me.getNick() !== user.getNick() &&
+                !Candy.Core.getUser().isInPrivacyList("ignore", user.getJid())
+              );
             },
-            'class' : 'ignore',
-            'label' : $.i18n._('ignoreActionLabel'),
-            'callback' : function(e, roomJid, user) {
+            class: "ignore",
+            label: $.i18n._("ignoreActionLabel"),
+            callback: function (e, roomJid, user) {
               Candy.View.Pane.Room.ignoreUser(roomJid, user.getJid());
-            }
-          },
-          'unignore': {
-            requiredPermission: function(user, me) {
-              return me.getNick() !== user.getNick() && Candy.Core.getUser().isInPrivacyList('ignore', user.getJid());
             },
-            'class' : 'unignore',
-            'label' : $.i18n._('unignoreActionLabel'),
-            'callback' : function(e, roomJid, user) {
+          },
+          unignore: {
+            requiredPermission: function (user, me) {
+              return (
+                me.getNick() !== user.getNick() &&
+                Candy.Core.getUser().isInPrivacyList("ignore", user.getJid())
+              );
+            },
+            class: "unignore",
+            label: $.i18n._("unignoreActionLabel"),
+            callback: function (e, roomJid, user) {
               Candy.View.Pane.Room.unignoreUser(roomJid, user.getJid());
-            }
-          },
-          'kick': {
-            requiredPermission: function(user, me) {
-              return me.getNick() !== user.getNick() && me.isModerator() && !user.isModerator();
             },
-            'class' : 'kick',
-            'label' : $.i18n._('kickActionLabel'),
-            'callback' : function(e, roomJid, user) {
-              self.Chat.Modal.show(Mustache.to_html(Candy.View.Template.Chat.Context.contextModalForm, {
-                _label: $.i18n._('reason'),
-                _submit: $.i18n._('kickActionLabel')
-              }), true);
-              $('#context-modal-field').focus();
-              $('#context-modal-form').submit(function() {
-                Candy.Core.Action.Jabber.Room.Admin.UserAction(roomJid, user.getJid(), 'kick', $('#context-modal-field').val());
+          },
+          kick: {
+            requiredPermission: function (user, me) {
+              return (
+                me.getNick() !== user.getNick() &&
+                me.isModerator() &&
+                !user.isModerator()
+              );
+            },
+            class: "kick",
+            label: $.i18n._("kickActionLabel"),
+            callback: function (e, roomJid, user) {
+              self.Chat.Modal.show(
+                Mustache.to_html(
+                  Candy.View.Template.Chat.Context.contextModalForm,
+                  {
+                    _label: $.i18n._("reason"),
+                    _submit: $.i18n._("kickActionLabel"),
+                  }
+                ),
+                true
+              );
+              $("#context-modal-field").focus();
+              $("#context-modal-form").submit(function () {
+                Candy.Core.Action.Jabber.Room.Admin.UserAction(
+                  roomJid,
+                  user.getJid(),
+                  "kick",
+                  $("#context-modal-field").val()
+                );
                 self.Chat.Modal.hide();
                 return false; // stop propagation & preventDefault, as otherwise you get disconnected (wtf?)
               });
-            }
-          },
-          'ban': {
-            requiredPermission: function(user, me) {
-              return me.getNick() !== user.getNick() && me.isModerator() && !user.isModerator();
             },
-            'class' : 'ban',
-            'label' : $.i18n._('banActionLabel'),
-            'callback' : function(e, roomJid, user) {
-              self.Chat.Modal.show(Mustache.to_html(Candy.View.Template.Chat.Context.contextModalForm, {
-                _label: $.i18n._('reason'),
-                _submit: $.i18n._('banActionLabel')
-              }), true);
-              $('#context-modal-field').focus();
-              $('#context-modal-form').submit(function() {
-                Candy.Core.Action.Jabber.Room.Admin.UserAction(roomJid, user.getJid(), 'ban', $('#context-modal-field').val());
+          },
+          ban: {
+            requiredPermission: function (user, me) {
+              return (
+                me.getNick() !== user.getNick() &&
+                me.isModerator() &&
+                !user.isModerator()
+              );
+            },
+            class: "ban",
+            label: $.i18n._("banActionLabel"),
+            callback: function (e, roomJid, user) {
+              self.Chat.Modal.show(
+                Mustache.to_html(
+                  Candy.View.Template.Chat.Context.contextModalForm,
+                  {
+                    _label: $.i18n._("reason"),
+                    _submit: $.i18n._("banActionLabel"),
+                  }
+                ),
+                true
+              );
+              $("#context-modal-field").focus();
+              $("#context-modal-form").submit(function () {
+                Candy.Core.Action.Jabber.Room.Admin.UserAction(
+                  roomJid,
+                  user.getJid(),
+                  "ban",
+                  $("#context-modal-field").val()
+                );
                 self.Chat.Modal.hide();
                 return false; // stop propagation & preventDefault, as otherwise you get disconnected (wtf?)
               });
-            }
+            },
           },
-          'subject': {
-            requiredPermission: function(user, me) {
+          subject: {
+            requiredPermission: function (user, me) {
               return me.getNick() === user.getNick() && me.isModerator();
             },
-            'class': 'subject',
-            'label' : $.i18n._('setSubjectActionLabel'),
-            'callback': function(e, roomJid) {
-              self.Chat.Modal.show(Mustache.to_html(Candy.View.Template.Chat.Context.contextModalForm, {
-                _label: $.i18n._('subject'),
-                _submit: $.i18n._('setSubjectActionLabel')
-              }), true);
-              $('#context-modal-field').focus();
-              $('#context-modal-form').submit(function(e) {
-                Candy.Core.Action.Jabber.Room.Admin.SetSubject(roomJid, $('#context-modal-field').val());
+            class: "subject",
+            label: $.i18n._("setSubjectActionLabel"),
+            callback: function (e, roomJid) {
+              self.Chat.Modal.show(
+                Mustache.to_html(
+                  Candy.View.Template.Chat.Context.contextModalForm,
+                  {
+                    _label: $.i18n._("subject"),
+                    _submit: $.i18n._("setSubjectActionLabel"),
+                  }
+                ),
+                true
+              );
+              $("#context-modal-field").focus();
+              $("#context-modal-form").submit(function (e) {
+                Candy.Core.Action.Jabber.Room.Admin.SetSubject(
+                  roomJid,
+                  $("#context-modal-field").val()
+                );
                 self.Chat.Modal.hide();
                 e.preventDefault();
               });
-            }
-          }
+            },
+          },
         };
       },
 
@@ -975,40 +1126,57 @@ Candy.View.Pane = (function(self, $) {
        * Returns:
        *   (Boolean) - true
        */
-      showEmoticonsMenu: function(elem) {
+      showEmoticonsMenu: function (elem) {
         elem = $(elem);
         var pos = elem.offset(),
-          menu = $('#context-menu'),
-          content = $('ul', menu),
-          emoticons = '',
+          menu = $("#context-menu"),
+          content = $("ul", menu),
+          emoticons = "",
           i;
 
-        $('#tooltip').hide();
+        $("#tooltip").hide();
 
-        for(i = Candy.Util.Parser.emoticons.length-1; i >= 0; i--) {
-          emoticons = '<img src="' + Candy.Util.Parser._emoticonPath + Candy.Util.Parser.emoticons[i].image + '" alt="' + Candy.Util.Parser.emoticons[i].plain + '" />' + emoticons;
+        for (i = Candy.Util.Parser.emoticons.length - 1; i >= 0; i--) {
+          emoticons =
+            '<img src="' +
+            Candy.Util.Parser._emoticonPath +
+            Candy.Util.Parser.emoticons[i].image +
+            '" alt="' +
+            Candy.Util.Parser.emoticons[i].plain +
+            '" />' +
+            emoticons;
         }
-        content.html('<li class="emoticons">' + emoticons + '</li>');
-        content.find('img').click(function() {
-          var input = Candy.View.Pane.Room.getPane(Candy.View.getCurrent().roomJid, '.message-form').children('.field'),
+        content.html('<li class="emoticons">' + emoticons + "</li>");
+        content.find("img").click(function () {
+          var input = Candy.View.Pane.Room.getPane(
+              Candy.View.getCurrent().roomJid,
+              ".message-form"
+            ).children(".field"),
             value = input.val(),
-            emoticon = $(this).attr('alt') + ' ';
-          input.val(value ? value + ' ' + emoticon : emoticon).focus();
+            emoticon = $(this).attr("alt") + " ";
+          input.val(value ? value + " " + emoticon : emoticon).focus();
         });
 
-        var posLeft = Candy.Util.getPosLeftAccordingToWindowBounds(menu, pos.left),
-          posTop  = Candy.Util.getPosTopAccordingToWindowBounds(menu, pos.top);
+        var posLeft = Candy.Util.getPosLeftAccordingToWindowBounds(
+            menu,
+            pos.left
+          ),
+          posTop = Candy.Util.getPosTopAccordingToWindowBounds(menu, pos.top);
 
         menu
-          .css({'left': posLeft.px, 'top': posTop.px})
-          .removeClass('left-top left-bottom right-top right-bottom')
-          .addClass(posLeft.backgroundPositionAlignment + '-' + posTop.backgroundPositionAlignment)
-          .fadeIn('fast');
+          .css({ left: posLeft.px, top: posTop.px })
+          .removeClass("left-top left-bottom right-top right-bottom")
+          .addClass(
+            posLeft.backgroundPositionAlignment +
+              "-" +
+              posTop.backgroundPositionAlignment
+          )
+          .fadeIn("fast");
 
         return true;
-      }
-    }
+      },
+    },
   };
 
   return self;
-}(Candy.View.Pane || {}, jQuery));
+})(Candy.View.Pane || {}, jQuery);

@@ -1,11 +1,11 @@
 ---
-date: '2012-11-10 14:42:00'
+date: "2012-11-10 14:42:00"
 layout: post
 slug: ccv-now-has-a-state-of-art-tracking-algorithm
 status: publish
 title: ccv now has a state-of-art tracking algorithm
 categories:
-- post
+  - post
 ---
 
 In the next few minutes, I will cut the 0.3-rc1 branch, and that will put the 0.3 version of ccv out of the door (well, not exactly, because all the development on unstable branch is public). Ever since 0.1 version, I've tried to consciously focus on different areas for each cycle, mainly, an odd version should be a version with new features, and an even version should be a version with performance improvement, bug fixes and renovated API design. It is exciting for me to unleash 0.3 version, with a major feature included: a tracking algorithm.

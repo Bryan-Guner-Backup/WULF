@@ -14,19 +14,25 @@
  * limitations under the License.
  */
 
-import {writeScript} from '../src/3p';
+import { writeScript } from "../src/3p";
 
 /**
  * @param {!Window} global
  * @param {!Object} data
  */
 export function adreactor(global, data) {
-  var url = 'https://adserver.adreactor.com' +
-      '/servlet/view/banner/javascript/zone?' +
-      'zid=' + encodeURIComponent(data.zid) +
-      '&pid=' + encodeURIComponent(data.pid) +
-      '&custom3=' + encodeURIComponent(data.custom3) +
-      '&random=' + Math.floor(89999999 * Math.random() + 10000000) +
-      '&millis=' + new Date().getTime();
+  var url =
+    "https://adserver.adreactor.com" +
+    "/servlet/view/banner/javascript/zone?" +
+    "zid=" +
+    encodeURIComponent(data.zid) +
+    "&pid=" +
+    encodeURIComponent(data.pid) +
+    "&custom3=" +
+    encodeURIComponent(data.custom3) +
+    "&random=" +
+    Math.floor(89999999 * Math.random() + 10000000) +
+    "&millis=" +
+    new Date().getTime();
   writeScript(global, url);
 }

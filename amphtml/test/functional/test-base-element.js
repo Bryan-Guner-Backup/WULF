@@ -14,104 +14,102 @@
  * limitations under the License.
  */
 
-import {BaseElement} from '../../src/base-element';
+import { BaseElement } from "../../src/base-element";
 
-
-describe('BaseElement', () => {
-
+describe("BaseElement", () => {
   let div;
   let element;
 
   beforeEach(() => {
-    div = document.createElement('div');
+    div = document.createElement("div");
     element = new BaseElement(div);
   });
 
-  it('getPlaceholder - niente', () => {
+  it("getPlaceholder - niente", () => {
     expect(element.getPlaceholder()).to.equal(null);
   });
 
-  it('getPlaceholder', () => {
-    let placeholder = document.createElement('div');
-    placeholder.setAttribute('placeholder', '');
+  it("getPlaceholder", () => {
+    let placeholder = document.createElement("div");
+    placeholder.setAttribute("placeholder", "");
     div.appendChild(placeholder);
     expect(element.getPlaceholder()).to.equal(placeholder);
   });
 
-  it('getRealChildren - niente', () => {
+  it("getRealChildren - niente", () => {
     expect(element.getRealChildNodes().length).to.equal(0);
     expect(element.getRealChildren().length).to.equal(0);
   });
 
-  it('getRealChildren', () => {
-    div.appendChild(document.createElement('i-amp-service'));
-    div.appendChild(document.createTextNode('abc'));
-    div.appendChild(document.createElement('content'));
+  it("getRealChildren", () => {
+    div.appendChild(document.createElement("i-amp-service"));
+    div.appendChild(document.createTextNode("abc"));
+    div.appendChild(document.createElement("content"));
 
     let nodes = element.getRealChildNodes();
     expect(nodes.length).to.equal(2);
-    expect(nodes[0].textContent).to.equal('abc');
-    expect(nodes[1].tagName.toLowerCase()).to.equal('content');
+    expect(nodes[0].textContent).to.equal("abc");
+    expect(nodes[1].tagName.toLowerCase()).to.equal("content");
 
     let elements = element.getRealChildren();
     expect(elements.length).to.equal(1);
-    expect(elements[0].tagName.toLowerCase()).to.equal('content');
+    expect(elements[0].tagName.toLowerCase()).to.equal("content");
   });
 
-  it('propagateAttributes - niente', () => {
-    let target = document.createElement('div');
+  it("propagateAttributes - niente", () => {
+    let target = document.createElement("div");
     expect(target.hasAttributes()).to.be.false;
 
-    element.propagateAttributes(['data-test1'], target);
+    element.propagateAttributes(["data-test1"], target);
     expect(target.hasAttributes()).to.be.false;
 
-    element.propagateAttributes(['data-test2', 'data-test3'], target);
+    element.propagateAttributes(["data-test2", "data-test3"], target);
     expect(target.hasAttributes()).to.be.false;
   });
 
-  it('propagateAttributes', () => {
-    let target = document.createElement('div');
+  it("propagateAttributes", () => {
+    let target = document.createElement("div");
     expect(target.hasAttributes()).to.be.false;
 
-    div.setAttribute('data-test1', 'abc');
-    div.setAttribute('data-test2', 'xyz');
-    div.setAttribute('data-test3', '123');
+    div.setAttribute("data-test1", "abc");
+    div.setAttribute("data-test2", "xyz");
+    div.setAttribute("data-test3", "123");
 
-    element.propagateAttributes(['data-test1'], target);
+    element.propagateAttributes(["data-test1"], target);
     expect(target.hasAttributes()).to.be.true;
 
-    expect(target.getAttribute('data-test1')).to.equal('abc');
-    expect(target.getAttribute('data-test2')).to.be.null;
-    expect(target.getAttribute('data-test3')).to.be.null;
+    expect(target.getAttribute("data-test1")).to.equal("abc");
+    expect(target.getAttribute("data-test2")).to.be.null;
+    expect(target.getAttribute("data-test3")).to.be.null;
 
-    element.propagateAttributes(['data-test2', 'data-test3'], target);
-    expect(target.getAttribute('data-test2')).to.equal('xyz');
-    expect(target.getAttribute('data-test3')).to.equal('123');
+    element.propagateAttributes(["data-test2", "data-test3"], target);
+    expect(target.getAttribute("data-test2")).to.equal("xyz");
+    expect(target.getAttribute("data-test3")).to.equal("123");
   });
 
-  it('should register action', () => {
+  it("should register action", () => {
     let handler = () => {};
-    element.registerAction('method1', handler);
-    expect(element.actionMap_['method1']).to.equal(handler);
+    element.registerAction("method1", handler);
+    expect(element.actionMap_["method1"]).to.equal(handler);
   });
 
-  it('should fail execution of unregistered action', () => {
+  it("should fail execution of unregistered action", () => {
     expect(() => {
-      element.executeAction({method: 'method1'}, false);
+      element.executeAction({ method: "method1" }, false);
     }).to.throw(/Method not found/);
   });
 
-  it('should execute registered action', () => {
+  it("should execute registered action", () => {
     let handler = sinon.spy();
-    element.registerAction('method1', handler);
-    element.executeAction({method: 'method1'}, false);
+    element.registerAction("method1", handler);
+    element.executeAction({ method: "method1" }, false);
     expect(handler.callCount).to.equal(1);
   });
 
   it('should execute "activate" action without registration', () => {
     let handler = sinon.spy();
     element.activate = handler;
-    element.executeAction({method: 'activate'}, false);
+    element.executeAction({ method: "activate" }, false);
     expect(handler.callCount).to.equal(1);
   });
 });

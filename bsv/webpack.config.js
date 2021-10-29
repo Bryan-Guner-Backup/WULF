@@ -1,13 +1,13 @@
-var path = require('path')
+var path = require("path");
 
 module.exports = {
-  entry: path.join(__dirname, '/index.js'),
+  entry: path.join(__dirname, "/index.js"),
   externals: {
-    crypto: 'crypto'
+    crypto: "crypto",
   },
   output: {
-    library: 'bsv',
-    path: path.join(__dirname, '/'),
-    filename: 'bsv.min.js'
-  }
-}
+    library: "bsv",
+    path: path.join(__dirname, "/"),
+    filename: "bsv.min.js",
+  },
+};

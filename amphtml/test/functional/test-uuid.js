@@ -14,29 +14,28 @@
  * limitations under the License.
  */
 
-import {randomUUID} from '../../src/uuid';
+import { randomUUID } from "../../src/uuid";
 
-
-describe('UUID', () => {
-  it('should generate randomUUID with right pattern', () => {
+describe("UUID", () => {
+  it("should generate randomUUID with right pattern", () => {
     let uuid = randomUUID();
-    expect(uuid.indexOf('-', 0)).to.equal(8);
-    expect(uuid.indexOf('-', 9)).to.equal(13);
-    expect(uuid.indexOf('-', 14)).to.equal(18);
-    expect(uuid.indexOf('-', 19)).to.equal(23);
+    expect(uuid.indexOf("-", 0)).to.equal(8);
+    expect(uuid.indexOf("-", 9)).to.equal(13);
+    expect(uuid.indexOf("-", 14)).to.equal(18);
+    expect(uuid.indexOf("-", 19)).to.equal(23);
   });
 
-  it('should generate randomUUID with version 4', () => {
-    expect(randomUUID().substring(14, 15)).to.equal('4');
+  it("should generate randomUUID with version 4", () => {
+    expect(randomUUID().substring(14, 15)).to.equal("4");
   });
 
-  it('should generate randomUUID with IETF variant', () => {
+  it("should generate randomUUID with IETF variant", () => {
     // 0         1         2         3
     // 012345678901234567890123456789012345
     // aaaaaaaa-aaaa-4aaa-baaa-aaaaaaaaaaaa
     let v = randomUUID().substring(19, 20);
     let n = parseInt(v, 16);
-    expect(n & 0x8).to.not.equal(0, '|0x8');
-    expect((n - 0x8) & ~0x3).to.equal(0, '&0x3');
+    expect(n & 0x8).to.not.equal(0, "|0x8");
+    expect((n - 0x8) & ~0x3).to.equal(0, "&0x3");
   });
 });

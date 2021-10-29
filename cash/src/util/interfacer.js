@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * Simple binding interface between
@@ -15,10 +15,10 @@
 
 module.exports = function (opt) {
   const self = this;
-  let stdout = '';
+  let stdout = "";
   opt.options = opt.options || {};
   opt.callback = opt.callback || function () {};
-  opt.command = opt.command || {exec() {}};
+  opt.command = opt.command || { exec() {} };
 
   const logger = {
     log(out) {
@@ -27,11 +27,11 @@ module.exports = function (opt) {
         // process.stdout.write(out) // to do - handle newline problem.
         self.log(out);
       }
-    }
+    },
   };
 
   function onResult(result) {
-    result = (result === undefined) ? 0 : result;
+    result = result === undefined ? 0 : result;
     opt.callback(null, stdout);
     return stdout;
   }

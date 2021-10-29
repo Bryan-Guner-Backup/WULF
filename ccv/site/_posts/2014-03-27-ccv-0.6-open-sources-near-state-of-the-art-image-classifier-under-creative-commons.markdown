@@ -1,11 +1,11 @@
 ---
-date: '2014-03-27 07:35:00'
+date: "2014-03-27 07:35:00"
 layout: post
 slug: ccv-0.6-open-sources-near-state-of-the-art-image-classifier-under-creative-commons
 status: publish
 title: ccv 0.6 open sources near state-of-the-art image classifier under Creative Commons
 categories:
-- post
+  - post
 ---
 
 In previous posts, I mentioned that the even numbered release will be bugfixes. However, 0.6 is a bit different.

@@ -1,34 +1,24 @@
 {
   "commands": [
-    "alias", 
-    "cd", 
-    "cp", 
-    "echo", 
-    "kill", 
-    "ls", 
-    "mkdir", 
-    "mv", 
-    "pwd", 
-    "sort", 
-    "touch", 
-    "cat", 
+    "alias",
+    "cd",
+    "cp",
+    "echo",
+    "kill",
+    "ls",
+    "mkdir",
+    "mv",
+    "pwd",
+    "sort",
+    "touch",
+    "cat",
     "less",
     "grep",
     "rm",
     "unalias"
-    ],
-  "globalExclusions": [ 
-    "alias",
-    "cd",
-    "echo",
-    "less",
-    "sort",
-    "unalias"
   ],
-  "importedCommands": [
-    "less",
-    "grep"
-  ],
+  "globalExclusions": ["alias", "cd", "echo", "less", "sort", "unalias"],
+  "importedCommands": ["less", "grep"],
   "windowsCommands": [
     "attrib",
     "assoc",
@@ -69,9 +59,16 @@
     "xcopy"
   ],
   "dependencies": {
-    "./dist/delimiter.js": ["username", "./dist/util/converter.path.js", "user-home"],
+    "./dist/delimiter.js": [
+      "username",
+      "./dist/util/converter.path.js",
+      "user-home"
+    ],
     "./dist/util/colorFile.js": ["./dist/util/stripAnsi.js"],
-    "./dist/util/columnify.js": ["./dist/util/stripAnsi.js", "./dist/util/pad.js"],
+    "./dist/util/columnify.js": [
+      "./dist/util/stripAnsi.js",
+      "./dist/util/pad.js"
+    ],
     "./dist/util/converter.path.js": [],
     "./dist/util/converter.permissions.js": [],
     "./dist/util/converter.date.js": [],
@@ -90,31 +87,26 @@
     "cat": {
       "dependencies": ["lodash", "vorpal-autocomplete-fs", "glob"],
       "files": [
-        "./dist/util/fetch.js", 
-        "./dist/util/interfacer.js", 
-        "./dist/util/lpad.js", 
-        "./dist/util/stripAnsi.js", 
+        "./dist/util/fetch.js",
+        "./dist/util/interfacer.js",
+        "./dist/util/lpad.js",
+        "./dist/util/stripAnsi.js",
         "./dist/util/expand.js"
       ]
     },
     "cp": {
       "dependencies": ["lodash", "vorpal-autocomplete-fs", "glob"],
-      "files": [
-        "./dist/util/expand.js", 
-        "./dist/util/interfacer.js"
-      ]
+      "files": ["./dist/util/expand.js", "./dist/util/interfacer.js"]
     },
     "kill": {
       "dependencies": ["fkill", "lodash"],
-      "files": [
-        "./dist/util/interfacer.js"
-      ]
+      "files": ["./dist/util/interfacer.js"]
     },
     "ls": {
       "dependencies": ["lodash", "chalk", "filesize", "vorpal-autocomplete-fs"],
       "files": [
-        "./dist/util/colorFile.js", 
-        "./dist/util/columnify.js", 
+        "./dist/util/colorFile.js",
+        "./dist/util/columnify.js",
         "./dist/util/converter.date.js",
         "./dist/util/fileFromPath.js",
         "./dist/util/interfacer.js",
@@ -132,38 +124,35 @@
     },
     "mv": {
       "dependencies": ["lodash", "vorpal-autocomplete-fs", "glob"],
-      "files": [
-        "./dist/util/expand.js",
-        "./dist/util/interfacer.js"
-      ]
+      "files": ["./dist/util/expand.js", "./dist/util/interfacer.js"]
     },
     "pwd": {
       "dependencies": [],
-      "files": [
-        "./dist/util/interfacer.js"
-      ]
+      "files": ["./dist/util/interfacer.js"]
     },
     "sort": {
-      "dependencies": ["lodash", "vorpal-autocomplete-fs", "glob", "array-shuffle"],
+      "dependencies": [
+        "lodash",
+        "vorpal-autocomplete-fs",
+        "glob",
+        "array-shuffle"
+      ],
       "files": [
-        "./dist/util/fetch.js", 
-        "./dist/util/interfacer.js", 
-        "./dist/util/stripAnsi.js", 
+        "./dist/util/fetch.js",
+        "./dist/util/interfacer.js",
+        "./dist/util/stripAnsi.js",
         "./dist/util/expand.js"
       ]
     },
     "touch": {
       "dependencies": ["lodash", "fs-extra", "vorpal-autocomplete-fs"],
-      "files": [
-        "./dist/util/interfacer.js", 
-        "./dist/lib/sugar.js"
-      ]
+      "files": ["./dist/util/interfacer.js", "./dist/lib/sugar.js"]
     },
     "rm": {
       "dependencies": ["vorpal-autocomplete-fs", "glob"],
       "files": [
-        "./dist/util/expand.js", 
-        "./dist/util/interfacer.js", 
+        "./dist/util/expand.js",
+        "./dist/util/interfacer.js",
         "./dist/util/unlinkSync.js"
       ]
     }

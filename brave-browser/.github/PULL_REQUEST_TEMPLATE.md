@@ -9,7 +9,6 @@
 
 ## Test Plan:
 
-
 ## Reviewer Checklist:
 
 - [ ] New files have MPL-2.0 license header.

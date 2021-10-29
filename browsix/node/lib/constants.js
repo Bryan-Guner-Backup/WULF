@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = process.binding('constants');
+module.exports = process.binding("constants");

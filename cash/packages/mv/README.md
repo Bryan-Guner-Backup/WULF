@@ -2,7 +2,6 @@
 
 ---
 
-
 This is a cross-platform, 100% ES6 implementation of the Unix `mv` command.
 
 ```bash
@@ -20,7 +19,6 @@ For help on the command, type:
 ## More
 
 This module is part of [Cash](https://github.com/dthree/cash), a project providing cross-platform implementations of all major Unix-based commands in pure Javascript.
-
 
 ## Related
 
@@ -40,7 +38,6 @@ This module is part of [Cash](https://github.com/dthree/cash), a project providi
 - [cash-sort](https://npmjs.com/package/cash-sort)
 - [cash-touch](https://npmjs.com/package/cash-touch)
 - [cash-rm](https://npmjs.com/package/cash-rm)
-
 
 ## License
 

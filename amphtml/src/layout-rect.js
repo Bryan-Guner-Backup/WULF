@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 /**
  * The structure that combines position and size for an element. The exact
  * interpretation of position and size depends on the use case.
@@ -29,7 +28,6 @@
  * }}
  */
 var LayoutRect;
-
 
 /**
  * Creates a layout rect based on the left, top, width and height parameters
@@ -47,10 +45,9 @@ export function layoutRectLtwh(left, top, width, height) {
     width: width,
     height: height,
     bottom: top + height,
-    right: left + width
+    right: left + width,
   };
 }
-
 
 /**
  * Creates a layout rect based on the DOMRect, e.g. obtained from calling
@@ -65,10 +62,9 @@ export function layoutRectFromDomRect(rect) {
     width: rect.width,
     height: rect.height,
     bottom: rect.top + rect.height,
-    right: rect.left + rect.width
+    right: rect.left + rect.width,
   };
 }
-
 
 /**
  * Returns true if the specified two rects overlap by a single pixel.
@@ -77,10 +73,13 @@ export function layoutRectFromDomRect(rect) {
  * @return {boolean}
  */
 export function layoutRectsOverlap(r1, r2) {
-  return (r1.top <= r2.bottom && r2.top <= r1.bottom &&
-      r1.left <= r2.right && r2.left <= r1.right);
+  return (
+    r1.top <= r2.bottom &&
+    r2.top <= r1.bottom &&
+    r1.left <= r2.right &&
+    r2.left <= r1.right
+  );
 }
-
 
 /**
  * Expand the layout rect using multiples of width and height.
@@ -96,10 +95,9 @@ export function expandLayoutRect(rect, dw, dh) {
     left: rect.left - rect.width * dw,
     right: rect.right + rect.width * dw,
     width: rect.width * (1 + dw * 2),
-    height: rect.height * (1 + dh * 2)
+    height: rect.height * (1 + dh * 2),
   };
 }
-
 
 /**
  * Moves the layout rect using dx and dy.
@@ -112,6 +110,5 @@ export function moveLayoutRect(rect, dx, dy) {
   if (dx == 0 && dy == 0) {
     return rect;
   }
-  return layoutRectLtwh(rect.left + dx, rect.top + dy,
-      rect.width, rect.height);
+  return layoutRectLtwh(rect.left + dx, rect.top + dy, rect.width, rect.height);
 }

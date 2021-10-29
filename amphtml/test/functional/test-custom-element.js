@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-import {BaseElement} from '../../src/base-element';
-import {ElementStub} from '../../src/element-stub';
-import {Layout} from '../../src/layout';
-import {createAmpElementProto} from '../../src/custom-element';
-import {resources} from '../../src/resources';
-import * as sinon from 'sinon';
+import { BaseElement } from "../../src/base-element";
+import { ElementStub } from "../../src/element-stub";
+import { Layout } from "../../src/layout";
+import { createAmpElementProto } from "../../src/custom-element";
+import { resources } from "../../src/resources";
+import * as sinon from "sinon";
 
-
-describe('CustomElement', () => {
-
+describe("CustomElement", () => {
   let testElementCreatedCallback;
   let testElementFirstAttachedCallback;
   let testElementBuildCallback;
@@ -61,12 +59,12 @@ describe('CustomElement', () => {
     }
   }
 
-  let ElementClass = document.registerElement('amp-test',  {
-      prototype: createAmpElementProto(window, 'amp-test', TestElement)
+  let ElementClass = document.registerElement("amp-test", {
+    prototype: createAmpElementProto(window, "amp-test", TestElement),
   });
 
-  let StubElementClass = document.registerElement('amp-stub',  {
-      prototype: createAmpElementProto(window, 'amp-stub', ElementStub)
+  let StubElementClass = document.registerElement("amp-stub", {
+    prototype: createAmpElementProto(window, "amp-stub", ElementStub),
   });
 
   let sandbox;
@@ -95,52 +93,50 @@ describe('CustomElement', () => {
     sandbox = null;
   });
 
-
-  it('Element - createdCallback', () => {
+  it("Element - createdCallback", () => {
     let element = new ElementClass();
-    expect(element.classList.contains('-amp-element')).to.equal(true);
+    expect(element.classList.contains("-amp-element")).to.equal(true);
     expect(element.isBuilt()).to.equal(false);
-    expect(element.classList.contains('-amp-notbuilt')).to.equal(true);
-    expect(element.classList.contains('amp-notbuilt')).to.equal(true);
+    expect(element.classList.contains("-amp-notbuilt")).to.equal(true);
+    expect(element.classList.contains("amp-notbuilt")).to.equal(true);
     expect(element.isUpgraded()).to.equal(true);
-    expect(element.readyState).to.equal('loading');
+    expect(element.readyState).to.equal("loading");
     expect(element.everAttached).to.equal(false);
     expect(element.layout_).to.equal(Layout.NODISPLAY);
     expect(testElementCreatedCallback.callCount).to.equal(1);
   });
 
-  it('StubElement - createdCallback', () => {
+  it("StubElement - createdCallback", () => {
     let element = new StubElementClass();
-    expect(element.classList.contains('-amp-element')).to.equal(true);
+    expect(element.classList.contains("-amp-element")).to.equal(true);
     expect(element.isBuilt()).to.equal(false);
-    expect(element.classList.contains('-amp-notbuilt')).to.equal(true);
-    expect(element.classList.contains('amp-notbuilt')).to.equal(true);
+    expect(element.classList.contains("-amp-notbuilt")).to.equal(true);
+    expect(element.classList.contains("amp-notbuilt")).to.equal(true);
     expect(element.isUpgraded()).to.equal(false);
-    expect(element.readyState).to.equal('loading');
+    expect(element.readyState).to.equal("loading");
     expect(element.everAttached).to.equal(false);
     expect(element.layout_).to.equal(Layout.NODISPLAY);
     expect(testElementCreatedCallback.callCount).to.equal(0);
   });
 
-
-  it('Element - updateLayoutBox', () => {
+  it("Element - updateLayoutBox", () => {
     let element = new ElementClass();
     expect(element.layoutWidth_).to.equal(-1);
     expect(element.implementation_.layoutWidth_).to.equal(-1);
 
-    element.updateLayoutBox({top: 0, left: 0, width: 111, height: 51});
+    element.updateLayoutBox({ top: 0, left: 0, width: 111, height: 51 });
     expect(element.layoutWidth_).to.equal(111);
     expect(element.implementation_.layoutWidth_).to.equal(111);
   });
 
-  it('StubElement - upgrade', () => {
+  it("StubElement - upgrade", () => {
     let element = new StubElementClass();
     expect(element.isUpgraded()).to.equal(false);
     expect(testElementCreatedCallback.callCount).to.equal(0);
 
     element.layout_ = Layout.FILL;
-    element.updateLayoutBox({top: 0, left: 0, width: 111, height: 51});
-    resourcesMock.expects('upgraded').withExactArgs(element).once();
+    element.updateLayoutBox({ top: 0, left: 0, width: 111, height: 51 });
+    resourcesMock.expects("upgraded").withExactArgs(element).once();
 
     element.upgrade(TestElement);
 
@@ -153,25 +149,24 @@ describe('CustomElement', () => {
     expect(element.isBuilt()).to.equal(false);
   });
 
-
-  it('Element - build allowed', () => {
+  it("Element - build allowed", () => {
     let element = new ElementClass();
-    expect(element.classList.contains('-amp-element')).to.equal(true);
+    expect(element.classList.contains("-amp-element")).to.equal(true);
     expect(element.isBuilt()).to.equal(false);
-    expect(element.classList.contains('-amp-notbuilt')).to.equal(true);
-    expect(element.classList.contains('amp-notbuilt')).to.equal(true);
+    expect(element.classList.contains("-amp-notbuilt")).to.equal(true);
+    expect(element.classList.contains("amp-notbuilt")).to.equal(true);
     expect(testElementBuildCallback.callCount).to.equal(0);
 
     testElementIsReadyToBuild = true;
     element.build(false);
 
     expect(element.isBuilt()).to.equal(true);
-    expect(element.classList.contains('-amp-notbuilt')).to.equal(false);
-    expect(element.classList.contains('amp-notbuilt')).to.equal(false);
+    expect(element.classList.contains("-amp-notbuilt")).to.equal(false);
+    expect(element.classList.contains("amp-notbuilt")).to.equal(false);
     expect(testElementBuildCallback.callCount).to.equal(1);
   });
 
-  it('Element - buildCallback cannot be called twice', () => {
+  it("Element - buildCallback cannot be called twice", () => {
     let element = new ElementClass();
     expect(element.isBuilt()).to.equal(false);
     expect(testElementBuildCallback.callCount).to.equal(0);
@@ -189,46 +184,46 @@ describe('CustomElement', () => {
     expect(testElementBuildCallback.callCount).to.equal(1);
   });
 
-  it('Element - build not allowed', () => {
+  it("Element - build not allowed", () => {
     let element = new ElementClass();
-    expect(element.classList.contains('-amp-element')).to.equal(true);
+    expect(element.classList.contains("-amp-element")).to.equal(true);
     expect(element.isBuilt()).to.equal(false);
-    expect(element.classList.contains('-amp-notbuilt')).to.equal(true);
-    expect(element.classList.contains('amp-notbuilt')).to.equal(true);
+    expect(element.classList.contains("-amp-notbuilt")).to.equal(true);
+    expect(element.classList.contains("amp-notbuilt")).to.equal(true);
     expect(testElementBuildCallback.callCount).to.equal(0);
 
     testElementIsReadyToBuild = false;
     element.build(false);
 
     expect(element.isBuilt()).to.equal(false);
-    expect(element.classList.contains('-amp-notbuilt')).to.equal(true);
-    expect(element.classList.contains('amp-notbuilt')).to.equal(true);
+    expect(element.classList.contains("-amp-notbuilt")).to.equal(true);
+    expect(element.classList.contains("amp-notbuilt")).to.equal(true);
     expect(testElementBuildCallback.callCount).to.equal(0);
   });
 
-  it('Element - build not allowed but forced', () => {
+  it("Element - build not allowed but forced", () => {
     let element = new ElementClass();
-    expect(element.classList.contains('-amp-element')).to.equal(true);
+    expect(element.classList.contains("-amp-element")).to.equal(true);
     expect(element.isBuilt()).to.equal(false);
-    expect(element.classList.contains('-amp-notbuilt')).to.equal(true);
-    expect(element.classList.contains('amp-notbuilt')).to.equal(true);
+    expect(element.classList.contains("-amp-notbuilt")).to.equal(true);
+    expect(element.classList.contains("amp-notbuilt")).to.equal(true);
     expect(testElementBuildCallback.callCount).to.equal(0);
 
     testElementIsReadyToBuild = false;
     element.build(true);
 
     expect(element.isBuilt()).to.equal(true);
-    expect(element.classList.contains('-amp-notbuilt')).to.equal(false);
-    expect(element.classList.contains('amp-notbuilt')).to.equal(false);
+    expect(element.classList.contains("-amp-notbuilt")).to.equal(false);
+    expect(element.classList.contains("amp-notbuilt")).to.equal(false);
     expect(testElementBuildCallback.callCount).to.equal(1);
   });
 
-  it('StubElement - build never allowed', () => {
+  it("StubElement - build never allowed", () => {
     let element = new StubElementClass();
-    expect(element.classList.contains('-amp-element')).to.equal(true);
+    expect(element.classList.contains("-amp-element")).to.equal(true);
     expect(element.isBuilt()).to.equal(false);
-    expect(element.classList.contains('-amp-notbuilt')).to.equal(true);
-    expect(element.classList.contains('amp-notbuilt')).to.equal(true);
+    expect(element.classList.contains("-amp-notbuilt")).to.equal(true);
+    expect(element.classList.contains("amp-notbuilt")).to.equal(true);
     expect(testElementBuildCallback.callCount).to.equal(0);
 
     expect(() => {
@@ -239,15 +234,14 @@ describe('CustomElement', () => {
     expect(testElementBuildCallback.callCount).to.equal(0);
   });
 
-
-  it('Element - attachedCallback', () => {
+  it("Element - attachedCallback", () => {
     let element = new ElementClass();
-    element.setAttribute('layout', 'fill');
+    element.setAttribute("layout", "fill");
     expect(testElementFirstAttachedCallback.callCount).to.equal(0);
     expect(element.everAttached).to.equal(false);
     expect(element.layout_).to.equal(Layout.NODISPLAY);
 
-    resourcesMock.expects('add').withExactArgs(element).once();
+    resourcesMock.expects("add").withExactArgs(element).once();
     element.attachedCallback();
 
     expect(element.everAttached).to.equal(true);
@@ -256,14 +250,14 @@ describe('CustomElement', () => {
     expect(testElementFirstAttachedCallback.callCount).to.equal(1);
   });
 
-  it('StubElement - attachedCallback', () => {
+  it("StubElement - attachedCallback", () => {
     let element = new StubElementClass();
-    element.setAttribute('layout', 'fill');
+    element.setAttribute("layout", "fill");
     expect(testElementFirstAttachedCallback.callCount).to.equal(0);
     expect(element.everAttached).to.equal(false);
     expect(element.layout_).to.equal(Layout.NODISPLAY);
 
-    resourcesMock.expects('add').withExactArgs(element).once();
+    resourcesMock.expects("add").withExactArgs(element).once();
     element.attachedCallback();
 
     expect(element.everAttached).to.equal(true);
@@ -274,7 +268,7 @@ describe('CustomElement', () => {
     expect(testElementFirstAttachedCallback.callCount).to.equal(0);
 
     // Upgrade
-    resourcesMock.expects('upgraded').withExactArgs(element).once();
+    resourcesMock.expects("upgraded").withExactArgs(element).once();
     element.upgrade(TestElement);
 
     expect(element.layout_).to.equal(Layout.FILL);
@@ -284,17 +278,17 @@ describe('CustomElement', () => {
     expect(testElementFirstAttachedCallback.callCount).to.equal(1);
   });
 
-  it('Element - detachedCallback', () => {
+  it("Element - detachedCallback", () => {
     let element = new ElementClass();
-    element.setAttribute('layout', 'fill');
+    element.setAttribute("layout", "fill");
     expect(testElementFirstAttachedCallback.callCount).to.equal(0);
     expect(element.everAttached).to.equal(false);
     expect(element.layout_).to.equal(Layout.NODISPLAY);
 
-    resourcesMock.expects('add').withExactArgs(element).once();
+    resourcesMock.expects("add").withExactArgs(element).once();
     element.attachedCallback();
 
-    resourcesMock.expects('remove').withExactArgs(element).once();
+    resourcesMock.expects("remove").withExactArgs(element).once();
     element.detachedCallback();
 
     expect(element.everAttached).to.equal(true);
@@ -303,10 +297,9 @@ describe('CustomElement', () => {
     expect(testElementFirstAttachedCallback.callCount).to.equal(1);
   });
 
-
-  it('Element - layoutCallback before build', () => {
+  it("Element - layoutCallback before build", () => {
     let element = new ElementClass();
-    element.setAttribute('layout', 'fill');
+    element.setAttribute("layout", "fill");
     expect(testElementLayoutCallback.callCount).to.equal(0);
 
     expect(element.isBuilt()).to.equal(false);
@@ -317,9 +310,9 @@ describe('CustomElement', () => {
     expect(testElementLayoutCallback.callCount).to.equal(0);
   });
 
-  it('StubElement - layoutCallback before build or upgrade', () => {
+  it("StubElement - layoutCallback before build or upgrade", () => {
     let element = new StubElementClass();
-    element.setAttribute('layout', 'fill');
+    element.setAttribute("layout", "fill");
     expect(testElementLayoutCallback.callCount).to.equal(0);
 
     expect(element.isUpgraded()).to.equal(false);
@@ -328,7 +321,7 @@ describe('CustomElement', () => {
       element.layoutCallback();
     }).to.throw(/Must be upgraded and built to receive viewport events/);
 
-    resourcesMock.expects('upgraded').withExactArgs(element).once();
+    resourcesMock.expects("upgraded").withExactArgs(element).once();
     element.upgrade(TestElement);
 
     expect(element.isUpgraded()).to.equal(true);
@@ -340,9 +333,9 @@ describe('CustomElement', () => {
     expect(testElementLayoutCallback.callCount).to.equal(0);
   });
 
-  it('Element - layoutCallback', () => {
+  it("Element - layoutCallback", () => {
     let element = new ElementClass();
-    element.setAttribute('layout', 'fill');
+    element.setAttribute("layout", "fill");
     element.build(true);
     expect(element.isBuilt()).to.equal(true);
     expect(testElementLayoutCallback.callCount).to.equal(0);
@@ -350,14 +343,14 @@ describe('CustomElement', () => {
     let p = element.layoutCallback();
     expect(testElementLayoutCallback.callCount).to.equal(1);
     return p.then(() => {
-      expect(element.readyState).to.equal('complete');
+      expect(element.readyState).to.equal("complete");
     });
   });
 
-  it('StubElement - layoutCallback', () => {
+  it("StubElement - layoutCallback", () => {
     let element = new StubElementClass();
-    element.setAttribute('layout', 'fill');
-    resourcesMock.expects('upgraded').withExactArgs(element).once();
+    element.setAttribute("layout", "fill");
+    resourcesMock.expects("upgraded").withExactArgs(element).once();
     element.upgrade(TestElement);
     element.build(true);
     expect(element.isUpgraded()).to.equal(true);
@@ -367,14 +360,13 @@ describe('CustomElement', () => {
     let p = element.layoutCallback();
     expect(testElementLayoutCallback.callCount).to.equal(1);
     return p.then(() => {
-      expect(element.readyState).to.equal('complete');
+      expect(element.readyState).to.equal("complete");
     });
   });
 
-
-  it('Element - viewportCallback before build', () => {
+  it("Element - viewportCallback before build", () => {
     let element = new ElementClass();
-    element.setAttribute('layout', 'fill');
+    element.setAttribute("layout", "fill");
     expect(testElementViewportCallback.callCount).to.equal(0);
 
     expect(element.isBuilt()).to.equal(false);
@@ -385,9 +377,9 @@ describe('CustomElement', () => {
     expect(testElementViewportCallback.callCount).to.equal(0);
   });
 
-  it('StubElement - viewportCallback before build or upgrade', () => {
+  it("StubElement - viewportCallback before build or upgrade", () => {
     let element = new StubElementClass();
-    element.setAttribute('layout', 'fill');
+    element.setAttribute("layout", "fill");
     expect(testElementViewportCallback.callCount).to.equal(0);
 
     expect(element.isUpgraded()).to.equal(false);
@@ -396,7 +388,7 @@ describe('CustomElement', () => {
       element.viewportCallback();
     }).to.throw(/Must be upgraded and built to receive viewport events/);
 
-    resourcesMock.expects('upgraded').withExactArgs(element).once();
+    resourcesMock.expects("upgraded").withExactArgs(element).once();
     element.upgrade(TestElement);
 
     expect(element.isUpgraded()).to.equal(true);
@@ -408,9 +400,9 @@ describe('CustomElement', () => {
     expect(testElementViewportCallback.callCount).to.equal(0);
   });
 
-  it('Element - viewportCallback', () => {
+  it("Element - viewportCallback", () => {
     let element = new ElementClass();
-    element.setAttribute('layout', 'fill');
+    element.setAttribute("layout", "fill");
     element.build(true);
     expect(element.isBuilt()).to.equal(true);
     expect(testElementViewportCallback.callCount).to.equal(0);
@@ -420,10 +412,10 @@ describe('CustomElement', () => {
     expect(testElementViewportCallback.callCount).to.equal(1);
   });
 
-  it('StubElement - viewportCallback', () => {
+  it("StubElement - viewportCallback", () => {
     let element = new StubElementClass();
-    element.setAttribute('layout', 'fill');
-    resourcesMock.expects('upgraded').withExactArgs(element).once();
+    element.setAttribute("layout", "fill");
+    resourcesMock.expects("upgraded").withExactArgs(element).once();
     element.upgrade(TestElement);
     element.build(true);
     expect(element.isUpgraded()).to.equal(true);
@@ -435,8 +427,7 @@ describe('CustomElement', () => {
     expect(testElementViewportCallback.callCount).to.equal(1);
   });
 
-
-  it('should enqueue actions until built', () => {
+  it("should enqueue actions until built", () => {
     let element = new ElementClass();
     let handler = sinon.spy();
     element.implementation_.executeAction = handler;
@@ -449,7 +440,7 @@ describe('CustomElement', () => {
     expect(handler.callCount).to.equal(0);
   });
 
-  it('should execute action immediately after built', () => {
+  it("should execute action immediately after built", () => {
     let element = new ElementClass();
     let handler = sinon.spy();
     element.implementation_.executeAction = handler;
@@ -462,7 +453,7 @@ describe('CustomElement', () => {
     expect(handler.getCall(0).args[1]).to.equal(false);
   });
 
-  it('should dequeue all actions after build', () => {
+  it("should dequeue all actions after build", () => {
     let element = new ElementClass();
     let handler = sinon.spy();
     element.implementation_.executeAction = handler;
@@ -486,35 +477,33 @@ describe('CustomElement', () => {
     expect(element.actionQueue_).to.equal(null);
   });
 
-
-  it('should apply media condition', () => {
+  it("should apply media condition", () => {
     let element1 = new ElementClass();
-    element1.setAttribute('media', '(min-width: 1px)');
+    element1.setAttribute("media", "(min-width: 1px)");
     element1.applyMediaQuery();
-    expect(element1).to.not.have.class('-amp-hidden-by-media-query');
+    expect(element1).to.not.have.class("-amp-hidden-by-media-query");
 
     let element2 = new ElementClass();
-    element2.setAttribute('media', '(min-width: 1111111px)');
+    element2.setAttribute("media", "(min-width: 1111111px)");
     element2.applyMediaQuery();
-    expect(element2).to.have.class('-amp-hidden-by-media-query');
+    expect(element2).to.have.class("-amp-hidden-by-media-query");
   });
 
-  it('should change height without sizer', () => {
+  it("should change height without sizer", () => {
     let element = new ElementClass();
     element.changeHeight(111);
-    expect(element.style.height).to.equal('111px');
+    expect(element.style.height).to.equal("111px");
   });
 
-  it('should change height with sizer', () => {
+  it("should change height with sizer", () => {
     let element = new ElementClass();
-    element.sizerElement_ = document.createElement('div');
+    element.sizerElement_ = document.createElement("div");
     element.changeHeight(111);
-    expect(element.sizerElement_.style.paddingTop).to.equal('111px');
-    expect(element.style.height).to.equal('');
+    expect(element.sizerElement_.style.paddingTop).to.equal("111px");
+    expect(element.style.height).to.equal("");
   });
 
-
-  it('Element - documentInactiveCallback', () => {
+  it("Element - documentInactiveCallback", () => {
     let element = new ElementClass();
 
     // Non-built element doesn't receive documentInactiveCallback.
@@ -527,7 +516,7 @@ describe('CustomElement', () => {
     expect(testElementDocumentInactiveCallback.callCount).to.equal(1);
   });
 
-  it('StubElement - documentInactiveCallback', () => {
+  it("StubElement - documentInactiveCallback", () => {
     let element = new StubElementClass();
 
     // Unupgraded document doesn't receive documentInactiveCallback.

@@ -1,11 +1,11 @@
 ---
-date: '2014-04-25 23:15:00'
+date: "2014-04-25 23:15:00"
 layout: post
 slug: closing-the-gap-between-open-source-and-proprietary
 status: publish
 title: closing the gap between open source and proprietary
 categories:
-- post
+  - post
 ---
 
 In 0.6 release, ccv's deep learning based image classifier achieved 16.26% top-5 missing rate on imageNet 2010. However, the state of the art uses imageNet 2012 data set as the standard, and it is hard to do apple to orange comparison.

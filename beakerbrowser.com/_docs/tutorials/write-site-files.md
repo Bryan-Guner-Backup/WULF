@@ -1,5 +1,5 @@
 ---
-title: 'Example: Write site files'
+title: "Example: Write site files"
 section: webAPIs
 sectionTitle: Web APIs
 order: 7
@@ -140,26 +140,28 @@ async function main () {
   var archive = new DatArchive(localStorage.targetDatURL)
   console.log(await archive.readdir('/'))
 
-  // add the /stuff folder
-  try {
-    await archive.mkdir('/stuff')
-    console.log('Created /stuff')
-  } catch (e) {
-    console.log('Failed:', e)
-  }
+// add the /stuff folder
+try {
+await archive.mkdir('/stuff')
+console.log('Created /stuff')
+} catch (e) {
+console.log('Failed:', e)
+}
 
-  // write /hello.txt
-  await archive.writeFile('/hello.txt', 'world')
-  console.log('Wrote', archive.url + '/hello.txt')
+// write /hello.txt
+await archive.writeFile('/hello.txt', 'world')
+console.log('Wrote', archive.url + '/hello.txt')
 
-  // write /logo.png
-  var thisArchive = new DatArchive(window.location.toString())
-  var logoPng = await thisArchive.readFile('/img/logo.png', 'base64')
-  await archive.writeFile('/logo.png', logoPng, 'base64')
-  console.log('Wrote', archive.url + '/logo.png')
+// write /logo.png
+var thisArchive = new DatArchive(window.location.toString())
+var logoPng = await thisArchive.readFile('/img/logo.png', 'base64')
+await archive.writeFile('/logo.png', logoPng, 'base64')
+console.log('Wrote', archive.url + '/logo.png')
 }
 
 main()
+
 ```
 
 Now you can create folders and write files. This is great, but so far you’ve only made those changes to the staging area. Next, [read about how to commit those changes to the archive.](/docs/tutorials/diff-commit-revert.html)
+```

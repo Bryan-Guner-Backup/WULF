@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-import {exponentialBackoff} from '../../src/exponential-backoff';
-import * as sinon from 'sinon';
+import { exponentialBackoff } from "../../src/exponential-backoff";
+import * as sinon from "sinon";
 
-
-describe('exponentialBackoff', () => {
-
+describe("exponentialBackoff", () => {
   let sandbox;
   let clock;
 
@@ -33,7 +31,7 @@ describe('exponentialBackoff', () => {
     sandbox.restore();
   });
 
-  it('should backoff exponentially', () => {
+  it("should backoff exponentially", () => {
     var count = 0;
     var backoff = exponentialBackoff();
     var backoff2 = exponentialBackoff();

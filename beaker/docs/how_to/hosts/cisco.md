@@ -1,6 +1,6 @@
 # Wind River Linux
 
-Wind River Linux is an embedded systems OS from Wind, an Intel Company.  You can get more details on this from their [product page](http://www.windriver.com/products/linux/).
+Wind River Linux is an embedded systems OS from Wind, an Intel Company. You can get more details on this from their [product page](http://www.windriver.com/products/linux/).
 
 Beaker provides support for 2 of Cisco's Wind River Linux platforms. Those platform codenames are `cisco_nexus` for Cisco NX-OS based systems and `cisco_ios_xr` for Cisco IOS XR based systems.
 
@@ -8,9 +8,9 @@ Beaker currently can install puppet on Cisco Nexus and Cisco IOS XR.
 
 # Host Requirements
 
-WRLinux hosts validate their setup once created, and will fail if not setup correctly.  There are two conditions that are validated specifically on WRLinux hosts.  These conditions are listed below.
+WRLinux hosts validate their setup once created, and will fail if not setup correctly. There are two conditions that are validated specifically on WRLinux hosts. These conditions are listed below.
 
-A. All Cisco Nexus hosts will need a `:vrf` value, which determines their virtual routing framework for networking purposes.  For our purposes, we tend to use the value `management`, so there is always a hosts file line that looks like this in our configuration:
+A. All Cisco Nexus hosts will need a `:vrf` value, which determines their virtual routing framework for networking purposes. For our purposes, we tend to use the value `management`, so there is always a hosts file line that looks like this in our configuration:
 
     HOSTS:
       <hostname>:

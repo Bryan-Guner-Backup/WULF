@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import {preconnectFor} from '../../src/preconnect';
-import * as sinon from 'sinon';
+import { preconnectFor } from "../../src/preconnect";
+import * as sinon from "sinon";
 
-describe('preconnect', () => {
-
+describe("preconnect", () => {
   let sandbox;
   let clock;
   let preconnect;
@@ -35,48 +34,52 @@ describe('preconnect', () => {
     sandbox.restore();
   });
 
-  it('should preconnect', () => {
-    preconnect.url('https://a.preconnect.com/foo/bar');
-    preconnect.url('https://a.preconnect.com/other');
-    expect(document.querySelectorAll('link[rel=dns-prefetch]'))
-        .to.have.length(1);
-    expect(document.querySelector('link[rel=dns-prefetch]').href)
-        .to.equal('https://a.preconnect.com/');
-    expect(document.querySelectorAll('link[rel=preconnect]'))
-        .to.have.length(1);
-    expect(document.querySelector('link[rel=preconnect]').href)
-        .to.equal('https://a.preconnect.com/');
+  it("should preconnect", () => {
+    preconnect.url("https://a.preconnect.com/foo/bar");
+    preconnect.url("https://a.preconnect.com/other");
+    expect(document.querySelectorAll("link[rel=dns-prefetch]")).to.have.length(
+      1
+    );
+    expect(document.querySelector("link[rel=dns-prefetch]").href).to.equal(
+      "https://a.preconnect.com/"
+    );
+    expect(document.querySelectorAll("link[rel=preconnect]")).to.have.length(1);
+    expect(document.querySelector("link[rel=preconnect]").href).to.equal(
+      "https://a.preconnect.com/"
+    );
   });
 
-  it('should cleanup', () => {
-    preconnect.url('https://c.preconnect.com/foo/bar');
-    expect(document.querySelectorAll('link[rel=dns-prefetch]'))
-        .to.have.length(1);
-    expect(document.querySelectorAll('link[rel=preconnect]'))
-        .to.have.length(1);
+  it("should cleanup", () => {
+    preconnect.url("https://c.preconnect.com/foo/bar");
+    expect(document.querySelectorAll("link[rel=dns-prefetch]")).to.have.length(
+      1
+    );
+    expect(document.querySelectorAll("link[rel=preconnect]")).to.have.length(1);
     clock.tick(9000);
-    expect(document.querySelectorAll('link[rel=dns-prefetch]'))
-        .to.have.length(1);
-    expect(document.querySelectorAll('link[rel=preconnect]'))
-        .to.have.length(1);
+    expect(document.querySelectorAll("link[rel=dns-prefetch]")).to.have.length(
+      1
+    );
+    expect(document.querySelectorAll("link[rel=preconnect]")).to.have.length(1);
     clock.tick(1000);
-    expect(document.querySelectorAll('link[rel=dns-prefetch]'))
-        .to.have.length(0);
-    expect(document.querySelectorAll('link[rel=preconnect]'))
-        .to.have.length(0);
+    expect(document.querySelectorAll("link[rel=dns-prefetch]")).to.have.length(
+      0
+    );
+    expect(document.querySelectorAll("link[rel=preconnect]")).to.have.length(0);
   });
 
-  it('should preconnect to 2 different origins', () => {
-    preconnect.url('https://d.preconnect.com/foo/bar');
+  it("should preconnect to 2 different origins", () => {
+    preconnect.url("https://d.preconnect.com/foo/bar");
     // Different origin
-    preconnect.url('https://e.preconnect.com/other');
-    expect(document.querySelectorAll('link[rel=dns-prefetch]'))
-        .to.have.length(2);
-    expect(document.querySelectorAll('link[rel=dns-prefetch]')[0].href)
-        .to.equal('https://d.preconnect.com/');
-    expect(document.querySelectorAll('link[rel=dns-prefetch]')[1].href)
-        .to.equal('https://e.preconnect.com/');
-    expect(document.querySelectorAll('link[rel=preconnect]'))
-        .to.have.length(2);
+    preconnect.url("https://e.preconnect.com/other");
+    expect(document.querySelectorAll("link[rel=dns-prefetch]")).to.have.length(
+      2
+    );
+    expect(
+      document.querySelectorAll("link[rel=dns-prefetch]")[0].href
+    ).to.equal("https://d.preconnect.com/");
+    expect(
+      document.querySelectorAll("link[rel=dns-prefetch]")[1].href
+    ).to.equal("https://e.preconnect.com/");
+    expect(document.querySelectorAll("link[rel=preconnect]")).to.have.length(2);
   });
 });

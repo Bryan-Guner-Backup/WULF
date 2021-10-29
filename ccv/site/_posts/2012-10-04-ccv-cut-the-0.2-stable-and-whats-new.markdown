@@ -1,11 +1,11 @@
 ---
-date: '2012-10-04 23:56:00'
+date: "2012-10-04 23:56:00"
 layout: post
 slug: ccv-cut-the-0.2-stable-and-whats-new
 status: publish
 title: ccv cut the 0.2 stable, and what's new
 categories:
-- post
+  - post
 ---
 
 I've cut the stable branch off unstable yesterday, and a r0.2-rc branch as well.
@@ -32,7 +32,7 @@ model), and I've included a car model for you to try out:
 
 ![car](/photo/2012-10-04-car.png)
 
-Largely still *work-in-progress*, the SWT included a swtcreate tool for you to
+Largely still _work-in-progress_, the SWT included a swtcreate tool for you to
 tune SWT parameters to fit your use-cases, and the text segregation gets better
 too:
 

@@ -1,24 +1,21 @@
-'use strict';
+"use strict";
 
-const fs = require('fs');
-const fsAutocomplete = require('vorpal-autocomplete-fs');
+const fs = require("fs");
+const fsAutocomplete = require("vorpal-autocomplete-fs");
 
-const expand = require('./../util/expand');
-const interfacer = require('./../util/interfacer');
-const unlinkSync = require('./../util/unlinkSync');
+const expand = require("./../util/expand");
+const interfacer = require("./../util/interfacer");
+const unlinkSync = require("./../util/unlinkSync");
 
 const rm = {
-
   exec(args, options) {
     const self = this;
     options = options || {};
-    options.recursive = (options.R) ?
-      options.R :
-      options.recursive;
+    options.recursive = options.R ? options.R : options.recursive;
 
     let files = args;
-    files = (files === undefined) ? [] : files;
-    files = (typeof files === 'string') ? [files] : files;
+    files = files === undefined ? [] : files;
+    files = typeof files === "string" ? [files] : files;
 
     files = expand(files);
 
@@ -62,7 +59,7 @@ const rm = {
         rmdirSyncRecursive.call(self, file, options.force, options.dir);
       }
     });
-  }
+  },
 };
 
 function rmdirSyncRecursive(dir, force, removeEmptyDir) {
@@ -75,7 +72,8 @@ function rmdirSyncRecursive(dir, force, removeEmptyDir) {
     const file = `${dir}/${files[i]}`;
     const currFile = fs.lstatSync(file);
 
-    if (currFile.isDirectory()) { // Recursive function back to the beginning
+    if (currFile.isDirectory()) {
+      // Recursive function back to the beginning
       rmdirSyncRecursive(file, force, removeEmptyDir);
     } else if (currFile.isSymbolicLink()) {
       // Unlink symlinks
@@ -112,21 +110,27 @@ function rmdirSyncRecursive(dir, force, removeEmptyDir) {
         result = fs.rmdirSync(dir);
         /* istanbul ignore next */
         if (fs.existsSync(dir)) {
-          throw new Error('EAGAIN');
+          throw new Error("EAGAIN");
         }
         break;
       } catch (er) {
         // In addition to error codes, also check if the directory still exists and loop again if true
         /* istanbul ignore next */
-        if (process.platform === 'win32' && (er.code === 'ENOTEMPTY' || er.code === 'EBUSY' || er.code === 'EPERM' || er.code === 'EAGAIN')) {
+        if (
+          process.platform === "win32" &&
+          (er.code === "ENOTEMPTY" ||
+            er.code === "EBUSY" ||
+            er.code === "EPERM" ||
+            er.code === "EAGAIN")
+        ) {
           if (Date.now() - start > 1000) {
             throw er;
           }
-        /* istanbul ignore next */
-        } else if (er.code === 'ENOENT') {
+          /* istanbul ignore next */
+        } else if (er.code === "ENOENT") {
           // Directory did not exist, deletion was successful
           break;
-        /* istanbul ignore next */
+          /* istanbul ignore next */
         } else {
           throw er;
         }
@@ -146,7 +150,7 @@ function rmdirSyncRecursive(dir, force, removeEmptyDir) {
 function isWriteable(file) {
   let writePermission = true;
   try {
-    const __fd = fs.openSync(file, 'a');
+    const __fd = fs.openSync(file, "a");
     fs.closeSync(__fd);
   } catch (e) {
     /* istanbul ignore next */
@@ -162,10 +166,16 @@ module.exports = function (vorpal) {
   }
   vorpal.api.rm = rm;
   vorpal
-    .command('rm [files...]')
-    .option('-f, --force', 'ignore nonexistent files and arguments, never prompt')
-    .option('-r, --recursive', 'remove directories and their contents recursively')
-    .option('-R', 'remove directories and their contents recursively')
+    .command("rm [files...]")
+    .option(
+      "-f, --force",
+      "ignore nonexistent files and arguments, never prompt"
+    )
+    .option(
+      "-r, --recursive",
+      "remove directories and their contents recursively"
+    )
+    .option("-R", "remove directories and their contents recursively")
     .autocomplete(fsAutocomplete())
     .action(function (args, callback) {
       args.options = args.options || {};
@@ -173,7 +183,7 @@ module.exports = function (vorpal) {
         command: rm,
         args: args.files,
         options: args.options,
-        callback
+        callback,
       });
     });
 };

@@ -5,14 +5,8 @@
   "description": "Run prod AMP pages with the local AMP runtime.",
   "homepage_url": "https://www.ampproject.org",
   "background": {
-    "scripts": [
-      "background.js"
-    ],
+    "scripts": ["background.js"],
     "persistent": true
   },
-  "permissions": [
-    "webRequest",
-    "webRequestBlocking",
-    "*://*/*"
-  ]
+  "permissions": ["webRequest", "webRequestBlocking", "*://*/*"]
 }

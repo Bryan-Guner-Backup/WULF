@@ -43,9 +43,7 @@ This example shows how you would add a handler for the `ipfs` protocol and have 
 ## Notes
 
 - It's not [`navigator.registerProtocolHandler`][2]. That's the same as the the webextension version and restricted to redirecting to urls that match the current origin.
-- Beaker Browser uses `registerStreamProtocol` to [handle `dat:` uris](
-https://github.com/beakerbrowser/beaker/blob/984188245e69fe8035688292399c3f5b1aa51c25/app/background-process/protocols/dat.js#L53)
-
+- Beaker Browser uses `registerStreamProtocol` to [handle `dat:` uris](https://github.com/beakerbrowser/beaker/blob/984188245e69fe8035688292399c3f5b1aa51c25/app/background-process/protocols/dat.js#L53)
 
 [1]: https://github.com/electron/electron/blob/master/docs/api/protocol.md#protocolregisterstreamprotocolscheme-handler-completion
 [2]: https://developer.mozilla.org/en-US/docs/Web/API/Navigator/registerProtocolHandler

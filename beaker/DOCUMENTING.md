@@ -1,4 +1,3 @@
-
 # Contributing Documentation to Beaker
 
 ## Documents
@@ -29,11 +28,11 @@ User-friendly Documentation (tutorials, how-tos, etc.) uses [GitHub Flavored Mar
 - Use fenced blocks for code of one full line or greater
 - Offset fenced blocks with whitespace before and after, except in list items.
 - Mark the language of code blocks:
-  ~~~
+  ````
   ```console
     $ beaker --help
   ```
-  ~~~
+  ````
   Supported languages are documented [here](https://github.com/github/linguist/blob/master/lib/linguist/languages.yml). You will probably be using `console`, `ruby`, `puppet`, or `yaml` most of the time.
 - It's nice to provide a shebang (`$`) in console examples to distinguish input from output.
 
@@ -90,7 +89,7 @@ Most of our documentation is done with the @tag syntax. With a few execptions ta
 
 Note: The `tag` name and the `nameOfValue` in question cannot contain spaces.
 
-All sections should be considered mandatory, but in practice a committer can walk a contributor through the process and help ensure a high quality of documentation.  When contributing keep especially in mind that an
+All sections should be considered mandatory, but in practice a committer can walk a contributor through the process and help ensure a high quality of documentation. When contributing keep especially in mind that an
 `@example` block will go a long way in helping understand the use case
 (which also encourages use by others) and the @api tag helps to understand the scope of a Pull Request.
 
@@ -113,7 +112,6 @@ or
 depending on whether you want the server to run in the foreground or not
 
 Wait for the documentation to compile and then point your browser to [http://localhost:8808](http://localhost:8808).
-
 
 ## A Simple YARD Reference
 
@@ -188,4 +186,3 @@ When you want to reference other information use:
     @see ClassOrModule
     @see #other_method
     @see http://web.url.com/reference Title for the link
-

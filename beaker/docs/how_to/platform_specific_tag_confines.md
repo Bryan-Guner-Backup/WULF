@@ -44,7 +44,6 @@ Taking one of our confine examples from above, we can think of the Ubuntu UI con
     "ui" tests will be confined away from ubuntu-1404 hosts, because
     "TODO: We have not applied the UI tests to Ubuntu yet"
 
-
 ## But Why Do We Need These?
 
 Usually when we add platforms, the confining tests step is very heavy handed & repetitive, usually consisting of adding boilerplate confine calls that don't provide any explanation for why these are happening. This can make it hard to later know the reason for the confine, making it hard to know when we should be able to remove confines down the road.
@@ -53,4 +52,4 @@ This new workflow should provide a number of advantages over the previous one, i
 
 1. Always reporting a reason for confining a platform
 2. Allowing these to be dynamically determined from configuration, rather
-    than needing to edit tens to hundreds of test files in-repo
+   than needing to edit tens to hundreds of test files in-repo

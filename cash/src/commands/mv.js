@@ -1,32 +1,35 @@
-'use strict';
+"use strict";
 
-const _ = require('lodash');
-const fs = require('fs');
-const fsAutocomplete = require('vorpal-autocomplete-fs');
-const path = require('path');
+const _ = require("lodash");
+const fs = require("fs");
+const fsAutocomplete = require("vorpal-autocomplete-fs");
+const path = require("path");
 
-const expand = require('./../util/expand');
-const interfacer = require('./../util/interfacer');
+const expand = require("./../util/expand");
+const interfacer = require("./../util/interfacer");
 
 const mv = {
-
   exec(args, options) {
     const self = this;
     options = options || {};
 
-    args = (args === undefined) ? [] : args;
-    args = (_.isArray(args)) ? args : args.split(' ');
-    args = _.filter(args, arg => String(arg).trim() !== '');
+    args = args === undefined ? [] : args;
+    args = _.isArray(args) ? args : args.split(" ");
+    args = _.filter(args, (arg) => String(arg).trim() !== "");
 
-    options.noclobber = (options.force === true) ? false : options.noclobber;
+    options.noclobber = options.force === true ? false : options.noclobber;
 
     if (args.length < 1) {
-      this.log('mv: missing file operand\nTry \'mv --help\' for more information.');
+      this.log(
+        "mv: missing file operand\nTry 'mv --help' for more information."
+      );
       return 1;
     }
 
     if (args.length === 1) {
-      this.log(`mv: missing destination file operand after ${args[0]}\nTry 'mv --help' for more information.`);
+      this.log(
+        `mv: missing destination file operand after ${args[0]}\nTry 'mv --help' for more information.`
+      );
       return 1;
     }
 
@@ -51,7 +54,7 @@ const mv = {
     }
 
     if (options.striptrailingslashes) {
-      sources = sources.map(src => String(src).replace(/\/$/g, ''));
+      sources = sources.map((src) => String(src).replace(/\/$/g, ""));
     }
 
     sources.forEach(function (src) {
@@ -78,10 +81,10 @@ const mv = {
 
       fs.renameSync(src, iDest);
       if (options.verbose === true) {
-        self.log(String(`${src} -> ${iDest}`).replace(/\\/g, '/'));
+        self.log(String(`${src} -> ${iDest}`).replace(/\\/g, "/"));
       }
     });
-  }
+  },
 };
 
 module.exports = function (vorpal) {
@@ -90,11 +93,14 @@ module.exports = function (vorpal) {
   }
   vorpal.api.mv = mv;
   vorpal
-    .command('mv [args...]')
-    .option('-f, --force', 'do not prompt before overwriting')
-    .option('-n, --no-clobber', 'do not overwrite an existing file')
-    .option('--striptrailingslashes', 'remove any trailing slashes from each source') // vorpal bug, need to add dashes between words
-    .option('-v, --verbose', 'explain what is being done')
+    .command("mv [args...]")
+    .option("-f, --force", "do not prompt before overwriting")
+    .option("-n, --no-clobber", "do not overwrite an existing file")
+    .option(
+      "--striptrailingslashes",
+      "remove any trailing slashes from each source"
+    ) // vorpal bug, need to add dashes between words
+    .option("-v, --verbose", "explain what is being done")
     .autocomplete(fsAutocomplete())
     .action(function (args, callback) {
       args.options = args.options || {};
@@ -102,7 +108,7 @@ module.exports = function (vorpal) {
         command: mv,
         args: args.args,
         options: args.options,
-        callback
+        callback,
       });
     });
 };

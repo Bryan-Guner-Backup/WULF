@@ -1,25 +1,24 @@
-'use strict';
+"use strict";
 
-var assert = require('./assert');
-var EventEmitter = require('./events');
-var stream = require('./stream');
-var tls = require('./tls');
-var util = require('./util');
-var common = require('./_tls_common');
-var debug = util.debuglog('tls-legacy');
-var Buffer = require('./buffer').Buffer;
-var Timer = process.binding('timer_wrap').Timer;
+var assert = require("./assert");
+var EventEmitter = require("./events");
+var stream = require("./stream");
+var tls = require("./tls");
+var util = require("./util");
+var common = require("./_tls_common");
+var debug = util.debuglog("tls-legacy");
+var Buffer = require("./buffer").Buffer;
+var Timer = process.binding("timer_wrap").Timer;
 var Connection = null;
 try {
-  Connection = process.binding('crypto').Connection;
+  Connection = process.binding("crypto").Connection;
 } catch (e) {
-  throw new Error('node.js not compiled with openssl crypto support.');
+  throw new Error("node.js not compiled with openssl crypto support.");
 }
 
 function SlabBuffer() {
   this.create();
 }
-
 
 SlabBuffer.prototype.create = function create() {
   this.isFull = false;
@@ -27,7 +26,6 @@ SlabBuffer.prototype.create = function create() {
   this.offset = 0;
   this.remaining = this.pool.length;
 };
-
 
 SlabBuffer.prototype.use = function use(context, fn, size) {
   if (this.remaining === 0) {
@@ -50,9 +48,7 @@ SlabBuffer.prototype.use = function use(context, fn, size) {
   return bytes;
 };
 
-
 var slabBuffer = null;
-
 
 // Base class of both CleartextStream and EncryptedStream
 function CryptoStream(pair, options) {
@@ -60,7 +56,7 @@ function CryptoStream(pair, options) {
 
   this.pair = pair;
   this._pending = null;
-  this._pendingEncoding = '';
+  this._pendingEncoding = "";
   this._pendingCallback = null;
   this._doneFlag = false;
   this._retryAfterPartial = false;
@@ -76,35 +72,32 @@ function CryptoStream(pair, options) {
   if (slabBuffer === null) slabBuffer = new SlabBuffer();
   this._buffer = slabBuffer;
 
-  this.once('finish', onCryptoStreamFinish);
+  this.once("finish", onCryptoStreamFinish);
 
   // net.Socket calls .onend too
-  this.once('end', onCryptoStreamEnd);
+  this.once("end", onCryptoStreamEnd);
 }
 util.inherits(CryptoStream, stream.Duplex);
-
 
 function onCryptoStreamFinish() {
   this._finished = true;
 
   if (this === this.pair.cleartext) {
-    debug('cleartext.onfinish');
+    debug("cleartext.onfinish");
     if (this.pair.ssl) {
       // Generate close notify
       // NOTE: first call checks if client has sent us shutdown,
       // second call enqueues shutdown into the BIO.
       if (this.pair.ssl.shutdownSSL() !== 1) {
-        if (this.pair.ssl && this.pair.ssl.error)
-          return this.pair.error();
+        if (this.pair.ssl && this.pair.ssl.error) return this.pair.error();
 
         this.pair.ssl.shutdownSSL();
       }
 
-      if (this.pair.ssl && this.pair.ssl.error)
-        return this.pair.error();
+      if (this.pair.ssl && this.pair.ssl.error) return this.pair.error();
     }
   } else {
-    debug('encrypted.onfinish');
+    debug("encrypted.onfinish");
   }
 
   // Try to read just to get sure that we won't miss EOF
@@ -118,21 +111,19 @@ function onCryptoStreamFinish() {
   }
 }
 
-
 function onCryptoStreamEnd() {
   this._ended = true;
   if (this === this.pair.cleartext) {
-    debug('cleartext.onend');
+    debug("cleartext.onend");
   } else {
-    debug('encrypted.onend');
+    debug("encrypted.onend");
   }
 }
-
 
 // NOTE: Called once `this._opposite` is set.
 CryptoStream.prototype.init = function init() {
   var self = this;
-  this._opposite.on('sslOutEnd', function() {
+  this._opposite.on("sslOutEnd", function () {
     if (self._sslOutCb) {
       var cb = self._sslOutCb;
       self._sslOutCb = null;
@@ -140,7 +131,6 @@ CryptoStream.prototype.init = function init() {
     }
   });
 };
-
 
 CryptoStream.prototype._write = function write(data, encoding, cb) {
   assert(this._pending === null);
@@ -153,15 +143,17 @@ CryptoStream.prototype._write = function write(data, encoding, cb) {
   // side.
   //
   // TODO(indutny): Remove magic number, use watermark based limits
-  if (!this._resumingSession &&
-      this._opposite._internallyPendingBytes() < 128 * 1024) {
+  if (
+    !this._resumingSession &&
+    this._opposite._internallyPendingBytes() < 128 * 1024
+  ) {
     // Write current buffer now
     var written;
     if (this === this.pair.cleartext) {
-      debug('cleartext.write called with %d bytes', data.length);
+      debug("cleartext.write called with %d bytes", data.length);
       written = this.pair.ssl.clearIn(data, 0, data.length);
     } else {
-      debug('encrypted.write called with %d bytes', data.length);
+      debug("encrypted.write called with %d bytes", data.length);
       written = this.pair.ssl.encIn(data, 0, data.length);
     }
 
@@ -183,9 +175,9 @@ CryptoStream.prototype._write = function write(data, encoding, cb) {
     // Whole buffer was written
     if (written === data.length) {
       if (this === this.pair.cleartext) {
-        debug('cleartext.write succeed with ' + written + ' bytes');
+        debug("cleartext.write succeed with " + written + " bytes");
       } else {
-        debug('encrypted.write succeed with ' + written + ' bytes');
+        debug("encrypted.write succeed with " + written + " bytes");
       }
 
       // Invoke callback only when all data read from opposite stream
@@ -204,7 +196,7 @@ CryptoStream.prototype._write = function write(data, encoding, cb) {
       return;
     }
   } else {
-    debug('cleartext.write queue is full');
+    debug("cleartext.write queue is full");
 
     // Force SSL_read call to cycle some states/data inside OpenSSL
     this.pair.cleartext.read(0);
@@ -216,24 +208,22 @@ CryptoStream.prototype._write = function write(data, encoding, cb) {
   this._pendingCallback = cb;
 
   if (this === this.pair.cleartext) {
-    debug('cleartext.write queued with %d bytes', data.length);
+    debug("cleartext.write queued with %d bytes", data.length);
   } else {
-    debug('encrypted.write queued with %d bytes', data.length);
+    debug("encrypted.write queued with %d bytes", data.length);
   }
 };
 
-
 CryptoStream.prototype._writePending = function writePending() {
   var data = this._pending,
-      encoding = this._pendingEncoding,
-      cb = this._pendingCallback;
+    encoding = this._pendingEncoding,
+    cb = this._pendingCallback;
 
   this._pending = null;
-  this._pendingEncoding = '';
+  this._pendingEncoding = "";
   this._pendingCallback = null;
   this._write(data, encoding, cb);
 };
-
 
 CryptoStream.prototype._read = function read(size) {
   // XXX: EOF?!
@@ -241,20 +231,20 @@ CryptoStream.prototype._read = function read(size) {
 
   // Wait for session to be resumed
   // Mark that we're done reading, but don't provide data or EOF
-  if (this._resumingSession || !this._reading) return this.push('');
+  if (this._resumingSession || !this._reading) return this.push("");
 
   var out;
   if (this === this.pair.cleartext) {
-    debug('cleartext.read called with %d bytes', size);
+    debug("cleartext.read called with %d bytes", size);
     out = this.pair.ssl.clearOut;
   } else {
-    debug('encrypted.read called with %d bytes', size);
+    debug("encrypted.read called with %d bytes", size);
     out = this.pair.ssl.encOut;
   }
 
   var bytesRead = 0,
-      start = this._buffer.offset,
-      last = start;
+    start = this._buffer.offset,
+    last = start;
   do {
     assert(last === this._buffer.offset);
     var read = this._buffer.use(this.pair.ssl, out, size - bytesRead);
@@ -268,10 +258,12 @@ CryptoStream.prototype._read = function read(size) {
       this.pair.error();
       break;
     }
-  } while (read > 0 &&
-           !this._buffer.isFull &&
-           bytesRead < size &&
-           this.pair.ssl !== null);
+  } while (
+    read > 0 &&
+    !this._buffer.isFull &&
+    bytesRead < size &&
+    this.pair.ssl !== null
+  );
 
   // Get NPN and Server name when ready
   this.pair.maybeInitFinished();
@@ -283,9 +275,9 @@ CryptoStream.prototype._read = function read(size) {
   assert(bytesRead >= 0);
 
   if (this === this.pair.cleartext) {
-    debug('cleartext.read succeed with %d bytes', bytesRead);
+    debug("cleartext.read succeed with %d bytes", bytesRead);
   } else {
-    debug('encrypted.read succeed with %d bytes', bytesRead);
+    debug("encrypted.read succeed with %d bytes", bytesRead);
   }
 
   // Try writing pending data
@@ -294,8 +286,10 @@ CryptoStream.prototype._read = function read(size) {
 
   if (bytesRead === 0) {
     // EOF when cleartext has finished and we have nothing to read
-    if (this._opposite._finished && this._internallyPendingBytes() === 0 ||
-        this.pair.ssl && this.pair.ssl.receivedShutdown) {
+    if (
+      (this._opposite._finished && this._internallyPendingBytes() === 0) ||
+      (this.pair.ssl && this.pair.ssl.receivedShutdown)
+    ) {
       // Perform graceful shutdown
       this._done();
 
@@ -311,7 +305,7 @@ CryptoStream.prototype._read = function read(size) {
       }
     } else {
       // Bail out
-      this.push('');
+      this.push("");
     }
   } else {
     // Give them requested data
@@ -328,45 +322,43 @@ CryptoStream.prototype._read = function read(size) {
     // Notify listeners about internal data end
     if (!halfRead) {
       if (this === this.pair.cleartext) {
-        debug('cleartext.sslOutEnd');
+        debug("cleartext.sslOutEnd");
       } else {
-        debug('encrypted.sslOutEnd');
+        debug("encrypted.sslOutEnd");
       }
 
-      this.emit('sslOutEnd');
+      this.emit("sslOutEnd");
     }
   }
 };
 
-
-CryptoStream.prototype.setTimeout = function(timeout, callback) {
+CryptoStream.prototype.setTimeout = function (timeout, callback) {
   if (this.socket) this.socket.setTimeout(timeout, callback);
 };
 
-
-CryptoStream.prototype.setNoDelay = function(noDelay) {
+CryptoStream.prototype.setNoDelay = function (noDelay) {
   if (this.socket) this.socket.setNoDelay(noDelay);
 };
 
-
-CryptoStream.prototype.setKeepAlive = function(enable, initialDelay) {
+CryptoStream.prototype.setKeepAlive = function (enable, initialDelay) {
   if (this.socket) this.socket.setKeepAlive(enable, initialDelay);
 };
 
-CryptoStream.prototype.__defineGetter__('bytesWritten', function() {
+CryptoStream.prototype.__defineGetter__("bytesWritten", function () {
   return this.socket ? this.socket.bytesWritten : 0;
 });
 
-CryptoStream.prototype.getPeerCertificate = function(detailed) {
+CryptoStream.prototype.getPeerCertificate = function (detailed) {
   if (this.pair.ssl) {
     return common.translatePeerCertificate(
-        this.pair.ssl.getPeerCertificate(detailed));
+      this.pair.ssl.getPeerCertificate(detailed)
+    );
   }
 
   return null;
 };
 
-CryptoStream.prototype.getSession = function() {
+CryptoStream.prototype.getSession = function () {
   if (this.pair.ssl) {
     return this.pair.ssl.getSession();
   }
@@ -374,7 +366,7 @@ CryptoStream.prototype.getSession = function() {
   return null;
 };
 
-CryptoStream.prototype.isSessionReused = function() {
+CryptoStream.prototype.isSessionReused = function () {
   if (this.pair.ssl) {
     return this.pair.ssl.isSessionReused();
   }
@@ -382,7 +374,7 @@ CryptoStream.prototype.isSessionReused = function() {
   return null;
 };
 
-CryptoStream.prototype.getCipher = function(err) {
+CryptoStream.prototype.getCipher = function (err) {
   if (this.pair.ssl) {
     return this.pair.ssl.getCurrentCipher();
   } else {
@@ -390,12 +382,11 @@ CryptoStream.prototype.getCipher = function(err) {
   }
 };
 
-
-CryptoStream.prototype.end = function(chunk, encoding) {
+CryptoStream.prototype.end = function (chunk, encoding) {
   if (this === this.pair.cleartext) {
-    debug('cleartext.end');
+    debug("cleartext.end");
   } else {
-    debug('encrypted.end');
+    debug("encrypted.end");
   }
 
   // Write pending data first
@@ -406,16 +397,14 @@ CryptoStream.prototype.end = function(chunk, encoding) {
   stream.Duplex.prototype.end.call(this, chunk, encoding);
 };
 
-
-CryptoStream.prototype.destroySoon = function(err) {
+CryptoStream.prototype.destroySoon = function (err) {
   if (this === this.pair.cleartext) {
-    debug('cleartext.destroySoon');
+    debug("cleartext.destroySoon");
   } else {
-    debug('encrypted.destroySoon');
+    debug("encrypted.destroySoon");
   }
 
-  if (this.writable)
-    this.end();
+  if (this.writable) this.end();
 
   if (this._writableState.finished && this._opposite._ended) {
     this.destroy();
@@ -424,76 +413,73 @@ CryptoStream.prototype.destroySoon = function(err) {
     // was written on this side was read from the other side.
     var self = this;
     var waiting = 1;
-    var finish = function() {
+    var finish = function () {
       if (--waiting === 0) self.destroy();
     };
-    this._opposite.once('end', finish);
+    this._opposite.once("end", finish);
     if (!this._finished) {
-      this.once('finish', finish);
+      this.once("finish", finish);
       ++waiting;
     }
   }
 };
 
-
-CryptoStream.prototype.destroy = function(err) {
+CryptoStream.prototype.destroy = function (err) {
   if (this._destroyed) return;
   this._destroyed = true;
   this.readable = this.writable = false;
 
   // Destroy both ends
   if (this === this.pair.cleartext) {
-    debug('cleartext.destroy');
+    debug("cleartext.destroy");
   } else {
-    debug('encrypted.destroy');
+    debug("encrypted.destroy");
   }
   this._opposite.destroy();
 
   process.nextTick(destroyNT, this, err ? true : false);
 };
 
-
 function destroyNT(self, hadErr) {
   // Force EOF
   self.push(null);
 
   // Emit 'close' event
-  self.emit('close', hadErr);
+  self.emit("close", hadErr);
 }
 
-
-CryptoStream.prototype._done = function() {
+CryptoStream.prototype._done = function () {
   this._doneFlag = true;
 
   if (this === this.pair.encrypted && !this.pair._secureEstablished)
     return this.pair.error();
 
-  if (this.pair.cleartext._doneFlag &&
-      this.pair.encrypted._doneFlag &&
-      !this.pair._doneFlag) {
+  if (
+    this.pair.cleartext._doneFlag &&
+    this.pair.encrypted._doneFlag &&
+    !this.pair._doneFlag
+  ) {
     // If both streams are done:
     this.pair.destroy();
   }
 };
 
-
 // readyState is deprecated. Don't use it.
-Object.defineProperty(CryptoStream.prototype, 'readyState', {
-  get: function() {
+Object.defineProperty(CryptoStream.prototype, "readyState", {
+  get: function () {
     if (this._connecting) {
-      return 'opening';
+      return "opening";
     } else if (this.readable && this.writable) {
-      return 'open';
+      return "open";
     } else if (this.readable && !this.writable) {
-      return 'readOnly';
+      return "readOnly";
     } else if (!this.readable && this.writable) {
-      return 'writeOnly';
+      return "writeOnly";
     } else {
-      return 'closed';
+      return "closed";
     }
-  }
+  },
 });
-
 
 function CleartextStream(pair, options) {
   CryptoStream.call(this, pair, options);
@@ -502,21 +488,20 @@ function CleartextStream(pair, options) {
   // on top of net Sockets
   var self = this;
   this._handle = {
-    readStop: function() {
+    readStop: function () {
       self._reading = false;
     },
-    readStart: function() {
+    readStart: function () {
       if (self._reading && self._readableState.length > 0) return;
       self._reading = true;
       self.read(0);
       if (self._opposite.readable) self._opposite.read(0);
-    }
+    },
   };
 }
 util.inherits(CleartextStream, CryptoStream);
 
-
-CleartextStream.prototype._internallyPendingBytes = function() {
+CleartextStream.prototype._internallyPendingBytes = function () {
   if (this.pair.ssl) {
     return this.pair.ssl.clearPending();
   } else {
@@ -524,42 +509,36 @@ CleartextStream.prototype._internallyPendingBytes = function() {
   }
 };
 
-
-CleartextStream.prototype.address = function() {
+CleartextStream.prototype.address = function () {
   return this.socket && this.socket.address();
 };
 
-
-CleartextStream.prototype.__defineGetter__('remoteAddress', function() {
+CleartextStream.prototype.__defineGetter__("remoteAddress", function () {
   return this.socket && this.socket.remoteAddress;
 });
 
-CleartextStream.prototype.__defineGetter__('remoteFamily', function() {
+CleartextStream.prototype.__defineGetter__("remoteFamily", function () {
   return this.socket && this.socket.remoteFamily;
 });
 
-CleartextStream.prototype.__defineGetter__('remotePort', function() {
+CleartextStream.prototype.__defineGetter__("remotePort", function () {
   return this.socket && this.socket.remotePort;
 });
 
-
-CleartextStream.prototype.__defineGetter__('localAddress', function() {
+CleartextStream.prototype.__defineGetter__("localAddress", function () {
   return this.socket && this.socket.localAddress;
 });
 
-
-CleartextStream.prototype.__defineGetter__('localPort', function() {
+CleartextStream.prototype.__defineGetter__("localPort", function () {
   return this.socket && this.socket.localPort;
 });
-
 
 function EncryptedStream(pair, options) {
   CryptoStream.call(this, pair, options);
 }
 util.inherits(EncryptedStream, CryptoStream);
 
-
-EncryptedStream.prototype._internallyPendingBytes = function() {
+EncryptedStream.prototype._internallyPendingBytes = function () {
   if (this.pair.ssl) {
     return this.pair.ssl.encPending();
   } else {
@@ -567,9 +546,8 @@ EncryptedStream.prototype._internallyPendingBytes = function() {
   }
 };
 
-
 function onhandshakestart() {
-  debug('onhandshakestart');
+  debug("onhandshakestart");
 
   var self = this;
   var ssl = self.ssl;
@@ -577,11 +555,11 @@ function onhandshakestart() {
 
   assert(now >= ssl.lastHandshakeTime);
 
-  if ((now - ssl.lastHandshakeTime) >= tls.CLIENT_RENEG_WINDOW * 1000) {
+  if (now - ssl.lastHandshakeTime >= tls.CLIENT_RENEG_WINDOW * 1000) {
     ssl.handshakes = 0;
   }
 
-  var first = (ssl.lastHandshakeTime === 0);
+  var first = ssl.lastHandshakeTime === 0;
   ssl.lastHandshakeTime = now;
   if (first) return;
 
@@ -589,23 +567,21 @@ function onhandshakestart() {
     // Defer the error event to the next tick. We're being called from OpenSSL's
     // state machine and OpenSSL is not re-entrant. We cannot allow the user's
     // callback to destroy the connection right now, it would crash and burn.
-    setImmediate(function() {
-      var err = new Error('TLS session renegotiation attack detected.');
-      if (self.cleartext) self.cleartext.emit('error', err);
+    setImmediate(function () {
+      var err = new Error("TLS session renegotiation attack detected.");
+      if (self.cleartext) self.cleartext.emit("error", err);
     });
   }
 }
 
-
 function onhandshakedone() {
   // for future use
-  debug('onhandshakedone');
+  debug("onhandshakedone");
 }
-
 
 function onclienthello(hello) {
   var self = this,
-      once = false;
+    once = false;
 
   this._resumingSession = true;
   function callback(err, session) {
@@ -623,13 +599,14 @@ function onclienthello(hello) {
     self.encrypted.read(0);
   }
 
-  if (hello.sessionId.length <= 0 ||
-      !this.server ||
-      !this.server.emit('resumeSession', hello.sessionId, callback)) {
+  if (
+    hello.sessionId.length <= 0 ||
+    !this.server ||
+    !this.server.emit("resumeSession", hello.sessionId, callback)
+  ) {
     callback(null, null);
   }
 }
-
 
 function onnewsession(key, session) {
   if (!this.server) return;
@@ -637,37 +614,39 @@ function onnewsession(key, session) {
   var self = this;
   var once = false;
 
-  if (!self.server.emit('newSession', key, session, done))
-    done();
+  if (!self.server.emit("newSession", key, session, done)) done();
 
   function done() {
-    if (once)
-      return;
+    if (once) return;
     once = true;
 
-    if (self.ssl)
-      self.ssl.newSessionDone();
+    if (self.ssl) self.ssl.newSessionDone();
   }
 }
 
-
 function onocspresponse(resp) {
-  this.emit('OCSPResponse', resp);
+  this.emit("OCSPResponse", resp);
 }
-
 
 /**
  * Provides a pair of streams to do encrypted communication.
  */
 
-function SecurePair(context, isServer, requestCert, rejectUnauthorized,
-                    options) {
+function SecurePair(
+  context,
+  isServer,
+  requestCert,
+  rejectUnauthorized,
+  options
+) {
   if (!(this instanceof SecurePair)) {
-    return new SecurePair(context,
-                          isServer,
-                          requestCert,
-                          rejectUnauthorized,
-                          options);
+    return new SecurePair(
+      context,
+      isServer,
+      requestCert,
+      rejectUnauthorized,
+      options
+    );
   }
 
   options || (options = {});
@@ -697,11 +676,12 @@ function SecurePair(context, isServer, requestCert, rejectUnauthorized,
   this._rejectUnauthorized = rejectUnauthorized ? true : false;
   this._requestCert = requestCert ? true : false;
 
-  this.ssl = new Connection(this.credentials.context,
-                            this._isServer ? true : false,
-                            this._isServer ? this._requestCert :
-                                             options.servername,
-                            this._rejectUnauthorized);
+  this.ssl = new Connection(
+    this.credentials.context,
+    this._isServer ? true : false,
+    this._isServer ? this._requestCert : options.servername,
+    this._rejectUnauthorized
+  );
 
   if (this._isServer) {
     this.ssl.onhandshakestart = onhandshakestart.bind(this);
@@ -748,29 +728,24 @@ function securePairNT(self, options) {
   if (self.ssl) {
     self.ssl.start();
 
-    if (options.requestOCSP)
-      self.ssl.requestOCSP();
+    if (options.requestOCSP) self.ssl.requestOCSP();
 
     /* In case of cipher suite failures - SSL_accept/SSL_connect may fail */
-    if (self.ssl && self.ssl.error)
-      self.error();
+    if (self.ssl && self.ssl.error) self.error();
   }
 }
 
-
-exports.createSecurePair = function(context,
-                                    isServer,
-                                    requestCert,
-                                    rejectUnauthorized) {
-  var pair = new SecurePair(context,
-                            isServer,
-                            requestCert,
-                            rejectUnauthorized);
+exports.createSecurePair = function (
+  context,
+  isServer,
+  requestCert,
+  rejectUnauthorized
+) {
+  var pair = new SecurePair(context, isServer, requestCert, rejectUnauthorized);
   return pair;
 };
 
-
-SecurePair.prototype.maybeInitFinished = function() {
+SecurePair.prototype.maybeInitFinished = function () {
   if (this.ssl && !this._secureEstablished && this.ssl.isInitFinished()) {
     if (process.features.tls_npn) {
       this.npnProtocol = this.ssl.getNegotiatedProtocol();
@@ -781,17 +756,16 @@ SecurePair.prototype.maybeInitFinished = function() {
     }
 
     this._secureEstablished = true;
-    debug('secure established');
-    this.emit('secure');
+    debug("secure established");
+    this.emit("secure");
   }
 };
 
-
-SecurePair.prototype.destroy = function() {
+SecurePair.prototype.destroy = function () {
   if (this._destroying) return;
 
   if (!this._doneFlag) {
-    debug('SecurePair.destroy');
+    debug("SecurePair.destroy");
     this._destroying = true;
 
     // SecurePair should be destroyed only after it's streams
@@ -805,39 +779,39 @@ SecurePair.prototype.destroy = function() {
   }
 };
 
-
-SecurePair.prototype.error = function(returnOnly) {
+SecurePair.prototype.error = function (returnOnly) {
   var err = this.ssl.error;
   this.ssl.error = null;
 
   if (!this._secureEstablished) {
     // Emit ECONNRESET instead of zero return
-    if (!err || err.message === 'ZERO_RETURN') {
-      var connReset = new Error('socket hang up');
-      connReset.code = 'ECONNRESET';
+    if (!err || err.message === "ZERO_RETURN") {
+      var connReset = new Error("socket hang up");
+      connReset.code = "ECONNRESET";
       connReset.sslError = err && err.message;
 
       err = connReset;
     }
     this.destroy();
-    if (!returnOnly) this.emit('error', err);
-  } else if (this._isServer &&
-             this._rejectUnauthorized &&
-             /peer did not return a certificate/.test(err.message)) {
+    if (!returnOnly) this.emit("error", err);
+  } else if (
+    this._isServer &&
+    this._rejectUnauthorized &&
+    /peer did not return a certificate/.test(err.message)
+  ) {
     // Not really an error.
     this.destroy();
   } else {
-    if (!returnOnly) this.cleartext.emit('error', err);
+    if (!returnOnly) this.cleartext.emit("error", err);
   }
   return err;
 };
-
 
 exports.pipe = function pipe(pair, socket) {
   pair.encrypted.pipe(socket);
   socket.pipe(pair.encrypted);
 
-  pair.encrypted.on('close', function() {
+  pair.encrypted.on("close", function () {
     process.nextTick(pipeCloseNT, pair, socket);
   });
 
@@ -854,37 +828,34 @@ exports.pipe = function pipe(pair, socket) {
   // complicated.  Since the encrypted side actually gets
   // its data from the cleartext side, we have to give it a
   // light kick to get in motion again.
-  socket.on('drain', function() {
-    if (pair.encrypted._pending)
-      pair.encrypted._writePending();
-    if (pair.cleartext._pending)
-      pair.cleartext._writePending();
+  socket.on("drain", function () {
+    if (pair.encrypted._pending) pair.encrypted._writePending();
+    if (pair.cleartext._pending) pair.cleartext._writePending();
     pair.encrypted.read(0);
     pair.cleartext.read(0);
   });
 
   function onerror(e) {
     if (cleartext._controlReleased) {
-      cleartext.emit('error', e);
+      cleartext.emit("error", e);
     }
   }
 
   function onclose() {
-    socket.removeListener('error', onerror);
-    socket.removeListener('timeout', ontimeout);
+    socket.removeListener("error", onerror);
+    socket.removeListener("timeout", ontimeout);
   }
 
   function ontimeout() {
-    cleartext.emit('timeout');
+    cleartext.emit("timeout");
   }
 
-  socket.on('error', onerror);
-  socket.on('close', onclose);
-  socket.on('timeout', ontimeout);
+  socket.on("error", onerror);
+  socket.on("close", onclose);
+  socket.on("timeout", ontimeout);
 
   return cleartext;
 };
-
 
 function pipeCloseNT(pair, socket) {
   // Encrypted should be unpiped from socket to prevent possible

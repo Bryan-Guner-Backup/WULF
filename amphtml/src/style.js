@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-
 /** @private @const {!Object<string>} */
 const propertyNameCache_ = Object.create(null);
 
 /** @private @const {!Array<string>} */
-const vendorPrefixes_ = ['Webkit', 'webkit', 'Moz', 'moz', 'ms', 'O', 'o'];
-
+const vendorPrefixes_ = ["Webkit", "webkit", "Moz", "moz", "ms", "O", "o"];
 
 /**
  * @export
@@ -46,7 +44,7 @@ function getVendorJsPropertyName_(object, titleCase) {
       return propertyName;
     }
   }
-  return '';
+  return "";
 }
 
 /**
@@ -79,7 +77,6 @@ export function getVendorJsPropertyName(object, camelCase, opt_bypassCache) {
   return propertyName;
 }
 
-
 /**
  * Sets the CSS style of the specified element with optional units, e.g. "px".
  * @param {!Element} element
@@ -89,13 +86,15 @@ export function getVendorJsPropertyName(object, camelCase, opt_bypassCache) {
  * @param {boolean=} opt_bypassCache
  */
 export function setStyle(element, property, value, opt_units, opt_bypassCache) {
-  let propertyName = getVendorJsPropertyName(element.style, property,
-      opt_bypassCache);
+  let propertyName = getVendorJsPropertyName(
+    element.style,
+    property,
+    opt_bypassCache
+  );
   if (propertyName) {
     element.style[propertyName] = opt_units ? value + opt_units : value;
   }
 }
-
 
 /**
  * Returns the value of the CSS style of the specified element.
@@ -105,14 +104,16 @@ export function setStyle(element, property, value, opt_units, opt_bypassCache) {
  * @return {*}
  */
 export function getStyle(element, property, opt_bypassCache) {
-  let propertyName = getVendorJsPropertyName(element.style, property,
-      opt_bypassCache);
+  let propertyName = getVendorJsPropertyName(
+    element.style,
+    property,
+    opt_bypassCache
+  );
   if (!propertyName) {
     return undefined;
   }
   return element.style[propertyName];
 }
-
 
 /**
  * Sets the CSS styles of the specified element. The styles
@@ -126,7 +127,6 @@ export function setStyles(element, styles) {
   }
 }
 
-
 /**
  * Shows or hides the specified element.
  * @param {!Element} element
@@ -134,11 +134,10 @@ export function setStyles(element, styles) {
  */
 export function toggle(element, opt_display) {
   if (opt_display === undefined) {
-    opt_display = !(element.style.display != 'none');
+    opt_display = !(element.style.display != "none");
   }
-  element.style.display = opt_display ? '' : 'none';
+  element.style.display = opt_display ? "" : "none";
 }
-
 
 /**
  * Returns a pixel value.
@@ -146,9 +145,8 @@ export function toggle(element, opt_display) {
  * @return {string}
  */
 export function px(value) {
-  return value + 'px';
+  return value + "px";
 }
-
 
 /**
  * Returns a "translateX" for CSS "transform" property.
@@ -156,12 +154,11 @@ export function px(value) {
  * @return {string}
  */
 export function translateX(value) {
-  if (typeof value == 'string') {
+  if (typeof value == "string") {
     return `translateX(${value})`;
   }
   return `translateX(${px(value)})`;
 }
-
 
 /**
  * Returns a "translateX" for CSS "transform" property.
@@ -170,18 +167,17 @@ export function translateX(value) {
  * @return {string}
  */
 export function translate(x, opt_y) {
-  if (typeof x == 'number') {
+  if (typeof x == "number") {
     x = px(x);
   }
   if (opt_y === undefined) {
     return `translate(${x})`;
   }
-  if (typeof opt_y == 'number') {
+  if (typeof opt_y == "number") {
     opt_y = px(opt_y);
   }
   return `translate(${x},${opt_y})`;
 }
-
 
 /**
  * Returns a "scale" for CSS "transform" property.

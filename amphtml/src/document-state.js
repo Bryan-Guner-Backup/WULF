@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import {Observable} from './observable';
-import {getService} from './service';
-import {getVendorJsPropertyName} from './style';
-
+import { Observable } from "./observable";
+import { getService } from "./service";
+import { getVendorJsPropertyName } from "./style";
 
 /**
  * Whether the document is ready.
@@ -25,9 +24,8 @@ import {getVendorJsPropertyName} from './style';
  * @return {boolean}
  */
 export function isDocumentReady(doc) {
-  return doc.readyState != 'loading';
+  return doc.readyState != "loading";
 }
-
 
 /**
  * Calls the callback when document is ready.
@@ -40,18 +38,17 @@ export function onDocumentReady(doc, callback) {
     callback();
   } else {
     var readyListener = () => {
-      if (doc.readyState != 'loading') {
+      if (doc.readyState != "loading") {
         if (!ready) {
           ready = true;
           callback();
         }
-        doc.removeEventListener('readystatechange', readyListener);
+        doc.removeEventListener("readystatechange", readyListener);
       }
     };
-    doc.addEventListener('readystatechange', readyListener);
+    doc.addEventListener("readystatechange", readyListener);
   }
 }
-
 
 /**
  */
@@ -67,14 +64,17 @@ export class DocumentState {
     this.document_ = win.document;
 
     /** @private @const {string|null} */
-    this.hiddenProp_ = getVendorJsPropertyName(this.document_, 'hidden', true);
+    this.hiddenProp_ = getVendorJsPropertyName(this.document_, "hidden", true);
     if (this.document_[this.hiddenProp_] === undefined) {
       this.hiddenProp_ = null;
     }
 
     /** @private @const {string|null} */
-    this.visibilityStateProp_ = getVendorJsPropertyName(this.document_,
-        'visibilityState', true);
+    this.visibilityStateProp_ = getVendorJsPropertyName(
+      this.document_,
+      "visibilityState",
+      true
+    );
     if (this.document_[this.visibilityStateProp_] === undefined) {
       this.visibilityStateProp_ = null;
     }
@@ -85,27 +85,31 @@ export class DocumentState {
     /** @private @const {string|null} */
     this.visibilityChangeEvent_ = null;
     if (this.hiddenProp_) {
-      this.visibilityChangeEvent_ = 'visibilitychange';
-      let vendorStop = this.hiddenProp_.indexOf('Hidden');
+      this.visibilityChangeEvent_ = "visibilitychange";
+      let vendorStop = this.hiddenProp_.indexOf("Hidden");
       if (vendorStop != -1) {
         this.visibilityChangeEvent_ =
-            this.hiddenProp_.substring(0, vendorStop) + 'Visibilitychange';
+          this.hiddenProp_.substring(0, vendorStop) + "Visibilitychange";
       }
     }
 
     /** @private @const {!Function} */
     this.boundOnVisibilityChanged_ = this.onVisibilityChanged_.bind(this);
     if (this.visibilityChangeEvent_) {
-      this.document_.addEventListener(this.visibilityChangeEvent_,
-          this.boundOnVisibilityChanged_);
+      this.document_.addEventListener(
+        this.visibilityChangeEvent_,
+        this.boundOnVisibilityChanged_
+      );
     }
   }
 
   /** @private */
   cleanup_() {
     if (this.visibilityChangeEvent_) {
-      this.document_.removeEventListener(this.visibilityChangeEvent_,
-          this.boundOnVisibilityChanged_);
+      this.document_.removeEventListener(
+        this.visibilityChangeEvent_,
+        this.boundOnVisibilityChanged_
+      );
     }
   }
 
@@ -145,7 +149,7 @@ export class DocumentState {
    */
   getVisibilityState() {
     if (!this.visibilityStateProp_) {
-      return !this.isHidden() ? 'visible' : 'hidden';
+      return !this.isHidden() ? "visible" : "hidden";
     }
     return this.document_[this.visibilityStateProp_];
   }
@@ -164,7 +168,6 @@ export class DocumentState {
   }
 }
 
-
 /**
  * @param {!Window} window
  * @return {!DocumentState}
@@ -174,13 +177,12 @@ function createDocumentState_(window) {
   return new DocumentState(window);
 }
 
-
 /**
  * @param {!Window} window
  * @return {!DocumentState}
  */
 export function documentStateFor(window) {
-  return getService(window, 'documentState', () => {
+  return getService(window, "documentState", () => {
     return createDocumentState_(window);
   });
-};
+}

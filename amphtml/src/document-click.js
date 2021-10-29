@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import {closestByTag} from './dom';
-import {getService} from './service';
-import {log} from './log';
-import {parseUrl} from './url';
-import {viewportFor} from './viewport';
-
+import { closestByTag } from "./dom";
+import { getService } from "./service";
+import { log } from "./log";
+import { parseUrl } from "./url";
+import { viewportFor } from "./viewport";
 
 /**
  * @param {!Window} window
@@ -39,7 +38,7 @@ export function uninstallGlobalClickListener(window) {
  * @param {!Window} window
  */
 function clickHandlerFor(window) {
-  return getService(window, 'clickhandler', () => {
+  return getService(window, "clickhandler", () => {
     return new ClickHandler(window);
   });
 }
@@ -63,16 +62,20 @@ export class ClickHandler {
     /** @private @const {!Function} */
     this.boundHandle_ = this.handle_.bind(this);
 
-    this.win.document.documentElement.addEventListener('click',
-        this.boundHandle_);
+    this.win.document.documentElement.addEventListener(
+      "click",
+      this.boundHandle_
+    );
   }
 
   /**
    * Removes all event listeners.
    */
   cleanup() {
-    this.win.document.documentElement.removeEventListener('click',
-        this.boundHandle_);
+    this.win.document.documentElement.removeEventListener(
+      "click",
+      this.boundHandle_
+    );
   }
 
   /**
@@ -85,7 +88,6 @@ export class ClickHandler {
   }
 }
 
-
 /**
  * Intercept any click on the current document and prevent any
  * linking to an identifier from pushing into the history stack.
@@ -97,7 +99,7 @@ export function onDocumentElementClick_(e, viewport) {
     return;
   }
 
-  let target = closestByTag(e.target, 'A');
+  let target = closestByTag(e.target, "A");
   if (!target) {
     return;
   }
@@ -130,10 +132,12 @@ export function onDocumentElementClick_(e, viewport) {
 
     if (elem) {
       // TODO(dvoytenko): consider implementing animated scroll.
-      viewport./*OK*/scrollIntoView(elem);
+      viewport./*OK*/ scrollIntoView(elem);
     } else {
-      log.warn('documentElement',
-          `failed to find element with id=${hash} or a[name=${hash}]`);
+      log.warn(
+        "documentElement",
+        `failed to find element with id=${hash} or a[name=${hash}]`
+      );
     }
   }
-};
+}

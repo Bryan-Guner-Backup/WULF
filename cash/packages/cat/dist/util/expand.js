@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var glob = require('glob');
+var glob = require("glob");
 
 /**
  * Expands wildcard files, etc. out
@@ -23,7 +23,9 @@ module.exports = function (list) {
   }
   var out = [];
   for (var i = 0; i < files.length; ++i) {
-    out = Array.isArray(files[i]) ? out.concat(files[i]) : out.concat([files[i]]);
+    out = Array.isArray(files[i])
+      ? out.concat(files[i])
+      : out.concat([files[i]]);
   }
   return out;
 };

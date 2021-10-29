@@ -1,27 +1,35 @@
-'use strict';
+"use strict";
 
-const $ = require('shelljs');
-const fs = require('fs-extra');
+const $ = require("shelljs");
+const fs = require("fs-extra");
 
 module.exports = {
-
   writeSampleDir(cb) {
     // If tests fail mid, script cleanup doesn't happen.
     // This makes sure we are in the right dir before
     // trying to write.
-    if (String(process.cwd()).indexOf('/cash') === -1) {
+    if (String(process.cwd()).indexOf("/cash") === -1) {
       process.chdir(`${__dirname}/../..`);
     }
 
-    fs.removeSync('./testing');
+    fs.removeSync("./testing");
 
-    $.mkdir('-p', './testing/');
-    $.mkdir('-p', './testing/sub/');
+    $.mkdir("-p", "./testing/");
+    $.mkdir("-p", "./testing/sub/");
 
-    let filler = 'fill|';
+    let filler = "fill|";
 
     function writeDir(dir, cbk) {
-      const files = ['a.txt', 'c.exe', 'd.json', 'e.gif', 'b.tgz', 'f.jpg', 'g', '.hidden'];
+      const files = [
+        "a.txt",
+        "c.exe",
+        "d.json",
+        "e.gif",
+        "b.tgz",
+        "f.jpg",
+        "g",
+        ".hidden",
+      ];
       function write() {
         const next = files.shift();
         if (next) {
@@ -37,16 +45,16 @@ module.exports = {
       write();
     }
 
-    writeDir('./testing/', function () {
-      writeDir('./testing/sub/', function () {
+    writeDir("./testing/", function () {
+      writeDir("./testing/sub/", function () {
         cb();
       });
     });
   },
 
   deleteSampleDir() {
-    fs.removeSync('./testing');
-  }
+    fs.removeSync("./testing");
+  },
 };
 
 function double(str) {

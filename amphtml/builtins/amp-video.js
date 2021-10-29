@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import {BaseElement} from '../src/base-element';
-import {assertHttpsUrl} from '../src/url';
-import {getLengthNumeral, isLayoutSizeDefined} from '../src/layout';
-import {loadPromise} from '../src/event-helper';
-import {registerElement} from '../src/custom-element';
-
+import { BaseElement } from "../src/base-element";
+import { assertHttpsUrl } from "../src/url";
+import { getLengthNumeral, isLayoutSizeDefined } from "../src/layout";
+import { loadPromise } from "../src/event-helper";
+import { registerElement } from "../src/custom-element";
 
 /**
  * @param {!Window} win Destination window for the new element.
@@ -28,7 +27,6 @@ import {registerElement} from '../src/custom-element';
  */
 export function installVideo(win) {
   class AmpVideo extends BaseElement {
-
     /** @override */
     isLayoutSupported(layout) {
       return isLayoutSizeDefined(layout);
@@ -37,21 +35,22 @@ export function installVideo(win) {
     /** @override */
     layoutCallback() {
       // TODO(dvoytenko): Add re-layout as well.
-      var width = this.element.getAttribute('width');
-      var height = this.element.getAttribute('height');
-      var video = document.createElement('video');
-      if (this.element.getAttribute('src')) {
-        assertHttpsUrl(this.element.getAttribute('src'), this.element);
+      var width = this.element.getAttribute("width");
+      var height = this.element.getAttribute("height");
+      var video = document.createElement("video");
+      if (this.element.getAttribute("src")) {
+        assertHttpsUrl(this.element.getAttribute("src"), this.element);
       }
       this.propagateAttributes(
-          ['src', 'controls', 'autoplay', 'muted', 'loop', 'poster'],
-          video);
+        ["src", "controls", "autoplay", "muted", "loop", "poster"],
+        video
+      );
       video.width = getLengthNumeral(width);
       video.height = getLengthNumeral(height);
       this.applyFillContent(video);
-      this.getRealChildNodes().forEach(child => {
-        if (child.getAttribute && child.getAttribute('src')) {
-          assertHttpsUrl(child.getAttribute('src'), child);
+      this.getRealChildNodes().forEach((child) => {
+        if (child.getAttribute && child.getAttribute("src")) {
+          assertHttpsUrl(child.getAttribute("src"), child);
         }
         video.appendChild(child);
       });
@@ -72,5 +71,5 @@ export function installVideo(win) {
     }
   }
 
-  registerElement(win, 'amp-video', AmpVideo);
+  registerElement(win, "amp-video", AmpVideo);
 }

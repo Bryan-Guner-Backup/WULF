@@ -1,17 +1,17 @@
-'use strict';
+"use strict";
 
-var StringDecoder = require('../string_decoder').StringDecoder;
-var Buffer = require('../buffer').Buffer;
-var EventEmitter = require('../events');
+var StringDecoder = require("../string_decoder").StringDecoder;
+var Buffer = require("../buffer").Buffer;
+var EventEmitter = require("../events");
 //var net = require('./net');
-var util = require('../util');
-var constants = require('../constants');
-var assert = require('../assert');
+var util = require("../util");
+var constants = require("../constants");
+var assert = require("../assert");
 
-var Process = process.binding('process_wrap').Process;
-var uv = process.binding('uv');
-var Pipe = process.binding('pipe_wrap').Pipe;
-var TTY = process.binding('tty_wrap').TTY;
+var Process = process.binding("process_wrap").Process;
+var uv = process.binding("uv");
+var Pipe = process.binding("pipe_wrap").Pipe;
+var TTY = process.binding("tty_wrap").TTY;
 
 var errnoException = util._errnoException;
 
@@ -23,7 +23,7 @@ module.exports = {
 };
 
 function fork(modulePath) {
-  throw new Error('fork not available');
+  throw new Error("fork not available");
 }
 
 function ChildProcess() {
@@ -43,7 +43,7 @@ function ChildProcess() {
   this._handle = new Process();
   this._handle.owner = this;
 
-  this._handle.onexit = function(exitCode, signalCode) {
+  this._handle.onexit = function (exitCode, signalCode) {
     //
     // follow 0.4.x behaviour:
     //
@@ -54,8 +54,8 @@ function ChildProcess() {
     //
     // - spawn failures are reported with exitCode < 0
     //
-    var syscall = self.spawnfile ? 'spawn ' + self.spawnfile : 'spawn';
-    var err = (exitCode < 0) ? errnoException(exitCode, syscall) : null;
+    var syscall = self.spawnfile ? "spawn " + self.spawnfile : "spawn";
+    var err = exitCode < 0 ? errnoException(exitCode, syscall) : null;
 
     if (signalCode) {
       self.signalCode = signalCode;
@@ -71,13 +71,12 @@ function ChildProcess() {
     self._handle = null;
 
     if (exitCode < 0) {
-      if (self.spawnfile)
-        err.path = self.spawnfile;
+      if (self.spawnfile) err.path = self.spawnfile;
 
       err.spawnargs = self.spawnargs.slice(1);
-      self.emit('error', err);
+      self.emit("error", err);
     } else {
-      self.emit('exit', self.exitCode, self.signalCode);
+      self.emit("exit", self.exitCode, self.signalCode);
     }
 
     // if any of the stdio streams have not been touched,
@@ -93,19 +92,16 @@ function ChildProcess() {
 }
 util.inherits(ChildProcess, EventEmitter);
 
-
 function flushStdio(subprocess) {
   if (subprocess.stdio == null) return;
-  subprocess.stdio.forEach(function(stream, fd, stdio) {
-    if (!stream || !stream.readable || stream._consuming)
-      return;
+  subprocess.stdio.forEach(function (stream, fd, stdio) {
+    if (!stream || !stream.readable || stream._consuming) return;
     stream.resume();
   });
 }
 
-
 function createSocket(pipe, readable) {
-    /*
+  /*
   var s = new net.Socket({ handle: pipe });
 
   if (readable) {
@@ -118,24 +114,22 @@ function createSocket(pipe, readable) {
 
   return s;
     */
-    throw new Error('createSocket not implemented');
+  throw new Error("createSocket not implemented");
 }
 
-
 function getHandleWrapType(stream) {
-  if (stream instanceof Pipe) return 'pipe';
-  if (stream instanceof TTY) return 'tty';
+  if (stream instanceof Pipe) return "pipe";
+  if (stream instanceof TTY) return "tty";
 
   return false;
 }
 
-
-ChildProcess.prototype.spawn = function(options) {
+ChildProcess.prototype.spawn = function (options) {
   var self = this,
-      ipc,
-      ipcFd,
-      // If no `stdio` option was given - use default
-      stdio = options.stdio || 'pipe';
+    ipc,
+    ipcFd,
+    // If no `stdio` option was given - use default
+    stdio = options.stdio || "pipe";
 
   stdio = _validateStdio(stdio, false);
 
@@ -146,7 +140,7 @@ ChildProcess.prototype.spawn = function(options) {
   if (ipc !== undefined) {
     // Let child process know about opened IPC channel
     options.envPairs = options.envPairs || [];
-    options.envPairs.push('NODE_CHANNEL_FD=' + ipcFd);
+    options.envPairs.push("NODE_CHANNEL_FD=" + ipcFd);
   }
 
   this.spawnfile = options.file;
@@ -155,10 +149,12 @@ ChildProcess.prototype.spawn = function(options) {
   var err = this._handle.spawn(options);
 
   // Run-time errors should emit an error, not throw an exception.
-  if (err === uv.UV_EAGAIN ||
-      err === uv.UV_EMFILE ||
-      err === uv.UV_ENFILE ||
-      err === uv.UV_ENOENT) {
+  if (
+    err === uv.UV_EAGAIN ||
+    err === uv.UV_EMFILE ||
+    err === uv.UV_ENFILE ||
+    err === uv.UV_ENOENT
+  ) {
     process.nextTick(onErrorNT, self, err);
     // There is no point in continuing when we've hit EMFILE or ENFILE
     // because we won't be able to set up the stdio file descriptors.
@@ -168,21 +164,21 @@ ChildProcess.prototype.spawn = function(options) {
     if (err !== uv.UV_ENOENT) return err;
   } else if (err) {
     // Close all opened fds on error
-    stdio.forEach(function(stdio) {
-      if (stdio.type === 'pipe') {
+    stdio.forEach(function (stdio) {
+      if (stdio.type === "pipe") {
         stdio.handle.close();
       }
     });
 
     this._handle.close();
     this._handle = null;
-    throw errnoException(err, 'spawn');
+    throw errnoException(err, "spawn");
   }
 
   this.pid = this._handle.pid;
 
-  stdio.forEach(function(stdio, i) {
-    if (stdio.type === 'ignore') return;
+  stdio.forEach(function (stdio, i) {
+    if (stdio.type === "ignore") return;
 
     if (stdio.ipc) {
       self._closesNeeded++;
@@ -196,21 +192,21 @@ ChildProcess.prototype.spawn = function(options) {
 
       if (i > 0 && self.pid !== 0) {
         self._closesNeeded++;
-        stdio.socket.on('close', function() {
+        stdio.socket.on("close", function () {
           maybeClose(self);
         });
       }
     }
   });
 
-  this.stdin = stdio.length >= 1 && stdio[0].socket !== undefined ?
-      stdio[0].socket : null;
-  this.stdout = stdio.length >= 2 && stdio[1].socket !== undefined ?
-      stdio[1].socket : null;
-  this.stderr = stdio.length >= 3 && stdio[2].socket !== undefined ?
-      stdio[2].socket : null;
+  this.stdin =
+    stdio.length >= 1 && stdio[0].socket !== undefined ? stdio[0].socket : null;
+  this.stdout =
+    stdio.length >= 2 && stdio[1].socket !== undefined ? stdio[1].socket : null;
+  this.stderr =
+    stdio.length >= 3 && stdio[2].socket !== undefined ? stdio[2].socket : null;
 
-  this.stdio = stdio.map(function(stdio) {
+  this.stdio = stdio.map(function (stdio) {
     return stdio.socket === undefined ? null : stdio.socket;
   });
 
@@ -220,25 +216,23 @@ ChildProcess.prototype.spawn = function(options) {
   return err;
 };
 
-
 function onErrorNT(self, err) {
   self._handle.onexit(err);
 }
 
-
-ChildProcess.prototype.kill = function(sig) {
+ChildProcess.prototype.kill = function (sig) {
   var signal;
 
   if (sig === 0) {
     signal = 0;
   } else if (!sig) {
-    signal = constants['SIGTERM'];
+    signal = constants["SIGTERM"];
   } else {
     signal = constants[sig];
   }
 
   if (signal === undefined) {
-    throw new Error('Unknown signal: ' + sig);
+    throw new Error("Unknown signal: " + sig);
   }
 
   if (this._handle) {
@@ -252,10 +246,10 @@ ChildProcess.prototype.kill = function(sig) {
       /* Already dead. */
     } else if (err === uv.UV_EINVAL || err === uv.UV_ENOSYS) {
       /* The underlying platform doesn't support this signal. */
-      throw errnoException(err, 'kill');
+      throw errnoException(err, "kill");
     } else {
       /* Other error, almost certainly EPERM. */
-      this.emit('error', errnoException(err, 'kill'));
+      this.emit("error", errnoException(err, "kill"));
     }
   }
 
@@ -263,52 +257,57 @@ ChildProcess.prototype.kill = function(sig) {
   return false;
 };
 
-
-ChildProcess.prototype.ref = function() {
+ChildProcess.prototype.ref = function () {
   if (this._handle) this._handle.ref();
 };
 
-
-ChildProcess.prototype.unref = function() {
+ChildProcess.prototype.unref = function () {
   if (this._handle) this._handle.unref();
 };
 
-
 function setupChannel(target, channel) {
-  throw new Error('setupChannel not implemented in browser-node');
+  throw new Error("setupChannel not implemented in browser-node");
 }
 
-
-var INTERNAL_PREFIX = 'NODE_';
+var INTERNAL_PREFIX = "NODE_";
 function handleMessage(target, message, handle) {
-  var eventName = 'message';
-  if (message !== null &&
-      typeof message === 'object' &&
-      typeof message.cmd === 'string' &&
-      message.cmd.length > INTERNAL_PREFIX.length &&
-      message.cmd.slice(0, INTERNAL_PREFIX.length) === INTERNAL_PREFIX) {
-    eventName = 'internalMessage';
+  var eventName = "message";
+  if (
+    message !== null &&
+    typeof message === "object" &&
+    typeof message.cmd === "string" &&
+    message.cmd.length > INTERNAL_PREFIX.length &&
+    message.cmd.slice(0, INTERNAL_PREFIX.length) === INTERNAL_PREFIX
+  ) {
+    eventName = "internalMessage";
   }
   target.emit(eventName, message, handle);
 }
 
-function nop() { }
+function nop() {}
 
 function _validateStdio(stdio, sync) {
-  var ipc,
-      ipcFd;
+  var ipc, ipcFd;
 
   // Replace shortcut with an array
-  if (typeof stdio === 'string') {
+  if (typeof stdio === "string") {
     switch (stdio) {
-      case 'ignore': stdio = ['ignore', 'ignore', 'ignore']; break;
-      case 'pipe': stdio = ['pipe', 'pipe', 'pipe']; break;
-      case 'inherit': stdio = [0, 1, 2]; break;
-      default: throw new TypeError('Incorrect value of stdio option: ' + stdio);
+      case "ignore":
+        stdio = ["ignore", "ignore", "ignore"];
+        break;
+      case "pipe":
+        stdio = ["pipe", "pipe", "pipe"];
+        break;
+      case "inherit":
+        stdio = [0, 1, 2];
+        break;
+      default:
+        throw new TypeError("Incorrect value of stdio option: " + stdio);
     }
   } else if (!Array.isArray(stdio)) {
-    throw new TypeError('Incorrect value of stdio option: ' +
-        util.inspect(stdio));
+    throw new TypeError(
+      "Incorrect value of stdio option: " + util.inspect(stdio)
+    );
   }
 
   // At least 3 stdio will be created
@@ -319,97 +318,102 @@ function _validateStdio(stdio, sync) {
 
   // Translate stdio into C++-readable form
   // (i.e. PipeWraps or fds)
-  stdio = stdio.reduce(function(acc, stdio, i) {
+  stdio = stdio.reduce(function (acc, stdio, i) {
     function cleanup() {
-      acc.filter(function(stdio) {
-        return stdio.type === 'pipe' || stdio.type === 'ipc';
-      }).forEach(function(stdio) {
-        if (stdio.handle)
-          stdio.handle.close();
-      });
+      acc
+        .filter(function (stdio) {
+          return stdio.type === "pipe" || stdio.type === "ipc";
+        })
+        .forEach(function (stdio) {
+          if (stdio.handle) stdio.handle.close();
+        });
     }
 
     // Defaults
     if (stdio === null || stdio === undefined) {
-      stdio = i < 3 ? 'pipe' : 'ignore';
+      stdio = i < 3 ? "pipe" : "ignore";
     }
 
-    if (stdio === null || stdio === 'ignore') {
-      acc.push({type: 'ignore'});
-    } else if (stdio === 'pipe' || typeof stdio === 'number' && stdio < 0) {
+    if (stdio === null || stdio === "ignore") {
+      acc.push({ type: "ignore" });
+    } else if (stdio === "pipe" || (typeof stdio === "number" && stdio < 0)) {
       var a = {
-        type: 'pipe',
+        type: "pipe",
         readable: i === 0,
-        writable: i !== 0
+        writable: i !== 0,
       };
 
-      if (!sync)
-        a.handle = new Pipe();
+      if (!sync) a.handle = new Pipe();
 
       acc.push(a);
-    } else if (stdio === 'ipc') {
+    } else if (stdio === "ipc") {
       if (sync || ipc !== undefined) {
         // Cleanup previously created pipes
         cleanup();
-        if (!sync)
-          throw new Error('Child process can have only one IPC pipe');
-        else
-          throw new Error('You cannot use IPC with synchronous forks');
+        if (!sync) throw new Error("Child process can have only one IPC pipe");
+        else throw new Error("You cannot use IPC with synchronous forks");
       }
 
       ipc = new Pipe(true);
       ipcFd = i;
 
       acc.push({
-        type: 'pipe',
+        type: "pipe",
         handle: ipc,
-        ipc: true
+        ipc: true,
       });
-    } else if (stdio === 'inherit') {
+    } else if (stdio === "inherit") {
       acc.push({
-        type: 'inherit',
-        fd: i
+        type: "inherit",
+        fd: i,
       });
-    } else if (typeof stdio === 'number' || typeof stdio.fd === 'number') {
+    } else if (typeof stdio === "number" || typeof stdio.fd === "number") {
       acc.push({
-        type: 'fd',
-        fd: typeof stdio === 'number' ? stdio : stdio.fd
+        type: "fd",
+        fd: typeof stdio === "number" ? stdio : stdio.fd,
       });
-    } else if (getHandleWrapType(stdio) || getHandleWrapType(stdio.handle) ||
-               getHandleWrapType(stdio._handle)) {
-      var handle = getHandleWrapType(stdio) ?
-          stdio :
-          getHandleWrapType(stdio.handle) ? stdio.handle : stdio._handle;
+    } else if (
+      getHandleWrapType(stdio) ||
+      getHandleWrapType(stdio.handle) ||
+      getHandleWrapType(stdio._handle)
+    ) {
+      var handle = getHandleWrapType(stdio)
+        ? stdio
+        : getHandleWrapType(stdio.handle)
+        ? stdio.handle
+        : stdio._handle;
 
       acc.push({
-        type: 'wrap',
+        type: "wrap",
         wrapType: getHandleWrapType(handle),
-        handle: handle
+        handle: handle,
       });
-    } else if (stdio instanceof Buffer || typeof stdio === 'string') {
+    } else if (stdio instanceof Buffer || typeof stdio === "string") {
       if (!sync) {
         cleanup();
-        throw new TypeError('Asynchronous forks do not support Buffer input: ' +
-            util.inspect(stdio));
+        throw new TypeError(
+          "Asynchronous forks do not support Buffer input: " +
+            util.inspect(stdio)
+        );
       }
     } else {
       // Cleanup
       cleanup();
-      throw new TypeError('Incorrect value for stdio stream: ' +
-          util.inspect(stdio));
+      throw new TypeError(
+        "Incorrect value for stdio stream: " + util.inspect(stdio)
+      );
     }
 
     return acc;
   }, []);
 
-  return {stdio: stdio, ipc: ipc, ipcFd: ipcFd};
+  return { stdio: stdio, ipc: ipc, ipcFd: ipcFd };
 }
-
 
 function maybeClose(subprocess) {
   subprocess._closesGot++;
 
   if (subprocess._closesGot == subprocess._closesNeeded) {
-    subprocess.emit('close', subprocess.exitCode, subprocess.signalCode);
+    subprocess.emit("close", subprocess.exitCode, subprocess.signalCode);
   }
 }

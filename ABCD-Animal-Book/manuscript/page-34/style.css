@@ -57,7 +57,7 @@ body {
   -webkit-border-radius: 63vw 63vw 63vw 63vw / 108vw 108vw 72vw 72vw;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
   background: #e8a6b0;
-  border: .5vw solid #FCB3B3;
+  border: 0.5vw solid #fcb3b3;
   margin: 16vw 39vw;
   animation: baja7 3s linear infinite;
   -moz-animation: baja7 3s linear infinite;
@@ -69,7 +69,7 @@ body {
   width: 10vw;
   height: 10vw;
   border-radius: 30vw 30vw 30vw 90vw;
-  background: #F78A9E;
+  background: #f78a9e;
   transform: rotate(112deg);
   -moz-transform: rotate(112deg);
   -webkit-transform: rotate(112deg);
@@ -82,7 +82,7 @@ body {
   width: 10vw;
   height: 10vw;
   border-radius: 30vw 30vw 30vw 90vw;
-  background: #F78A9E;
+  background: #f78a9e;
   transform: rotate(45deg);
   -moz-transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
@@ -95,7 +95,7 @@ body {
   height: 3.5vw;
   border-radius: 100vw;
   background: white;
-  margin: 12vw 4vw
+  margin: 12vw 4vw;
 }
 
 .ojos::before {
@@ -105,7 +105,7 @@ body {
   height: 3.5vw;
   border-radius: 100vw;
   background: white;
-  margin: 0vw 14.5vw
+  margin: 0vw 14.5vw;
 }
 
 .iris {
@@ -127,7 +127,7 @@ body {
   height: 2vw;
   border-radius: 100vw;
   background: black;
-  margin: 0vw 13.5vw
+  margin: 0vw 13.5vw;
 }
 
 .hocico {
@@ -135,8 +135,8 @@ body {
   width: 12vw;
   height: 9vw;
   border-radius: 100%;
-  background: #F78A9E;
-  margin: 14vw 7.3vw
+  background: #f78a9e;
+  margin: 14vw 7.3vw;
 }
 
 .nariz {
@@ -203,9 +203,9 @@ body {
   width: 7vw;
   height: 7vw;
   border-radius: 100vw;
-  border-left: 1vw solid #FCB3B3;
-  border-bottom: 1vw solid #FCB3B3;
-  margin: 25vw 13vw
+  border-left: 1vw solid #fcb3b3;
+  border-bottom: 1vw solid #fcb3b3;
+  margin: 25vw 13vw;
 }
 
 .cola::before {
@@ -214,8 +214,8 @@ body {
   width: 2vw;
   height: 2vw;
   border-radius: 100vw;
-  border: 1vw solid #FCB3B3;
-  margin: 0vw -.3vw
+  border: 1vw solid #fcb3b3;
+  margin: 0vw -0.3vw;
 }
 
 .cola::after {
@@ -224,8 +224,8 @@ body {
   width: 5vw;
   height: 5vw;
   border-radius: 100vw;
-  border-right: 1vw solid #FCB3B3;
-  margin: -4vw -3.7vw
+  border-right: 1vw solid #fcb3b3;
+  margin: -4vw -3.7vw;
 }
 
 .coin {
@@ -233,8 +233,8 @@ body {
   width: 9vw;
   height: 9vw;
   border-radius: 100vw;
-  background: #E0A80F;
-  border: 1vw solid #DDB349;
+  background: #e0a80f;
+  border: 1vw solid #ddb349;
   margin: -50vw 30vw;
   animation: baja 3s linear infinite;
   -moz-animation: baja 3s linear infinite;
@@ -283,7 +283,7 @@ body {
     margin: 1vw 1.2vw;
   }
   45% {
-    margin: .3vw 1.2vw;
+    margin: 0.3vw 1.2vw;
   }
   75%,
   85%,
@@ -298,7 +298,7 @@ body {
     margin: 1vw 1.2vw;
   }
   45% {
-    margin: .3vw 1.2vw;
+    margin: 0.3vw 1.2vw;
   }
   75%,
   85%,
@@ -313,7 +313,7 @@ body {
     margin: 1vw 1.2vw;
   }
   45% {
-    margin: .3vw 1.2vw;
+    margin: 0.3vw 1.2vw;
   }
   75%,
   85%,

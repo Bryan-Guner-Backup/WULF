@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-
-require('../src/polyfills');
-import {Timer} from '../src/timer';
-import {registerForUnitTest} from '../src/runtime';
+require("../src/polyfills");
+import { Timer } from "../src/timer";
+import { registerForUnitTest } from "../src/runtime";
 
 var iframeCount = 0;
-
 
 /**
  * Creates an iframe from an HTML fixture for use in tests.
@@ -50,35 +48,35 @@ export function createFixtureIframe(fixture, initialIframeHeight, done) {
   return new Promise((resolve, reject) => {
     // Counts the supported custom events.
     const events = {
-      'amp:attached': 0,
-      'amp:error': 0,
-      'amp:stubbed': 0,
-      'amp:load:start': 0
+      "amp:attached": 0,
+      "amp:error": 0,
+      "amp:stubbed": 0,
+      "amp:load:start": 0,
     };
     var html = __html__[fixture];
     if (!html) {
-      throw new Error('Cannot find fixture: ' + fixture);
+      throw new Error("Cannot find fixture: " + fixture);
     }
     var firstLoad = true;
     // This global function will be called by the iframe immediately when it
     // starts loading. This appears to be the only way to get the correct
     // window object early enough to not miss any events that may get fired
     // on that window.
-    window.beforeLoad = function(win) {
+    window.beforeLoad = function (win) {
       // Flag as being a test window.
       win.AMP_TEST = true;
       // Function that returns a promise for when the given event fired at
       // least count times.
       var awaitEvent = (eventName, count) => {
         if (!(eventName in events)) {
-          throw new Error('Unknown custom event ' + eventName);
+          throw new Error("Unknown custom event " + eventName);
         }
-        return new Promise(function(resolve) {
+        return new Promise(function (resolve) {
           if (events[eventName] >= count) {
             resolve();
           } else {
             win.addEventListener(eventName, () => {
-              if(events[eventName] == count) {
+              if (events[eventName] == count) {
                 resolve();
               }
             });
@@ -91,40 +89,47 @@ export function createFixtureIframe(fixture, initialIframeHeight, done) {
           events[name]++;
         });
       }
-      win.onerror = function(message, file, line, col, error) {
-        throw new Error('Error in frame: ' + message + '\n' +
-            file + ':' + line + '\n' +
-            (error ? error.stack : 'no stack'));
+      win.onerror = function (message, file, line, col, error) {
+        throw new Error(
+          "Error in frame: " +
+            message +
+            "\n" +
+            file +
+            ":" +
+            line +
+            "\n" +
+            (error ? error.stack : "no stack")
+        );
       };
       var errors = [];
-      win.console.error = function() {
-        errors.push('Error: ' + [].slice.call(arguments).join(' '));
+      win.console.error = function () {
+        errors.push("Error: " + [].slice.call(arguments).join(" "));
       };
       // Make time go 10x as fast
-      win.setTimeout = function(fn, ms) {
+      win.setTimeout = function (fn, ms) {
         ms = ms || 0;
         setTimeout(fn, ms / 10);
       };
-      var timeout = setTimeout(function() {
-        reject(new Error('Timeout waiting for elements to start loading.'));
+      var timeout = setTimeout(function () {
+        reject(new Error("Timeout waiting for elements to start loading."));
       }, 1000);
       // Declare the test ready to run when the document was fully parsed.
-      window.afterLoad = function() {
+      window.afterLoad = function () {
         resolve({
           win: win,
           doc: win.document,
           iframe: iframe,
           awaitEvent: awaitEvent,
-          errors: errors
+          errors: errors,
         });
       };
     };
     // Add before and after load callbacks to the document.
-    html = html.replace('>', '><script>parent.beforeLoad(window);</script>');
-    html += '<script>parent.afterLoad(window);</script>';
-    var iframe = document.createElement('iframe');
-    iframe.name = 'test_' + fixture + iframeCount++;
-    iframe.onerror = function(event) {
+    html = html.replace(">", "><script>parent.beforeLoad(window);</script>");
+    html += "<script>parent.afterLoad(window);</script>";
+    var iframe = document.createElement("iframe");
+    iframe.name = "test_" + fixture + iframeCount++;
+    iframe.onerror = function (event) {
       throw event.error;
     };
     iframe.srcdoc = html;
@@ -152,13 +157,14 @@ export function createFixtureIframe(fixture, initialIframeHeight, done) {
  * }>}
  */
 export function createIframePromise() {
-  return new Promise(function(resolve, reject) {
-    var iframe = document.createElement('iframe');
-    iframe.name = 'test_' + iframeCount++;
-    iframe.srcdoc = '<!doctype><html><head>' +
-        '<script src="/base/build/polyfills.js"></script>' +
-        '<body style="margin:0">';
-    iframe.onload = function() {
+  return new Promise(function (resolve, reject) {
+    var iframe = document.createElement("iframe");
+    iframe.name = "test_" + iframeCount++;
+    iframe.srcdoc =
+      "<!doctype><html><head>" +
+      '<script src="/base/build/polyfills.js"></script>' +
+      '<body style="margin:0">';
+    iframe.onload = function () {
       registerForUnitTest(iframe.contentWindow);
       // Flag as being a test window.
       iframe.contentWindow.AMP_TEST = true;
@@ -166,16 +172,16 @@ export function createIframePromise() {
         win: iframe.contentWindow,
         doc: iframe.contentWindow.document,
         iframe: iframe,
-        addElement: function(element) {
+        addElement: function (element) {
           iframe.contentWindow.document.body.appendChild(element);
           // Wait for mutation observer to fire.
           return new Timer(window).promise(16).then(() => {
             // Make sure it has dimensions since no styles are available.
-            element.style.display = 'block';
+            element.style.display = "block";
             element.implementation_.layoutCallback();
             return element;
           });
-        }
+        },
       });
     };
     iframe.onerror = reject;
@@ -205,7 +211,7 @@ export function poll(description, condition, opt_onError, opt_timeout) {
             reject(opt_onError());
             return;
           }
-          reject(new Error('Timeout waiting for ' + description));
+          reject(new Error("Timeout waiting for " + description));
         }
       }
     }
@@ -226,15 +232,24 @@ export function poll(description, condition, opt_onError, opt_timeout) {
  */
 export function pollForLayout(win, count, opt_timeout) {
   var getCount = () => {
-    return win.document.querySelectorAll('.-amp-layout,.-amp-error').length;
+    return win.document.querySelectorAll(".-amp-layout,.-amp-error").length;
   };
-  return poll('Waiting for elements to layout: ' + count, () => {
-    return getCount() >= count;
-  }, () => {
-    return new Error('Failed to find elements with layout.' +
-        ' Current count: ' + getCount() + ' HTML:\n' +
-        win.document.documentElement./*TEST*/innerHTML);
-  }, opt_timeout);
+  return poll(
+    "Waiting for elements to layout: " + count,
+    () => {
+      return getCount() >= count;
+    },
+    () => {
+      return new Error(
+        "Failed to find elements with layout." +
+          " Current count: " +
+          getCount() +
+          " HTML:\n" +
+          win.document.documentElement./*TEST*/ innerHTML
+      );
+    },
+    opt_timeout
+  );
 }
 
 /**
@@ -242,7 +257,7 @@ export function pollForLayout(win, count, opt_timeout) {
  * @return {!Promise}
  */
 export function expectBodyToBecomeVisible(win) {
-  return poll('expect body to become visible', () => {
-    return win.document.body && win.document.body.style.opacity == '1';
+  return poll("expect body to become visible", () => {
+    return win.document.body && win.document.body.style.opacity == "1";
   });
 }

@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-import {Layout, isInternalElement} from './layout';
-import {assert} from './asserts';
-import {preconnectFor} from './preconnect';
-import {resources} from './resources';
-import {viewerFor} from './viewer';
-import {viewportFor} from './viewport';
-
+import { Layout, isInternalElement } from "./layout";
+import { assert } from "./asserts";
+import { preconnectFor } from "./preconnect";
+import { resources } from "./resources";
+import { viewerFor } from "./viewer";
+import { viewportFor } from "./viewport";
 
 /**
  * Base class for all custom element implementations. Instead of inheriting
@@ -246,8 +245,7 @@ export class BaseElement {
    * viewport. Intended to be implemented by actual components.
    * @param {boolean} inViewport
    */
-  viewportCallback(inViewport) {
-  }
+  viewportCallback(inViewport) {}
 
   /**
    * Requests the resource to stop its activity when the document goes into
@@ -266,8 +264,7 @@ export class BaseElement {
    * user event. Intended to be implemented by actual components.
    * @param {!ActionInvocation} invocation
    */
-  activate(invocation) {
-  }
+  activate(invocation) {}
 
   /**
    * Registers the action handler for the method with the specified name.
@@ -290,7 +287,7 @@ export class BaseElement {
    * @package
    */
   executeAction(invocation, deferred) {
-    if (invocation.method == 'activate') {
+    if (invocation.method == "activate") {
       this.activate(invocation);
     } else {
       let handler = this.actionMap_[invocation.method];
@@ -342,7 +339,7 @@ export class BaseElement {
   getPlaceholder() {
     let children = this.element.children;
     for (let i = 0; i < children.length; i++) {
-      if (children[i].hasAttribute('placeholder')) {
+      if (children[i].hasAttribute("placeholder")) {
         return children[i];
       }
     }
@@ -390,7 +387,7 @@ export class BaseElement {
    * @protected @final
    */
   applyFillContent(element) {
-    element.classList.add('-amp-fill-content');
+    element.classList.add("-amp-fill-content");
   }
 
   /**
@@ -472,8 +469,7 @@ export class BaseElement {
   cancelFullOverlay() {
     viewerFor(this.element.ownerDocument.defaultView).cancelFullOverlay();
   }
-};
-
+}
 
 /**
  * Returns "true" for internal AMP nodes or for placeholder elements.
@@ -484,7 +480,7 @@ function isInternalOrServiceNode(node) {
   if (isInternalElement(node)) {
     return true;
   }
-  if (node.tagName && node.hasAttribute('placeholder')) {
+  if (node.tagName && node.hasAttribute("placeholder")) {
     return true;
   }
   return false;

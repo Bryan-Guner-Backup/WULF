@@ -1,9 +1,9 @@
-'use strict'
-var _ = require('./util/_')
+"use strict";
+var _ = require("./util/_");
 
-var JSUtil = require('./util/js')
-var networks = []
-var networkMaps = {}
+var JSUtil = require("./util/js");
+var networks = [];
+var networkMaps = {};
 
 /**
  * A network is merely a map containing values that correspond to version
@@ -11,11 +11,11 @@ var networkMaps = {}
  * (a.k.a. "mainnet"), "testnet", "regtest" and "stn".
  * @constructor
  */
-function Network () {}
+function Network() {}
 
-Network.prototype.toString = function toString () {
-  return this.name
-}
+Network.prototype.toString = function toString() {
+  return this.name;
+};
 
 /**
  * @function
@@ -25,25 +25,25 @@ Network.prototype.toString = function toString () {
  * @param {string|Array} keys - if set, only check if the magic number associated with this name matches
  * @return Network
  */
-function get (arg, keys) {
+function get(arg, keys) {
   if (~networks.indexOf(arg)) {
-    return arg
+    return arg;
   }
   if (keys) {
     if (!_.isArray(keys)) {
-      keys = [keys]
+      keys = [keys];
     }
     for (var i = 0; i < networks.length; i++) {
-      var network = networks[i]
-      var filteredNet = _.pick(network, keys)
-      var netValues = _.values(filteredNet)
+      var network = networks[i];
+      var filteredNet = _.pick(network, keys);
+      var netValues = _.values(filteredNet);
       if (~netValues.indexOf(arg)) {
-        return network
+        return network;
       }
     }
-    return undefined
+    return undefined;
   }
-  return networkMaps[arg]
+  return networkMaps[arg];
 }
 
 /***
@@ -52,12 +52,12 @@ function get (arg, keys) {
  *
  * @param {string} cashAddrPrefix Network cashAddrPrefix. E.g.: 'bitcoincash'.
  */
-function cashAddrPrefixToArray (cashAddrPrefix) {
-  var result = []
+function cashAddrPrefixToArray(cashAddrPrefix) {
+  var result = [];
   for (var i = 0; i < cashAddrPrefix.length; i++) {
-    result.push(cashAddrPrefix.charCodeAt(i) & 31)
+    result.push(cashAddrPrefix.charCodeAt(i) & 31);
   }
-  return result
+  return result;
 }
 
 /**
@@ -77,8 +77,8 @@ function cashAddrPrefixToArray (cashAddrPrefix) {
  * @param {Array}  data.dnsSeeds - An array of dns seeds
  * @return Network
  */
-function addNetwork (data) {
-  var network = new Network()
+function addNetwork(data) {
+  var network = new Network();
 
   JSUtil.defineImmutable(network, {
     name: data.name,
@@ -87,55 +87,55 @@ function addNetwork (data) {
     privatekey: data.privatekey,
     scripthash: data.scripthash,
     xpubkey: data.xpubkey,
-    xprivkey: data.xprivkey
-  })
+    xprivkey: data.xprivkey,
+  });
 
-  var indexBy = data.indexBy || Object.keys(data)
+  var indexBy = data.indexBy || Object.keys(data);
 
   if (data.cashAddrPrefix) {
     _.extend(network, {
       cashAddrPrefix: data.cashAddrPrefix,
-      cashAddrPrefixArray: cashAddrPrefixToArray(data.cashAddrPrefix)
-    })
+      cashAddrPrefixArray: cashAddrPrefixToArray(data.cashAddrPrefix),
+    });
   }
 
   if (data.networkMagic) {
     _.extend(network, {
-      networkMagic: JSUtil.integerAsBuffer(data.networkMagic)
-    })
+      networkMagic: JSUtil.integerAsBuffer(data.networkMagic),
+    });
   }
 
   if (data.port) {
     _.extend(network, {
-      port: data.port
-    })
+      port: data.port,
+    });
   }
 
   if (data.dnsSeeds) {
     _.extend(network, {
-      dnsSeeds: data.dnsSeeds
-    })
+      dnsSeeds: data.dnsSeeds,
+    });
   }
-  networks.push(network)
-  indexNetworkBy(network, indexBy)
-  return network
+  networks.push(network);
+  indexNetworkBy(network, indexBy);
+  return network;
 }
 
-function indexNetworkBy (network, keys) {
+function indexNetworkBy(network, keys) {
   for (var i = 0; i < keys.length; i++) {
-    var key = keys[i]
-    var networkValue = network[key]
+    var key = keys[i];
+    var networkValue = network[key];
     if (!_.isUndefined(networkValue) && !_.isObject(networkValue)) {
-      networkMaps[networkValue] = network
+      networkMaps[networkValue] = network;
     }
   }
 }
 
-function unindexNetworkBy (network, values) {
+function unindexNetworkBy(network, values) {
   for (var index = 0; index < values.length; index++) {
-    var value = values[index]
+    var value = values[index];
     if (networkMaps[value] === network) {
-      delete networkMaps[value]
+      delete networkMaps[value];
     }
   }
 }
@@ -146,56 +146,53 @@ function unindexNetworkBy (network, values) {
  * Will remove a custom network
  * @param {Network} network
  */
-function removeNetwork (network) {
+function removeNetwork(network) {
   for (var i = 0; i < networks.length; i++) {
     if (networks[i] === network) {
-      networks.splice(i, 1)
+      networks.splice(i, 1);
     }
   }
-  unindexNetworkBy(network, Object.keys(networkMaps))
+  unindexNetworkBy(network, Object.keys(networkMaps));
 }
 
 var networkMagic = {
   livenet: 0xe3e1f3e8,
   testnet: 0xf4e5f3f4,
   regtest: 0xdab5bffa,
-  stn: 0xfbcec4f9
-}
+  stn: 0xfbcec4f9,
+};
 
-var dnsSeeds = [
-  'seed.bitcoinsv.org',
-  'seed.bitcoinunlimited.info'
-]
+var dnsSeeds = ["seed.bitcoinsv.org", "seed.bitcoinunlimited.info"];
 
 var TESTNET = {
   PORT: 18333,
   NETWORK_MAGIC: networkMagic.testnet,
   DNS_SEEDS: dnsSeeds,
-  PREFIX: 'testnet',
-  CASHADDRPREFIX: 'bchtest'
-}
+  PREFIX: "testnet",
+  CASHADDRPREFIX: "bchtest",
+};
 
 var REGTEST = {
   PORT: 18444,
   NETWORK_MAGIC: networkMagic.regtest,
   DNS_SEEDS: [],
-  PREFIX: 'regtest',
-  CASHADDRPREFIX: 'bchreg'
-}
+  PREFIX: "regtest",
+  CASHADDRPREFIX: "bchreg",
+};
 
 var STN = {
   PORT: 9333,
   NETWORK_MAGIC: networkMagic.stn,
-  DNS_SEEDS: ['stn-seed.bitcoinsv.io'],
-  PREFIX: 'stn',
-  CASHADDRPREFIX: 'bsvstn'
-}
+  DNS_SEEDS: ["stn-seed.bitcoinsv.io"],
+  PREFIX: "stn",
+  CASHADDRPREFIX: "bsvstn",
+};
 
 var liveNetwork = {
-  name: 'livenet',
-  alias: 'mainnet',
-  prefix: 'bitcoin',
-  cashAddrPrefix: 'bitcoincash',
+  name: "livenet",
+  alias: "mainnet",
+  prefix: "bitcoin",
+  cashAddrPrefix: "bitcoincash",
   pubkeyhash: 0x00,
   privatekey: 0x80,
   scripthash: 0x05,
@@ -203,12 +200,12 @@ var liveNetwork = {
   xprivkey: 0x0488ade4,
   networkMagic: networkMagic.livenet,
   port: 8333,
-  dnsSeeds: dnsSeeds
-}
+  dnsSeeds: dnsSeeds,
+};
 
 // network magic, port, cashAddrPrefix, and dnsSeeds are overloaded by enableRegtest
 var testNetwork = {
-  name: 'testnet',
+  name: "testnet",
   prefix: TESTNET.PREFIX,
   cashAddrPrefix: TESTNET.CASHADDRPREFIX,
   pubkeyhash: 0x6f,
@@ -216,11 +213,11 @@ var testNetwork = {
   scripthash: 0xc4,
   xpubkey: 0x043587cf,
   xprivkey: 0x04358394,
-  networkMagic: TESTNET.NETWORK_MAGIC
-}
+  networkMagic: TESTNET.NETWORK_MAGIC,
+};
 
 var regtestNetwork = {
-  name: 'regtest',
+  name: "regtest",
   prefix: REGTEST.PREFIX,
   cashAddrPrefix: REGTEST.CASHADDRPREFIX,
   pubkeyhash: 0x6f,
@@ -231,15 +228,10 @@ var regtestNetwork = {
   networkMagic: REGTEST.NETWORK_MAGIC,
   port: REGTEST.PORT,
   dnsSeeds: [],
-  indexBy: [
-    'port',
-    'name',
-    'cashAddrPrefix',
-    'networkMagic'
-  ]
-}
+  indexBy: ["port", "name", "cashAddrPrefix", "networkMagic"],
+};
 var stnNetwork = {
-  name: 'stn',
+  name: "stn",
   prefix: STN.PREFIX,
   cashAddrPrefix: STN.CASHADDRPREFIX,
   pubkeyhash: 0x6f,
@@ -248,102 +240,97 @@ var stnNetwork = {
   xpubkey: 0x043587cf,
   xprivkey: 0x04358394,
   networkMagic: STN.NETWORK_MAGIC,
-  indexBy: [
-    'port',
-    'name',
-    'cashAddrPrefix',
-    'networkMagic'
-  ]
-}
+  indexBy: ["port", "name", "cashAddrPrefix", "networkMagic"],
+};
 // Add configurable values for testnet/regtest
 
-addNetwork(testNetwork)
-addNetwork(stnNetwork)
-addNetwork(regtestNetwork)
-addNetwork(liveNetwork)
+addNetwork(testNetwork);
+addNetwork(stnNetwork);
+addNetwork(regtestNetwork);
+addNetwork(liveNetwork);
 
-var livenet = get('livenet')
-var regtest = get('regtest')
-var testnet = get('testnet')
-var stn = get('stn')
+var livenet = get("livenet");
+var regtest = get("regtest");
+var testnet = get("testnet");
+var stn = get("stn");
 
-Object.defineProperty(testnet, 'port', {
+Object.defineProperty(testnet, "port", {
   enumerable: true,
   configurable: false,
   get: function () {
     if (this.regtestEnabled) {
-      return REGTEST.PORT
+      return REGTEST.PORT;
     } else if (this.stnEnabled) {
-      return STN.PORT
+      return STN.PORT;
     } else {
-      return TESTNET.PORT
+      return TESTNET.PORT;
     }
-  }
-})
+  },
+});
 
-Object.defineProperty(testnet, 'networkMagic', {
+Object.defineProperty(testnet, "networkMagic", {
   enumerable: true,
   configurable: false,
   get: function () {
     if (this.regtestEnabled) {
-      return JSUtil.integerAsBuffer(REGTEST.NETWORK_MAGIC)
+      return JSUtil.integerAsBuffer(REGTEST.NETWORK_MAGIC);
     } else if (this.stnEnabled) {
-      return JSUtil.integerAsBuffer(STN.NETWORK_MAGIC)
+      return JSUtil.integerAsBuffer(STN.NETWORK_MAGIC);
     } else {
-      return JSUtil.integerAsBuffer(TESTNET.NETWORK_MAGIC)
+      return JSUtil.integerAsBuffer(TESTNET.NETWORK_MAGIC);
     }
-  }
-})
+  },
+});
 
-Object.defineProperty(testnet, 'dnsSeeds', {
+Object.defineProperty(testnet, "dnsSeeds", {
   enumerable: true,
   configurable: false,
   get: function () {
     if (this.regtestEnabled) {
-      return REGTEST.DNS_SEEDS
+      return REGTEST.DNS_SEEDS;
     } else if (this.stnEnabled) {
-      return STN.DNS_SEEDS
+      return STN.DNS_SEEDS;
     } else {
-      return TESTNET.DNS_SEEDS
+      return TESTNET.DNS_SEEDS;
     }
-  }
-})
+  },
+});
 
-Object.defineProperty(testnet, 'cashAddrPrefix', {
+Object.defineProperty(testnet, "cashAddrPrefix", {
   enumerable: true,
   configurable: false,
   get: function () {
     if (this.regtestEnabled) {
-      return REGTEST.CASHADDRPREFIX
+      return REGTEST.CASHADDRPREFIX;
     } else if (this.stnEnabled) {
-      return STN.CASHADDRPREFIX
+      return STN.CASHADDRPREFIX;
     } else {
-      return TESTNET.CASHADDRPREFIX
+      return TESTNET.CASHADDRPREFIX;
     }
-  }
-})
+  },
+});
 
-Object.defineProperty(testnet, 'cashAddrPrefixArray', {
+Object.defineProperty(testnet, "cashAddrPrefixArray", {
   enumerable: true,
   configurable: false,
   get: function () {
     if (this.regtestEnabled) {
-      return cashAddrPrefixToArray(REGTEST.CASHADDRPREFIX)
+      return cashAddrPrefixToArray(REGTEST.CASHADDRPREFIX);
     } else if (this.stnEnabled) {
-      return STN.cashAddrPrefixToArray(STN.CASHADDRPREFIX)
+      return STN.cashAddrPrefixToArray(STN.CASHADDRPREFIX);
     } else {
-      return cashAddrPrefixToArray(TESTNET.CASHADDRPREFIX)
+      return cashAddrPrefixToArray(TESTNET.CASHADDRPREFIX);
     }
-  }
-})
+  },
+});
 
 /**
  * @function
  * @member Networks#enableRegtest
  * Will enable regtest features for testnet
  */
-function enableRegtest () {
-  testnet.regtestEnabled = true
+function enableRegtest() {
+  testnet.regtestEnabled = true;
 }
 
 /**
@@ -351,16 +338,16 @@ function enableRegtest () {
  * @member Networks#disableRegtest
  * Will disable regtest features for testnet
  */
-function disableRegtest () {
-  testnet.regtestEnabled = false
+function disableRegtest() {
+  testnet.regtestEnabled = false;
 }
 /**
  * @function
  * @member Networks#enableStn
  * Will enable stn features for testnet
  */
-function enableStn () {
-  testnet.stnEnabled = true
+function enableStn() {
+  testnet.stnEnabled = true;
 }
 
 /**
@@ -368,8 +355,8 @@ function enableStn () {
  * @member Networks#disableStn
  * Will disable stn features for testnet
  */
-function disableStn () {
-  testnet.stnEnabled = false
+function disableStn() {
+  testnet.stnEnabled = false;
 }
 
 /**
@@ -388,5 +375,5 @@ module.exports = {
   enableRegtest: enableRegtest,
   disableRegtest: disableRegtest,
   enableStn: enableStn,
-  disableStn: disableStn
-}
+  disableStn: disableStn,
+};

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-require('./lint');
-require('./presubmit-checks');
-require('./size');
-require('./test');
+require("./lint");
+require("./presubmit-checks");
+require("./size");
+require("./test");

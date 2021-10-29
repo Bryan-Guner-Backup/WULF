@@ -1,20 +1,20 @@
-'use strict'
+"use strict";
 
-var BN = require('bn.js')
-var $ = require('../util/preconditions')
-var _ = require('../util/_')
+var BN = require("bn.js");
+var $ = require("../util/preconditions");
+var _ = require("../util/_");
 
 var reversebuf = function (buf) {
-  var buf2 = Buffer.alloc(buf.length)
+  var buf2 = Buffer.alloc(buf.length);
   for (var i = 0; i < buf.length; i++) {
-    buf2[i] = buf[buf.length - 1 - i]
+    buf2[i] = buf[buf.length - 1 - i];
   }
-  return buf2
-}
+  return buf2;
+};
 
-BN.Zero = new BN(0)
-BN.One = new BN(1)
-BN.Minus1 = new BN(-1)
+BN.Zero = new BN(0);
+BN.One = new BN(1);
+BN.Minus1 = new BN(-1);
 
 /**
  * Convert a number into a big number.
@@ -22,9 +22,9 @@ BN.Minus1 = new BN(-1)
  * @param {number} n Any positive or negative integer.
  */
 BN.fromNumber = function (n) {
-  $.checkArgument(_.isNumber(n))
-  return new BN(n)
-}
+  $.checkArgument(_.isNumber(n));
+  return new BN(n);
+};
 
 /**
  * Convert a string number into a big number.
@@ -33,9 +33,9 @@ BN.fromNumber = function (n) {
  * @param {number} base The base of the number, defaults to 10.
  */
 BN.fromString = function (str, base) {
-  $.checkArgument(_.isString(str))
-  return new BN(str, base)
-}
+  $.checkArgument(_.isString(str));
+  return new BN(str, base);
+};
 
 /**
  * Convert a buffer (such as a 256 bit binary private key) into a big number.
@@ -47,13 +47,13 @@ BN.fromString = function (str, base) {
  * @param {Object} opts With a property 'endian' that can be either 'big' or 'little'. Defaults big endian (most significant digit first).
  */
 BN.fromBuffer = function (buf, opts) {
-  if (typeof opts !== 'undefined' && opts.endian === 'little') {
-    buf = reversebuf(buf)
+  if (typeof opts !== "undefined" && opts.endian === "little") {
+    buf = reversebuf(buf);
   }
-  var hex = buf.toString('hex')
-  var bn = new BN(hex, 16)
-  return bn
-}
+  var hex = buf.toString("hex");
+  var bn = new BN(hex, 16);
+  return bn;
+};
 
 /**
  * Instantiate a BigNumber from a "signed magnitude buffer". (a buffer where the
@@ -63,35 +63,35 @@ BN.fromBuffer = function (buf, opts) {
  * @param {Object} opts With a property 'endian' that can be either 'big' or 'little'. Defaults big endian (most significant digit first).
  */
 BN.fromSM = function (buf, opts) {
-  var ret
+  var ret;
   if (buf.length === 0) {
-    return BN.fromBuffer(Buffer.from([0]))
+    return BN.fromBuffer(Buffer.from([0]));
   }
 
-  var endian = 'big'
+  var endian = "big";
   if (opts) {
-    endian = opts.endian
+    endian = opts.endian;
   }
-  if (endian === 'little') {
-    buf = reversebuf(buf)
+  if (endian === "little") {
+    buf = reversebuf(buf);
   }
 
   if (buf[0] & 0x80) {
-    buf[0] = buf[0] & 0x7f
-    ret = BN.fromBuffer(buf)
-    ret.neg().copy(ret)
+    buf[0] = buf[0] & 0x7f;
+    ret = BN.fromBuffer(buf);
+    ret.neg().copy(ret);
   } else {
-    ret = BN.fromBuffer(buf)
+    ret = BN.fromBuffer(buf);
   }
-  return ret
-}
+  return ret;
+};
 
 /**
  * Convert a big number into a number.
  */
 BN.prototype.toNumber = function () {
-  return parseInt(this.toString(10), 10)
-}
+  return parseInt(this.toString(10), 10);
+};
 
 /**
  * Convert a big number into a buffer. This is somewhat ambiguous, so there is
@@ -103,30 +103,30 @@ BN.prototype.toNumber = function () {
  * @param {Object} opts Defaults to { endian: 'big', size: 32 }
  */
 BN.prototype.toBuffer = function (opts) {
-  var buf, hex
+  var buf, hex;
   if (opts && opts.size) {
-    hex = this.toString(16, 2)
-    var natlen = hex.length / 2
-    buf = Buffer.from(hex, 'hex')
+    hex = this.toString(16, 2);
+    var natlen = hex.length / 2;
+    buf = Buffer.from(hex, "hex");
 
     if (natlen === opts.size) {
       // buf = buf
     } else if (natlen > opts.size) {
-      buf = BN.trim(buf, natlen)
+      buf = BN.trim(buf, natlen);
     } else if (natlen < opts.size) {
-      buf = BN.pad(buf, natlen, opts.size)
+      buf = BN.pad(buf, natlen, opts.size);
     }
   } else {
-    hex = this.toString(16, 2)
-    buf = Buffer.from(hex, 'hex')
+    hex = this.toString(16, 2);
+    buf = Buffer.from(hex, "hex");
   }
 
-  if (typeof opts !== 'undefined' && opts.endian === 'little') {
-    buf = reversebuf(buf)
+  if (typeof opts !== "undefined" && opts.endian === "little") {
+    buf = reversebuf(buf);
   }
 
-  return buf
-}
+  return buf;
+};
 
 /**
  * For big numbers that are either positive or negative, you can convert to
@@ -134,26 +134,26 @@ BN.prototype.toBuffer = function (opts) {
  * positive or negative.
  */
 BN.prototype.toSMBigEndian = function () {
-  var buf
+  var buf;
   if (this.cmp(BN.Zero) === -1) {
-    buf = this.neg().toBuffer()
+    buf = this.neg().toBuffer();
     if (buf[0] & 0x80) {
-      buf = Buffer.concat([Buffer.from([0x80]), buf])
+      buf = Buffer.concat([Buffer.from([0x80]), buf]);
     } else {
-      buf[0] = buf[0] | 0x80
+      buf[0] = buf[0] | 0x80;
     }
   } else {
-    buf = this.toBuffer()
+    buf = this.toBuffer();
     if (buf[0] & 0x80) {
-      buf = Buffer.concat([Buffer.from([0x00]), buf])
+      buf = Buffer.concat([Buffer.from([0x00]), buf]);
     }
   }
 
-  if (buf.length === 1 & buf[0] === 0) {
-    buf = Buffer.from([])
+  if ((buf.length === 1) & (buf[0] === 0)) {
+    buf = Buffer.from([]);
   }
-  return buf
-}
+  return buf;
+};
 
 /**
  * For big numbers that are either positive or negative, you can convert to
@@ -163,14 +163,14 @@ BN.prototype.toSMBigEndian = function () {
  * @param {Object} opts Defaults to { endian: 'big' }
  */
 BN.prototype.toSM = function (opts) {
-  var endian = opts ? opts.endian : 'big'
-  var buf = this.toSMBigEndian()
+  var endian = opts ? opts.endian : "big";
+  var buf = this.toSMBigEndian();
 
-  if (endian === 'little') {
-    buf = reversebuf(buf)
+  if (endian === "little") {
+    buf = reversebuf(buf);
   }
-  return buf
-}
+  return buf;
+};
 
 /**
  * Create a BN from a "ScriptNum": This is analogous to the constructor for
@@ -185,8 +185,11 @@ BN.prototype.toSM = function (opts) {
  * @param {number} size The maximum size.
  */
 BN.fromScriptNumBuffer = function (buf, fRequireMinimal, size) {
-  var nMaxNumSize = size || 4
-  $.checkArgument(buf.length <= nMaxNumSize, new Error('script number overflow'))
+  var nMaxNumSize = size || 4;
+  $.checkArgument(
+    buf.length <= nMaxNumSize,
+    new Error("script number overflow")
+  );
   if (fRequireMinimal && buf.length > 0) {
     // Check that the number is encoded with the minimum possible
     // number of bytes.
@@ -201,14 +204,14 @@ BN.fromScriptNumBuffer = function (buf, fRequireMinimal, size) {
       // is +-255, which encode to 0xff00 and 0xff80 respectively.
       // (big-endian).
       if (buf.length <= 1 || (buf[buf.length - 2] & 0x80) === 0) {
-        throw new Error('non-minimally encoded script number')
+        throw new Error("non-minimally encoded script number");
       }
     }
   }
   return BN.fromSM(buf, {
-    endian: 'little'
-  })
-}
+    endian: "little",
+  });
+};
 
 /**
  * The corollary to the above, with the notable exception that we do not throw
@@ -218,9 +221,9 @@ BN.fromScriptNumBuffer = function (buf, fRequireMinimal, size) {
  */
 BN.prototype.toScriptNumBuffer = function () {
   return this.toSM({
-    endian: 'little'
-  })
-}
+    endian: "little",
+  });
+};
 
 /**
  * Trims a buffer if it starts with zeros.
@@ -229,8 +232,8 @@ BN.prototype.toScriptNumBuffer = function () {
  * @param {number} natlen The natural length of the number.
  */
 BN.trim = function (buf, natlen) {
-  return buf.slice(natlen - buf.length, buf.length)
-}
+  return buf.slice(natlen - buf.length, buf.length);
+};
 
 /**
  * Adds extra zeros to the start of a number.
@@ -240,15 +243,15 @@ BN.trim = function (buf, natlen) {
  * @param {number} size How big to pad the number in bytes.
  */
 BN.pad = function (buf, natlen, size) {
-  var rbuf = Buffer.alloc(size)
+  var rbuf = Buffer.alloc(size);
   for (var i = 0; i < buf.length; i++) {
-    rbuf[rbuf.length - 1 - i] = buf[buf.length - 1 - i]
+    rbuf[rbuf.length - 1 - i] = buf[buf.length - 1 - i];
   }
   for (i = 0; i < size - natlen; i++) {
-    rbuf[i] = 0
+    rbuf[i] = 0;
   }
-  return rbuf
-}
+  return rbuf;
+};
 /**
  * Convert a big number into a hex string. This is somewhat ambiguous, so there
  * is an opts parameter that let's you specify the endianness or the size.
@@ -259,8 +262,8 @@ BN.pad = function (buf, natlen, size) {
  * @param {Object} opts Defaults to { endian: 'big', size: 32 }
  */
 BN.prototype.toHex = function (...args) {
-  return this.toBuffer(...args).toString('hex')
-}
+  return this.toBuffer(...args).toString("hex");
+};
 
 /**
  * Convert a hex string (such as a 256 bit binary private key) into a big
@@ -272,7 +275,7 @@ BN.prototype.toHex = function (...args) {
  * @param {Object} opts With a property 'endian' that can be either 'big' or 'little'. Defaults big endian (most significant digit first).
  */
 BN.fromHex = function (hex, ...args) {
-  return BN.fromBuffer(Buffer.from(hex, 'hex'), ...args)
-}
+  return BN.fromBuffer(Buffer.from(hex, "hex"), ...args);
+};
 
-module.exports = BN
+module.exports = BN;

@@ -37,8 +37,5 @@
     "node": ">= 4",
     "iojs": ">= 1.0.0"
   },
-  "files": [
-    "dist",
-    "bin"
-  ]
+  "files": ["dist", "bin"]
 }

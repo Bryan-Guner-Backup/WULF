@@ -9,5 +9,5 @@ This release contains a security patch for Windows users, along with a small set
 
 <h2>Fixes</h2>
 
- - <span class="tag updated">fix</span> Patch security issue in Windows builds ([more information](https://electronjs.org/blog/protocol-handler-fix)).
- - <span class="tag updated">fix</span> Display errors in the swarm debugger when they occur (thanks [@samuelmaddock](https://github.com/samuelmaddock)!).
+- <span class="tag updated">fix</span> Patch security issue in Windows builds ([more information](https://electronjs.org/blog/protocol-handler-fix)).
+- <span class="tag updated">fix</span> Display errors in the swarm debugger when they occur (thanks [@samuelmaddock](https://github.com/samuelmaddock)!).

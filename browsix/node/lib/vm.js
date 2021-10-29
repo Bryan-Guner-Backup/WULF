@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var binding = process.binding('contextify');
+var binding = process.binding("contextify");
 var Script = binding.ContextifyScript;
 
 // The binding provides a few useful primitives:
@@ -13,18 +13,18 @@ var Script = binding.ContextifyScript;
 // - isContext(sandbox)
 // From this we build the entire documented API.
 
-Script.prototype.runInNewContext = function(sandbox, options) {
+Script.prototype.runInNewContext = function (sandbox, options) {
   var context = exports.createContext(sandbox);
   return this.runInContext(context, options);
 };
 
 exports.Script = Script;
 
-exports.createScript = function(code, options) {
+exports.createScript = function (code, options) {
   return new Script(code, options);
 };
 
-exports.createContext = function(sandbox) {
+exports.createContext = function (sandbox) {
   if (sandbox === undefined) {
     sandbox = {};
   } else if (binding.isContext(sandbox)) {
@@ -35,21 +35,21 @@ exports.createContext = function(sandbox) {
   return sandbox;
 };
 
-exports.runInDebugContext = function(code) {
+exports.runInDebugContext = function (code) {
   return binding.runInDebugContext(code);
 };
 
-exports.runInContext = function(code, contextifiedSandbox, options) {
+exports.runInContext = function (code, contextifiedSandbox, options) {
   var script = new Script(code, options);
   return script.runInContext(contextifiedSandbox, options);
 };
 
-exports.runInNewContext = function(code, sandbox, options) {
+exports.runInNewContext = function (code, sandbox, options) {
   var script = new Script(code, options);
   return script.runInNewContext(sandbox, options);
 };
 
-exports.runInThisContext = function(code, options) {
+exports.runInThisContext = function (code, options) {
   var script = new Script(code, options);
   return script.runInThisContext(options);
 };

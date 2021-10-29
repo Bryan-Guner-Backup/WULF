@@ -14,7 +14,7 @@ Including 'install' causes as much of the puppet install to happen in parallel a
 
 ## run_in_parallel command option
 
-The run_in_parallel command option is a boolean value, specifying whether to execute each iteration (usually of hosts) in parallel, or not.  The block_on method is the primary method accepting the run_in_parallel command option, however many methods that call into block_on respect it as well:
+The run_in_parallel command option is a boolean value, specifying whether to execute each iteration (usually of hosts) in parallel, or not. The block_on method is the primary method accepting the run_in_parallel command option, however many methods that call into block_on respect it as well:
 
 - on
 - run_block_on

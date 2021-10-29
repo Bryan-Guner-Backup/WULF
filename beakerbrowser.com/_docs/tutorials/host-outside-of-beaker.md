@@ -10,6 +10,7 @@ Sometimes it’s important to make sure your site is always available. One solut
 From the README:
 
 > A Web server for Dat and HTTPS:
+>
 > - Serve sites over Dat with DNS shortnames.
 > - Rehost those sites over HTTPS.
 > - Get TLS certs automatically with Let's Encrypt.
@@ -36,14 +37,18 @@ Then run
 sudo apt-get install libtool m4 automake make g++
 
 # install dathttpd (https://docs.npmjs.com/getting-started/fixing-npm-permissions)
+
 npm install -g dathttpd
 
 # give node perms to use ports 80 and 443
+
 sudo setcap cap_net_bind_service=+ep `readlink -f \`which node\``
 
 # start dathttpd
+
 dathttpd
-```
+
+````
 
 To daemonify the server in Debian-based systems, stop the `dathttpd` process and then run:
 
@@ -57,6 +62,6 @@ sudo add-to-systemd dathttpd --user $(whoami) $(which dathttpd)
 
 # start the dathttpd service
 sudo systemctl start dathttpd
-```
+````
 
 See the [DatHTTPD README](https://github.com/beakerbrowser/dathttpd) for more information.

@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import {timer} from './timer';
-
+import { timer } from "./timer";
 
 /**
  * TODO(dvoytenko): remove this struct and just supply measure/mutate directly
@@ -27,7 +26,6 @@ import {timer} from './timer';
  */
 class VsyncTaskSpec {}
 
-
 /**
  * TODO(dvoytenko): lots and lots of work to make it actually work right:
  * queue, scheduling, measures/mutates separation, etc.
@@ -36,7 +34,6 @@ class VsyncTaskSpec {}
  * since that will be the main use case.
  */
 export class Vsync {
-
   /**
    * @param {!Window} win
    */
@@ -65,7 +62,7 @@ export class Vsync {
    * @param {function()} mutator
    */
   mutate(mutator) {
-    this.run({mutate: mutator});
+    this.run({ mutate: mutator });
   }
 
   /**
@@ -102,17 +99,16 @@ export class Vsync {
           if (!res) {
             resolve();
           } else if (opt_timeout && timeSinceStart > opt_timeout) {
-            reject('timeout');
+            reject("timeout");
           } else {
             prevTime = timeSinceStart;
             task(state);
           }
-        }
+        },
       });
       task({});
     });
   }
 }
-
 
 export const vsync = new Vsync(window);

@@ -1,11 +1,10 @@
-wire
-====
+# wire
 
 [![Build Status](http://img.shields.io/travis/btcsuite/btcd.svg)]
 (https://travis-ci.org/btcsuite/btcd) [![ISC License]
 (http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
 
-Package wire implements the bitcoin wire protocol.  A comprehensive suite of
+Package wire implements the bitcoin wire protocol. A comprehensive suite of
 tests with 100% test coverage is provided to ensure proper functionality.
 
 There is an associated blog post about the release of this package
@@ -54,7 +53,7 @@ concern themselves with the specifics.
 
 In order to unmarshal bitcoin messages from the wire, use the `ReadMessage`
 function. It accepts any `io.Reader`, but typically this will be a `net.Conn`
-to a remote node running a bitcoin peer.  Example syntax is:
+to a remote node running a bitcoin peer. Example syntax is:
 
 ```Go
 	// Use the most recent protocol version supported by the package and the
@@ -102,13 +101,14 @@ from a remote peer is:
 ## GPG Verification Key
 
 All official release tags are signed by Conformal so users can ensure the code
-has not been tampered with and is coming from the btcsuite developers.  To
+has not been tampered with and is coming from the btcsuite developers. To
 verify the signature perform the following:
 
 - Download the public key from the Conformal website at
   https://opensource.conformal.com/GIT-GPG-KEY-conformal.txt
 
 - Import the public key into your GPG keyring:
+
   ```bash
   gpg --import GIT-GPG-KEY-conformal.txt
   ```

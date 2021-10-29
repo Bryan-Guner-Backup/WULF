@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('./parser')(process.argv, 'echo');
+require("./parser")(process.argv, "echo");

@@ -20,7 +20,7 @@
  * @visibleForTesting
  */
 export function dashToCamelCase(name) {
-  return name.replace(/-([a-z])/g, function(all, character) {
+  return name.replace(/-([a-z])/g, function (all, character) {
     return character.toUpperCase();
   });
 }

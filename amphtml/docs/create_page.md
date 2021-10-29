@@ -8,31 +8,46 @@ stage it, test it, and get it ready for publication.
 The basic AMP HTML page includes the following mark-up:
 
 ```html
-    <!doctype html>
-    <html amp>
-      <head>
-        <meta charset="utf-8">
-        <title>Hello, AMPs</title>
-        <link rel="canonical" href="http://example.ampproject.org/article-metadata.html" />
-        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
-        <script type="application/ld+json">
-          {
-            "@context": "http://schema.org",
-            "@type": "NewsArticle",
-            "headline": "Open-source framework for publishing content everywhere",
-            "datePublished": "2015-10-07T12:02:41Z",
-            "image": [
-              "logo.jpg"
-            ]
-          }
-        </script>
-        <style>body {opacity: 0}</style><noscript><style>body {opacity: 1}</style></noscript>
-        <script async src="https://cdn.ampproject.org/v0.js"></script>
-      </head>
-      <body>
-        <h1>Welcome to the mobile web</h1>
-      </body>
-    </html>
+<!DOCTYPE html>
+<html amp>
+  <head>
+    <meta charset="utf-8" />
+    <title>Hello, AMPs</title>
+    <link
+      rel="canonical"
+      href="http://example.ampproject.org/article-metadata.html"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "NewsArticle",
+        "headline": "Open-source framework for publishing content everywhere",
+        "datePublished": "2015-10-07T12:02:41Z",
+        "image": ["logo.jpg"]
+      }
+    </script>
+    <style>
+      body {
+        opacity: 0;
+      }
+    </style>
+    <noscript
+      ><style>
+        body {
+          opacity: 1;
+        }
+      </style></noscript
+    >
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+  </head>
+  <body>
+    <h1>Welcome to the mobile web</h1>
+  </body>
+</html>
 ```
 
 ## Required mark-up
@@ -60,33 +75,52 @@ To get you started,
 here's the basic AMP HTML page now with an image:
 
 ```html
-    <!doctype html>
-    <html amp>
-      <head>
-        <meta charset="utf-8">
-        <title>Hello, AMPs</title>
-        <link rel="canonical" href="http://example.ampproject.org/article-metadata.html" />
-        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
-        <script type="application/ld+json">
-          {
-            "@context": "http://schema.org",
-            "@type": "NewsArticle",
-            "headline": "Open-source framework for publishing content everywhere",
-            "datePublished": "2015-10-07T12:02:41Z",
-            "image": [
-              "logo.jpg"
-            ]
-          }
-        </script>
-        <style>body {opacity: 0}</style><noscript><style>body {opacity: 1}</style></noscript>
-        <script async src="https://cdn.ampproject.org/v0.js"></script>
-      </head>
-      <body>
-        <h1>Welcome to the mobile web</h1>
-        <amp-img src="welcome.jpg" alt="Welcome" height="2000" width="800"></amp-img>
-
-      </body>
-    </html>
+<!DOCTYPE html>
+<html amp>
+  <head>
+    <meta charset="utf-8" />
+    <title>Hello, AMPs</title>
+    <link
+      rel="canonical"
+      href="http://example.ampproject.org/article-metadata.html"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "NewsArticle",
+        "headline": "Open-source framework for publishing content everywhere",
+        "datePublished": "2015-10-07T12:02:41Z",
+        "image": ["logo.jpg"]
+      }
+    </script>
+    <style>
+      body {
+        opacity: 0;
+      }
+    </style>
+    <noscript
+      ><style>
+        body {
+          opacity: 1;
+        }
+      </style></noscript
+    >
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+  </head>
+  <body>
+    <h1>Welcome to the mobile web</h1>
+    <amp-img
+      src="welcome.jpg"
+      alt="Welcome"
+      height="2000"
+      width="800"
+    ></amp-img>
+  </body>
+</html>
 ```
 
 Learn more about
@@ -98,45 +132,64 @@ AMPs are web pages; add custom styling using common CSS properties.
 
 Style elements inside `<style amp-custom>`
 using class or element selectors in an author-defined,
-inlined stylesheet: 
+inlined stylesheet:
 
 ```html
-    <!doctype html>
-    <html amp>
-      <head>
-        <meta charset="utf-8">
-        <title>Hello, AMPs</title>
-        <link rel="canonical" href="http://example.ampproject.org/article-metadata.html" />
-        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
-        <script type="application/ld+json">
-          {
-            "@context": "http://schema.org",
-            "@type": "NewsArticle",
-            "headline": "Open-source framework for publishing content everywhere",
-            "datePublished": "2015-10-07T12:02:41Z",
-            "image": [
-              "logo.jpg"
-            ]
-          }
-        </script>
-        <style>body {opacity: 0}</style><noscript><style>body {opacity: 1}</style></noscript>
-        <style amp-custom>
-          <!-- any custom style goes here; and remember, body margin can not be declared -->
-          body {
-            background-color: white;
-          }
-          amp-img {
-            background-color: gray;
-          }
-        </style>
-        <script async src="https://cdn.ampproject.org/v0.js"></script>
-      </head>
-      <body>
-        <h1>Welcome to the mobile web</h1>
-        <amp-img src="welcome.jpg" alt="Welcome" height="2000" width="800"></amp-img>
-
-      </body>
-    </html>
+<!DOCTYPE html>
+<html amp>
+  <head>
+    <meta charset="utf-8" />
+    <title>Hello, AMPs</title>
+    <link
+      rel="canonical"
+      href="http://example.ampproject.org/article-metadata.html"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "NewsArticle",
+        "headline": "Open-source framework for publishing content everywhere",
+        "datePublished": "2015-10-07T12:02:41Z",
+        "image": ["logo.jpg"]
+      }
+    </script>
+    <style>
+      body {
+        opacity: 0;
+      }
+    </style>
+    <noscript
+      ><style>
+        body {
+          opacity: 1;
+        }
+      </style></noscript
+    >
+    <style amp-custom>
+      <!-- any custom style goes here; and remember, body margin can not be declared -->
+      body {
+        background-color: white;
+      }
+      amp-img {
+        background-color: gray;
+      }
+    </style>
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+  </head>
+  <body>
+    <h1>Welcome to the mobile web</h1>
+    <amp-img
+      src="welcome.jpg"
+      alt="Welcome"
+      height="2000"
+      width="800"
+    ></amp-img>
+  </body>
+</html>
 ```
 
 Learn more about adding elements, including extended components,
@@ -145,7 +198,7 @@ in [How to Include Common Features](../docs/include_features.md).
 # Page layout
 
 Externally-loaded resources (like images, ads, videos, etc.) must have height
-and width attributes.  This ensures that sizes of all elements can be
+and width attributes. This ensures that sizes of all elements can be
 calculated by the browser via CSS automatically and element sizes won't be
 recalculated because of external resources, preventing the page from jumping
 around as resources load.
@@ -166,14 +219,14 @@ and validating the page using the
 [Chrome DevTools console](https://developers.google.com/web/tools/javascript/console/).
 
 1. Include your page in your local directory, for example,
-`/ampproject/amphtml/examples`.
+   `/ampproject/amphtml/examples`.
 2. Get your web server up and running locally.
-For a quick web server, run `python -m SimpleHTTPServer`.
-4. Open your page, for example, go to
-[http://localhost:8000/released.amp.html](http://localhost:8000/released.amp.html).
-5. Add "#development=1" to the URL, for example,
-[http://localhost:8000/released.amp.html#development=1](http://localhost:8000/released.amp.html#development=1).
-6. Open the Chrome DevTools console and check for validation errors.
+   For a quick web server, run `python -m SimpleHTTPServer`.
+3. Open your page, for example, go to
+   [http://localhost:8000/released.amp.html](http://localhost:8000/released.amp.html).
+4. Add "#development=1" to the URL, for example,
+   [http://localhost:8000/released.amp.html#development=1](http://localhost:8000/released.amp.html#development=1).
+5. Open the Chrome DevTools console and check for validation errors.
 
 <!--
 # What to do when you get validation errors

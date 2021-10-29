@@ -29,14 +29,17 @@ twitter_username: pfrazee
 github_username:  pfrazee
 
 # Build settings
+
 markdown: kramdown
 theme: minima
 gems:
-  - jekyll-feed
-exclude:
-  - Gemfile
-  - Gemfile.lock
-```
+
+- jekyll-feed
+  exclude:
+- Gemfile
+- Gemfile.lock
+
+````
 
 Run `jekyll build` to generate your site’s files:
 
@@ -51,7 +54,7 @@ Configuration file: /Users/paulfrazee/my-awesome-p2p-blog/_config.yml
       Generating...
                     done in 0.854 seconds.
  Auto-regeneration: disabled. Use --watch to enable.
-```
+````
 
 Now, let’s create the site in Beaker. Open the dropdown menu in Beaker, and select “New site”:
 

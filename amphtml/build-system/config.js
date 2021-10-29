@@ -14,33 +14,33 @@
  * limitations under the License.
  */
 
-var path = require('path');
+var path = require("path");
 
-var karmaConf = path.resolve('karma.conf.js');
+var karmaConf = path.resolve("karma.conf.js");
 
 var testPaths = [
-  'test/**/*.js',
-  'extensions/**/test/**/*.js',
-  'test/fixtures/**/*.html',
+  "test/**/*.js",
+  "extensions/**/test/**/*.js",
+  "test/fixtures/**/*.html",
   {
-    pattern: 'dist/**/*.js',
+    pattern: "dist/**/*.js",
     included: false,
   },
   {
-    pattern: 'build/**/*.js',
+    pattern: "build/**/*.js",
     included: false,
-    served: true
+    served: true,
   },
   {
-    pattern: 'examples/**/*',
+    pattern: "examples/**/*",
     included: false,
-    served: true
+    served: true,
   },
   {
-    pattern: 'dist.3p/**/*',
+    pattern: "dist.3p/**/*",
     included: false,
-    served: true
-  }
+    served: true,
+  },
 ];
 
 var karma = {
@@ -49,33 +49,33 @@ var karma = {
     files: testPaths,
     singleRun: true,
     client: {
-      captureConsole: false
-    }
+      captureConsole: false,
+    },
   },
   firefox: {
     configFile: karmaConf,
     files: testPaths,
     singleRun: true,
-    browsers: ['Firefox'],
+    browsers: ["Firefox"],
     client: {
       mocha: {
-        timeout: 10000
+        timeout: 10000,
       },
-      captureConsole: false
-    }
+      captureConsole: false,
+    },
   },
   safari: {
     configFile: karmaConf,
     files: testPaths,
     singleRun: true,
-    browsers: ['Safari'],
+    browsers: ["Safari"],
     client: {
       mocha: {
-        timeout: 10000
+        timeout: 10000,
       },
-      captureConsole: false
-    }
-  }
+      captureConsole: false,
+    },
+  },
 };
 
 /** @const  */
@@ -83,10 +83,10 @@ module.exports = {
   testPaths: testPaths,
   karma: karma,
   src: {
-    exclude: '!{node_modules,build,dist,dist.3p}/**/*.*',
+    exclude: "!{node_modules,build,dist,dist.3p}/**/*.*",
   },
   srcGlobs: [
-    '**/*.{css,js,html,md}',
-    '!{node_modules,build,dist,dist.3p}/**/*.*',
+    "**/*.{css,js,html,md}",
+    "!{node_modules,build,dist,dist.3p}/**/*.*",
   ],
 };

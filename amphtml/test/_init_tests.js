@@ -15,8 +15,8 @@
  */
 
 // This must load before all other tests.
-import '../src/polyfills';
-import {adopt} from '../src/runtime';
+import "../src/polyfills";
+import { adopt } from "../src/runtime";
 
 adopt(global);
 
@@ -26,7 +26,7 @@ adopt(global);
  * @param {string} desc
  * @param {function()} fn
  */
-it.skipOnTravis = function(desc, fn) {
+it.skipOnTravis = function (desc, fn) {
   if (navigator.userAgent.match(/Chromium/)) {
     it.skip(desc, fn);
     return;
@@ -40,7 +40,7 @@ it.skipOnTravis = function(desc, fn) {
  * @param {string} desc
  * @param {function()} fn
  */
-it.skipOnFirefox = function(desc, fn) {
+it.skipOnFirefox = function (desc, fn) {
   if (navigator.userAgent.match(/Firefox/)) {
     it.skip(desc, fn);
     return;
@@ -48,57 +48,68 @@ it.skipOnFirefox = function(desc, fn) {
   it(desc, fn);
 };
 
-chai.Assertion.addMethod('attribute', function(attr) {
+chai.Assertion.addMethod("attribute", function (attr) {
   var obj = this._obj;
   var tagName = obj.tagName.toLowerCase();
   this.assert(
     obj.hasAttribute(attr),
-    'expected element \'' + tagName + '\' to have attribute #{exp}',
-    'expected element \'' + tagName + '\' to not have attribute #{act}',
+    "expected element '" + tagName + "' to have attribute #{exp}",
+    "expected element '" + tagName + "' to not have attribute #{act}",
     attr,
     attr
   );
 });
 
-chai.Assertion.addMethod('class', function(className) {
+chai.Assertion.addMethod("class", function (className) {
   var obj = this._obj;
   var tagName = obj.tagName.toLowerCase();
   this.assert(
     obj.classList.contains(className),
-    'expected element \'' + tagName + '\' to have class #{exp}',
-    'expected element \'' + tagName + '\' to not have class #{act}',
+    "expected element '" + tagName + "' to have class #{exp}",
+    "expected element '" + tagName + "' to not have class #{act}",
     className,
     className
   );
 });
 
-chai.Assertion.addProperty('visible', function() {
+chai.Assertion.addProperty("visible", function () {
   var obj = this._obj;
-  var value = window./*OK*/getComputedStyle(obj)
-      .getPropertyValue('visibility');
+  var value = window
+    ./*OK*/ getComputedStyle(obj)
+    .getPropertyValue("visibility");
   var tagName = obj.tagName.toLowerCase();
   this.assert(
-    value == 'visible',
-    'expected element \'' +
-        tagName + '\' to be #{exp}, got #{act}. with classes: ' + obj.className,
-    'expected element \'' +
-        tagName + '\' not to be #{act}. with classes: ' + obj.className,
-    'visible',
+    value == "visible",
+    "expected element '" +
+      tagName +
+      "' to be #{exp}, got #{act}. with classes: " +
+      obj.className,
+    "expected element '" +
+      tagName +
+      "' not to be #{act}. with classes: " +
+      obj.className,
+    "visible",
     value
   );
 });
 
-chai.Assertion.addProperty('hidden', function() {
+chai.Assertion.addProperty("hidden", function () {
   var obj = this._obj;
-  var value = window./*OK*/getComputedStyle(obj).getPropertyValue('visibility');
+  var value = window
+    ./*OK*/ getComputedStyle(obj)
+    .getPropertyValue("visibility");
   var tagName = obj.tagName.toLowerCase();
   this.assert(
-     value == 'hidden',
-    'expected element \'' +
-        tagName + '\' to be #{exp}, got #{act}. with classes: ' + obj.className,
-    'expected element \'' +
-        tagName + '\' not to be #{act}. with classes: ' + obj.className,
-    'hidden',
+    value == "hidden",
+    "expected element '" +
+      tagName +
+      "' to be #{exp}, got #{act}. with classes: " +
+      obj.className,
+    "expected element '" +
+      tagName +
+      "' not to be #{act}. with classes: " +
+      obj.className,
+    "hidden",
     value
   );
 });

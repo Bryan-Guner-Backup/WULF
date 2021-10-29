@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import {timer} from './timer';
-
+import { timer } from "./timer";
 
 /**
  * Generates a random UUID string that is RFC4122 version 4 compliant.
@@ -24,9 +23,9 @@ import {timer} from './timer';
  */
 export function randomUUID() {
   var d = timer.now();
-  return 'aaaaaaaa-aaaa-4aaa-baaa-aaaaaaaaaaaa'.replace(/[ab]/g, (c) => {
+  return "aaaaaaaa-aaaa-4aaa-baaa-aaaaaaaaaaaa".replace(/[ab]/g, (c) => {
     var r = (d + Math.random() * 16) % 16 | 0;
     d = Math.floor(d / 16);
-    return (c == 'a' ? r : (r & 0x3 | 0x8)).toString(16);
+    return (c == "a" ? r : (r & 0x3) | 0x8).toString(16);
   });
-};
+}

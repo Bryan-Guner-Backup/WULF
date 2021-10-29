@@ -14,22 +14,24 @@
  * limitations under the License.
  */
 
-import {createIframePromise} from '../../testing/iframe';
-import {installAd, scoreDimensions_, upgradeImages_} from
-    '../../builtins/amp-ad';
+import { createIframePromise } from "../../testing/iframe";
+import {
+  installAd,
+  scoreDimensions_,
+  upgradeImages_,
+} from "../../builtins/amp-ad";
 
-describe('amp-ad', () => {
-
+describe("amp-ad", () => {
   function getAd(attributes, canonical) {
     return createIframePromise().then((iframe) => {
       installAd(iframe.win);
       if (canonical) {
-        var link = iframe.doc.createElement('link');
-        link.setAttribute('rel', 'canonical');
-        link.setAttribute('href', canonical);
+        var link = iframe.doc.createElement("link");
+        link.setAttribute("rel", "canonical");
+        link.setAttribute("href", canonical);
         iframe.doc.head.appendChild(link);
       }
-      var a = iframe.doc.createElement('amp-ad');
+      var a = iframe.doc.createElement("amp-ad");
       for (var key in attributes) {
         a.setAttribute(key, attributes[key]);
       }
@@ -37,93 +39,109 @@ describe('amp-ad', () => {
     });
   }
 
-  it('render an ad', () => {
-    return getAd({
-      width: 300,
-      height: 250,
-      type: 'a9',
-      src: 'testsrc',
-      'data-aax_size': '300x250',
-      'data-aax_pubname': 'test123',
-      'data-aax_src': '302',
-      // Test precedence
-      'data-width': '6666'
-    }, 'https://schema.org').then((ad) => {
+  it("render an ad", () => {
+    return getAd(
+      {
+        width: 300,
+        height: 250,
+        type: "a9",
+        src: "testsrc",
+        "data-aax_size": "300x250",
+        "data-aax_pubname": "test123",
+        "data-aax_src": "302",
+        // Test precedence
+        "data-width": "6666",
+      },
+      "https://schema.org"
+    ).then((ad) => {
       var iframe = ad.firstChild;
       expect(iframe).to.not.be.null;
-      expect(iframe.tagName).to.equal('IFRAME');
-      var url = iframe.getAttribute('src');
+      expect(iframe.tagName).to.equal("IFRAME");
+      var url = iframe.getAttribute("src");
       expect(url).to.match(/^http:\/\/ads.localhost:/);
       expect(url).to.match(/frame(.max)?.html#{/);
 
-      var fragment = url.substr(url.indexOf('#') + 1);
+      var fragment = url.substr(url.indexOf("#") + 1);
       var data = JSON.parse(fragment);
 
-      expect(data.type).to.equal('a9');
-      expect(data.src).to.equal('testsrc');
+      expect(data.type).to.equal("a9");
+      expect(data.src).to.equal("testsrc");
       expect(data.width).to.equal(300);
       expect(data.height).to.equal(250);
-      expect(data._context.location.href).to.equal('https://schema.org/');
-      expect(data.aax_size).to.equal('300x250');
+      expect(data._context.location.href).to.equal("https://schema.org/");
+      expect(data.aax_size).to.equal("300x250");
     });
   });
 
-  it('should require a canonical', () => {
-    return expect(getAd({
-      width: 300,
-      height: 250,
-      type: 'a9',
-    }, null)).to.be.rejectedWith(/canonical/);
+  it("should require a canonical", () => {
+    return expect(
+      getAd(
+        {
+          width: 300,
+          height: 250,
+          type: "a9",
+        },
+        null
+      )
+    ).to.be.rejectedWith(/canonical/);
   });
 
-  it('should require a type', () => {
-    return expect(getAd({
-      width: 300,
-      height: 250,
-    }, null)).to.be.rejectedWith(/type/);
+  it("should require a type", () => {
+    return expect(
+      getAd(
+        {
+          width: 300,
+          height: 250,
+        },
+        null
+      )
+    ).to.be.rejectedWith(/type/);
   });
 
-  describe('scoreDimensions_', () => {
-
-    it('should choose a matching dimension', () => {
-      let dims = [[320, 200], [320, 210], [320, 200]];
+  describe("scoreDimensions_", () => {
+    it("should choose a matching dimension", () => {
+      let dims = [
+        [320, 200],
+        [320, 210],
+        [320, 200],
+      ];
       let scores = scoreDimensions_(dims, 320, 200);
       let winner = scores.indexOf(Math.max(...scores));
       expect(winner).to.equal(0);
     });
 
-    it('should be biased to a smaller height delta', () => {
-      let dims = [[300, 200], [320, 50]];
+    it("should be biased to a smaller height delta", () => {
+      let dims = [
+        [300, 200],
+        [320, 50],
+      ];
       let scores = scoreDimensions_(dims, 300, 50);
       let winner = scores.indexOf(Math.max(...scores));
       expect(winner).to.equal(1);
     });
   });
 
-  describe('upgradeImages_', () => {
+  describe("upgradeImages_", () => {
     let images;
     beforeEach(() => {
       images = {
-        '300x200': [
-          'backfill-1@1x.png',
-          'backfill-2@1x.png',
-          'backfill-3@1x.png',
-          'backfill-4@1x.png',
-          'backfill-5@1x.png',
+        "300x200": [
+          "backfill-1@1x.png",
+          "backfill-2@1x.png",
+          "backfill-3@1x.png",
+          "backfill-4@1x.png",
+          "backfill-5@1x.png",
         ],
-        '320x50': [
-          'backfill-6@1x.png',
-          'backfill-7@1x.png',
-        ],
+        "320x50": ["backfill-6@1x.png", "backfill-7@1x.png"],
       };
     });
 
-    it('should upgrade an image from 1x to 2x', () => {
-      expect(images['300x200'][0]).to.equal('backfill-1@1x.png');
-      expect(images['320x50'][0]).to.equal('backfill-6@1x.png');
+    it("should upgrade an image from 1x to 2x", () => {
+      expect(images["300x200"][0]).to.equal("backfill-1@1x.png");
+      expect(images["320x50"][0]).to.equal("backfill-6@1x.png");
       upgradeImages_(images);
-      expect(images['300x200'][0]).to.equal('backfill-1@2x.png');
-      expect(images['320x50'][0]).to.equal('backfill-6@2x.png');
+      expect(images["300x200"][0]).to.equal("backfill-1@2x.png");
+      expect(images["320x50"][0]).to.equal("backfill-6@2x.png");
     });
   });
 });

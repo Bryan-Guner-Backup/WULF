@@ -1,18 +1,19 @@
 Beaker uses arguments and settings from a variety of sources to determine how your test run is executed.
 
-*  [Environment Variables](#environment-variables)
-* [Host/Config File Options](#host-file-options)
-* [ARGV](#argv-or-provided-arguments-array)
-  * [Supported Command Line Arguments](#supported-command-line-arguments)
-* [Options File Values](#options-file-values)
-  * [Example Options File](#example-options-file)
-* [Default Values](#default-values)
-  * [Beaker Default Values](#beaker-default-values)
-* [Priority of Settings](#priority-of-settings)
-
+- [Environment Variables](#environment-variables)
+- [Host/Config File Options](#host-file-options)
+- [ARGV](#argv-or-provided-arguments-array)
+  - [Supported Command Line Arguments](#supported-command-line-arguments)
+- [Options File Values](#options-file-values)
+  - [Example Options File](#example-options-file)
+- [Default Values](#default-values)
+  - [Beaker Default Values](#beaker-default-values)
+- [Priority of Settings](#priority-of-settings)
 
 ## Environment Variables
+
 ### Supported Environment Variables:
+
 ```
         BEAKER VARIABLE NAME  => ENVIRONMENT VARIABLE NAME
         :home                 => 'HOME',
@@ -38,8 +39,11 @@ Beaker uses arguments and settings from a variety of sources to determine how yo
         :tag_excludes         => ['BEAKER_EXCLUDE_TAG'],
         :run_in_parallel      => ['BEAKER_RUN_IN_PARALLEL'],
 ```
+
 ## Host File Options
+
 Any values included for an individual host in a host file.
+
 ```
 HOSTS:
   pe-ubuntu-lucid:
@@ -53,9 +57,11 @@ HOSTS:
     snapshot : clean-w-keys
     hypervisor : fusion
 ```
-`roles`, `vmname`, `platform`, `snapshot` and `hypervisor` are all options set for the host `pe-ubuntu-lucid`.  Any additional values can be included on a per-host basis by adding arbitrary key-value pairs.
+
+`roles`, `vmname`, `platform`, `snapshot` and `hypervisor` are all options set for the host `pe-ubuntu-lucid`. Any additional values can be included on a per-host basis by adding arbitrary key-value pairs.
 
 ## `CONFIG` section of Hosts File
+
 ```
 HOSTS:
   pe-ubuntu-lucid:
@@ -73,15 +79,19 @@ CONFIG:
   consoleport: 443
   pe_dir: http://path/to/pe/builds
 ```
-`nfs_server`, `consoleport`, `pe_dir` are examples of `CONFIG` section arguments.  The values of these will be rolled up into each host defined, thus `host[pe_dir]` is valid.
+
+`nfs_server`, `consoleport`, `pe_dir` are examples of `CONFIG` section arguments. The values of these will be rolled up into each host defined, thus `host[pe_dir]` is valid.
 
 ## ARGV or Provided Arguments Array
+
 ```
 $ beaker --debug --tests acceptance/tests/base/host.rb --hosts configs/fusion/winfusion.cfg
 ```
+
 `--debug`, `--tests acceptance/tests/base/host.rb` and `--hosts configs/fusion/winfusion.cfg` are the provided command line values for this test run.
 
 ### Supported Command Line Arguments:
+
 ```
 $ beaker --help
 Usage: beaker [options...]
@@ -164,12 +174,15 @@ Usage: beaker [options...]
 ```
 
 ## Options File Values
+
 ```
 $ beaker --options-file additional_options.rb
 ```
-The additional options file is provided with `--options-file /path/to/file.rb`.  The file itself must contain a properly formatted Ruby hash.  You can override any beaker internal option variable in the options file hash, but you have to associate the new value with the correct, internal key name.
+
+The additional options file is provided with `--options-file /path/to/file.rb`. The file itself must contain a properly formatted Ruby hash. You can override any beaker internal option variable in the options file hash, but you have to associate the new value with the correct, internal key name.
 
 ### Example Options File
+
 ```
 {
   :hosts_file => 'hosts.cfg',
@@ -188,9 +201,13 @@ The additional options file is provided with `--options-file /path/to/file.rb`. 
   'xml' => true,
 }
 ```
+
 ## Default Values
+
 Values already included in Beaker as defaults for required arguments.
+
 ### Beaker Default Values
+
 ```
 {
           :project                => 'Beaker',
@@ -279,17 +296,21 @@ Values already included in Beaker as defaults for required arguments.
 ```
 
 ## Priority of Settings
+
 Order of priority is as follows (from highest to lowest):
-  1. Environment variables are given top priority
-  1. Host/Config file options
-  1. `CONFIG` section of the hosts file
-  1. ARGV or Provided Arguments Array
-  1. Options file values
-  1. Default or Preset values are given the lowest priority
+
+1. Environment variables are given top priority
+1. Host/Config file options
+1. `CONFIG` section of the hosts file
+1. ARGV or Provided Arguments Array
+1. Options file values
+1. Default or Preset values are given the lowest priority
 
 ### Examples
-  1.  If `BEAKER_PE_DIR` environment variable then any and all `pe_dir` settings in the host file, options file and beaker defaults are ignored
-  1.  In this case, the `pe_dir` for `pe-ubuntu-lucid` will be `http://ubuntu/path`, while the `pe_dir` for `pe-centos6` will be `https://CONFIG/path`.
+
+1.  If `BEAKER_PE_DIR` environment variable then any and all `pe_dir` settings in the host file, options file and beaker defaults are ignored
+1.  In this case, the `pe_dir` for `pe-ubuntu-lucid` will be `http://ubuntu/path`, while the `pe_dir` for `pe-centos6` will be `https://CONFIG/path`.
+
 ```
 HOSTS:
   pe-ubuntu-lucid:

@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-import {BaseElement} from './base-element';
-import {upgradeOrRegisterElement} from './custom-element';
-
+import { BaseElement } from "./base-element";
+import { upgradeOrRegisterElement } from "./custom-element";
 
 /**
  * Registers an extended element. This function should typically be called

@@ -5,13 +5,12 @@ slug: sift
 status: publish
 title: "SIFT: Scale Invariant Feature Transform"
 categories:
-- doc
+  - doc
 ---
 
 [Library Reference: ccv_sift.c](/lib/ccv-sift/)
 
-What's SIFT?
-------------
+## What's SIFT?
 
 SIFT paper refers to:
 Distinctive Image Features from Scale-Invariant Keypoints, David G. Lowe
@@ -19,18 +18,17 @@ Distinctive Image Features from Scale-Invariant Keypoints, David G. Lowe
 The current implementation in ccv was largely influenced by VLFeat:
 http://www.vlfeat.org/
 
-How to run the sample program?
-------------------------------
+## How to run the sample program?
 
 There is a sample program under bin/siftmatch that at your disposal, to run it,
 just simply type:
 
-	./siftmatch ../samples/book.png ../samples/scene.png
+    ./siftmatch ../samples/book.png ../samples/scene.png
 
 The output may not be most interesting thing for you, want to see some images?
 There is siftdraw.rb script to do that, pipe the command:
 
-	./siftmatch ../samples/book.png ../samples/scene.png | ./siftdraw.rb ../samples/book.png ../samples/scene.png output.png
+    ./siftmatch ../samples/book.png ../samples/scene.png | ./siftdraw.rb ../samples/book.png ../samples/scene.png output.png
 
 Check out output.png, there are interesting lines between the book and the scene.
 
@@ -40,7 +38,7 @@ requires levmar program (http://www.ics.forth.gr/~lourakis/levmar/) as well.
 compile homest until you get the homest_demo binary somewhere, and pipe the command
 like this:
 
-	./siftmatch ../samples/book.png ../samples/scene.png | ./siftdraw.rb ../samples/book.png ../samples/scene.png output.png <directory to homest>/homest_demo
+    ./siftmatch ../samples/book.png ../samples/scene.png | ./siftdraw.rb ../samples/book.png ../samples/scene.png output.png <directory to homest>/homest_demo
 
 You see, somehow, SIFT recognized the book in the scene, amazing, ah?
 

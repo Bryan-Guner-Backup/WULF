@@ -1,26 +1,22 @@
-SWT: Stroke Width Transform
-===========================
+# SWT: Stroke Width Transform
 
-*(This documentation is still largely work in progress, use with caution)*
+_(This documentation is still largely work in progress, use with caution)_
 
-What's SWT?
------------
+## What's SWT?
 
 The original paper refers to: Stroke Width Transform, Boris Epshtein, Yonathan Wexler, and Eyal Ofek 2010.
 
-How it works?
--------------
+## How it works?
 
 It is a long story, as always, please read their paper. SWT tries to capture the only text
 effective features and using geometric signature of text to filter out non-text areas. As a
 result, SWT gives you reliable text regions that is language neutral. Try it yourself:
 
-	./swtdetect <Your Image contains Text> | ./swtdraw.rb <Your Image contains Text> output.png
+    ./swtdetect <Your Image contains Text> | ./swtdraw.rb <Your Image contains Text> output.png
 
 Checkout output.png, luckily, the text area is labeled.
 
-What about performance?
------------------------
+## What about performance?
 
 SWT is quite fast. The SWT without scale-invariant support (multi-scale) can run on a 640x480
 photo for well under 50 milliseconds on my laptop. By extending SWT to multi-scale, the accuracy
@@ -39,7 +35,7 @@ dataset](http://robustreading.opendfki.de/wiki/SceneText), more meaningful compa
 With ccv's scale-invariant SWT implementation, and do parameter search on ICDAR 2011's training
 dataset, I was able to achieve:
 
-	precision: 59% recall: 61% harmonic mean: 60%
+    precision: 59% recall: 61% harmonic mean: 60%
 
 Which would rank around 2nd to 3rd place in the chart. Please note that other methods in comparison
 are language specific, thus, were trained with additional character shape information using
@@ -47,5 +43,4 @@ SVM or Adaboost where as SWT is language neutral and doesn't use any language sp
 
 Speed-wise:
 
-How can I adopt SWT for my application?
----------------------------------------
+## How can I adopt SWT for my application?

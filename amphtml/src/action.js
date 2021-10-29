@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-import {log} from './log';
-import {platform} from './platform';
-import {timer} from './timer';
+import { log } from "./log";
+import { platform } from "./platform";
+import { timer } from "./timer";
 
 /** @const {string} */
-const TAG_ = 'Action';
+const TAG_ = "Action";
 
 /** @const {string} */
-const ACTION_MAP_ = '__AMP_ACTION_MAP__' + Math.random();
+const ACTION_MAP_ = "__AMP_ACTION_MAP__" + Math.random();
 
 /** @const {string} */
-const DEFAULT_METHOD_ = 'activate';
-
+const DEFAULT_METHOD_ = "activate";
 
 /**
  * @typedef {{
@@ -36,8 +35,7 @@ const DEFAULT_METHOD_ = 'activate';
  *   str: string
  * }}
  */
-class ActionInfo_ {};
-
+class ActionInfo_ {}
 
 /**
  * The structure that contains all details of the action method invocation.
@@ -64,8 +62,6 @@ class ActionInvocation {
   }
 }
 
-
-
 /**
  * TODO(dvoytenko): consider splitting this class into two:
  * 1. A class that has a method "trigger(element, eventType, data)" and
@@ -74,7 +70,6 @@ class ActionInvocation {
  *    simply calls action.trigger.
  */
 export class Action {
-
   /**
    * @param {!Window} win
    */
@@ -89,12 +84,12 @@ export class Action {
    * registered with Action instead, e.g. "doubletap", "tap to zoom".
    */
   addEvent(name) {
-    if (name == 'tap') {
+    if (name == "tap") {
       // TODO(dvoytenko): if needed, also configure touch-based tap, e.g. for
       // fast-click.
-      this.win.document.addEventListener('click', (event) => {
+      this.win.document.addEventListener("click", (event) => {
         if (!event.defaultPrevented) {
-          this.trigger(event.target, 'tap', event);
+          this.trigger(event.target, "tap", event);
         }
       });
     }
@@ -136,12 +131,17 @@ export class Action {
 
     let target = document.getElementById(action.actionInfo.target);
     if (!target) {
-      this.actionInfoError_('target not found', action.actionInfo, target);
+      this.actionInfoError_("target not found", action.actionInfo, target);
       return;
     }
 
-    this.invoke_(target, action.actionInfo.method,
-        action.node, event, action.actionInfo);
+    this.invoke_(
+      target,
+      action.actionInfo.method,
+      action.node,
+      event,
+      action.actionInfo
+    );
   }
 
   /**
@@ -153,9 +153,12 @@ export class Action {
    */
   actionInfoError_(s, actionInfo, target) {
     // Method not found "activate" on ' + target
-    throw new Error('Action Error: ' + s +
-        (actionInfo ? ' in [' + actionInfo.str + ']' : '') +
-        (target ? ' on [' + target + ']' : ''));
+    throw new Error(
+      "Action Error: " +
+        s +
+        (actionInfo ? " in [" + actionInfo.str + "]" : "") +
+        (target ? " on [" + target + "]" : "")
+    );
   }
 
   /**
@@ -171,17 +174,24 @@ export class Action {
     // TODO(dvoytenko): implement common method handlers, e.g. "toggleClass"
 
     // Only amp elements are allowed to proceed further.
-    if (target.tagName.toLowerCase().substring(0, 4) != 'amp-') {
-      this.actionInfoError_('Target must be an AMP element', actionInfo,
-          target);
+    if (target.tagName.toLowerCase().substring(0, 4) != "amp-") {
+      this.actionInfoError_(
+        "Target must be an AMP element",
+        actionInfo,
+        target
+      );
       return;
     }
 
     if (!target.enqueAction) {
-      this.actionInfoError_('Unrecognized AMP element "' +
-          target.tagName.toLowerCase() + '". ' +
-          'Did you forget to include it via <script custom-element>?',
-          actionInfo, target);
+      this.actionInfoError_(
+        'Unrecognized AMP element "' +
+          target.tagName.toLowerCase() +
+          '". ' +
+          "Did you forget to include it via <script custom-element>?",
+        actionInfo,
+        target
+      );
       return;
     }
 
@@ -200,7 +210,7 @@ export class Action {
     while (n) {
       actionInfo = this.matchActionInfo_(n, actionEventType);
       if (actionInfo) {
-        return {node: n, actionInfo: actionInfo};
+        return { node: n, actionInfo: actionInfo };
       }
       n = n.parentElement;
     }
@@ -228,8 +238,8 @@ export class Action {
     let actionMap = node[ACTION_MAP_];
     if (actionMap === undefined) {
       actionMap = null;
-      if (node.hasAttribute('on')) {
-        actionMap = this.parseActionMap_(node.getAttribute('on'));
+      if (node.hasAttribute("on")) {
+        actionMap = this.parseActionMap_(node.getAttribute("on"));
       }
       node[ACTION_MAP_] = actionMap;
     }
@@ -242,7 +252,7 @@ export class Action {
    */
   parseActionMap_(s) {
     let actionMap = null;
-    let actions = s.split(';');
+    let actions = s.split(";");
     if (actions && actions.length > 0) {
       for (let i = 0; i < actions.length; i++) {
         let actionStr = actions[i];
@@ -268,22 +278,24 @@ export class Action {
       return null;
     }
 
-    let eventSep = s.indexOf(':');
-    let methodSep = s.indexOf('.', eventSep + 1);
-    let event = (eventSep != -1 ? s.substring(0, eventSep) : '').toLowerCase().
-        trim() || null;
-    let target = s.substring(eventSep + 1, methodSep != -1 ? methodSep :
-        s.length).trim();
-    let method = (methodSep != -1 ? s.substring(methodSep + 1) : '').
-        trim() || DEFAULT_METHOD_;
+    let eventSep = s.indexOf(":");
+    let methodSep = s.indexOf(".", eventSep + 1);
+    let event =
+      (eventSep != -1 ? s.substring(0, eventSep) : "").toLowerCase().trim() ||
+      null;
+    let target = s
+      .substring(eventSep + 1, methodSep != -1 ? methodSep : s.length)
+      .trim();
+    let method =
+      (methodSep != -1 ? s.substring(methodSep + 1) : "").trim() ||
+      DEFAULT_METHOD_;
 
     if (!event || !target) {
-      log.error(TAG_, 'invalid action definition: ' + s);
+      log.error(TAG_, "invalid action definition: " + s);
       return null;
     }
-    return {event: event, target: target, method: method, str: s};
+    return { event: event, target: target, method: method, str: s };
   }
-};
-
+}
 
 export const action = new Action(window);

@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-
-import {getIframe, listen} from '../../../src/3p-frame';
-import {isLayoutSizeDefined} from '../../../src/layout';
-import {loadPromise} from '../../../src/event-helper';
-
+import { getIframe, listen } from "../../../src/3p-frame";
+import { isLayoutSizeDefined } from "../../../src/layout";
+import { loadPromise } from "../../../src/event-helper";
 
 class AmpTwitter extends AMP.BaseElement {
   /** @override */
   createdCallback() {
     // This domain serves the actual tweets as JSONP.
-    this.preconnect.url('https://syndication.twitter.com');
+    this.preconnect.url("https://syndication.twitter.com");
     // Hosts the script that renders tweets.
-    this.preconnect.url('https://platform.twitter.com');
+    this.preconnect.url("https://platform.twitter.com");
     this.preconnect.threePFrame();
   }
 
@@ -38,21 +36,24 @@ class AmpTwitter extends AMP.BaseElement {
   /** @override */
   layoutCallback() {
     // TODO(malteubl): Preconnect to twitter.
-    var iframe = getIframe(this.element.ownerDocument.defaultView,
-        this.element, 'twitter');
+    var iframe = getIframe(
+      this.element.ownerDocument.defaultView,
+      this.element,
+      "twitter"
+    );
     this.applyFillContent(iframe);
     this.element.appendChild(iframe);
     // Triggered by context.updateDimensions() inside the iframe.
-    listen(iframe, 'embed-size', (data) => {
+    listen(iframe, "embed-size", (data) => {
       iframe.height = data.height;
       iframe.width = data.width;
       var amp = iframe.parentElement;
-      amp.setAttribute('height', data.height);
-      amp.setAttribute('width', data.width);
+      amp.setAttribute("height", data.height);
+      amp.setAttribute("width", data.width);
       this.changeHeight(data.height);
     });
     return loadPromise(iframe);
   }
-};
+}
 
-AMP.registerElement('amp-twitter', AmpTwitter);
+AMP.registerElement("amp-twitter", AmpTwitter);

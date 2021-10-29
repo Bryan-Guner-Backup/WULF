@@ -1,17 +1,17 @@
-'use strict'
+"use strict";
 
-var bsv = require('../../')
-var BN = bsv.crypto.BN
-var unorm = require('unorm')
-var _ = bsv.deps._
+var bsv = require("../../");
+var BN = bsv.crypto.BN;
+var unorm = require("unorm");
+var _ = bsv.deps._;
 
-var pbkdf2 = require('./pbkdf2')
-var errors = require('./errors')
+var pbkdf2 = require("./pbkdf2");
+var errors = require("./errors");
 
-var Hash = bsv.crypto.Hash
-var Random = bsv.crypto.Random
+var Hash = bsv.crypto.Hash;
+var Random = bsv.crypto.Random;
 
-var $ = bsv.util.preconditions
+var $ = bsv.util.preconditions;
 
 /**
  * This is an immutable class that represents a BIP39 Mnemonic code.
@@ -36,68 +36,74 @@ var $ = bsv.util.preconditions
  */
 var Mnemonic = function (data, wordlist) {
   if (!(this instanceof Mnemonic)) {
-    return new Mnemonic(data, wordlist)
+    return new Mnemonic(data, wordlist);
   }
 
   if (_.isArray(data)) {
-    wordlist = data
-    data = null
+    wordlist = data;
+    data = null;
   }
 
   // handle data overloading
-  var ent, phrase, seed
+  var ent, phrase, seed;
   if (Buffer.isBuffer(data)) {
-    seed = data
+    seed = data;
   } else if (_.isString(data)) {
-    phrase = unorm.nfkd(data)
+    phrase = unorm.nfkd(data);
   } else if (_.isNumber(data)) {
-    ent = data
+    ent = data;
   } else if (data) {
-    throw new bsv.errors.InvalidArgument('data', 'Must be a Buffer, a string or an integer')
+    throw new bsv.errors.InvalidArgument(
+      "data",
+      "Must be a Buffer, a string or an integer"
+    );
   }
-  ent = ent || 128
+  ent = ent || 128;
 
   // check and detect wordlist
-  wordlist = wordlist || Mnemonic._getDictionary(phrase)
+  wordlist = wordlist || Mnemonic._getDictionary(phrase);
   if (phrase && !wordlist) {
-    throw new errors.UnknownWordlist(phrase)
+    throw new errors.UnknownWordlist(phrase);
   }
-  wordlist = wordlist || Mnemonic.Words.ENGLISH
+  wordlist = wordlist || Mnemonic.Words.ENGLISH;
 
   if (seed) {
-    phrase = Mnemonic._entropy2mnemonic(seed, wordlist)
+    phrase = Mnemonic._entropy2mnemonic(seed, wordlist);
   }
 
   // validate phrase and ent
   if (phrase && !Mnemonic.isValid(phrase, wordlist)) {
-    throw new errors.InvalidMnemonic(phrase)
+    throw new errors.InvalidMnemonic(phrase);
   }
   if (ent % 32 !== 0 || ent < 128) {
-    throw new bsv.errors.InvalidArgument('ENT', 'Values must be ENT > 128 and ENT % 32 == 0')
+    throw new bsv.errors.InvalidArgument(
+      "ENT",
+      "Values must be ENT > 128 and ENT % 32 == 0"
+    );
   }
 
-  phrase = phrase || Mnemonic._mnemonic(ent, wordlist)
+  phrase = phrase || Mnemonic._mnemonic(ent, wordlist);
 
-  Object.defineProperty(this, 'wordlist', {
+  Object.defineProperty(this, "wordlist", {
     configurable: false,
-    value: wordlist
-  })
+    value: wordlist,
+  });
 
-  Object.defineProperty(this, 'phrase', {
+  Object.defineProperty(this, "phrase", {
     configurable: false,
-    value: phrase
-  })
-}
+    value: phrase,
+  });
+};
 
 Mnemonic.fromRandom = function (wordlist = Mnemonic.Words.ENGLISH) {
-  return new Mnemonic(wordlist)
-}
+  return new Mnemonic(wordlist);
+};
 
 Mnemonic.fromString = function (mnemonic, wordlist = Mnemonic.Words.ENGLISH) {
-  return new Mnemonic(mnemonic, wordlist)
-}
+  return new Mnemonic(mnemonic, wordlist);
+};
 
-Mnemonic.Words = require('./words')
+Mnemonic.Words = require("./words");
 
 /**
  * Will return a boolean if the mnemonic is valid
@@ -112,31 +118,31 @@ Mnemonic.Words = require('./words')
  * @returns {boolean}
  */
 Mnemonic.isValid = function (mnemonic, wordlist) {
-  mnemonic = unorm.nfkd(mnemonic)
-  wordlist = wordlist || Mnemonic._getDictionary(mnemonic)
+  mnemonic = unorm.nfkd(mnemonic);
+  wordlist = wordlist || Mnemonic._getDictionary(mnemonic);
 
   if (!wordlist) {
-    return false
+    return false;
   }
 
-  var words = mnemonic.split(' ')
-  var bin = ''
+  var words = mnemonic.split(" ");
+  var bin = "";
   for (var i = 0; i < words.length; i++) {
-    var ind = wordlist.indexOf(words[i])
-    if (ind < 0) return false
-    bin = bin + ('00000000000' + ind.toString(2)).slice(-11)
+    var ind = wordlist.indexOf(words[i]);
+    if (ind < 0) return false;
+    bin = bin + ("00000000000" + ind.toString(2)).slice(-11);
   }
 
-  var cs = bin.length / 33
-  var hashBits = bin.slice(-cs)
-  var nonhashBits = bin.slice(0, bin.length - cs)
-  var buf = Buffer.alloc(nonhashBits.length / 8)
+  var cs = bin.length / 33;
+  var hashBits = bin.slice(-cs);
+  var nonhashBits = bin.slice(0, bin.length - cs);
+  var buf = Buffer.alloc(nonhashBits.length / 8);
   for (i = 0; i < nonhashBits.length / 8; i++) {
-    buf.writeUInt8(parseInt(bin.slice(i * 8, (i + 1) * 8), 2), i)
+    buf.writeUInt8(parseInt(bin.slice(i * 8, (i + 1) * 8), 2), i);
   }
-  var expectedHashBits = Mnemonic._entropyChecksum(buf)
-  return expectedHashBits === hashBits
-}
+  var expectedHashBits = Mnemonic._entropyChecksum(buf);
+  return expectedHashBits === hashBits;
+};
 
 /**
  * Internal function to check if a mnemonic belongs to a wordlist.
@@ -146,13 +152,13 @@ Mnemonic.isValid = function (mnemonic, wordlist) {
  * @returns {boolean}
  */
 Mnemonic._belongsToWordlist = function (mnemonic, wordlist) {
-  var words = unorm.nfkd(mnemonic).split(' ')
+  var words = unorm.nfkd(mnemonic).split(" ");
   for (var i = 0; i < words.length; i++) {
-    var ind = wordlist.indexOf(words[i])
-    if (ind < 0) return false
+    var ind = wordlist.indexOf(words[i]);
+    if (ind < 0) return false;
   }
-  return true
-}
+  return true;
+};
 
 /**
  * Internal function to detect the wordlist used to generate the mnemonic.
@@ -161,17 +167,17 @@ Mnemonic._belongsToWordlist = function (mnemonic, wordlist) {
  * @returns {Array} the wordlist or null
  */
 Mnemonic._getDictionary = function (mnemonic) {
-  if (!mnemonic) return null
+  if (!mnemonic) return null;
 
-  var dicts = Object.keys(Mnemonic.Words)
+  var dicts = Object.keys(Mnemonic.Words);
   for (var i = 0; i < dicts.length; i++) {
-    var key = dicts[i]
+    var key = dicts[i];
     if (Mnemonic._belongsToWordlist(mnemonic, Mnemonic.Words[key])) {
-      return Mnemonic.Words[key]
+      return Mnemonic.Words[key];
     }
   }
-  return null
-}
+  return null;
+};
 
 /**
  * Will generate a seed based on the mnemonic and optional passphrase. Note that
@@ -183,9 +189,14 @@ Mnemonic._getDictionary = function (mnemonic) {
  * @returns {Buffer}
  */
 Mnemonic.prototype.toSeed = function (passphrase) {
-  passphrase = passphrase || ''
-  return pbkdf2(unorm.nfkd(this.phrase), unorm.nfkd('mnemonic' + passphrase), 2048, 64)
-}
+  passphrase = passphrase || "";
+  return pbkdf2(
+    unorm.nfkd(this.phrase),
+    unorm.nfkd("mnemonic" + passphrase),
+    2048,
+    64
+  );
+};
 
 /**
  * Will generate a Mnemonic object based on a seed.
@@ -195,10 +206,13 @@ Mnemonic.prototype.toSeed = function (passphrase) {
  * @returns {Mnemonic}
  */
 Mnemonic.fromSeed = function (seed, wordlist) {
-  $.checkArgument(Buffer.isBuffer(seed), 'seed must be a Buffer.')
-  $.checkArgument(_.isArray(wordlist) || _.isString(wordlist), 'wordlist must be a string or an array.')
-  return new Mnemonic(seed, wordlist)
-}
+  $.checkArgument(Buffer.isBuffer(seed), "seed must be a Buffer.");
+  $.checkArgument(
+    _.isArray(wordlist) || _.isString(wordlist),
+    "wordlist must be a string or an array."
+  );
+  return new Mnemonic(seed, wordlist);
+};
 
 /**
  *
@@ -210,9 +224,9 @@ Mnemonic.fromSeed = function (seed, wordlist) {
  * @returns {HDPrivateKey}
  */
 Mnemonic.prototype.toHDPrivateKey = function (passphrase, network) {
-  var seed = this.toSeed(passphrase)
-  return bsv.HDPrivateKey.fromSeed(seed, network)
-}
+  var seed = this.toSeed(passphrase);
+  return bsv.HDPrivateKey.fromSeed(seed, network);
+};
 
 /**
  * Will return a the string representation of the mnemonic
@@ -220,8 +234,8 @@ Mnemonic.prototype.toHDPrivateKey = function (passphrase, network) {
  * @returns {String} Mnemonic
  */
 Mnemonic.prototype.toString = function () {
-  return this.phrase
-}
+  return this.phrase;
+};
 
 /**
  * Will return a string formatted for the console
@@ -229,8 +243,8 @@ Mnemonic.prototype.toString = function () {
  * @returns {String} Mnemonic
  */
 Mnemonic.prototype.inspect = function () {
-  return '<Mnemonic: ' + this.toString() + ' >'
-}
+  return "<Mnemonic: " + this.toString() + " >";
+};
 
 /**
  * Internal function to generate a random mnemonic
@@ -240,9 +254,9 @@ Mnemonic.prototype.inspect = function () {
  * @returns {String} Mnemonic string
  */
 Mnemonic._mnemonic = function (ENT, wordlist) {
-  var buf = Random.getRandomBuffer(ENT / 8)
-  return Mnemonic._entropy2mnemonic(buf, wordlist)
-}
+  var buf = Random.getRandomBuffer(ENT / 8);
+  return Mnemonic._entropy2mnemonic(buf, wordlist);
+};
 
 /**
  * Internal function to generate mnemonic based on entropy
@@ -252,28 +266,28 @@ Mnemonic._mnemonic = function (ENT, wordlist) {
  * @returns {String} Mnemonic string
  */
 Mnemonic._entropy2mnemonic = function (entropy, wordlist) {
-  var bin = ''
+  var bin = "";
   for (var i = 0; i < entropy.length; i++) {
-    bin = bin + ('00000000' + entropy[i].toString(2)).slice(-8)
+    bin = bin + ("00000000" + entropy[i].toString(2)).slice(-8);
   }
 
-  bin = bin + Mnemonic._entropyChecksum(entropy)
+  bin = bin + Mnemonic._entropyChecksum(entropy);
   if (bin.length % 11 !== 0) {
-    throw new errors.InvalidEntropy(bin)
+    throw new errors.InvalidEntropy(bin);
   }
-  var mnemonic = []
+  var mnemonic = [];
   for (i = 0; i < bin.length / 11; i++) {
-    var wi = parseInt(bin.slice(i * 11, (i + 1) * 11), 2)
-    mnemonic.push(wordlist[wi])
+    var wi = parseInt(bin.slice(i * 11, (i + 1) * 11), 2);
+    mnemonic.push(wordlist[wi]);
   }
-  var ret
+  var ret;
   if (wordlist === Mnemonic.Words.JAPANESE) {
-    ret = mnemonic.join('\u3000')
+    ret = mnemonic.join("\u3000");
   } else {
-    ret = mnemonic.join(' ')
+    ret = mnemonic.join(" ");
   }
-  return ret
-}
+  return ret;
+};
 
 /**
  * Internal function to create checksum of entropy
@@ -283,22 +297,22 @@ Mnemonic._entropy2mnemonic = function (entropy, wordlist) {
  * @private
  */
 Mnemonic._entropyChecksum = function (entropy) {
-  var hash = Hash.sha256(entropy)
-  var bits = entropy.length * 8
-  var cs = bits / 32
+  var hash = Hash.sha256(entropy);
+  var bits = entropy.length * 8;
+  var cs = bits / 32;
 
-  var hashbits = new BN(hash.toString('hex'), 16).toString(2)
+  var hashbits = new BN(hash.toString("hex"), 16).toString(2);
 
   // zero pad the hash bits
   while (hashbits.length % 256 !== 0) {
-    hashbits = '0' + hashbits
+    hashbits = "0" + hashbits;
   }
 
-  var checksum = hashbits.slice(0, cs)
+  var checksum = hashbits.slice(0, cs);
 
-  return checksum
-}
+  return checksum;
+};
 
-Mnemonic.bsv = bsv
+Mnemonic.bsv = bsv;
 
-module.exports = Mnemonic
+module.exports = Mnemonic;

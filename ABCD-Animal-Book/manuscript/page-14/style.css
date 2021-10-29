@@ -44,8 +44,8 @@ body {
   -webkit-transform: rotate(-45deg);
   -moz-transform: rotate(-45deg);
   transform: rotate(-45deg);
-  background: #2391B2;
-  margin: 21.5vw 21.5vw
+  background: #2391b2;
+  margin: 21.5vw 21.5vw;
 }
 
 .ojo {
@@ -54,7 +54,7 @@ body {
   height: 9vw;
   border-radius: 100vw;
   background: white;
-  margin: 30.5vw 30vw
+  margin: 30.5vw 30vw;
 }
 
 .iris {
@@ -63,7 +63,7 @@ body {
   height: 5vw;
   border-radius: 100vw;
   background: black;
-  margin: 1vw .5vw
+  margin: 1vw 0.5vw;
 }
 
 .iris::before {
@@ -81,11 +81,11 @@ body {
   width: 9vw;
   height: 8vw;
   border-radius: 100%;
-  background: #2391B2;
+  background: #2391b2;
   -webkit-transform: rotate(21deg);
   -moz-transform: rotate(21deg);
   transform: rotate(21deg);
-  margin: 37vw 17.5vw
+  margin: 37vw 17.5vw;
 }
 
 .boca::before {
@@ -94,11 +94,11 @@ body {
   width: 9vw;
   height: 8vw;
   border-radius: 100%;
-  background: #2391B2;
+  background: #2391b2;
   -webkit-transform: rotate(-42deg);
   -moz-transform: rotate(-42deg);
   transform: rotate(-42deg);
-  margin: 5vw 2.1vw
+  margin: 5vw 2.1vw;
 }
 
 .aleta {
@@ -106,12 +106,12 @@ body {
   width: 25vw;
   height: 27vw;
   border-radius: 30vw 600vw;
-  background: #FF2193;
-  opacity: .7;
+  background: #ff2193;
+  opacity: 0.7;
   -webkit-transform: rotate(-70deg);
   -moz-transform: rotate(-70deg);
   transform: rotate(-70deg);
-  margin: 6vw 33vw
+  margin: 6vw 33vw;
 }
 
 .aleta3 {
@@ -119,12 +119,12 @@ body {
   width: 22vw;
   height: 25vw;
   border-radius: 30vw 600vw;
-  background: #FF2193;
-  opacity: .7;
+  background: #ff2193;
+  opacity: 0.7;
   -webkit-transform: rotate(-55deg);
   -moz-transform: rotate(-55deg);
   transform: rotate(-55deg);
-  margin: 10.2vw 39vw
+  margin: 10.2vw 39vw;
 }
 
 .aleta4 {
@@ -132,12 +132,12 @@ body {
   width: 19vw;
   height: 25vw;
   border-radius: 30vw 600vw;
-  background: #FF2193;
-  opacity: .7;
+  background: #ff2193;
+  opacity: 0.7;
   -webkit-transform: rotate(-65deg);
   -moz-transform: rotate(-65deg);
   transform: rotate(-65deg);
-  margin: 16vw 43vw
+  margin: 16vw 43vw;
 }
 
 .aleta7 {
@@ -145,8 +145,8 @@ body {
   width: 16vw;
   height: 16vw;
   border-radius: 30vw 600vw;
-  background: #FF2193;
-  opacity: .7;
+  background: #ff2193;
+  opacity: 0.7;
   -webkit-transform: rotate(12deg);
   -moz-transform: rotate(12deg);
   transform: rotate(12deg);
@@ -161,8 +161,8 @@ body {
   width: 16vw;
   height: 16vw;
   border-radius: 30vw 600vw;
-  background: #FF2193;
-  opacity: .7;
+  background: #ff2193;
+  opacity: 0.7;
   -webkit-transform: rotate(75deg);
   -moz-transform: rotate(75deg);
   transform: rotate(75deg);
@@ -177,8 +177,8 @@ body {
   width: 14vw;
   height: 14vw;
   border-radius: 30vw 600vw;
-  background: #FF2193;
-  opacity: .7;
+  background: #ff2193;
+  opacity: 0.7;
   -webkit-transform: rotate(90deg);
   -moz-transform: rotate(90deg);
   transform: rotate(90deg);
@@ -194,12 +194,12 @@ body {
   width: 14vw;
   height: 14vw;
   border-radius: 30vw 600vw;
-  background: #FF2193;
-  opacity: .7;
+  background: #ff2193;
+  opacity: 0.7;
   -webkit-transform: rotate(90deg);
   -moz-transform: rotate(90deg);
   transform: rotate(90deg);
-  margin: -.3vw 9vw
+  margin: -0.3vw 9vw;
 }
 
 @keyframes flota {

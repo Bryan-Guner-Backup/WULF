@@ -19,14 +19,11 @@
  * connection before the real request can be made.
  */
 
-
-import {getService} from './service';
-import {parseUrl} from './url';
-import {timer} from './timer';
-
+import { getService } from "./service";
+import { parseUrl } from "./url";
+import { timer } from "./timer";
 
 class Preconnect {
-
   /**
    * @param {!Window} win
    */
@@ -49,12 +46,12 @@ class Preconnect {
       return;
     }
     this.origins_[origin] = true;
-    var dns = document.createElement('link');
-    dns.setAttribute('rel', 'dns-prefetch');
-    dns.setAttribute('href', origin);
-    var preconnect = document.createElement('link');
-    preconnect.setAttribute('rel', 'preconnect');
-    preconnect.setAttribute('href', origin);
+    var dns = document.createElement("link");
+    dns.setAttribute("rel", "dns-prefetch");
+    dns.setAttribute("href", origin);
+    var preconnect = document.createElement("link");
+    preconnect.setAttribute("rel", "preconnect");
+    preconnect.setAttribute("href", origin);
     this.head_.appendChild(dns);
     this.head_.appendChild(preconnect);
 
@@ -66,7 +63,7 @@ class Preconnect {
   }
 
   threePFrame() {
-    this.url('https://3p.ampproject.net');
+    this.url("https://3p.ampproject.net");
   }
 }
 
@@ -75,7 +72,7 @@ class Preconnect {
  * @return {!Preconnect}
  */
 export function preconnectFor(window) {
-  return getService(window, 'preconnect', () => {
+  return getService(window, "preconnect", () => {
     return new Preconnect(window);
   });
-};
+}

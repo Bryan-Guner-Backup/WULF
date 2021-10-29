@@ -7,29 +7,14 @@
     "Patrick Stadler <patrick.stadler@gmail.com>"
   ],
   "description": "Multi-user XMPP web client",
-  "main": [
-    "candy.min.js"
-  ],
-  "keywords": [
-    "xmpp",
-    "muc",
-    "multi-user",
-    "websocket",
-    "bosh",
-    "chat"
-  ],
+  "main": ["candy.min.js"],
+  "keywords": ["xmpp", "muc", "multi-user", "websocket", "bosh", "chat"],
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/candy-chat/candy.git"
   },
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
+  "ignore": ["**/.*", "node_modules", "bower_components", "test", "tests"],
   "dependencies": {
     "jquery": "~1.10.2",
     "strophe": "1.1.3",

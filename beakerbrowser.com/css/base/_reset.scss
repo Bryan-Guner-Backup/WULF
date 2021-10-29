@@ -4,14 +4,22 @@
   box-sizing: border-box;
 }
 
-html, body { height: 100%; }
+html,
+body {
+  height: 100%;
+}
 
 a {
   color: inherit;
   text-decoration: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin-bottom: 1.5em;
   font-weight: 500;
 }
@@ -22,7 +30,6 @@ h3,
 h4,
 h5,
 h6 {
-
   code,
   pre {
     font-size: inherit;
@@ -34,5 +41,5 @@ img {
 }
 
 figcaption code {
-  font-size: .8rem;
+  font-size: 0.8rem;
 }

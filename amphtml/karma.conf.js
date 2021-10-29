@@ -17,34 +17,33 @@
 /**
  * @param {!Object} config
  */
-module.exports = function(config) {
-
+module.exports = function (config) {
   var configuration = {
     frameworks: [
-      'fixture',
-      'browserify',
-      'mocha',
-      'chai-as-promised',
-      'sinon-chai',
-      'chai',
+      "fixture",
+      "browserify",
+      "mocha",
+      "chai-as-promised",
+      "sinon-chai",
+      "chai",
     ],
 
     preprocessors: {
-      'test/fixtures/*.html' : ['html2js'],
-      'src/**/*.js': ['browserify'],
-      'test/**/*.js': ['browserify'],
-      'extensions/**/test/**/*.js': ['browserify'],
-      'testing/**/*.js': ['browserify']
+      "test/fixtures/*.html": ["html2js"],
+      "src/**/*.js": ["browserify"],
+      "test/**/*.js": ["browserify"],
+      "extensions/**/test/**/*.js": ["browserify"],
+      "testing/**/*.js": ["browserify"],
     },
 
     browserify: {
       watch: true,
       debug: true,
-      transform: ['babelify'],
-      bundleDelay: 900
+      transform: ["babelify"],
+      bundleDelay: 900,
     },
 
-    reporters: ['progress'],
+    reporters: ["progress"],
 
     port: 9876,
 
@@ -54,27 +53,27 @@ module.exports = function(config) {
 
     autoWatch: true,
 
-    browsers: ['Chrome'],
+    browsers: ["Chrome"],
 
     customLaunchers: {
       /*eslint "google-camelcase/google-camelcase": 0*/
       Chrome_travis_ci: {
-        base: 'Chrome',
-        flags: ['--no-sandbox']
-      }
+        base: "Chrome",
+        flags: ["--no-sandbox"],
+      },
     },
 
     // change Karma's debug.html to the mocha web reporter
     client: {
       mocha: {
-        reporter: 'html'
+        reporter: "html",
       },
-      captureConsole: false
-    }
+      captureConsole: false,
+    },
   };
 
   if (process.env.TRAVIS) {
-    configuration.browsers = ['Chrome_travis_ci'];
+    configuration.browsers = ["Chrome_travis_ci"];
   }
 
   config.set(configuration);

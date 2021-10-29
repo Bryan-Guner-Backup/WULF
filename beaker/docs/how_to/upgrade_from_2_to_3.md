@@ -37,8 +37,8 @@ Starting in beaker 3.0, there is no explicit beaker-pe requirement in beaker. Th
 Luckily, if you do need it, this shouldn't be hard to update. These are the steps needed to use beaker-pe with beaker 3.0:
 
 1. put a dependency on beaker-pe in your Gemfile as a sibling to your beaker
-  requirement (make sure beaker-pe is >= 1.0)
+   requirement (make sure beaker-pe is >= 1.0)
 2. That's it! Beaker itself will still `require 'beaker-pe'`, so making sure that it is specified
-  in your project's Gemfile is the only code change you will need to make. Please note that this
-  is only supported with the `beaker-pe` gem; other beaker libraries will need an explicit `require`
-  in your test setup.
+   in your project's Gemfile is the only code change you will need to make. Please note that this
+   is only supported with the `beaker-pe` gem; other beaker libraries will need an explicit `require`
+   in your test setup.

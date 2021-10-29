@@ -15,10 +15,10 @@ You can read more about the APIs here: <a href="./dat.html">DatArchive</a>,
 
 ```js
 var archive = await DatArchive.create({
-  title: 'My Site',
-  description: 'Where I put my files'
-})
-console.log(archive.url)
+  title: "My Site",
+  description: "Where I put my files",
+});
+console.log(archive.url);
 // => dat://da2ce4..dc/
 ```
 
@@ -29,9 +29,9 @@ console.log(archive.url)
 ## Write a file
 
 ```js
-await archive.writeFile('/hello.txt', 'world')
-await archive.writeFile('/image.png', myArrayBuffer)
-await archive.writeFile('/image.png', myBase64, 'base64')
+await archive.writeFile("/hello.txt", "world");
+await archive.writeFile("/image.png", myArrayBuffer);
+await archive.writeFile("/image.png", myBase64, "base64");
 ```
 
 </section>
@@ -41,9 +41,9 @@ await archive.writeFile('/image.png', myBase64, 'base64')
 ## Read a file
 
 ```js
-var helloTxt = await archive.readFile('/hello.txt')
+var helloTxt = await archive.readFile("/hello.txt");
 // => String
-var imagePng = await archive.readFile('/image.png', 'binary')
+var imagePng = await archive.readFile("/image.png", "binary");
 // => ArrayBuffer
 ```
 
@@ -64,10 +64,10 @@ await archive.mkdir('/subdir'))
 ## List files
 
 ```js
-var files = await archive.readdir('/')
-console.log(files) // => ['index.html', 'js']
-var files = await archive.readdir('/', {recursive: true})
-console.log(files) // => ['index.html', 'js', 'js/index.js']
+var files = await archive.readdir("/");
+console.log(files); // => ['index.html', 'js']
+var files = await archive.readdir("/", { recursive: true });
+console.log(files); // => ['index.html', 'js', 'js/index.js']
 ```
 
 </section>
@@ -78,7 +78,7 @@ console.log(files) // => ['index.html', 'js', 'js/index.js']
 
 ```js
 try {
-  var st = await archive.stat('/foo.txt')
+  var st = await archive.stat("/foo.txt");
   // does exist
 } catch (e) {
   // does not exist
@@ -92,11 +92,11 @@ try {
 ## Get the last-modified time of a file
 
 The `ctime` is the file creation-time, and `mtime` is the last-modified time.
-Note: `ctime` and `mtime` can be edited by the file’s author and *may* be incorrect.
+Note: `ctime` and `mtime` can be edited by the file’s author and _may_ be incorrect.
 
 ```js
-var st = await archive.stat('/hello.txt')
-console.log(st)
+var st = await archive.stat("/hello.txt");
+console.log(st);
 /* => {
   ctime: 1477267871000,
   mtime: 1477267871000,
@@ -112,15 +112,15 @@ console.log(st)
 
 ```js
 // arraybuffer:
-var arrayBuf = await archive.readFile('/picture.png')
-var blob = new Blob([arrayBuf], {type: 'image/png'})
-var src = URL.createObjectURL(blob)
-document.querySelector('img').src = src
+var arrayBuf = await archive.readFile("/picture.png");
+var blob = new Blob([arrayBuf], { type: "image/png" });
+var src = URL.createObjectURL(blob);
+document.querySelector("img").src = src;
 
 // base64:
-var base64 = await archive.readFile(picUrl, 'base64')
-var src = 'data:image/png;base64,'+base64
-document.querySelector('img').src = src
+var base64 = await archive.readFile(picUrl, "base64");
+var src = "data:image/png;base64," + base64;
+document.querySelector("img").src = src;
 ```
 
 </section>
@@ -130,16 +130,16 @@ document.querySelector('img').src = src
 ## Write a binary file
 
 ```js
-var orgUrl = archive.url + '/picture.png'
-var res = await fetch(orgUrl)
+var orgUrl = archive.url + "/picture.png";
+var res = await fetch(orgUrl);
 
 // arraybuffer:
-var arrayBuf = await res.arrayBuffer()
-await archive.writeFile('/picture_copy.png', arrayBuf)
+var arrayBuf = await res.arrayBuffer();
+await archive.writeFile("/picture_copy.png", arrayBuf);
 
 // base64:
-var base64 = convertBufToBase64(arrayBuf)
-await archive.writeFile('/picture_copy.png', base64, 'base64')
+var base64 = convertBufToBase64(arrayBuf);
+await archive.writeFile("/picture_copy.png", base64, "base64");
 ```
 
 </section>
@@ -150,10 +150,10 @@ await archive.writeFile('/picture_copy.png', base64, 'base64')
 
 ```js
 var res = await navigator.permissions.request({
-  name: 'network',
-  hostname: 'github.com'
-})
-console.log(res.status)
+  name: "network",
+  hostname: "github.com",
+});
+console.log(res.status);
 // => 'granted'
 ```
 
@@ -165,10 +165,10 @@ console.log(res.status)
 
 ```js
 var res = await navigator.permissions.request({
-  name: 'network',
-  hostname: '*'
-})
-console.log(res.status)
+  name: "network",
+  hostname: "*",
+});
+console.log(res.status);
 // => 'granted'
 ```
 

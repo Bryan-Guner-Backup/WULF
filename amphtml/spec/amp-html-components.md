@@ -21,10 +21,10 @@ limitations under the License.
 The AMP runtime defines a small set of custom elements that can be used in any
 AMP file. These custom elements serve two primary purposes:
 
-* Enable the AMP runtime to manage the loading of external resources, which may
-slow down the initial render or cause jank.
-* Allow AMP authors to include functionality above and beyond standard HTML,
-while maintaining the security- and performance-minded requirement that no author-written JavaScript is executed.
+- Enable the AMP runtime to manage the loading of external resources, which may
+  slow down the initial render or cause jank.
+- Allow AMP authors to include functionality above and beyond standard HTML,
+  while maintaining the security- and performance-minded requirement that no author-written JavaScript is executed.
 
 The initial set of elements included in the AMP spec is purposefully minimal,
 to keep payload small. The AMP runtime also allows dynamic loading of additional
@@ -123,8 +123,6 @@ The height of the component. `width` and `height` attributes imply the aspect ra
 
 Defines the way the container is laid out. `layout=”responsive”` will let the container scale with the width of the parent container. `layout=”nodisplay”` indicates that the component should not be initially displayed by the runtime - for example, for an image that will appear in a lightbox when a trigger is tapped.
 
-
-
 ### Extended Components
 
 The AMP runtime itself will only build-in the most commonly-used components - additional components must be explicitly included into a AMP document.
@@ -148,13 +146,13 @@ The creators of the AMP component project - Google and a core group of collabora
 While in active development, the initial creators of the project - Google and a core group of collaborators - will work together around adding additional owners as well as approving contributions for inclusion.
 
 Contributions with the following characteristics will be prioritized:
+
 - Generalized components that solve problems in a non-service-specific way - e.g. a “Related Content” widget that makes a request to a generic JSON endpoint for lazy-loading in additional content.
 - Components that are modular, and useful for various types of contained content - e.g. a carousel that takes HTML as well as images.
 
-
 #### Service-specific Components
 
-A number of AMP components supporting features like ads, analytics, and embeds, may rely on third-party JavaScript provided by a specific service. For example: an analytics component from Google Analytics might need to run logic specific to the GA service, or a Twitter embed may need to run Twitter-specific code.  There are three ways these service-specific components can work:
+A number of AMP components supporting features like ads, analytics, and embeds, may rely on third-party JavaScript provided by a specific service. For example: an analytics component from Google Analytics might need to run logic specific to the GA service, or a Twitter embed may need to run Twitter-specific code. There are three ways these service-specific components can work:
 
 **Arbitrary 3rd Party JavaScript loaded at runtime**
 
@@ -171,7 +169,6 @@ These types of components will be prioritized behind components that are more ge
 The AMP component set may provide components that can load data from an arbitrary endpoint at runtime and use that data to effect the layout and appearance of the component. For example, a “related articles” component may fetch JSON from a author-provided URL and use the data to populate a UI component.
 
 In these cases, services may set up endpoints that produce data that conforms to how the component expects data to be returned. That component may then reference the endpoint with a `url` parameter for example, and the service will be effectively incorporated into the page.
-
 
 ## Components
 

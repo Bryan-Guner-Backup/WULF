@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import {Curves, bezierCurve, getCurve} from '../../src/curve';
+import { Curves, bezierCurve, getCurve } from "../../src/curve";
 
-describe('Curve', () => {
-
+describe("Curve", () => {
   let sandbox;
 
   beforeEach(() => {
@@ -29,7 +28,7 @@ describe('Curve', () => {
     sandbox = null;
   });
 
-  it('bezierCurve', () => {
+  it("bezierCurve", () => {
     let curve = bezierCurve(0.75, 0, 0.75, 0.9);
     expect(curve(0.2)).to.be.closeTo(0.024374631, 1e-6);
     expect(curve(0.6)).to.be.closeTo(0.317459494, 1e-6);
@@ -41,7 +40,7 @@ describe('Curve', () => {
     expect(curve(0.9)).to.be.closeTo(0.982973389, 1e-6);
   });
 
-  it('getCurve', () => {
+  it("getCurve", () => {
     // Null case.
     expect(getCurve(null)).to.equal(null);
     expect(getCurve(undefined)).to.equal(null);
@@ -51,11 +50,10 @@ describe('Curve', () => {
     expect(getCurve(func)).to.equal(func);
 
     // String is translated.
-    expect(getCurve('linear')).to.equal(Curves.LINEAR);
-    expect(getCurve('ease')).to.equal(Curves.EASE);
-    expect(getCurve('ease-in')).to.equal(Curves.EASE_IN);
-    expect(getCurve('ease-out')).to.equal(Curves.EASE_OUT);
-    expect(getCurve('ease-in-out')).to.equal(Curves.EASE_IN_OUT);
+    expect(getCurve("linear")).to.equal(Curves.LINEAR);
+    expect(getCurve("ease")).to.equal(Curves.EASE);
+    expect(getCurve("ease-in")).to.equal(Curves.EASE_IN);
+    expect(getCurve("ease-out")).to.equal(Curves.EASE_OUT);
+    expect(getCurve("ease-in-out")).to.equal(Curves.EASE_IN_OUT);
   });
-
 });

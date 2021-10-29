@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-var Timer = process.binding('timer_wrap').Timer;
-var L = require('./_linklist');
-var assert = require('./assert').ok;
-var util = require('./util');
-var debug = util.debuglog('timer');
+var Timer = process.binding("timer_wrap").Timer;
+var L = require("./_linklist");
+var assert = require("./assert").ok;
+var util = require("./util");
+var debug = util.debuglog("timer");
 var kOnTimeout = Timer.kOnTimeout | 0;
 
 // Timeout values > TIMEOUT_MAX are set to 1.
@@ -23,12 +23,11 @@ var TIMEOUT_MAX = 2147483647; // 2^31-1
 // value = list
 var lists = {};
 
-
 // call this whenever the item is active (not idle)
 // it will reset its timeout.
 // the main function - creates lists on demand and the watchers associated
 // with them.
-exports.active = function(item) {
+exports.active = function (item) {
   var msecs = item._idleTimeout;
   if (msecs < 0 || msecs === undefined) return;
 
@@ -57,17 +56,17 @@ function listOnTimeout() {
   var msecs = this.msecs;
   var list = this;
 
-  debug('timeout callback %d', msecs);
+  debug("timeout callback %d", msecs);
 
   var now = Timer.now();
-  debug('now: %s', now);
+  debug("now: %s", now);
 
   var diff, first, threw;
-  while (first = L.peek(list)) {
+  while ((first = L.peek(list))) {
     diff = now - first._idleStart;
     if (diff < msecs) {
       list.start(msecs - diff, 0);
-      debug('%d list wait because diff is %d', msecs, diff);
+      debug("%d list wait because diff is %d", msecs, diff);
       return;
     } else {
       L.remove(first);
@@ -81,17 +80,14 @@ function listOnTimeout() {
       //
       // https://github.com/joyent/node/issues/2631
       var domain = first.domain;
-      if (domain && domain._disposed)
-        continue;
+      if (domain && domain._disposed) continue;
 
       try {
-        if (domain)
-          domain.enter();
+        if (domain) domain.enter();
         threw = true;
         first._called = true;
         first._onTimeout();
-        if (domain)
-          domain.exit();
+        if (domain) domain.exit();
         threw = false;
       } finally {
         if (threw) {
@@ -107,42 +103,39 @@ function listOnTimeout() {
     }
   }
 
-  debug('%d list empty', msecs);
+  debug("%d list empty", msecs);
   assert(L.isEmpty(list));
   list.close();
   delete lists[msecs];
 }
 
-
 function listOnTimeoutNT(list) {
   list[kOnTimeout]();
 }
 
-
-var unenroll = exports.unenroll = function(item) {
+var unenroll = (exports.unenroll = function (item) {
   L.remove(item);
 
   var list = lists[item._idleTimeout];
   // if empty then stop the watcher
-  debug('unenroll');
+  debug("unenroll");
   if (list && L.isEmpty(list)) {
-    debug('unenroll: list empty');
+    debug("unenroll: list empty");
     list.close();
     delete lists[item._idleTimeout];
   }
   // if active is called later, then we want to make sure not to insert again
   item._idleTimeout = -1;
-};
-
+});
 
 // Does not start the time, just sets up the members needed.
-exports.enroll = function(item, msecs) {
-  if (typeof msecs !== 'number') {
-    throw new TypeError('msecs must be a number');
+exports.enroll = function (item, msecs) {
+  if (typeof msecs !== "number") {
+    throw new TypeError("msecs must be a number");
   }
 
   if (msecs < 0 || !isFinite(msecs)) {
-    throw new RangeError('msecs must be a non-negative finite number');
+    throw new RangeError("msecs must be a non-negative finite number");
   }
 
   // if this item was already in a list somewhere
@@ -158,13 +151,11 @@ exports.enroll = function(item, msecs) {
   L.init(item);
 };
 
-
 /*
  * DOM-style timers
  */
 
-
-exports.setTimeout = function(callback, after) {
+exports.setTimeout = function (callback, after) {
   after *= 1; // coalesce to number or NaN
 
   if (!(after >= 1 && after <= TIMEOUT_MAX)) {
@@ -187,14 +178,17 @@ exports.setTimeout = function(callback, after) {
       ontimeout = callback.bind(timer, arguments[2], arguments[3]);
       break;
     case 5:
-      ontimeout =
-          callback.bind(timer, arguments[2], arguments[3], arguments[4]);
+      ontimeout = callback.bind(
+        timer,
+        arguments[2],
+        arguments[3],
+        arguments[4]
+      );
       break;
     // slow case
     default:
       var args = new Array(length - 2);
-      for (var i = 2; i < length; i++)
-        args[i - 2] = arguments[i];
+      for (var i = 2; i < length; i++) args[i - 2] = arguments[i];
       ontimeout = callback.apply.bind(callback, timer, args);
       break;
   }
@@ -207,8 +201,7 @@ exports.setTimeout = function(callback, after) {
   return timer;
 };
 
-
-exports.clearTimeout = function(timer) {
+exports.clearTimeout = function (timer) {
   if (timer && (timer[kOnTimeout] || timer._onTimeout)) {
     timer[kOnTimeout] = timer._onTimeout = null;
     if (timer instanceof Timeout) {
@@ -219,8 +212,7 @@ exports.clearTimeout = function(timer) {
   }
 };
 
-
-exports.setInterval = function(callback, repeat) {
+exports.setInterval = function (callback, repeat) {
   repeat *= 1; // coalesce to number or NaN
 
   if (!(repeat >= 1 && repeat <= TIMEOUT_MAX)) {
@@ -242,13 +234,16 @@ exports.setInterval = function(callback, repeat) {
       ontimeout = callback.bind(timer, arguments[2], arguments[3]);
       break;
     case 5:
-      ontimeout =
-          callback.bind(timer, arguments[2], arguments[3], arguments[4]);
+      ontimeout = callback.bind(
+        timer,
+        arguments[2],
+        arguments[3],
+        arguments[4]
+      );
       break;
     default:
       var args = new Array(length - 2);
-      for (var i = 2; i < length; i += 1)
-        args[i - 2] = arguments[i];
+      for (var i = 2; i < length; i += 1) args[i - 2] = arguments[i];
       ontimeout = callback.apply.bind(callback, timer, args);
       break;
   }
@@ -264,8 +259,7 @@ exports.setInterval = function(callback, repeat) {
     timer._repeat.call(this);
 
     // Timer might be closed - no point in restarting it
-    if (!timer._repeat)
-      return;
+    if (!timer._repeat) return;
 
     // If timer is unref'd (or was - it's permanently removed from the list.)
     if (this._handle) {
@@ -277,16 +271,14 @@ exports.setInterval = function(callback, repeat) {
   }
 };
 
-
-exports.clearInterval = function(timer) {
+exports.clearInterval = function (timer) {
   if (timer && timer._repeat) {
     timer._repeat = null;
     clearTimeout(timer);
   }
 };
 
-
-var Timeout = function(after) {
+var Timeout = function (after) {
   this._called = false;
   this._idleTimeout = after;
   this._idlePrev = this;
@@ -296,18 +288,15 @@ var Timeout = function(after) {
   this._repeat = null;
 };
 
-
 function unrefdHandle() {
   this.owner._onTimeout();
-  if (!this.owner._repeat)
-    this.owner.close();
+  if (!this.owner._repeat) this.owner.close();
 }
 
-
-Timeout.prototype.unref = function() {
+Timeout.prototype.unref = function () {
   if (this._handle) {
     this._handle.unref();
-  } else if (typeof(this._onTimeout) === 'function') {
+  } else if (typeof this._onTimeout === "function") {
     var now = Timer.now();
     if (!this._idleStart) this._idleStart = now;
     var delay = this._idleStart + this._idleTimeout - now;
@@ -327,13 +316,12 @@ Timeout.prototype.unref = function() {
   return this;
 };
 
-Timeout.prototype.ref = function() {
-  if (this._handle)
-    this._handle.ref();
+Timeout.prototype.ref = function () {
+  if (this._handle) this._handle.ref();
   return this;
 };
 
-Timeout.prototype.close = function() {
+Timeout.prototype.close = function () {
   this._onTimeout = null;
   if (this._handle) {
     this._handle[kOnTimeout] = null;
@@ -344,10 +332,8 @@ Timeout.prototype.close = function() {
   return this;
 };
 
-
 var immediateQueue = {};
 L.init(immediateQueue);
-
 
 function processImmediate() {
   var queue = immediateQueue;
@@ -360,8 +346,7 @@ function processImmediate() {
     immediate = L.shift(queue);
     domain = immediate.domain;
 
-    if (domain)
-      domain.enter();
+    if (domain) domain.enter();
 
     var threw = true;
     try {
@@ -381,8 +366,7 @@ function processImmediate() {
       }
     }
 
-    if (domain)
-      domain.exit();
+    if (domain) domain.exit();
   }
 
   // Only round-trip to C++ land if we have to. Calling clearImmediate() on an
@@ -393,16 +377,14 @@ function processImmediate() {
   }
 }
 
-
-function Immediate() { }
+function Immediate() {}
 
 Immediate.prototype.domain = undefined;
 Immediate.prototype._onImmediate = undefined;
 Immediate.prototype._idleNext = undefined;
 Immediate.prototype._idlePrev = undefined;
 
-
-exports.setImmediate = function(callback, arg1, arg2, arg3) {
+exports.setImmediate = function (callback, arg1, arg2, arg3) {
   var i, args;
   var len = arguments.length;
   var immediate = new Immediate();
@@ -416,27 +398,26 @@ exports.setImmediate = function(callback, arg1, arg2, arg3) {
       immediate._onImmediate = callback;
       break;
     case 2:
-      immediate._onImmediate = function() {
+      immediate._onImmediate = function () {
         callback.call(immediate, arg1);
       };
       break;
     case 3:
-      immediate._onImmediate = function() {
+      immediate._onImmediate = function () {
         callback.call(immediate, arg1, arg2);
       };
       break;
     case 4:
-      immediate._onImmediate = function() {
+      immediate._onImmediate = function () {
         callback.call(immediate, arg1, arg2, arg3);
       };
       break;
     // slow case
     default:
       args = new Array(len - 1);
-      for (i = 1; i < len; i++)
-        args[i - 1] = arguments[i];
+      for (i = 1; i < len; i++) args[i - 1] = arguments[i];
 
-      immediate._onImmediate = function() {
+      immediate._onImmediate = function () {
         callback.apply(immediate, args);
       };
       break;
@@ -447,16 +428,14 @@ exports.setImmediate = function(callback, arg1, arg2, arg3) {
     process._immediateCallback = processImmediate;
   }
 
-  if (process.domain)
-    immediate.domain = process.domain;
+  if (process.domain) immediate.domain = process.domain;
 
   L.append(immediateQueue, immediate);
 
   return immediate;
 };
 
-
-exports.clearImmediate = function(immediate) {
+exports.clearImmediate = function (immediate) {
   if (!immediate) return;
 
   immediate._onImmediate = undefined;
@@ -467,7 +446,6 @@ exports.clearImmediate = function(immediate) {
     process._needImmediateCallback = false;
   }
 };
-
 
 // Internal APIs that need timeouts should use timers._unrefActive instead of
 // timers.active as internal timeouts shouldn't hold the loop open
@@ -482,25 +460,21 @@ function _makeTimerTimeout(timer) {
 
   // Timer has been unenrolled by another timer that fired at the same time,
   // so don't make it timeout.
-  if (msecs <= 0)
-    return;
+  if (msecs <= 0) return;
 
-  if (!timer._onTimeout)
-    return;
+  if (!timer._onTimeout) return;
 
   if (domain) {
-    if (domain._disposed)
-      return;
+    if (domain._disposed) return;
 
     domain.enter();
   }
 
-  debug('unreftimer firing timeout');
+  debug("unreftimer firing timeout");
   timer._called = true;
   _runOnTimeout(timer);
 
-  if (domain)
-    domain.exit();
+  if (domain) domain.exit();
 }
 
 function _runOnTimeout(timer) {
@@ -516,7 +490,7 @@ function _runOnTimeout(timer) {
 function unrefTimeout() {
   var now = Timer.now();
 
-  debug('unrefTimer fired');
+  debug("unrefTimer fired");
 
   var timeSinceLastActive;
   var nextTimeoutTime;
@@ -545,8 +519,10 @@ function unrefTimeout() {
 
       nextTimeoutDuration = cur._idleTimeout - timeSinceLastActive;
       nextTimeoutTime = now + nextTimeoutDuration;
-      if (minNextTimeoutTime === TIMEOUT_MAX ||
-          (nextTimeoutTime < minNextTimeoutTime)) {
+      if (
+        minNextTimeoutTime === TIMEOUT_MAX ||
+        nextTimeoutTime < minNextTimeoutTime
+      ) {
         // We found a timeout that will expire earlier,
         // store its next timeout time now so that we
         // can rearm the actual timer accordingly when
@@ -568,20 +544,18 @@ function unrefTimeout() {
   for (var timerIdx = 0; timerIdx < nbTimersToTimeout; ++timerIdx)
     _makeTimerTimeout(timersToTimeout[timerIdx]);
 
-
   // Rearm the actual timer with the timeout delay
   // of the earliest timeout found.
   if (minNextTimeoutTime !== TIMEOUT_MAX) {
     unrefTimer.start(minNextTimeoutTime - now, 0);
     unrefTimer.when = minNextTimeoutTime;
-    debug('unrefTimer rescheduled');
+    debug("unrefTimer rescheduled");
   } else if (L.isEmpty(unrefList)) {
-    debug('unrefList is empty');
+    debug("unrefList is empty");
   }
 }
 
-
-exports._unrefActive = function(item) {
+exports._unrefActive = function (item) {
   var msecs = item._idleTimeout;
   if (!msecs || msecs < 0) return;
   assert(msecs >= 0);
@@ -589,11 +563,11 @@ exports._unrefActive = function(item) {
   L.remove(item);
 
   if (!unrefList) {
-    debug('unrefList initialized');
+    debug("unrefList initialized");
     unrefList = {};
     L.init(unrefList);
 
-    debug('unrefTimer initialized');
+    debug("unrefTimer initialized");
     unrefTimer = new Timer();
     unrefTimer.unref();
     unrefTimer.when = -1;
@@ -610,9 +584,9 @@ exports._unrefActive = function(item) {
   if (unrefTimer.when === -1 || unrefTimer.when > when) {
     unrefTimer.start(msecs, 0);
     unrefTimer.when = when;
-    debug('unrefTimer scheduled');
+    debug("unrefTimer scheduled");
   }
 
-  debug('unrefList append to end');
+  debug("unrefList append to end");
   L.append(unrefList, item);
 };

@@ -1,17 +1,17 @@
-'use strict';
+"use strict";
 
-var FreeList = require('./internal/freelist').FreeList;
-var HTTPParser = process.binding('http_parser').HTTPParser;
+var FreeList = require("./internal/freelist").FreeList;
+var HTTPParser = process.binding("http_parser").HTTPParser;
 
-var incoming = require('./_http_incoming');
+var incoming = require("./_http_incoming");
 var IncomingMessage = incoming.IncomingMessage;
 var readStart = incoming.readStart;
 var readStop = incoming.readStop;
 
-var debug = require('./util').debuglog('http');
+var debug = require("./util").debuglog("http");
 exports.debug = debug;
 
-exports.CRLF = '\r\n';
+exports.CRLF = "\r\n";
 exports.chunkExpression = /chunk/i;
 exports.continueExpression = /100-continue/i;
 exports.methods = HTTPParser.methods;
@@ -28,8 +28,7 @@ var kOnMessageComplete = HTTPParser.kOnMessageComplete | 0;
 // called to process trailing HTTP headers.
 function parserOnHeaders(headers, url) {
   // Once we exceeded headers limit - stop collecting them
-  if (this.maxHeaderPairs <= 0 ||
-      this._headers.length < this.maxHeaderPairs) {
+  if (this.maxHeaderPairs <= 0 || this._headers.length < this.maxHeaderPairs) {
     this._headers = this._headers.concat(headers);
   }
   this._url += url;
@@ -39,9 +38,17 @@ function parserOnHeaders(headers, url) {
 // this request.
 // `url` is not set for response parsers but that's not applicable here since
 // all our parsers are request parsers.
-function parserOnHeadersComplete(versionMajor, versionMinor, headers, method,
-                                 url, statusCode, statusMessage, upgrade,
-                                 shouldKeepAlive) {
+function parserOnHeadersComplete(
+  versionMajor,
+  versionMinor,
+  headers,
+  method,
+  url,
+  statusCode,
+  statusMessage,
+  upgrade,
+  shouldKeepAlive
+) {
   var parser = this;
 
   if (!headers) {
@@ -51,24 +58,23 @@ function parserOnHeadersComplete(versionMajor, versionMinor, headers, method,
 
   if (!url) {
     url = parser._url;
-    parser._url = '';
+    parser._url = "";
   }
 
   parser.incoming = new IncomingMessage(parser.socket);
   parser.incoming.httpVersionMajor = versionMajor;
   parser.incoming.httpVersionMinor = versionMinor;
-  parser.incoming.httpVersion = versionMajor + '.' + versionMinor;
+  parser.incoming.httpVersion = versionMajor + "." + versionMinor;
   parser.incoming.url = url;
 
   var n = headers.length;
 
   // If parser.maxHeaderPairs <= 0 assume that there's no limit.
-  if (parser.maxHeaderPairs > 0)
-    n = Math.min(n, parser.maxHeaderPairs);
+  if (parser.maxHeaderPairs > 0) n = Math.min(n, parser.maxHeaderPairs);
 
   parser.incoming._addHeaderLines(headers, n);
 
-  if (typeof method === 'number') {
+  if (typeof method === "number") {
     // server only
     parser.incoming.method = HTTPParser.methods[method];
   } else {
@@ -98,8 +104,7 @@ function parserOnBody(b, start, len) {
   var stream = parser.incoming;
 
   // if the stream has already been removed, then drop it.
-  if (!stream)
-    return;
+  if (!stream) return;
 
   var socket = stream.socket;
 
@@ -107,8 +112,7 @@ function parserOnBody(b, start, len) {
   if (len > 0 && !stream._dumped) {
     var slice = b.slice(start, start + len);
     var ret = stream.push(slice);
-    if (!ret)
-      readStop(socket);
+    if (!ret) readStop(socket);
   }
 }
 
@@ -123,7 +127,7 @@ function parserOnMessageComplete() {
     if (headers) {
       parser.incoming._addHeaderLines(headers, headers.length);
       parser._headers = [];
-      parser._url = '';
+      parser._url = "";
     }
 
     // For emit end event
@@ -134,12 +138,11 @@ function parserOnMessageComplete() {
   readStart(parser.socket);
 }
 
-
-var parsers = new FreeList('parsers', 1000, function() {
+var parsers = new FreeList("parsers", 1000, function () {
   var parser = new HTTPParser(HTTPParser.REQUEST);
 
   parser._headers = [];
-  parser._url = '';
+  parser._url = "";
 
   // Only called in the slow case where slow means
   // that the request headers were either fragmented
@@ -155,7 +158,6 @@ var parsers = new FreeList('parsers', 1000, function() {
 });
 exports.parsers = parsers;
 
-
 // Free the parser and also break any links that it
 // might have to any other things.
 // TODO: All parser data should be attached to a
@@ -167,12 +169,10 @@ function freeParser(parser, req, socket) {
   if (parser) {
     parser._headers = [];
     parser.onIncoming = null;
-    if (parser.socket)
-      parser.socket.parser = null;
+    if (parser.socket) parser.socket.parser = null;
     parser.socket = null;
     parser.incoming = null;
-    if (parsers.free(parser) === false)
-      parser.close();
+    if (parsers.free(parser) === false) parser.close();
     parser = null;
   }
   if (req) {
@@ -184,14 +184,12 @@ function freeParser(parser, req, socket) {
 }
 exports.freeParser = freeParser;
 
-
 function ondrain() {
-  if (this._httpMessage) this._httpMessage.emit('drain');
+  if (this._httpMessage) this._httpMessage.emit("drain");
 }
 
-
 function httpSocketSetup(socket) {
-  socket.removeListener('drain', ondrain);
-  socket.on('drain', ondrain);
+  socket.removeListener("drain", ondrain);
+  socket.on("drain", ondrain);
 }
 exports.httpSocketSetup = httpSocketSetup;

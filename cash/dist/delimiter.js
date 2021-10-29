@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-var os = require('os');
-var username = require('username');
-var userHome = require('user-home');
+var os = require("os");
+var username = require("username");
+var userHome = require("user-home");
 
-var pathConverter = require('./util/converter.path');
+var pathConverter = require("./util/converter.path");
 
 module.exports = {
   refresh: function refresh(vorpal, cb) {
@@ -12,15 +12,15 @@ module.exports = {
     username(function (err, username) {
       if (!err) {
         var user = username;
-        var host = String(os.hostname()).split('.')[0];
+        var host = String(os.hostname()).split(".")[0];
         var home = pathConverter.unix(userHome);
         var cwd = pathConverter.unix(process.cwd());
-        cwd = cwd.replace(home, '~');
-        var delimiter = user + '@' + host + ':' + cwd + '$';
+        cwd = cwd.replace(home, "~");
+        var delimiter = user + "@" + host + ":" + cwd + "$";
         // If we're on linux-based systems, color
         // the prompt so we don't get confused.
-        if (os.platform().indexOf('win') === -1) {
-          delimiter = '\u001b[32m' + delimiter + '\u001b[39m';
+        if (os.platform().indexOf("win") === -1) {
+          delimiter = "\u001b[32m" + delimiter + "\u001b[39m";
         }
         vorpal.delimiter(delimiter);
       }
@@ -29,5 +29,5 @@ module.exports = {
   },
   getHomeDir: function getHomeDir() {
     return userHome;
-  }
+  },
 };

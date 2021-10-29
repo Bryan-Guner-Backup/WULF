@@ -16,17 +16,17 @@ This release includes an updated library UI <a class="thumbnail" href="#" data-s
 
 <h2>Fixes and smaller updates</h2>
 
- - Major performance improvements to archive sync
- - Fixed issue which would cause the page to lose focus
- - Fixed [an issue with Twitter logins](https://github.com/beakerbrowser/beaker/issues/453)
- - Fixed rendering glitches in the URL autocomplete
- - Added `{stat:}` option to `DatArchive.readdir()`
- - Added `{shallow:}` option to `DatArchive.diff()`
- - Updated dat CSPs to allow `blob:` resources
- - User is now [prompted before deleting an archive](https://github.com/beakerbrowser/beaker/issues/531)
- - Added beaker://dat-dns-cache/ page and the ability to "hard refresh" Dat DNS
- - Imported support for DNS shortnames in the `DatArchive` API
- - In `dat://`, [fallback the page title to the site title if none is given](https://github.com/beakerbrowser/beaker/issues/507)
- - [Don't garbage collect Dat archives that are under 2MB](https://github.com/beakerbrowser/beaker/issues/518)
- - Can now [close the burger menu by clicking anywhere in the window](https://github.com/beakerbrowser/beaker/issues/530)
- - [Set devtools shortcut to shift+ctrl+i for non-darwin platforms](https://github.com/beakerbrowser/beaker/issues/516)
+- Major performance improvements to archive sync
+- Fixed issue which would cause the page to lose focus
+- Fixed [an issue with Twitter logins](https://github.com/beakerbrowser/beaker/issues/453)
+- Fixed rendering glitches in the URL autocomplete
+- Added `{stat:}` option to `DatArchive.readdir()`
+- Added `{shallow:}` option to `DatArchive.diff()`
+- Updated dat CSPs to allow `blob:` resources
+- User is now [prompted before deleting an archive](https://github.com/beakerbrowser/beaker/issues/531)
+- Added beaker://dat-dns-cache/ page and the ability to "hard refresh" Dat DNS
+- Imported support for DNS shortnames in the `DatArchive` API
+- In `dat://`, [fallback the page title to the site title if none is given](https://github.com/beakerbrowser/beaker/issues/507)
+- [Don't garbage collect Dat archives that are under 2MB](https://github.com/beakerbrowser/beaker/issues/518)
+- Can now [close the burger menu by clicking anywhere in the window](https://github.com/beakerbrowser/beaker/issues/530)
+- [Set devtools shortcut to shift+ctrl+i for non-darwin platforms](https://github.com/beakerbrowser/beaker/issues/516)

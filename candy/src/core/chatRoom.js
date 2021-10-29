@@ -9,7 +9,7 @@
  *   (c) 2011 Amiado Group AG. All rights reserved.
  *   (c) 2012-2014 Patrick Stadler & Michael Weibel. All rights reserved.
  */
-'use strict';
+"use strict";
 
 /* global Candy, Strophe */
 
@@ -19,24 +19,24 @@
  * Parameters:
  *   (String) roomJid - Room jid
  */
-Candy.Core.ChatRoom = function(roomJid) {
-	/** Object: room
-	 * Object containing roomJid and name.
-	 */
-	this.room = {
-		jid: roomJid,
-		name: Strophe.getNodeFromJid(roomJid)
-	};
+Candy.Core.ChatRoom = function (roomJid) {
+  /** Object: room
+   * Object containing roomJid and name.
+   */
+  this.room = {
+    jid: roomJid,
+    name: Strophe.getNodeFromJid(roomJid),
+  };
 
-	/** Variable: user
-	 * Current local user of this room.
-	 */
-	this.user = null;
+  /** Variable: user
+   * Current local user of this room.
+   */
+  this.user = null;
 
-	/** Variable: Roster
-	 * Candy.Core.ChatRoster instance
-	 */
-	this.roster = new Candy.Core.ChatRoster();
+  /** Variable: Roster
+   * Candy.Core.ChatRoster instance
+   */
+  this.roster = new Candy.Core.ChatRoster();
 };
 
 /** Function: setUser
@@ -45,8 +45,8 @@ Candy.Core.ChatRoom = function(roomJid) {
  * Parameters:
  *   (Candy.Core.ChatUser) user - Chat user
  */
-Candy.Core.ChatRoom.prototype.setUser = function(user) {
-	this.user = user;
+Candy.Core.ChatRoom.prototype.setUser = function (user) {
+  this.user = user;
 };
 
 /** Function: getUser
@@ -55,8 +55,8 @@ Candy.Core.ChatRoom.prototype.setUser = function(user) {
  * Returns:
  *   (Object) - Candy.Core.ChatUser instance or null
  */
-Candy.Core.ChatRoom.prototype.getUser = function() {
-	return this.user;
+Candy.Core.ChatRoom.prototype.getUser = function () {
+  return this.user;
 };
 
 /** Function: getJid
@@ -65,8 +65,8 @@ Candy.Core.ChatRoom.prototype.getUser = function() {
  * Returns:
  *   (String) - Room jid
  */
-Candy.Core.ChatRoom.prototype.getJid = function() {
-	return this.room.jid;
+Candy.Core.ChatRoom.prototype.getJid = function () {
+  return this.room.jid;
 };
 
 /** Function: setName
@@ -75,8 +75,8 @@ Candy.Core.ChatRoom.prototype.getJid = function() {
  * Parameters:
  *   (String) name - Room name
  */
-Candy.Core.ChatRoom.prototype.setName = function(name) {
-	this.room.name = name;
+Candy.Core.ChatRoom.prototype.setName = function (name) {
+  this.room.name = name;
 };
 
 /** Function: getName
@@ -85,8 +85,8 @@ Candy.Core.ChatRoom.prototype.setName = function(name) {
  * Returns:
  *   (String) - Room name
  */
-Candy.Core.ChatRoom.prototype.getName = function() {
-	return this.room.name;
+Candy.Core.ChatRoom.prototype.getName = function () {
+  return this.room.name;
 };
 
 /** Function: setRoster
@@ -95,8 +95,8 @@ Candy.Core.ChatRoom.prototype.getName = function() {
  * Parameters:
  *   (Candy.Core.ChatRoster) roster - Chat roster
  */
-Candy.Core.ChatRoom.prototype.setRoster = function(roster) {
-	this.roster = roster;
+Candy.Core.ChatRoom.prototype.setRoster = function (roster) {
+  this.roster = roster;
 };
 
 /** Function: getRoster
@@ -105,6 +105,6 @@ Candy.Core.ChatRoom.prototype.setRoster = function(roster) {
  * Returns
  *   (Candy.Core.ChatRoster) - instance
  */
-Candy.Core.ChatRoom.prototype.getRoster = function() {
-	return this.roster;
+Candy.Core.ChatRoom.prototype.getRoster = function () {
+  return this.roster;
 };

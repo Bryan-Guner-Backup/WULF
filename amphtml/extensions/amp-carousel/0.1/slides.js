@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-import {Animation} from '../../../src/animation';
-import {BaseCarousel} from './base-carousel';
-import {Gestures} from '../../../src/gesture';
-import {SwipeXRecognizer} from '../../../src/gesture-recognizers';
-import {bezierCurve} from '../../../src/curve';
-import {continueMotion} from '../../../src/motion';
-import {isLayoutSizeDefined} from '../../../src/layout';
-import * as st from '../../../src/style';
-import * as tr from '../../../src/transition';
-
+import { Animation } from "../../../src/animation";
+import { BaseCarousel } from "./base-carousel";
+import { Gestures } from "../../../src/gesture";
+import { SwipeXRecognizer } from "../../../src/gesture-recognizers";
+import { bezierCurve } from "../../../src/curve";
+import { continueMotion } from "../../../src/motion";
+import { isLayoutSizeDefined } from "../../../src/layout";
+import * as st from "../../../src/style";
+import * as tr from "../../../src/transition";
 
 export class AmpSlides extends BaseCarousel {
-
   /** @override */
   isLayoutSupported(layout) {
     return isLayoutSizeDefined(layout);
@@ -39,7 +37,7 @@ export class AmpSlides extends BaseCarousel {
     this.slides_.forEach((slide, i) => {
       this.setAsOwner(slide);
       // Only the first element is initially visible.
-      slide.style.display = i > 0 ? 'none' : 'block';
+      slide.style.display = i > 0 ? "none" : "block";
       this.applyFillContent(slide);
     });
 
@@ -71,11 +69,14 @@ export class AmpSlides extends BaseCarousel {
         this.commitSwitch_(oldSlide, newSlide);
       } else {
         oldSlide.style.zIndex = 0;
-        Animation.animate(this.createTransition_(oldSlide, newSlide, dir),
-            200, 'ease-out').thenAlways(() => {
-              this.commitSwitch_(oldSlide, newSlide);
-              this.preloadNext_(dir);
-            });
+        Animation.animate(
+          this.createTransition_(oldSlide, newSlide, dir),
+          200,
+          "ease-out"
+        ).thenAlways(() => {
+          this.commitSwitch_(oldSlide, newSlide);
+          this.preloadNext_(dir);
+        });
       }
     }
   }
@@ -85,11 +86,11 @@ export class AmpSlides extends BaseCarousel {
    * @param {number} dir
    */
   prepareSlide_(slide, dir) {
-    var containerWidth = this.element./*OK*/offsetWidth;
+    var containerWidth = this.element./*OK*/ offsetWidth;
     st.setStyles(slide, {
       transform: st.translateX(dir * containerWidth),
       zIndex: 1,
-      display: 'block'
+      display: "block",
     });
 
     this.scheduleLayout(slide);
@@ -102,16 +103,16 @@ export class AmpSlides extends BaseCarousel {
    * @return {!Transition}
    */
   createTransition_(oldSlide, newSlide, dir) {
-    var containerWidth = this.element./*OK*/offsetWidth;
+    var containerWidth = this.element./*OK*/ offsetWidth;
     return tr.all([
       tr.setStyles(newSlide, {
         transform: tr.translateX(tr.numeric(dir * containerWidth, 0)),
-        opacity: tr.numeric(0.8, 1)
+        opacity: tr.numeric(0.8, 1),
       }),
       tr.setStyles(oldSlide, {
         transform: tr.scale(tr.numeric(1, 0.98)),
-        opacity: tr.numeric(1, 0.4)
-      })
+        opacity: tr.numeric(1, 0.4),
+      }),
     ]);
   }
 
@@ -122,16 +123,16 @@ export class AmpSlides extends BaseCarousel {
    */
   commitSwitch_(oldSlide, newSlide) {
     st.setStyles(oldSlide, {
-      display: 'none',
+      display: "none",
       zIndex: 0,
-      transform: '',
-      opacity: 1
+      transform: "",
+      opacity: 1,
     });
     st.setStyles(newSlide, {
-      display: 'block',
+      display: "block",
       zIndex: 0,
-      transform: '',
-      opacity: 1
+      transform: "",
+      opacity: 1,
     });
     this.scheduleLayout(newSlide);
     this.updateInViewport(oldSlide, false);
@@ -198,7 +199,7 @@ export class AmpSlides extends BaseCarousel {
    */
   onSwipeStart_(swipe) {
     let currentSlide = this.slides_[this.currentIndex_];
-    let containerWidth = this.element./*OK*/offsetWidth;
+    let containerWidth = this.element./*OK*/ offsetWidth;
     let minDelta = 0;
     let maxDelta = 0;
     let prevTr = tr.NOOP;
@@ -222,7 +223,7 @@ export class AmpSlides extends BaseCarousel {
       min: minDelta,
       max: maxDelta,
       pos: 0,
-      currentIndex: this.currentIndex_
+      currentIndex: this.currentIndex_,
     };
   }
 
@@ -239,8 +240,10 @@ export class AmpSlides extends BaseCarousel {
     // Translate the gesture position to be a number between -1 and 1,
     // with negative values indiamping sliding to the previous slide and
     // positive indiamping sliding to the next slide.
-    let pos = Math.min(s.max, Math.max(s.min,
-        -swipe.deltaX / s.containerWidth));
+    let pos = Math.min(
+      s.max,
+      Math.max(s.min, -swipe.deltaX / s.containerWidth)
+    );
 
     s.nextTr(pos > 0 ? pos : 0);
     s.prevTr(pos < 0 ? -pos : 0);
@@ -261,20 +264,25 @@ export class AmpSlides extends BaseCarousel {
 
     let advPos = s.pos;
     if (s.pos * -swipe.velocityX >= 0) {
-      advPos = s.pos - Math.sign(swipe.velocityX) *
-          (Math.abs(swipe.velocityX) > 0.2 ? 1 : 0);
+      advPos =
+        s.pos -
+        Math.sign(swipe.velocityX) * (Math.abs(swipe.velocityX) > 0.2 ? 1 : 0);
     }
     advPos = Math.min(s.max, Math.max(s.min, advPos));
     let newPos = Math.abs(advPos) >= 0.55 ? Math.sign(advPos) : 0;
     let promise;
     if (newPos != s.pos) {
       let posFunc = tr.numeric(s.pos, newPos);
-      promise = Animation.animate((time) => {
-        let pos = posFunc(time);
-        s.nextTr(pos > 0 ? pos : 0);
-        s.prevTr(pos < 0 ? -pos : 0);
-        s.pos = pos;
-      }, 150, bezierCurve(0.19, 0.49, 0.2, 1)).thenAlways();
+      promise = Animation.animate(
+        (time) => {
+          let pos = posFunc(time);
+          s.nextTr(pos > 0 ? pos : 0);
+          s.prevTr(pos < 0 ? -pos : 0);
+          s.pos = pos;
+        },
+        150,
+        bezierCurve(0.19, 0.49, 0.2, 1)
+      ).thenAlways();
     } else {
       promise = Promise.resolve();
     }

@@ -79,8 +79,8 @@ Once there is a published proposal document for a topic, you can add a link to i
 Documents are [CC-BY-SA 3.0] license © 2018 Protocol Labs Inc.
 Code is [MIT](./LICENSE) © 2018 Protocol Labs Inc.
 
-[IPFS]: https://ipfs.io
+[ipfs]: https://ipfs.io
 [hugo]: https://gohugo.io
 [tachyons]: http://tachyons.io
 [ipfs-css]: https://github.com/ipfs-shipyard/ipfs-css
-[CC-BY-SA 3.0]: https://ipfs.io/ipfs/QmVreNvKsQmQZ83T86cWSjPu2vR3yZHGPm5jnxFuunEB9u
+[cc-by-sa 3.0]: https://ipfs.io/ipfs/QmVreNvKsQmQZ83T86cWSjPu2vR3yZHGPm5jnxFuunEB9u

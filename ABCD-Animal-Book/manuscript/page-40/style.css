@@ -75,7 +75,7 @@ body {
   height: 1vw;
   border-radius: 100%;
   background: white;
-  margin: .6vw .6vw;
+  margin: 0.6vw 0.6vw;
 }
 
 .iris::before {
@@ -95,7 +95,7 @@ body {
   -webkit-border-radius: 63vw 63vw 63vw 63vw / 108vw 108vw 72vw 72vw;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
   background: black;
-  margin: 12vw 8vw
+  margin: 12vw 8vw;
 }
 
 .redon {
@@ -104,11 +104,11 @@ body {
   height: 8vw;
   border-radius: 100%;
   background: #444;
-  border: .3vw solid #212121;
+  border: 0.3vw solid #212121;
   transform: rotate(12deg);
   -moz-transform: rotate(12deg);
   -webkit-transform: rotate(12deg);
-  margin: 12vw 3vw
+  margin: 12vw 3vw;
 }
 
 .redon::before {
@@ -118,11 +118,11 @@ body {
   height: 8vw;
   border-radius: 100%;
   background: #444;
-  border: .3vw solid #212121;
+  border: 0.3vw solid #212121;
   transform: rotate.(-21deg);
   -moz-transform: rotate(-21deg);
   -webkit-transform: rotate(-21deg);
-  margin: -1vw 5.7vw
+  margin: -1vw 5.7vw;
 }
 
 .col {
@@ -131,7 +131,7 @@ body {
   height: 4vw;
   border-radius: 100%;
   margin: 16vw 4.5vw;
-  border: .1vw solid #212121;
+  border: 0.1vw solid #212121;
   background: #fc5aac;
 }
 
@@ -141,7 +141,7 @@ body {
   height: 13vw;
   background: #333;
   border-radius: 40vw 40vw 0 0;
-  margin: 45vw 29vw
+  margin: 45vw 29vw;
 }
 
 .aletas::before {
@@ -151,7 +151,7 @@ body {
   height: 4.5vw;
   border-radius: 100%;
   background: #333;
-  margin: 11vw -14.9vw
+  margin: 11vw -14.9vw;
 }
 
 .aletas3 {
@@ -160,7 +160,7 @@ body {
   height: 13vw;
   background: #333;
   border-radius: 40vw 40vw 0 0;
-  margin: 45vw 44.5vw
+  margin: 45vw 44.5vw;
 }
 
 .aletas3::before {
@@ -170,7 +170,7 @@ body {
   height: 4.5vw;
   border-radius: 100%;
   background: #333;
-  margin: 11vw -.1vw
+  margin: 11vw -0.1vw;
 }
 
 .bigotes {
@@ -178,7 +178,7 @@ body {
   width: 12.5vw;
   height: 7vw;
   border-radius: 100%;
-  border-top: .3vw solid black;
+  border-top: 0.3vw solid black;
   margin: 11vw 9vw;
 }
 
@@ -188,8 +188,8 @@ body {
   width: 10vw;
   height: 5vw;
   border-radius: 100%;
-  border-top: .3vw solid black;
-  margin: .5vw 0vw;
+  border-top: 0.3vw solid black;
+  margin: 0.5vw 0vw;
 }
 
 .bigotes::after {
@@ -198,7 +198,7 @@ body {
   width: 9vw;
   height: 5vw;
   border-radius: 100%;
-  border-top: .3vw solid black;
+  border-top: 0.3vw solid black;
   margin: -5.2vw 0vw;
 }
 
@@ -207,7 +207,7 @@ body {
   width: 12.5vw;
   height: 7vw;
   border-radius: 100%;
-  border-top: .3vw solid black;
+  border-top: 0.3vw solid black;
   margin: 11vw -3vw;
 }
 
@@ -217,8 +217,8 @@ body {
   width: 10vw;
   height: 5vw;
   border-radius: 100%;
-  border-top: .3vw solid black;
-  margin: .4vw 2vw;
+  border-top: 0.3vw solid black;
+  margin: 0.4vw 2vw;
 }
 
 .bigotes3::after {
@@ -227,7 +227,7 @@ body {
   width: 9vw;
   height: 5vw;
   border-radius: 100%;
-  border-top: .3vw solid black;
+  border-top: 0.3vw solid black;
   margin: -5vw 3.5vw;
   z-index: 3;
 }

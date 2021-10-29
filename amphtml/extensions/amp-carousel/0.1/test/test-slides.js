@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
-import {AmpSlides} from '../slides';
-import * as tr from '../../../../src/transition';
+import { AmpSlides } from "../slides";
+import * as tr from "../../../../src/transition";
 
-
-describe('Slides gestures', () => {
-
+describe("Slides gestures", () => {
   let element;
   let slide0, slide1, slide2;
   let slides;
   let prepareCallback, switchCallback;
 
   beforeEach(() => {
-    element = document.createElement('div');
-    element.style.width = '320px';
-    element.style.height = '200px';
+    element = document.createElement("div");
+    element.style.width = "320px";
+    element.style.height = "200px";
     document.body.appendChild(element);
 
-    element.appendChild(slide0 = document.createElement('div'));
-    element.appendChild(slide1 = document.createElement('div'));
-    element.appendChild(slide2 = document.createElement('div'));
+    element.appendChild((slide0 = document.createElement("div")));
+    element.appendChild((slide1 = document.createElement("div")));
+    element.appendChild((slide2 = document.createElement("div")));
 
     slides = new AmpSlides(element);
     slides.buildCarousel();
@@ -47,8 +45,7 @@ describe('Slides gestures', () => {
     document.body.removeChild(element);
   });
 
-
-  it('should start swiping with slide0', () => {
+  it("should start swiping with slide0", () => {
     slides.currentIndex_ = 0;
     slides.onSwipeStart_({});
     expect(slides.swipeState_).to.not.equal(null);
@@ -64,7 +61,7 @@ describe('Slides gestures', () => {
     expect(prepareCallback.getCall(0).args[1]).to.equal(1);
   });
 
-  it('should start swiping with slide1', () => {
+  it("should start swiping with slide1", () => {
     slides.currentIndex_ = 1;
     slides.onSwipeStart_({});
     expect(slides.swipeState_).to.not.equal(null);
@@ -82,7 +79,7 @@ describe('Slides gestures', () => {
     expect(prepareCallback.getCall(1).args[1]).to.equal(1);
   });
 
-  it('should start swiping with slide2', () => {
+  it("should start swiping with slide2", () => {
     slides.currentIndex_ = 2;
     slides.onSwipeStart_({});
     expect(slides.swipeState_).to.not.equal(null);
@@ -98,8 +95,7 @@ describe('Slides gestures', () => {
     expect(prepareCallback.getCall(0).args[1]).to.equal(-1);
   });
 
-
-  it('should update on swipe within range in neg direction', () => {
+  it("should update on swipe within range in neg direction", () => {
     let prevTr = sinon.spy();
     let nextTr = sinon.spy();
     slides.currentIndex_ = 0;
@@ -110,9 +106,9 @@ describe('Slides gestures', () => {
       min: 0,
       max: 1,
       prevTr: prevTr,
-      nextTr: nextTr
+      nextTr: nextTr,
     };
-    slides.onSwipe_({deltaX: -32});
+    slides.onSwipe_({ deltaX: -32 });
     expect(slides.swipeState_.pos).to.equal(0.1);
     expect(nextTr.callCount).to.equal(1);
     expect(prevTr.callCount).to.equal(1);
@@ -120,7 +116,7 @@ describe('Slides gestures', () => {
     expect(prevTr.getCall(0).args[0]).to.equal(0);
   });
 
-  it('should update on swipe within range in pos direction', () => {
+  it("should update on swipe within range in pos direction", () => {
     let prevTr = sinon.spy();
     let nextTr = sinon.spy();
     slides.currentIndex_ = 1;
@@ -131,9 +127,9 @@ describe('Slides gestures', () => {
       min: -1,
       max: 1,
       prevTr: prevTr,
-      nextTr: nextTr
+      nextTr: nextTr,
     };
-    slides.onSwipe_({deltaX: 32});
+    slides.onSwipe_({ deltaX: 32 });
     expect(slides.swipeState_.pos).to.equal(-0.1);
     expect(nextTr.callCount).to.equal(1);
     expect(prevTr.callCount).to.equal(1);
@@ -141,7 +137,7 @@ describe('Slides gestures', () => {
     expect(prevTr.getCall(0).args[0]).to.equal(0.1);
   });
 
-  it('should stay in-bounds on swipe', () => {
+  it("should stay in-bounds on swipe", () => {
     let prevTr = sinon.spy();
     let nextTr = sinon.spy();
     slides.currentIndex_ = 0;
@@ -152,9 +148,9 @@ describe('Slides gestures', () => {
       min: 0,
       max: 1,
       prevTr: prevTr,
-      nextTr: nextTr
+      nextTr: nextTr,
     };
-    slides.onSwipe_({deltaX: 32});
+    slides.onSwipe_({ deltaX: 32 });
     expect(slides.swipeState_.pos).to.equal(0);
     expect(nextTr.callCount).to.equal(1);
     expect(prevTr.callCount).to.equal(1);
@@ -162,8 +158,7 @@ describe('Slides gestures', () => {
     expect(prevTr.getCall(0).args[0]).to.equal(0);
   });
 
-
-  it('should go next after threshold', () => {
+  it("should go next after threshold", () => {
     let prevTr = sinon.spy();
     let nextTr = sinon.spy();
     slides.currentIndex_ = 0;
@@ -174,10 +169,10 @@ describe('Slides gestures', () => {
       min: 0,
       max: 1,
       prevTr: prevTr,
-      nextTr: nextTr
+      nextTr: nextTr,
     };
     slides.swipeState_ = s;
-    let promise = slides.onSwipeEnd_({velocityX: 0});
+    let promise = slides.onSwipeEnd_({ velocityX: 0 });
     expect(slides.swipeState_).to.equal(null);
     return promise.then(() => {
       expect(nextTr.callCount).to.be.gt(1);
@@ -190,7 +185,7 @@ describe('Slides gestures', () => {
     });
   });
 
-  it('should go next before threshold but with velocity', () => {
+  it("should go next before threshold but with velocity", () => {
     let prevTr = sinon.spy();
     let nextTr = sinon.spy();
     slides.currentIndex_ = 0;
@@ -201,10 +196,10 @@ describe('Slides gestures', () => {
       min: 0,
       max: 1,
       prevTr: prevTr,
-      nextTr: nextTr
+      nextTr: nextTr,
     };
     slides.swipeState_ = s;
-    let promise = slides.onSwipeEnd_({velocityX: -0.5});
+    let promise = slides.onSwipeEnd_({ velocityX: -0.5 });
     expect(slides.swipeState_).to.equal(null);
     return promise.then(() => {
       expect(nextTr.callCount).to.be.gt(1);
@@ -217,7 +212,7 @@ describe('Slides gestures', () => {
     });
   });
 
-  it('should bounce back before threshold and no velocity', () => {
+  it("should bounce back before threshold and no velocity", () => {
     let prevTr = sinon.spy();
     let nextTr = sinon.spy();
     slides.currentIndex_ = 0;
@@ -228,10 +223,10 @@ describe('Slides gestures', () => {
       min: 0,
       max: 1,
       prevTr: prevTr,
-      nextTr: nextTr
+      nextTr: nextTr,
     };
     slides.swipeState_ = s;
-    let promise = slides.onSwipeEnd_({velocityX: 0});
+    let promise = slides.onSwipeEnd_({ velocityX: 0 });
     expect(slides.swipeState_).to.equal(null);
     return promise.then(() => {
       expect(nextTr.callCount).to.be.gt(1);
@@ -242,7 +237,7 @@ describe('Slides gestures', () => {
     });
   });
 
-  it('should bounce back before threshold and opposite velocity', () => {
+  it("should bounce back before threshold and opposite velocity", () => {
     let prevTr = sinon.spy();
     let nextTr = sinon.spy();
     slides.currentIndex_ = 0;
@@ -253,10 +248,10 @@ describe('Slides gestures', () => {
       min: 0,
       max: 1,
       prevTr: prevTr,
-      nextTr: nextTr
+      nextTr: nextTr,
     };
     slides.swipeState_ = s;
-    let promise = slides.onSwipeEnd_({velocityX: 0.5});
+    let promise = slides.onSwipeEnd_({ velocityX: 0.5 });
     expect(slides.swipeState_).to.equal(null);
     return promise.then(() => {
       expect(nextTr.callCount).to.be.gt(1);

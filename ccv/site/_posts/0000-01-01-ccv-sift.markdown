@@ -6,28 +6,26 @@ status: publish
 title: lib/ccv_sift.c
 desc: scale invariant feature transform
 categories:
-- lib
+  - lib
 ---
 
-ccv\_sift
----------
+## ccv_sift
 
-	void ccv_sift(ccv_dense_matrix_t *a, ccv_array_t **keypoints, ccv_dense_matrix_t **desc, int type, ccv_sift_param_t params)
+    void ccv_sift(ccv_dense_matrix_t *a, ccv_array_t **keypoints, ccv_dense_matrix_t **desc, int type, ccv_sift_param_t params)
 
-Compute [SIFT](https://en.wikipedia.org/wiki/Scale-invariant\_feature\_transform) key-points.
+Compute [SIFT](https://en.wikipedia.org/wiki/Scale-invariant_feature_transform) key-points.
 
- * **a**: The input matrix.
- * **keypoints**: The array of key-points, a ccv\_keypoint\_t structure.
- * **desc**: The descriptor for each key-point.
- * **type**: The type of the descriptor, if 0, ccv will default to CCV\_32F.
- * **params**: A **ccv\_sift\_param\_t** structure that defines various aspect of SIFT function.
+- **a**: The input matrix.
+- **keypoints**: The array of key-points, a ccv_keypoint_t structure.
+- **desc**: The descriptor for each key-point.
+- **type**: The type of the descriptor, if 0, ccv will default to CCV_32F.
+- **params**: A **ccv_sift_param_t** structure that defines various aspect of SIFT function.
 
-ccv\_sift\_param\_t
--------------------
+## ccv_sift_param_t
 
- * **edge\_threshold**: Above this threshold, it will be recognized as edge otherwise be ignored.
- * **nlevels**: Number of levels for each octaves.
- * **noctaves**: Number of octaves.
- * **norm\_threshold**: If norm of the descriptor is smaller than threshold, it will be ignored.
- * **peak\_threshold**: Above this threshold, it will be recognized as potential feature point.
- * **up2x**: If upscale the image for better SIFT accuracy.
+- **edge_threshold**: Above this threshold, it will be recognized as edge otherwise be ignored.
+- **nlevels**: Number of levels for each octaves.
+- **noctaves**: Number of octaves.
+- **norm_threshold**: If norm of the descriptor is smaller than threshold, it will be ignored.
+- **peak_threshold**: Above this threshold, it will be recognized as potential feature point.
+- **up2x**: If upscale the image for better SIFT accuracy.

@@ -1,22 +1,22 @@
-'use strict';
+"use strict";
 
-var assert = require('./assert');
-var crypto = require('./crypto');
-var net = require('./net');
-var tls = require('./tls');
-var util = require('./util');
-var common = require('./_tls_common');
-var StreamWrap = require('./_stream_wrap').StreamWrap;
-var Buffer = require('./buffer').Buffer;
-var Duplex = require('./stream').Duplex;
-var debug = util.debuglog('tls');
-var Timer = process.binding('timer_wrap').Timer;
-var tls_wrap = process.binding('tls_wrap');
-var TCP = process.binding('tcp_wrap').TCP;
-var Pipe = process.binding('pipe_wrap').Pipe;
+var assert = require("./assert");
+var crypto = require("./crypto");
+var net = require("./net");
+var tls = require("./tls");
+var util = require("./util");
+var common = require("./_tls_common");
+var StreamWrap = require("./_stream_wrap").StreamWrap;
+var Buffer = require("./buffer").Buffer;
+var Duplex = require("./stream").Duplex;
+var debug = util.debuglog("tls");
+var Timer = process.binding("timer_wrap").Timer;
+var tls_wrap = process.binding("tls_wrap");
+var TCP = process.binding("tcp_wrap").TCP;
+var Pipe = process.binding("pipe_wrap").Pipe;
 
 function onhandshakestart() {
-  debug('onhandshakestart');
+  debug("onhandshakestart");
 
   var self = this;
   var ssl = self._handle;
@@ -24,11 +24,11 @@ function onhandshakestart() {
 
   assert(now >= ssl.lastHandshakeTime);
 
-  if ((now - ssl.lastHandshakeTime) >= tls.CLIENT_RENEG_WINDOW * 1000) {
+  if (now - ssl.lastHandshakeTime >= tls.CLIENT_RENEG_WINDOW * 1000) {
     ssl.handshakes = 0;
   }
 
-  var first = (ssl.lastHandshakeTime === 0);
+  var first = ssl.lastHandshakeTime === 0;
   ssl.lastHandshakeTime = now;
   if (first) return;
 
@@ -36,33 +36,28 @@ function onhandshakestart() {
     // Defer the error event to the next tick. We're being called from OpenSSL's
     // state machine and OpenSSL is not re-entrant. We cannot allow the user's
     // callback to destroy the connection right now, it would crash and burn.
-    setImmediate(function() {
-      var err = new Error('TLS session renegotiation attack detected.');
+    setImmediate(function () {
+      var err = new Error("TLS session renegotiation attack detected.");
       self._emitTLSError(err);
     });
   }
 }
 
-
 function onhandshakedone() {
   // for future use
-  debug('onhandshakedone');
+  debug("onhandshakedone");
   this._finishInit();
 }
-
 
 function loadSession(self, hello, cb) {
   var once = false;
   function onSession(err, session) {
-    if (once)
-      return cb(new Error('TLS session callback was called 2 times'));
+    if (once) return cb(new Error("TLS session callback was called 2 times"));
     once = true;
 
-    if (err)
-      return cb(err);
+    if (err) return cb(err);
 
-    if (!self._handle)
-      return cb(new Error('Socket is closed'));
+    if (!self._handle) return cb(new Error("Socket is closed"));
 
     // NOTE: That we have disabled OpenSSL's internal session storage in
     // `node_crypto.cc` and hence its safe to rely on getting servername only
@@ -72,152 +67,127 @@ function loadSession(self, hello, cb) {
     cb(null, ret);
   }
 
-  if (hello.sessionId.length <= 0 ||
-      hello.tlsTicket ||
-      self.server &&
-      !self.server.emit('resumeSession', hello.sessionId, onSession)) {
+  if (
+    hello.sessionId.length <= 0 ||
+    hello.tlsTicket ||
+    (self.server &&
+      !self.server.emit("resumeSession", hello.sessionId, onSession))
+  ) {
     cb(null);
   }
 }
 
-
 function loadSNI(self, servername, cb) {
-  if (!servername || !self._SNICallback)
-    return cb(null);
+  if (!servername || !self._SNICallback) return cb(null);
 
   var once = false;
-  self._SNICallback(servername, function(err, context) {
-    if (once)
-      return cb(new Error('TLS SNI callback was called 2 times'));
+  self._SNICallback(servername, function (err, context) {
+    if (once) return cb(new Error("TLS SNI callback was called 2 times"));
     once = true;
 
-    if (err)
-      return cb(err);
+    if (err) return cb(err);
 
-    if (!self._handle)
-      return cb(new Error('Socket is closed'));
+    if (!self._handle) return cb(new Error("Socket is closed"));
 
     // TODO(indutny): eventually disallow raw `SecureContext`
-    if (context)
-      self._handle.sni_context = context.context || context;
+    if (context) self._handle.sni_context = context.context || context;
 
     cb(null, self._handle.sni_context);
   });
 }
 
-
 function requestOCSP(self, hello, ctx, cb) {
-  if (!hello.OCSPRequest || !self.server)
-    return cb(null);
+  if (!hello.OCSPRequest || !self.server) return cb(null);
 
-  if (!ctx)
-    ctx = self.server._sharedCreds;
-  if (ctx.context)
-    ctx = ctx.context;
+  if (!ctx) ctx = self.server._sharedCreds;
+  if (ctx.context) ctx = ctx.context;
 
-  if (self.server.listenerCount('OCSPRequest') === 0) {
+  if (self.server.listenerCount("OCSPRequest") === 0) {
     return cb(null);
   } else {
-    self.server.emit('OCSPRequest',
-                     ctx.getCertificate(),
-                     ctx.getIssuer(),
-                     onOCSP);
+    self.server.emit(
+      "OCSPRequest",
+      ctx.getCertificate(),
+      ctx.getIssuer(),
+      onOCSP
+    );
   }
 
   var once = false;
   function onOCSP(err, response) {
-    if (once)
-      return cb(new Error('TLS OCSP callback was called 2 times'));
+    if (once) return cb(new Error("TLS OCSP callback was called 2 times"));
     once = true;
 
-    if (err)
-      return cb(err);
+    if (err) return cb(err);
 
-    if (!self._handle)
-      return cb(new Error('Socket is closed'));
+    if (!self._handle) return cb(new Error("Socket is closed"));
 
-    if (response)
-      self._handle.setOCSPResponse(response);
+    if (response) self._handle.setOCSPResponse(response);
     cb(null);
   }
 }
 
-
 function onclienthello(hello) {
   var self = this;
 
-  loadSession(self, hello, function(err, session) {
-    if (err)
-      return self.destroy(err);
+  loadSession(self, hello, function (err, session) {
+    if (err) return self.destroy(err);
 
     self._handle.endParser();
   });
 }
 
-
 function oncertcb(info) {
   var self = this;
   var servername = info.servername;
 
-  loadSNI(self, servername, function(err, ctx) {
-    if (err)
-      return self.destroy(err);
-    requestOCSP(self, info, ctx, function(err) {
-      if (err)
-        return self.destroy(err);
+  loadSNI(self, servername, function (err, ctx) {
+    if (err) return self.destroy(err);
+    requestOCSP(self, info, ctx, function (err) {
+      if (err) return self.destroy(err);
 
-      if (!self._handle)
-        return self.destroy(new Error('Socket is closed'));
+      if (!self._handle) return self.destroy(new Error("Socket is closed"));
 
       self._handle.certCbDone();
     });
   });
 }
 
-
 function onnewsession(key, session) {
-  if (!this.server)
-    return;
+  if (!this.server) return;
 
   var self = this;
   var once = false;
 
   this._newSessionPending = true;
-  if (!this.server.emit('newSession', key, session, done))
-    done();
+  if (!this.server.emit("newSession", key, session, done)) done();
 
   function done() {
-    if (once)
-      return;
+    if (once) return;
     once = true;
 
-    if (!self._handle)
-      return self.destroy(new Error('Socket is closed'));
+    if (!self._handle) return self.destroy(new Error("Socket is closed"));
 
     self._handle.newSessionDone();
 
     self._newSessionPending = false;
-    if (self._securePending)
-      self._finishInit();
+    if (self._securePending) self._finishInit();
     self._securePending = false;
   }
 }
 
-
 function onocspresponse(resp) {
-  this.emit('OCSPResponse', resp);
+  this.emit("OCSPResponse", resp);
 }
 
 function initRead(tls, wrapped) {
   // If we were destroyed already don't bother reading
-  if (!tls._handle)
-    return;
+  if (!tls._handle) return;
 
   // Socket already has some buffered data - emulate receiving it
   if (wrapped && wrapped._readableState && wrapped._readableState.length) {
     var buf;
-    while ((buf = wrapped.read()) !== null)
-      tls._handle.receive(buf);
+    while ((buf = wrapped.read()) !== null) tls._handle.receive(buf);
   }
 
   tls.read(0);
@@ -243,10 +213,9 @@ function TLSSocket(socket, options) {
   var wrap;
   if (!(socket instanceof net.Socket) && socket instanceof Duplex)
     wrap = new StreamWrap(socket);
-  else if ((socket instanceof net.Socket) && !socket._handle)
+  else if (socket instanceof net.Socket && !socket._handle)
     wrap = new StreamWrap(socket);
-  else
-    wrap = socket;
+  else wrap = socket;
 
   // Just a documented property to make secure sockets
   // distinguishable from regular ones.
@@ -256,13 +225,13 @@ function TLSSocket(socket, options) {
     handle: this._wrapHandle(wrap),
     allowHalfOpen: socket && socket.allowHalfOpen,
     readable: false,
-    writable: false
+    writable: false,
   });
 
   // Proxy for API compatibility
   this.ssl = this._handle;
 
-  this.on('error', this._emitTLSError);
+  this.on("error", this._emitTLSError);
 
   this._init(socket, wrap);
 
@@ -278,16 +247,27 @@ util.inherits(TLSSocket, net.Socket);
 exports.TLSSocket = TLSSocket;
 
 var proxiedMethods = [
-  'ref', 'unref', 'open', 'bind', 'listen', 'connect', 'bind6',
-  'connect6', 'getsockname', 'getpeername', 'setNoDelay', 'setKeepAlive',
-  'setSimultaneousAccepts', 'setBlocking',
+  "ref",
+  "unref",
+  "open",
+  "bind",
+  "listen",
+  "connect",
+  "bind6",
+  "connect6",
+  "getsockname",
+  "getpeername",
+  "setNoDelay",
+  "setKeepAlive",
+  "setSimultaneousAccepts",
+  "setBlocking",
 
   // PipeWrap
-  'setPendingInstances'
+  "setPendingInstances",
 ];
 
 // Proxy HandleWrap, PipeWrap and TCPWrap methods
-proxiedMethods.forEach(function(name) {
+proxiedMethods.forEach(function (name) {
   tls_wrap.TLSWrap.prototype[name] = function methodProxy() {
     if (this._parent[name])
       return this._parent[name].apply(this._parent, arguments);
@@ -296,18 +276,17 @@ proxiedMethods.forEach(function(name) {
 
 tls_wrap.TLSWrap.prototype.close = function closeProxy(cb) {
   if (this._parentWrap && this._parentWrap._handle === this._parent) {
-    this._parentWrap.once('close', cb);
+    this._parentWrap.once("close", cb);
     return this._parentWrap.destroy();
   }
   return this._parent.close(cb);
 };
 
-TLSSocket.prototype._wrapHandle = function(wrap) {
+TLSSocket.prototype._wrapHandle = function (wrap) {
   var res;
   var handle;
 
-  if (wrap)
-    handle = wrap._handle;
+  if (wrap) handle = wrap._handle;
 
   var options = this._tlsOptions;
   if (!handle) {
@@ -316,26 +295,27 @@ TLSSocket.prototype._wrapHandle = function(wrap) {
   }
 
   // Wrap socket's handle
-  var context = options.secureContext ||
-                options.credentials ||
-                tls.createSecureContext();
-  res = tls_wrap.wrap(handle._externalStream,
-                      context.context,
-                      options.isServer);
+  var context =
+    options.secureContext || options.credentials || tls.createSecureContext();
+  res = tls_wrap.wrap(
+    handle._externalStream,
+    context.context,
+    options.isServer
+  );
   res._parent = handle;
   res._parentWrap = wrap;
   res._secureContext = context;
   res.reading = handle.reading;
-  Object.defineProperty(handle, 'reading', {
+  Object.defineProperty(handle, "reading", {
     get: function readingGetter() {
       return res.reading;
     },
     set: function readingSetter(value) {
       res.reading = value;
-    }
+    },
   });
 
-  this.on('close', function() {
+  this.on("close", function () {
     // Make sure we are not doing it on OpenSSL's stack
     setImmediate(destroySSL, this);
     res = null;
@@ -358,7 +338,7 @@ TLSSocket.prototype._destroySSL = function _destroySSL() {
   this.ssl = null;
 };
 
-TLSSocket.prototype._init = function(socket, wrap) {
+TLSSocket.prototype._init = function (socket, wrap) {
   var self = this;
   var options = this._tlsOptions;
   var ssl = this._handle;
@@ -374,13 +354,12 @@ TLSSocket.prototype._init = function(socket, wrap) {
   // Move the server to TLSSocket, otherwise both `socket.destroy()` and
   // `TLSSocket.destroy()` will decrement number of connections of the TLS
   // server, leading to misfiring `server.close()` callback
-  if (socket && socket.server === this.server)
-    socket.server = null;
+  if (socket && socket.server === this.server) socket.server = null;
 
   // For clients, we will always have either a given ca list or be using
   // default one
   var requestCert = !!options.requestCert || !options.isServer,
-      rejectUnauthorized = !!options.rejectUnauthorized;
+    rejectUnauthorized = !!options.rejectUnauthorized;
 
   this._requestCert = requestCert;
   this._rejectUnauthorized = rejectUnauthorized;
@@ -397,32 +376,33 @@ TLSSocket.prototype._init = function(socket, wrap) {
     ssl.handshakes = 0;
 
     if (this.server) {
-      if (this.server.listenerCount('resumeSession') > 0 ||
-          this.server.listenerCount('newSession') > 0) {
+      if (
+        this.server.listenerCount("resumeSession") > 0 ||
+        this.server.listenerCount("newSession") > 0
+      ) {
         ssl.enableSessionCallbacks();
       }
-      if (this.server.listenerCount('OCSPRequest') > 0)
-        ssl.enableCertCb();
+      if (this.server.listenerCount("OCSPRequest") > 0) ssl.enableCertCb();
     }
   } else {
-    ssl.onhandshakestart = function() {};
+    ssl.onhandshakestart = function () {};
     ssl.onhandshakedone = this._finishInit.bind(this);
     ssl.onocspresponse = onocspresponse.bind(this);
 
-    if (options.session)
-      ssl.setSession(options.session);
+    if (options.session) ssl.setSession(options.session);
   }
 
-  ssl.onerror = function(err) {
-    if (self._writableState.errorEmitted)
-      return;
+  ssl.onerror = function (err) {
+    if (self._writableState.errorEmitted) return;
 
     // Destroy socket if error happened before handshake's finish
     if (!self._secureEstablished) {
       self.destroy(self._tlsError(err));
-    } else if (options.isServer &&
-               rejectUnauthorized &&
-               /peer did not return a certificate/.test(err.message)) {
+    } else if (
+      options.isServer &&
+      rejectUnauthorized &&
+      /peer did not return a certificate/.test(err.message)
+    ) {
       // Ignore server's authorization errors
       self.destroy();
     } else {
@@ -436,13 +416,14 @@ TLSSocket.prototype._init = function(socket, wrap) {
   // If custom SNICallback was given, or if
   // there're SNI contexts to perform match against -
   // set `.onsniselect` callback.
-  if (process.features.tls_sni &&
-      options.isServer &&
-      options.SNICallback &&
-      options.server &&
-      (options.SNICallback !== SNICallback ||
-       options.server._contexts.length)) {
-    assert(typeof options.SNICallback === 'function');
+  if (
+    process.features.tls_sni &&
+    options.isServer &&
+    options.SNICallback &&
+    options.server &&
+    (options.SNICallback !== SNICallback || options.server._contexts.length)
+  ) {
+    assert(typeof options.SNICallback === "function");
     this._SNICallback = options.SNICallback;
     ssl.enableCertCb();
   }
@@ -458,15 +439,15 @@ TLSSocket.prototype._init = function(socket, wrap) {
 
     // To prevent assertion in afterConnect() and properly kick off readStart
     this._connecting = socket._connecting || !socket._handle;
-    socket.once('connect', function() {
+    socket.once("connect", function () {
       self._connecting = false;
-      self.emit('connect');
+      self.emit("connect");
     });
   }
 
   // Assume `tls.connect()`
   if (wrap) {
-    wrap.on('error', function(err) {
+    wrap.on("error", function (err) {
       self._emitTLSError(err);
     });
   } else {
@@ -475,36 +456,37 @@ TLSSocket.prototype._init = function(socket, wrap) {
   }
 };
 
-TLSSocket.prototype.renegotiate = function(options, callback) {
+TLSSocket.prototype.renegotiate = function (options, callback) {
   var requestCert = this._requestCert,
-      rejectUnauthorized = this._rejectUnauthorized;
+    rejectUnauthorized = this._rejectUnauthorized;
 
-  if (this.destroyed)
-    return;
+  if (this.destroyed) return;
 
-  if (typeof options.requestCert !== 'undefined')
+  if (typeof options.requestCert !== "undefined")
     requestCert = !!options.requestCert;
-  if (typeof options.rejectUnauthorized !== 'undefined')
+  if (typeof options.rejectUnauthorized !== "undefined")
     rejectUnauthorized = !!options.rejectUnauthorized;
 
-  if (requestCert !== this._requestCert ||
-      rejectUnauthorized !== this._rejectUnauthorized) {
+  if (
+    requestCert !== this._requestCert ||
+    rejectUnauthorized !== this._rejectUnauthorized
+  ) {
     this._handle.setVerifyMode(requestCert, rejectUnauthorized);
     this._requestCert = requestCert;
     this._rejectUnauthorized = rejectUnauthorized;
   }
   if (!this._handle.renegotiate()) {
     if (callback) {
-      process.nextTick(callback, new Error('Failed to renegotiate'));
+      process.nextTick(callback, new Error("Failed to renegotiate"));
     }
     return false;
   }
 
   // Ensure that we'll cycle through internal openssl's state
-  this.write('');
+  this.write("");
 
   if (callback) {
-    this.once('secure', function() {
+    this.once("secure", function () {
       callback(null);
     });
   }
@@ -520,32 +502,29 @@ TLSSocket.prototype.getTLSTicket = function getTLSTicket() {
   return this._handle.getTLSTicket();
 };
 
-TLSSocket.prototype._handleTimeout = function() {
-  this._emitTLSError(new Error('TLS handshake timeout'));
+TLSSocket.prototype._handleTimeout = function () {
+  this._emitTLSError(new Error("TLS handshake timeout"));
 };
 
-TLSSocket.prototype._emitTLSError = function(err) {
+TLSSocket.prototype._emitTLSError = function (err) {
   var e = this._tlsError(err);
-  if (e)
-    this.emit('error', e);
+  if (e) this.emit("error", e);
 };
 
-TLSSocket.prototype._tlsError = function(err) {
-  this.emit('_tlsError', err);
-  if (this._controlReleased)
-    return err;
+TLSSocket.prototype._tlsError = function (err) {
+  this.emit("_tlsError", err);
+  if (this._controlReleased) return err;
   return null;
 };
 
-TLSSocket.prototype._releaseControl = function() {
-  if (this._controlReleased)
-    return false;
+TLSSocket.prototype._releaseControl = function () {
+  if (this._controlReleased) return false;
   this._controlReleased = true;
-  this.removeListener('error', this._emitTLSError);
+  this.removeListener("error", this._emitTLSError);
   return true;
 };
 
-TLSSocket.prototype._finishInit = function() {
+TLSSocket.prototype._finishInit = function () {
   // `newSession` callback wasn't called yet
   if (this._newSessionPending) {
     this._securePending = true;
@@ -560,51 +539,49 @@ TLSSocket.prototype._finishInit = function() {
     this.servername = this._handle.getServername();
   }
 
-  debug('secure established');
+  debug("secure established");
   this._secureEstablished = true;
   if (this._tlsOptions.handshakeTimeout > 0)
     this.setTimeout(0, this._handleTimeout);
-  this.emit('secure');
+  this.emit("secure");
 };
 
-TLSSocket.prototype._start = function() {
+TLSSocket.prototype._start = function () {
   if (this._connecting) {
-    this.once('connect', function() {
+    this.once("connect", function () {
       this._start();
     });
     return;
   }
 
   // Socket was destroyed before the connection was established
-  if (!this._handle)
-    return;
+  if (!this._handle) return;
 
-  debug('start');
-  if (this._tlsOptions.requestOCSP)
-    this._handle.requestOCSP();
+  debug("start");
+  if (this._tlsOptions.requestOCSP) this._handle.requestOCSP();
   this._handle.start();
 };
 
-TLSSocket.prototype.setServername = function(name) {
+TLSSocket.prototype.setServername = function (name) {
   this._handle.setServername(name);
 };
 
-TLSSocket.prototype.setSession = function(session) {
-  if (typeof session === 'string')
-    session = new Buffer(session, 'binary');
+TLSSocket.prototype.setSession = function (session) {
+  if (typeof session === "string") session = new Buffer(session, "binary");
   this._handle.setSession(session);
 };
 
-TLSSocket.prototype.getPeerCertificate = function(detailed) {
+TLSSocket.prototype.getPeerCertificate = function (detailed) {
   if (this._handle) {
     return common.translatePeerCertificate(
-        this._handle.getPeerCertificate(detailed));
+      this._handle.getPeerCertificate(detailed)
+    );
   }
 
   return null;
 };
 
-TLSSocket.prototype.getSession = function() {
+TLSSocket.prototype.getSession = function () {
   if (this._handle) {
     return this._handle.getSession();
   }
@@ -612,7 +589,7 @@ TLSSocket.prototype.getSession = function() {
   return null;
 };
 
-TLSSocket.prototype.isSessionReused = function() {
+TLSSocket.prototype.isSessionReused = function () {
   if (this._handle) {
     return this._handle.isSessionReused();
   }
@@ -620,7 +597,7 @@ TLSSocket.prototype.isSessionReused = function() {
   return null;
 };
 
-TLSSocket.prototype.getCipher = function(err) {
+TLSSocket.prototype.getCipher = function (err) {
   if (this._handle) {
     return this._handle.getCurrentCipher();
   } else {
@@ -629,7 +606,6 @@ TLSSocket.prototype.getCipher = function(err) {
 };
 
 // TODO: support anonymous (nocert) and PSK
-
 
 // AUTHENTICATION MODES
 //
@@ -698,10 +674,10 @@ TLSSocket.prototype.getCipher = function(err) {
 function Server(/* [options], listener */) {
   var options, listener;
 
-  if (arguments[0] !== null && typeof arguments[0] === 'object') {
+  if (arguments[0] !== null && typeof arguments[0] === "object") {
     options = arguments[0];
     listener = arguments[1];
-  } else if (typeof arguments[0] === 'function') {
+  } else if (typeof arguments[0] === "function") {
     options = {};
     listener = arguments[0];
   }
@@ -728,14 +704,14 @@ function Server(/* [options], listener */) {
     secureOptions: self.secureOptions,
     honorCipherOrder: self.honorCipherOrder,
     crl: self.crl,
-    sessionIdContext: self.sessionIdContext
+    sessionIdContext: self.sessionIdContext,
   });
   this._sharedCreds = sharedCreds;
 
-  var timeout = options.handshakeTimeout || (120 * 1000);
+  var timeout = options.handshakeTimeout || 120 * 1000;
 
-  if (typeof timeout !== 'number') {
-    throw new TypeError('handshakeTimeout must be a number');
+  if (typeof timeout !== "number") {
+    throw new TypeError("handshakeTimeout must be a number");
   }
 
   if (self.sessionTimeout) {
@@ -747,7 +723,7 @@ function Server(/* [options], listener */) {
   }
 
   // constructor call
-  net.Server.call(this, function(raw_socket) {
+  net.Server.call(this, function (raw_socket) {
     var socket = new TLSSocket(raw_socket, {
       secureContext: sharedCreds,
       isServer: true,
@@ -756,91 +732,84 @@ function Server(/* [options], listener */) {
       rejectUnauthorized: self.rejectUnauthorized,
       handshakeTimeout: timeout,
       NPNProtocols: self.NPNProtocols,
-      SNICallback: options.SNICallback || SNICallback
+      SNICallback: options.SNICallback || SNICallback,
     });
 
-    socket.on('secure', function() {
+    socket.on("secure", function () {
       if (socket._requestCert) {
         var verifyError = socket._handle.verifyError();
         if (verifyError) {
           socket.authorizationError = verifyError.code;
 
-          if (socket._rejectUnauthorized)
-            socket.destroy();
+          if (socket._rejectUnauthorized) socket.destroy();
         } else {
           socket.authorized = true;
         }
       }
 
       if (!socket.destroyed && socket._releaseControl())
-        self.emit('secureConnection', socket);
+        self.emit("secureConnection", socket);
     });
 
     var errorEmitted = false;
-    socket.on('close', function(err) {
+    socket.on("close", function (err) {
       // Closed because of error - no need to emit it twice
-      if (err)
-        return;
+      if (err) return;
 
       // Emit ECONNRESET
       if (!socket._controlReleased && !errorEmitted) {
         errorEmitted = true;
-        var connReset = new Error('socket hang up');
-        connReset.code = 'ECONNRESET';
-        self.emit('clientError', connReset, socket);
+        var connReset = new Error("socket hang up");
+        connReset.code = "ECONNRESET";
+        self.emit("clientError", connReset, socket);
       }
     });
 
-    socket.on('_tlsError', function(err) {
+    socket.on("_tlsError", function (err) {
       if (!socket._controlReleased && !errorEmitted) {
         errorEmitted = true;
-        self.emit('clientError', err, socket);
+        self.emit("clientError", err, socket);
       }
     });
   });
 
   if (listener) {
-    this.on('secureConnection', listener);
+    this.on("secureConnection", listener);
   }
 }
 
 util.inherits(Server, net.Server);
 exports.Server = Server;
-exports.createServer = function(options, listener) {
+exports.createServer = function (options, listener) {
   return new Server(options, listener);
 };
 
-
-Server.prototype._getServerData = function() {
+Server.prototype._getServerData = function () {
   return {
-    ticketKeys: this.getTicketKeys().toString('hex')
+    ticketKeys: this.getTicketKeys().toString("hex"),
   };
 };
 
-
-Server.prototype._setServerData = function(data) {
-  this.setTicketKeys(new Buffer(data.ticketKeys, 'hex'));
+Server.prototype._setServerData = function (data) {
+  this.setTicketKeys(new Buffer(data.ticketKeys, "hex"));
 };
-
 
 Server.prototype.getTicketKeys = function getTicketKeys(keys) {
   return this._sharedCreds.context.getTicketKeys(keys);
 };
 
-
 Server.prototype.setTicketKeys = function setTicketKeys(keys) {
   this._sharedCreds.context.setTicketKeys(keys);
 };
 
-
-Server.prototype.setOptions = function(options) {
-  if (typeof options.requestCert === 'boolean') {
+Server.prototype.setOptions = function (options) {
+  if (typeof options.requestCert === "boolean") {
     this.requestCert = options.requestCert;
   } else {
     this.requestCert = false;
   }
 
-  if (typeof options.rejectUnauthorized === 'boolean') {
+  if (typeof options.rejectUnauthorized === "boolean") {
     this.rejectUnauthorized = options.rejectUnauthorized;
   } else {
     this.rejectUnauthorized = false;
@@ -854,44 +823,46 @@ Server.prototype.setOptions = function(options) {
   if (options.secureProtocol) this.secureProtocol = options.secureProtocol;
   if (options.crl) this.crl = options.crl;
   if (options.ciphers) this.ciphers = options.ciphers;
-  if (options.ecdhCurve !== undefined)
-    this.ecdhCurve = options.ecdhCurve;
+  if (options.ecdhCurve !== undefined) this.ecdhCurve = options.ecdhCurve;
   if (options.dhparam) this.dhparam = options.dhparam;
   if (options.sessionTimeout) this.sessionTimeout = options.sessionTimeout;
   if (options.ticketKeys) this.ticketKeys = options.ticketKeys;
   var secureOptions = options.secureOptions || 0;
   if (options.honorCipherOrder !== undefined)
     this.honorCipherOrder = !!options.honorCipherOrder;
-  else
-    this.honorCipherOrder = true;
+  else this.honorCipherOrder = true;
   if (secureOptions) this.secureOptions = secureOptions;
   if (options.NPNProtocols) tls.convertNPNProtocols(options.NPNProtocols, this);
   if (options.sessionIdContext) {
     this.sessionIdContext = options.sessionIdContext;
   } else {
-    this.sessionIdContext = crypto.createHash('md5')
-                                  .update(process.argv.join(' '))
-                                  .digest('hex');
+    this.sessionIdContext = crypto
+      .createHash("md5")
+      .update(process.argv.join(" "))
+      .digest("hex");
   }
 };
 
 // SNI Contexts High-Level API
-Server.prototype.addContext = function(servername, context) {
+Server.prototype.addContext = function (servername, context) {
   if (!servername) {
-    throw new Error('Servername is required parameter for Server.addContext');
+    throw new Error("Servername is required parameter for Server.addContext");
   }
 
-  var re = new RegExp('^' +
-                      servername.replace(/([\.^$+?\-\\[\]{}])/g, '\\$1')
-                                .replace(/\*/g, '[^\.]*') +
-                      '$');
+  var re = new RegExp(
+    "^" +
+      servername
+        .replace(/([\.^$+?\-\\[\]{}])/g, "\\$1")
+        .replace(/\*/g, "[^.]*") +
+      "$"
+  );
   this._contexts.push([re, tls.createSecureContext(context).context]);
 };
 
 function SNICallback(servername, callback) {
   var ctx;
 
-  this.server._contexts.some(function(elem) {
+  this.server._contexts.some(function (elem) {
     if (servername.match(elem[0]) !== null) {
       ctx = elem[1];
       return true;
@@ -900,7 +871,6 @@ function SNICallback(servername, callback) {
 
   callback(null, ctx);
 }
-
 
 // Target API:
 //
@@ -921,38 +891,38 @@ function normalizeConnectArgs(listArgs) {
   var options = args[0];
   var cb = args[1];
 
-  if (listArgs[1] !== null && typeof listArgs[1] === 'object') {
+  if (listArgs[1] !== null && typeof listArgs[1] === "object") {
     options = util._extend(options, listArgs[1]);
-  } else if (listArgs[2] !== null && typeof listArgs[2] === 'object') {
+  } else if (listArgs[2] !== null && typeof listArgs[2] === "object") {
     options = util._extend(options, listArgs[2]);
   }
 
-  return (cb) ? [options, cb] : [options];
+  return cb ? [options, cb] : [options];
 }
 
-exports.connect = function(/* [port, host], options, cb */) {
+exports.connect = function (/* [port, host], options, cb */) {
   var args = normalizeConnectArgs(arguments);
   var options = args[0];
   var cb = args[1];
 
   var defaults = {
-    rejectUnauthorized: '0' !== process.env.NODE_TLS_REJECT_UNAUTHORIZED,
+    rejectUnauthorized: "0" !== process.env.NODE_TLS_REJECT_UNAUTHORIZED,
     ciphers: tls.DEFAULT_CIPHERS,
-    checkServerIdentity: tls.checkServerIdentity
+    checkServerIdentity: tls.checkServerIdentity,
   };
 
   options = util._extend(defaults, options || {});
-  if (!options.keepAlive)
-    options.singleUse = true;
+  if (!options.keepAlive) options.singleUse = true;
 
-  assert(typeof options.checkServerIdentity === 'function');
+  assert(typeof options.checkServerIdentity === "function");
 
-  var hostname = options.servername ||
-                 options.host ||
-                 (options.socket && options.socket._host) ||
-                 'localhost',
-      NPN = {},
-      context = tls.createSecureContext(options);
+  var hostname =
+      options.servername ||
+      options.host ||
+      (options.socket && options.socket._host) ||
+      "localhost",
+    NPN = {},
+    context = tls.createSecureContext(options);
   tls.convertNPNProtocols(options.NPNProtocols, NPN);
 
   var socket = new TLSSocket(options.socket, {
@@ -963,11 +933,10 @@ exports.connect = function(/* [port, host], options, cb */) {
     rejectUnauthorized: options.rejectUnauthorized,
     session: options.session,
     NPNProtocols: NPN.NPNProtocols,
-    requestOCSP: options.requestOCSP
+    requestOCSP: options.requestOCSP,
   });
 
-  if (cb)
-    socket.once('secureConnect', cb);
+  if (cb) socket.once("secureConnect", cb);
 
   if (!options.socket) {
     var connect_opt;
@@ -977,26 +946,23 @@ exports.connect = function(/* [port, host], options, cb */) {
       connect_opt = {
         port: options.port,
         host: options.host,
-        localAddress: options.localAddress
+        localAddress: options.localAddress,
       };
     }
-    socket.connect(connect_opt, function() {
+    socket.connect(connect_opt, function () {
       socket._start();
     });
   }
 
   socket._releaseControl();
 
-  if (options.session)
-    socket.setSession(options.session);
+  if (options.session) socket.setSession(options.session);
 
-  if (options.servername)
-    socket.setServername(options.servername);
+  if (options.servername) socket.setServername(options.servername);
 
-  if (options.socket)
-    socket._start();
+  if (options.socket) socket._start();
 
-  socket.on('secure', function() {
+  socket.on("secure", function () {
     var verifyError = socket._handle.verifyError();
 
     // Verify that server's identity matches it's certificate's names
@@ -1014,27 +980,27 @@ exports.connect = function(/* [port, host], options, cb */) {
         socket.destroy(verifyError);
         return;
       } else {
-        socket.emit('secureConnect');
+        socket.emit("secureConnect");
       }
     } else {
       socket.authorized = true;
-      socket.emit('secureConnect');
+      socket.emit("secureConnect");
     }
 
     // Uncork incoming data
-    socket.removeListener('end', onHangUp);
+    socket.removeListener("end", onHangUp);
   });
 
   function onHangUp() {
     // NOTE: This logic is shared with _http_client.js
     if (!socket._hadError) {
       socket._hadError = true;
-      var error = new Error('socket hang up');
-      error.code = 'ECONNRESET';
+      var error = new Error("socket hang up");
+      error.code = "ECONNRESET";
       socket.destroy(error);
     }
   }
-  socket.once('end', onHangUp);
+  socket.once("end", onHangUp);
 
   return socket;
 };

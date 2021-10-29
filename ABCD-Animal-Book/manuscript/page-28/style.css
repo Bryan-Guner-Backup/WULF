@@ -45,7 +45,7 @@ body {
   transform: rotate(3deg);
   -moz-transform: rotate(3deg);
   -webkit-transform: rotate(3deg);
-  margin: -6vw -3vw
+  margin: -6vw -3vw;
 }
 
 .mono {
@@ -170,7 +170,7 @@ body {
   border-radius: 100vw;
   background: #623812;
   border: 8px solid #b57734;
-  margin: -1vw 21vw
+  margin: -1vw 21vw;
 }
 
 .boca {
@@ -190,7 +190,7 @@ body {
   border-radius: 100%;
   background: #fbf07d;
   border-bottom: 1vw solid #f5b648;
-  margin: 0vw .5vw;
+  margin: 0vw 0.5vw;
 }
 
 .body {

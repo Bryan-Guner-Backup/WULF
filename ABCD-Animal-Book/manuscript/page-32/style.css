@@ -21,12 +21,13 @@ body {
   -webkit-transform: translateY(-3.5em) translate(-50%, -50%) rotate(45deg);
   -ms-transform: translateY(-3.5em) translate(-50%, -50%) rotate(45deg);
   transform: translateY(-3.5em) translate(-50%, -50%) rotate(45deg);
-  box-shadow: 0.2em 0.2em 0 0.24em #d6a21f inset, -0.1em -0.1em 0 0.1em #dcaa2b inset;
+  box-shadow: 0.2em 0.2em 0 0.24em #d6a21f inset,
+    -0.1em -0.1em 0 0.1em #dcaa2b inset;
 }
 
 .head:before,
 .head:after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -117,7 +118,8 @@ body {
 
 .tentacle._6 {
   z-index: 2;
-  -webkit-transform: translateX(4em) translateY(2em) rotateY(180deg) rotate(-130deg);
+  -webkit-transform: translateX(4em) translateY(2em) rotateY(180deg)
+    rotate(-130deg);
   transform: translateX(4em) translateY(2em) rotateY(180deg) rotate(-130deg);
 }
 
@@ -128,7 +130,8 @@ body {
 
 .tentacle._7 {
   z-index: 3;
-  -webkit-transform: translateX(4em) rotateY(180deg) translateY(1em) rotate(-110deg);
+  -webkit-transform: translateX(4em) rotateY(180deg) translateY(1em)
+    rotate(-110deg);
   transform: translateX(4em) rotateY(180deg) translateY(1em) rotate(-110deg);
 }
 
@@ -139,7 +142,8 @@ body {
 
 .tentacle._8 {
   z-index: 4;
-  -webkit-transform: translateX(3em) rotateY(180deg) translateY(2em) rotate(-150deg);
+  -webkit-transform: translateX(3em) rotateY(180deg) translateY(2em)
+    rotate(-150deg);
   transform: translateX(3em) rotateY(180deg) translateY(2em) rotate(-150deg);
 }
 
@@ -163,7 +167,7 @@ body {
 }
 
 .tentacle div:before {
-  content: '';
+  content: "";
   position: absolute;
   z-index: 2;
   top: 50%;
@@ -264,27 +268,127 @@ body {
   animation-delay: -2.8s !important;
 }
 
-.tentacle div div div div div div div div div div div div div div div div div div {
+.tentacle
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div {
   -webkit-animation-delay: -3s !important;
   animation-delay: -3s !important;
 }
 
-.tentacle div div div div div div div div div div div div div div div div div div div {
+.tentacle
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div {
   -webkit-animation-delay: -3.2s !important;
   animation-delay: -3.2s !important;
 }
 
-.tentacle div div div div div div div div div div div div div div div div div div div div {
+.tentacle
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div {
   -webkit-animation-delay: -3.4s !important;
   animation-delay: -3.4s !important;
 }
 
-.tentacle div div div div div div div div div div div div div div div div div div div div div {
+.tentacle
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div {
   -webkit-animation-delay: -3.6s !important;
   animation-delay: -3.6s !important;
 }
 
-.tentacle div div div div div div div div div div div div div div div div div div div div div div {
+.tentacle
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div
+  div {
   -webkit-animation-delay: -3.8s !important;
   animation-delay: -3.8s !important;
 }

@@ -1,5 +1,3 @@
 /*global define */
 
-define([
-    'tests/candy/functional/basics'
-], function () {});
+define(["tests/candy/functional/basics"], function () {});

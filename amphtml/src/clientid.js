@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-import {randomUUID} from './uuid';
-import {getService} from './service';
-
+import { randomUUID } from "./uuid";
+import { getService } from "./service";
 
 /**
  * @param {!Window} window
  */
 export function getClientId(window) {
   return clientIdServiceFor(window).clientId;
-};
-
+}
 
 /** @private */
 class ClientIdService {
@@ -37,13 +35,12 @@ class ClientIdService {
   }
 }
 
-
 /**
  * @param {!Window} window
  * @return {!ClientIdService}
  */
 function clientIdServiceFor(window) {
-  return getService(window, 'clientId', () => {
+  return getService(window, "clientId", () => {
     return new ClientIdService(window);
   });
-};
+}

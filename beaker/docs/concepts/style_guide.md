@@ -16,6 +16,7 @@ Tests should test what they say they test. Test names, both the name of the test
 The `test_name` function should be the first line in the Beaker test file.
 
 **Good:**
+
 ```ruby
 # head -1 puppet/acceptance/tests/resource/file/should_default_mode.rb
 test_name "file resource: set default modes" do
@@ -28,12 +29,15 @@ These methods aid in self-documenting your tests, including indention in the log
 The most common [structure methods](http://www.rubydoc.info/github/puppetlabs/beaker/Beaker/DSL/Structure) are [`#test_name`](http://www.rubydoc.info/github/puppetlabs/beaker/Beaker/DSL/Structure#test_name-instance_method), [`#step`](http://www.rubydoc.info/github/puppetlabs/beaker/Beaker/DSL/Structure#step-instance_method), and [`#teardown`](http://www.rubydoc.info/github/puppetlabs/beaker/Beaker/DSL/Structure#teardown-instance_method).
 
 **Good:**
+
 ```ruby
 step 'do this thang' do
   on(host, "echo 'do this thang'")
 end
 ```
+
 **Bad:**
+
 ```ruby
 step 'do this thang'
 on(host, "echo 'do this thang'")
@@ -51,6 +55,7 @@ Teardowns must be used to return the system to the state it was in prior to the 
 Teardowns can be placed anywhere in the test file or its helpers. The preferred style is to have a teardown step near the beginning of the test file to show the reader that the system state will be restored.
 
 **Good:**
+
 ```ruby
 test_name 'The source attribute' do
 
@@ -75,25 +80,32 @@ When using the Beaker [`on`](http://www.rubydoc.info/github/puppetlabs/beaker/Be
 **Good:**
 
 - Single 0 exit code allowed
+
 ```ruby
 on(host, "rm #{file_to_rm}")
 ```
+
 - Single non-0 exit code allowed
+
 ```ruby
 on(host, "rm #{file_to_rm}", :acceptable_exit_codes => 1)
 ```
+
 - Multiple exit codes allowed
+
 ```ruby
 on(host, "rm #{file_to_rm}", :acceptable_exit_codes => [0,1])
 ```
+
 - Any exit code allowed
+
 ```ruby
 on(host, "rm #{file_to_rm}", :accept_all_exit_codes => true)
 ```
 
 In the last case, when any exit code is allowed, one must follow-up with a valid assertion test.
 
-If an exit_code outside of 0 is expected, one must use acceptable_exit_codes so the test will fail on the proper assertion and not error at that command.  Allow only the minimum expected set of exit codes unless coverage is provided by subsequent assertions.
+If an exit_code outside of 0 is expected, one must use acceptable_exit_codes so the test will fail on the proper assertion and not error at that command. Allow only the minimum expected set of exit codes unless coverage is provided by subsequent assertions.
 
 ## Test Outcomes
 
@@ -132,10 +144,13 @@ These can be used anywhere in a test to exit early. A [`skip_test`](http://www.r
 Skipping tests can be used, for instance, when they are temporarily failing or not yet complete.
 
 **Good:**
+
 ```ruby
 skip_test 'requires puppet and mcollective service scripts from AIO agent package' if @options[:type] != 'aio'
 ```
+
 **Bad:**
+
 ```ruby
 confine :to, :platform => 'solaris:pending'
 ```

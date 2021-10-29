@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-
-
 /**
  * Throws an error if the first argument isn't truish.
  *
@@ -39,8 +37,8 @@
 export function assert(shouldBeTrueish, message, var_args) {
   var firstElement;
   if (!shouldBeTrueish) {
-    message = message || 'Assertion failed';
-    var splitMessage = message.split('%s');
+    message = message || "Assertion failed";
+    var splitMessage = message.split("%s");
     var first = splitMessage.shift();
     var formatted = first;
     var messageArray = [];
@@ -71,7 +69,7 @@ export function assert(shouldBeTrueish, message, var_args) {
  */
 function toString(val) {
   if (val instanceof Element) {
-    return val.tagName.toLowerCase() + (val.id ? '#' + val.id : '');
+    return val.tagName.toLowerCase() + (val.id ? "#" + val.id : "");
   }
   return val;
 }
@@ -81,7 +79,7 @@ function toString(val) {
  * @param {*} val
  */
 function pushIfNonEmpty(array, val) {
-  if (val != '') {
+  if (val != "") {
     array.push(val);
   }
 }

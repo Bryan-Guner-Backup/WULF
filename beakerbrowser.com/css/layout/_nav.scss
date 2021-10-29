@@ -26,9 +26,9 @@
   &__link {
     @extend %transition;
     transition-property: color;
-    margin-right: .5em;
-    padding: .6em;
-    border-radius: .2em;
+    margin-right: 0.5em;
+    padding: 0.6em;
+    border-radius: 0.2em;
 
     @include respond-to(tablet) {
       margin-right: 1em;
@@ -43,6 +43,3 @@
     }
   }
 }
-
-
-

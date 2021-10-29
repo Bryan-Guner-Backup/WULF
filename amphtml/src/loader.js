@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 /**
  * Usage notes:
  * Element is initialized with a `hidden` class which needs to be removed
@@ -24,17 +23,17 @@
  * @return {!Element}
  */
 export function createLoaderElement() {
-  let placeholder = document.createElement('div');
-  let loader = document.createElement('div');
+  let placeholder = document.createElement("div");
+  let loader = document.createElement("div");
   placeholder.appendChild(loader);
 
-  placeholder.classList.add('hidden');
-  placeholder.classList.add('-amp-autoplaceholder');
-  loader.classList.add('-amp-loader');
+  placeholder.classList.add("hidden");
+  placeholder.classList.add("-amp-autoplaceholder");
+  loader.classList.add("-amp-loader");
 
   for (let i = 0; i < 3; i++) {
-    let dot = document.createElement('div');
-    dot.classList.add('-amp-loader-dot');
+    let dot = document.createElement("div");
+    dot.classList.add("-amp-loader-dot");
     loader.appendChild(dot);
   }
   return placeholder;

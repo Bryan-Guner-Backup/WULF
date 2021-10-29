@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 /**
  * @param {opt_base} opt_base Exponential base. Defaults to 2.
  * @return {function(function())} Function that when invoked will
@@ -30,8 +29,8 @@ export function exponentialBackoff(opt_base) {
     // we poll a backend and it fails for everyone at the same time.
     // We wait up to 30% longer or shorter than the time otherwise
     // given for this cycle.
-    var jitter = wait * .3 * Math.random();
-    if (Math.random() > .5) {
+    var jitter = wait * 0.3 * Math.random();
+    if (Math.random() > 0.5) {
       jitter *= -1;
     }
     wait += jitter;

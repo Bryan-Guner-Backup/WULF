@@ -30,7 +30,7 @@ body {
 
 .ciervo {
   position: absolute;
-  margin: -70px 50px
+  margin: -70px 50px;
 }
 
 .cabeza {
@@ -38,7 +38,7 @@ body {
   left: 0;
   width: 13.4vw;
   height: 13.4vw;
-  background: #843C3C;
+  background: #843c3c;
   border-radius: 112vw 112vw 0 112vw;
   -webkit-transform: rotate(9deg);
   -moz-transform: rotate(9deg);
@@ -53,14 +53,14 @@ body {
   height: 0;
   border-left: 3.7vw solid transparent;
   border-right: 3.7vw solid transparent;
-  border-top: 3.7vw solid #CE8E8E;
+  border-top: 3.7vw solid #ce8e8e;
   -moz-border-radius: 152vw / 50vw;
   -webkit-border-radius: 152vw / 50vw;
   border-radius: 152vw / 50vw;
   -webkit-transform: rotate(-45deg);
   -moz-transform: rotate(-45deg);
   transform: rotate(-45deg);
-  margin: 10.3vw 8.5vw
+  margin: 10.3vw 8.5vw;
 }
 
 .nariz {
@@ -72,7 +72,7 @@ body {
   -webkit-transform: rotate(145deg);
   -moz-transform: rotate(145deg);
   transform: rotate(145deg);
-  margin: 32vw 43vw
+  margin: 32vw 43vw;
 }
 
 .orejas {
@@ -80,11 +80,11 @@ body {
   width: 7vw;
   height: 7vw;
   border-radius: 8vw 100vw 30vw 100vw;
-  background: #681E2F;
+  background: #681e2f;
   -webkit-transform: rotate(45deg);
   -moz-transform: rotate(45deg);
   transform: rotate(45deg);
-  margin: 13vw 33vw
+  margin: 13vw 33vw;
 }
 
 .orejas3 {
@@ -92,11 +92,11 @@ body {
   width: 7vw;
   height: 8vw;
   border-radius: 8vw 100vw 30vw 100vw;
-  background: #681E2F;
+  background: #681e2f;
   -webkit-transform: rotate(35deg);
   -moz-transform: rotate(35deg);
   transform: rotate(35deg);
-  margin: 14vw 30vw
+  margin: 14vw 30vw;
 }
 
 .orejas3::before {
@@ -105,8 +105,8 @@ body {
   width: 6vw;
   height: 6vw;
   border-radius: 8vw 100vw 30vw 100vw;
-  background: #CF8F8F;
-  margin: .7vw 0.5vw
+  background: #cf8f8f;
+  margin: 0.7vw 0.5vw;
 }
 
 .orejas3::after {
@@ -115,7 +115,7 @@ body {
   width: 3.5vw;
   height: 3.5vw;
   border-radius: 8vw 100vw 30vw 100vw;
-  background: #681E2F;
+  background: #681e2f;
   margin: 2.5vw 2.5vw;
 }
 
@@ -123,7 +123,7 @@ body {
   position: absolute;
   width: 12vw;
   height: 21vw;
-  border-top: 2.7vw solid #843C3C;
+  border-top: 2.7vw solid #843c3c;
   border-left: 2vw solid transparent;
   border-right: 1.2vw solid transparent;
   -moz-border-radius: 100vw / 100vw;
@@ -132,27 +132,27 @@ body {
   -webkit-transform: rotate(-95deg);
   -moz-transform: rotate(-95deg);
   transform: rotate(-95deg);
-  margin: 13.9vw 35vw
+  margin: 13.9vw 35vw;
 }
 
 .cuello::before {
   content: "";
   display: block;
-  border-bottom: 12vw solid #D08A8C;
-  border-left: .5vw solid transparent;
-  border-right: .5vw solid transparent;
+  border-bottom: 12vw solid #d08a8c;
+  border-left: 0.5vw solid transparent;
+  border-right: 0.5vw solid transparent;
   -webkit-transform: rotate(95deg);
   -moz-transform: rotate(95deg);
   transform: rotate(95deg);
   height: 0;
   width: 5vw;
-  margin: -4.3vw -9vw
+  margin: -4.3vw -9vw;
 }
 
 .cuello::after {
   content: "";
   display: block;
-  border-bottom: 14vw solid #843C3C;
+  border-bottom: 14vw solid #843c3c;
   border-left: 1vw solid transparent;
   border-right: 1vw solid transparent;
   -webkit-transform: rotate(95deg);
@@ -160,21 +160,20 @@ body {
   transform: rotate(95deg);
   height: 0;
   width: 4.5vw;
-  margin: -14vw -9vw
+  margin: -14vw -9vw;
 }
 
 .body {
   position: absolute;
   width: 16vw;
   height: 19vw;
-  border-bottom: 6vw solid #843C3C;
-  ;
+  border-bottom: 6vw solid #843c3c;
   border-left: 6vw solid transparent;
   border-right: 6vw solid transparent;
   -moz-border-radius: 132vw / 100vw;
   -webkit-border-radius: 132vw / 100vw;
   border-radius: 132vw / 100vw;
-  margin: 25vw 14vw
+  margin: 25vw 14vw;
 }
 
 .body::before {
@@ -182,14 +181,13 @@ body {
   position: absolute;
   width: 16vw;
   height: 19vw;
-  border-bottom: 7vw solid #843C3C;
-  ;
+  border-bottom: 7vw solid #843c3c;
   border-left: 5vw solid transparent;
   border-right: 5vw solid transparent;
   -moz-border-radius: 132vw / 100vw;
   -webkit-border-radius: 132vw / 100vw;
   border-radius: 132vw / 100vw;
-  margin: 4.5vw -5vw
+  margin: 4.5vw -5vw;
 }
 
 .body::after {
@@ -197,8 +195,7 @@ body {
   position: absolute;
   width: 7.5vw;
   height: 18.5vw;
-  border-bottom: 4.3vw solid #843C3C;
-  ;
+  border-bottom: 4.3vw solid #843c3c;
   border-left: 3.5vw solid transparent;
   border-right: 4vw solid transparent;
   -moz-border-radius: 132vw / 100vw;
@@ -214,7 +211,7 @@ body {
   position: absolute;
   width: 7.5vw;
   height: 19vw;
-  border-top: 5vw solid #843C3C;
+  border-top: 5vw solid #843c3c;
   border-left: 5vw solid transparent;
   border-right: 5vw solid transparent;
   -moz-border-radius: 100vw / 100vw;
@@ -231,7 +228,7 @@ body {
   position: absolute;
   width: 3.5vw;
   height: 24vw;
-  background: #843C3C;
+  background: #843c3c;
   margin: -12vw -10vw;
   -webkit-transform: rotate(-102deg);
   -moz-transform: rotate(-102deg);
@@ -243,7 +240,7 @@ body {
   position: absolute;
   width: 3.5vw;
   height: 21vw;
-  background: #843C3C;
+  background: #843c3c;
   margin: 9vw -2vw;
   -webkit-transform: rotate(-121deg);
   -moz-transform: rotate(-121deg);
@@ -254,7 +251,7 @@ body {
   position: absolute;
   width: 3.5vw;
   height: 21vw;
-  background: #6A1D2F;
+  background: #6a1d2f;
   margin: 49vw 39vw;
   -webkit-transform: rotate(-21deg);
   -moz-transform: rotate(-21deg);
@@ -266,7 +263,7 @@ body {
   position: absolute;
   width: 3.5vw;
   height: 21vw;
-  background: #6A1D2F;
+  background: #6a1d2f;
   margin: -7vw -18vw;
   -webkit-transform: rotate(12deg);
   -moz-transform: rotate(12deg);
@@ -277,7 +274,7 @@ body {
   position: absolute;
   width: 3.5vw;
   height: 4vw;
-  background: #CE8E8E;
+  background: #ce8e8e;
   border-radius: 0 0 25vw 25vw;
   margin: 71vw 35.9vw;
 }
@@ -287,7 +284,7 @@ body {
   position: absolute;
   width: 3.5vw;
   height: 4vw;
-  background: #B56F6F;
+  background: #b56f6f;
   border-radius: 0 0 25vw 25vw;
   margin: -2.1vw 7.5vw;
   -webkit-transform: rotate(-21deg);
@@ -299,8 +296,7 @@ body {
   position: absolute;
   width: 3.5vw;
   height: 4vw;
-  background: #B56F6F;
-  ;
+  background: #b56f6f;
   border-radius: 0 0 25vw 25vw;
   margin: 69vw 21.6vw;
   -webkit-transform: rotate(-12deg);
@@ -312,7 +308,7 @@ body {
   position: absolute;
   width: 3.5vw;
   height: 4vw;
-  background: #CE8E8E;
+  background: #ce8e8e;
   border-radius: 0 0 25vw 25vw;
   margin: 70vw 10.8vw;
   -webkit-transform: rotate(13deg);
@@ -325,7 +321,7 @@ body {
   width: 5vw;
   height: 5vw;
   border-radius: 8vw 100vw 50vw 100vw;
-  background: #681E2F;
+  background: #681e2f;
   -webkit-transform: rotate(-12deg);
   -moz-transform: rotate(-12deg);
   transform: rotate(-12deg);
@@ -338,18 +334,18 @@ body {
   width: 3vw;
   height: 3vw;
   border-radius: 21vw 100vw 70vw 100vw;
-  background: #102C34;
-  margin: 1.5vw 1.5vw
+  background: #102c34;
+  margin: 1.5vw 1.5vw;
 }
 
 .ojos::after {
   content: "";
   position: absolute;
-  width: .7vw;
-  height: .7vw;
+  width: 0.7vw;
+  height: 0.7vw;
   border-radius: 100%;
   background: white;
-  margin: 2vw 2.5vw
+  margin: 2vw 2.5vw;
 }
 
 .cola {
@@ -357,7 +353,7 @@ body {
   width: 5vw;
   height: 7vw;
   border-radius: 100%;
-  border-left: 3.3vw solid #843C3C;
+  border-left: 3.3vw solid #843c3c;
   margin: 37vw 19vw;
   transform-origin: bottom center;
   -moz-transform-origin: bottom center;
@@ -376,7 +372,7 @@ body {
   width: 8vw;
   height: 5vw;
   border-radius: 40vw 40vw 0 0;
-  background: #691C2E;
+  background: #691c2e;
   margin: -18vw 1vw;
   -webkit-transform: rotate(112deg);
   -moz-transform: rotate(112deg);
@@ -389,7 +385,7 @@ body {
   width: 7vw;
   height: 4.9vw;
   border-radius: 40vw 40vw 0 0;
-  background: #843C3C;
+  background: #843c3c;
   margin: -21vw 2.1vw;
   -webkit-transform: rotate(112deg);
   -moz-transform: rotate(112deg);
@@ -416,11 +412,11 @@ body {
   width: 1.2vw;
   height: 1.2vw;
   border-radius: 100%;
-  background: #D79295;
+  background: #d79295;
 }
 
 .r1 {
-  margin: 33vw 33vw
+  margin: 33vw 33vw;
 }
 
 .r2 {
@@ -428,7 +424,7 @@ body {
 }
 
 .r3 {
-  margin: 39vw 33vw
+  margin: 39vw 33vw;
 }
 
 .r4 {
@@ -436,7 +432,7 @@ body {
 }
 
 .r5 {
-  margin: 44.5vw 30vw
+  margin: 44.5vw 30vw;
 }
 
 .r6 {
@@ -444,7 +440,7 @@ body {
 }
 
 .r7 {
-  margin: 44.5vw 24vw
+  margin: 44.5vw 24vw;
 }
 
 .r8 {
@@ -452,7 +448,7 @@ body {
 }
 
 .r9 {
-  margin: 47vw 30vw
+  margin: 47vw 30vw;
 }
 
 .r10 {
@@ -464,7 +460,7 @@ body {
 }
 
 .r12 {
-  margin: 45.5vw 21vw
+  margin: 45.5vw 21vw;
 }
 
 @keyframes col {

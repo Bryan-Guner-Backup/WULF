@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-import {Layout, getLengthNumeral}  from '../../../src/layout';
-import {assertHttpsUrl} from '../../../src/url';
-import {loadPromise} from '../../../src/event-helper';
+import { Layout, getLengthNumeral } from "../../../src/layout";
+import { assertHttpsUrl } from "../../../src/url";
+import { loadPromise } from "../../../src/event-helper";
 
 class AmpAudio extends AMP.BaseElement {
-
   /** @override */
   isLayoutSupported(layout) {
     return layout == Layout.FIXED || layout == Layout.FIXED_HEIGHT;
   }
-
 
   /** @override */
   layoutCallback() {
@@ -32,20 +30,18 @@ class AmpAudio extends AMP.BaseElement {
       return;
     }
     this.didLayout = true;
-    let audio = document.createElement('audio');
+    let audio = document.createElement("audio");
     // Force controls otherwise there is no player UI.
     audio.controls = true;
-    if (this.element.getAttribute('src')) {
-      assertHttpsUrl(this.element.getAttribute('src'), this.element);
+    if (this.element.getAttribute("src")) {
+      assertHttpsUrl(this.element.getAttribute("src"), this.element);
     }
-    this.propagateAttributes(
-        ['src', 'autoplay', 'muted', 'loop'],
-        audio);
+    this.propagateAttributes(["src", "autoplay", "muted", "loop"], audio);
 
     this.applyFillContent(audio);
-    this.getRealChildNodes().forEach(child => {
-      if (child.getAttribute && child.getAttribute('src')) {
-        assertHttpsUrl(child.getAttribute('src'), child);
+    this.getRealChildNodes().forEach((child) => {
+      if (child.getAttribute && child.getAttribute("src")) {
+        assertHttpsUrl(child.getAttribute("src"), child);
       }
       audio.appendChild(child);
     });
@@ -66,4 +62,4 @@ class AmpAudio extends AMP.BaseElement {
   }
 }
 
-AMP.registerElement('amp-audio', AmpAudio);
+AMP.registerElement("amp-audio", AmpAudio);

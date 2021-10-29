@@ -1,6 +1,6 @@
 # Ticket Process
 
-This doc is here to explain the lifecycle of a Beaker ticket.  If you have any questions about the workflow of a Beaker ticket, or the stage that it's in, you should be able to answer them here.  If not, then please let QE know, and we'll work to answer your question and update this doc, so that we can do this better going forward.
+This doc is here to explain the lifecycle of a Beaker ticket. If you have any questions about the workflow of a Beaker ticket, or the stage that it's in, you should be able to answer them here. If not, then please let QE know, and we'll work to answer your question and update this doc, so that we can do this better going forward.
 
 Note that a typical Beaker ticket goes through these states. They can sometimes go in order, but on average, they loop around through the various stages, can cycle a number of times before becoming resolved, and will sometimes skip stages as well.
 
@@ -19,7 +19,7 @@ The state for newly filed issues. These have not been triaged, and are waiting t
 
 ### Needs Information
 
-The state for blocked issues. These can be blocked by another issue (please link that issue from the ticket if that's the case), or they can be blocked on info needed from another party.  If this is the case, please assign the ticket to the person you need info from to move the ticket forward.
+The state for blocked issues. These can be blocked by another issue (please link that issue from the ticket if that's the case), or they can be blocked on info needed from another party. If this is the case, please assign the ticket to the person you need info from to move the ticket forward.
 
 ### Accepted
 
@@ -53,4 +53,4 @@ Once your PR is merged, then you can Resolve your ticket.
 
     BKR.next
 
-The reason that we do this now and not before is that we use this field to autogenerate our release notes.  We want to make sure that we capture only work that is _in_ the next release, not work that's _intended_ for it.
+The reason that we do this now and not before is that we use this field to autogenerate our release notes. We want to make sure that we capture only work that is _in_ the next release, not work that's _intended_ for it.

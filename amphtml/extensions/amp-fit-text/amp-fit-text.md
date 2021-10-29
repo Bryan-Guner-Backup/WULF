@@ -41,7 +41,6 @@ For example:
       inermis reprehendunt.
     </amp-fit-text>
 
-
 #### Attributes
 
 **min-font-size**
@@ -51,7 +50,6 @@ The minimum font size as an integer that the `amp-fit-text` can use.
 **max-font-size**
 
 The maximum font size as an integer that the `amp-fit-text` can use.
-
 
 #### Styling
 

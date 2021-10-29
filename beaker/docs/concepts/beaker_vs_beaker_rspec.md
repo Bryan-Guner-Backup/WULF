@@ -1,19 +1,21 @@
 ## How they relate
 
-beaker is an acceptance testing framework that is written in Ruby.  beaker-rspec is a small shim that integrates the [beaker DSL](http://www.rubydoc.info/github/puppetlabs/beaker/Beaker/DSL) (domain specific language) with [RSpec](http://rspec.info/) (a spec test format) and [Serverspec](http://serverspec.org/) (an extension to RSpec that provides many useful matchers).
+beaker is an acceptance testing framework that is written in Ruby. beaker-rspec is a small shim that integrates the [beaker DSL](http://www.rubydoc.info/github/puppetlabs/beaker/Beaker/DSL) (domain specific language) with [RSpec](http://rspec.info/) (a spec test format) and [Serverspec](http://serverspec.org/) (an extension to RSpec that provides many useful matchers).
 
 ![beaker vs. beaker-rspec (venn)](http://anodelman.github.io/shared/img/beaker_vs_beaker_rspec.jpg)
 
 ## beaker
-* provisions and configures test hosts
-* tests are just Ruby scripts
-* tests pass if they execute all the way through without errors/exceptions
-* tests can also use asserts to explicitly enforce a state
-* tests written in Ruby with Beaker's domain specific language extensions
-* tests can re-use functionality by using ruby constructs
-* tests are driven by Beaker's own test runner
 
-### An example beaker test ###
+- provisions and configures test hosts
+- tests are just Ruby scripts
+- tests pass if they execute all the way through without errors/exceptions
+- tests can also use asserts to explicitly enforce a state
+- tests written in Ruby with Beaker's domain specific language extensions
+- tests can re-use functionality by using ruby constructs
+- tests are driven by Beaker's own test runner
+
+### An example beaker test
+
     test_name "Be able to execute multi-line commands (#9996)"
     confine :except, :platform => 'windows'
     agents.each do |agent|
@@ -37,14 +39,16 @@ beaker is an acceptance testing framework that is written in Ruby.  beaker-rspec
     end
 
 ## beaker-rspec
-* builds on [RSpec](http://rspec.info/) and [Serverspec](http://serverspec.org/)
-* provisions and configures test hosts
-* tests pass when all asserted expectations are fulfilled
-* tests written in RSpec format, with Beaker data specific language extensions and Serverspec matchers
-* tests can re-use functionality by using ruby or RSpec constructs
-* tests are driven by RSpec's test runner
 
-### An example beaker-rspec test ###
+- builds on [RSpec](http://rspec.info/) and [Serverspec](http://serverspec.org/)
+- provisions and configures test hosts
+- tests pass when all asserted expectations are fulfilled
+- tests written in RSpec format, with Beaker data specific language extensions and Serverspec matchers
+- tests can re-use functionality by using ruby or RSpec constructs
+- tests are driven by RSpec's test runner
+
+### An example beaker-rspec test
+
     require 'spec_helper_acceptance'
 
     describe 'apache class' do
@@ -91,6 +95,6 @@ beaker is an acceptance testing framework that is written in Ruby.  beaker-rspec
 
 ## How to choose?
 
-* Use the tool already in use in the project you are contributing to.
-* beaker-rspec is used by many modules inside and outside of Puppet Labs for system-level and acceptance tests.
-* beaker is used for all other testing within Puppet Labs (puppet, puppetDB, Puppet Enterprise, etc).
+- Use the tool already in use in the project you are contributing to.
+- beaker-rspec is used by many modules inside and outside of Puppet Labs for system-level and acceptance tests.
+- beaker is used for all other testing within Puppet Labs (puppet, puppetDB, Puppet Enterprise, etc).

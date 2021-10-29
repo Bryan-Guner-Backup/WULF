@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import {timer} from './timer';
-
+import { timer } from "./timer";
 
 /**
  * Pass class helps to manage single-pass process. A pass is scheduled using
@@ -23,7 +22,6 @@ import {timer} from './timer';
  * the process is considered to be "idle".
  */
 export class Pass {
-
   /**
    * Creates a new Pass instance.
    * @param {function()} handler Handler to be executed when pass is triggered.

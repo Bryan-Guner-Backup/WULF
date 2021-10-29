@@ -8,7 +8,7 @@ image: /img/posts/view-source/netscape-view-source-cropped.jpg
 ---
 
 The spirit of openness has been baked into the Web since its formation. The Web was built to share
-documents written in *plain text* that could be downloaded and viewed transparently. 
+documents written in _plain text_ that could be downloaded and viewed transparently.
 
 <figure>
 <img src="/img/posts/view-source/netscape-view-source.gif">
@@ -16,7 +16,7 @@ documents written in *plain text* that could be downloaded and viewed transparen
 </figure>
 
 But most Web applications aren't composed of open documents anymore. Most
-are delivered as bundled, minified, and indecipherable versions of the original source. 
+are delivered as bundled, minified, and indecipherable versions of the original source.
 
 <figure>
 <img src="/img/posts/view-source/minified-js.png"/>

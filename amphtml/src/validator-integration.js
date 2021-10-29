@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import {getMode} from './mode';
-
+import { getMode } from "./mode";
 
 /**
  * Triggers validation for the current document if there is a script in the
@@ -28,13 +27,14 @@ export function maybeValidate(win) {
     return;
   }
   var filename = win.location.href;
-  if (filename.startsWith('about:')) {  // Should only happen in tests.
+  if (filename.startsWith("about:")) {
+    // Should only happen in tests.
     return;
   }
-  var s = document.createElement('script');
+  var s = document.createElement("script");
   // TODO(@cramforce): Switch to locally build version when we integrated
   // the validator and switch to production URL.
-  s.src = 'https://www.gstatic.com/amphtml/v0/validator.js';
+  s.src = "https://www.gstatic.com/amphtml/v0/validator.js";
   s.onload = () => {
     win.document.head.removeChild(s);
     amp.validator.validateUrlAndLog(filename, win.document);

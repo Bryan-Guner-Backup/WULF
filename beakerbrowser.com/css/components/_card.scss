@@ -37,7 +37,7 @@
 
   &-body {
     @extend %rounded-bottom;
-    
+
     background: $gray--light;
     color: $gray--very-dark;
     padding: 1rem;
@@ -56,7 +56,7 @@
 .detailed-card {
   @extend %card;
   border-color: $gray;
-  box-shadow: 0px 2px 2px rgba(0,0,0,0.05);
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05);
   position: relative;
   display: flex;
   padding: 1em;
@@ -95,7 +95,7 @@
     padding-top: 20px;
   }
 
-  .body>:last-child {
+  .body > :last-child {
     margin-bottom: 0 !important;
   }
 

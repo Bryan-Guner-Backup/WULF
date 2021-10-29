@@ -14,37 +14,39 @@
  * limitations under the License.
  */
 
-import {createIframePromise} from '../../testing/iframe';
-import {documentInfoFor} from '../../src/document-info';
+import { createIframePromise } from "../../testing/iframe";
+import { documentInfoFor } from "../../src/document-info";
 
-describe('document-info', () => {
+describe("document-info", () => {
   function getWin(canonical) {
     return createIframePromise().then((iframe) => {
       if (canonical) {
-        var link = iframe.doc.createElement('link');
-        link.setAttribute('href', canonical);
-        link.setAttribute('rel', 'canonical');
+        var link = iframe.doc.createElement("link");
+        link.setAttribute("href", canonical);
+        link.setAttribute("rel", "canonical");
         iframe.doc.head.appendChild(link);
       }
       return iframe.win;
     });
   }
 
-  it('should provide the canonicalUrl', () => {
-    return getWin('https://twitter.com/').then((win) => {
+  it("should provide the canonicalUrl", () => {
+    return getWin("https://twitter.com/").then((win) => {
       expect(documentInfoFor(win).canonicalUrl).to.equal(
-          'https://twitter.com/');
+        "https://twitter.com/"
+      );
     });
   });
 
-  it('should provide the relative canonicalUrl as absolute', () => {
-    return getWin('./foo.html').then((win) => {
+  it("should provide the relative canonicalUrl as absolute", () => {
+    return getWin("./foo.html").then((win) => {
       expect(documentInfoFor(win).canonicalUrl).to.equal(
-          'http://localhost:' + location.port + '/foo.html');
+        "http://localhost:" + location.port + "/foo.html"
+      );
     });
   });
 
-  it('should throw if no canonical is available.', () => {
+  it("should throw if no canonical is available.", () => {
     return getWin(null).then((win) => {
       expect(() => {
         documentInfoFor(win).canonicalUrl;

@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-
 /**
  * Super crude way to share ViewerMessaging class without any kind of module
  * system or packaging.
  * @param {!Function} callback
  */
 function whenMessagingLoaded(callback) {
-  window['__AMP_VIEWER_MESSAGING_CALLBACK'] = callback;
-  var script = document.createElement('script');
-  script.src = './viewer-integr-messaging.js';
+  window["__AMP_VIEWER_MESSAGING_CALLBACK"] = callback;
+  var script = document.createElement("script");
+  script.src = "./viewer-integr-messaging.js";
   document.head.appendChild(script);
 }
-
 
 /**
  * This is a very naive implementation of Viewer/AMP integration, but it
@@ -37,17 +35,19 @@ function whenMessagingLoaded(callback) {
  * validation. In the real world, postMessage and message event handler
  * should both set origin information and validate it when received.
  */
-(window.AMP = window.AMP || []).push(function(AMP) {
-
+(window.AMP = window.AMP || []).push(function (AMP) {
   var viewer = AMP.viewer;
 
   if (window.parent && window.parent != window) {
-    whenMessagingLoaded(function(ViewerMessaging) {
-      var messaging = new ViewerMessaging(window.parent,
-          function(type, payload, awaitResponse) {
-            return viewer.receiveMessage(type, payload, awaitResponse);
-          });
-      viewer.setMessageDeliverer(function(type, payload, awaitResponse) {
+    whenMessagingLoaded(function (ViewerMessaging) {
+      var messaging = new ViewerMessaging(window.parent, function (
+        type,
+        payload,
+        awaitResponse
+      ) {
+        return viewer.receiveMessage(type, payload, awaitResponse);
+      });
+      viewer.setMessageDeliverer(function (type, payload, awaitResponse) {
         return messaging.sendRequest(type, payload, awaitResponse);
       });
     });

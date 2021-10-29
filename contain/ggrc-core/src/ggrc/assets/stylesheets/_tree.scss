@@ -1,0 +1,36 @@
+/*
+ * Copyright (C) 2016 Google Inc.
+ * Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+ */
+
+.state-type {
+  display: inline-block;
+  .dropdown-menu {
+    @include border-radius($default-border-radius);
+    left: -10px;
+    top: 26px;
+    z-index: zIndex(dropdown-menu);
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+    min-width: 160px;
+    float: none;
+    background: $white;
+    border: 1px solid $gray;
+    li {
+      span {
+        display: block;
+        color: $darkText;
+        line-height: 30px;
+        padding: 0 8px;
+        i {
+          margin: 7px 6px 0 0;
+        }
+        &:hover {
+          cursor: pointer;
+          background: $lightGray;
+        }
+      }
+    }
+  }
+}

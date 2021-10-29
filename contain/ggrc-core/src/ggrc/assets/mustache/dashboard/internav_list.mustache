@@ -1,0 +1,75 @@
+{{!
+    Copyright (C) 2016 Google Inc.
+    Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+}}
+
+{{#widget_list}}
+  <li>
+    {{#if_helpers '\
+      #if' has_count '\
+      and #if' count '\
+      or ^if' has_count '\
+      or #if' force_show '\
+      or #if' instance.constructor.obj_nav_options.show_all_tabs '\
+      or #in_array' internav_display instance.constructor.obj_nav_options.force_show_list}}
+
+    <a href="{{ selector }}" rel="tooltip" data-placement="bottom" title="{{ internav_display }}">
+      <div class="oneline">
+        <i class="fa fa-{{ internav_icon }} color"></i>
+        {{#if show_title}}
+          {{internav_display}}
+          {{#has_count}}({{count}}{{#spinner}}...{{/spinner}}){{/has_count}}
+        {{else}}
+          {{#has_count}}{{count}}{{#spinner}}...{{/spinner}}{{/has_count}}
+        {{/if}}
+        {{^count}}{{#has_count}}
+          {{^instance.constructor.obj_nav_options.show_all_tabs}}
+            {{^in_array internav_display instance.constructor.obj_nav_options.force_show_list}}
+              <span class="closed"><i class="fa fa-times"></i></span>
+            {{/in_array}}
+          {{/instance.constructor.obj_nav_options.show_all_tabs}}
+        {{/has_count}}{{/count}}
+      </div>
+    </a>
+    {{/if_helpers}}
+  </li>
+{{/widget_list}}
+
+{{#is_allowed 'update' instance}}
+{{#if widget_list.length}}
+<li data-test-id="button_widget_add_2c925d94" class="hidden-widgets-list">
+  <a href="#dropdown-widgets" class="dropdown-toggle" data-toggle="dropdown" rel="tooltip" data-placement="bottom" title="Add widget"><i class="fa fa-plus-circle"></i> Add...</a>
+  <div class="dropdown-menu" role="menu">
+    {{#widget_list}}
+      <div class="inner-nav-item">
+        {{^if_helpers '\
+          #if' has_count '\
+          and #if' count '\
+          or ^if' has_count '\
+          or #if' force_show '\
+          or #if' instance.constructor.obj_nav_options.show_all_tabs '\
+          or #in_array' internav_display instance.constructor.obj_nav_options.force_show_list}}
+        <a
+          href="{{ selector }}"
+          {{#is_mappable_type instance.type model.shortName}}
+            data-clickable="true"
+            data-toggle="unified-mapper"
+            data-join-option-type="{{model.shortName}}"
+            data-join-object-id="{{instance.id}}"
+            data-join-object-type="{{instance.class.shortName}}"
+          {{/is_mappable_type}}
+        >
+          <div class="oneline">
+            <i class="fa fa-{{ internav_icon }} color"></i>
+            {{internav_display}}
+          </div>
+        </a>
+        {{/if_helpers}}
+      </div>
+    {{/widget_list}}
+  </div>
+</li>
+{{/if}}
+{{/is_allowed}}
+
+{{{render_hooks 'ObjectNav.Actions'}}}

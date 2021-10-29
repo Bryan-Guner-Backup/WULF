@@ -1,0 +1,314 @@
+/*
+ * Copyright (C) 2016 Google Inc.
+ * Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+ */
+
+$icon-color-normal: #999;
+$icon-color-empty: #FFBE00;
+$icon-color-invalid: red;
+$icon-color-dark: #7c7c7c;
+$light-grey-background: #f3f3f3;
+$icon-color-valid: #1d8d15;
+$icon-color-hover: #333;
+$border-color: #eee;
+
+.assessment-info-pane {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+
+  .assessment-attributes {
+    flex:2 2 66%;
+    margin: 0 22px 28px 0;
+    max-width: 66%;
+  }
+
+  .assessment-description {
+    margin: 0 0 16px;
+  }
+
+  .assessment-control-item {
+    flex: 1 1 50%;
+    max-width: 50%;
+    min-height: 72px;
+  }
+
+  .assessment-controls {
+    background: $light-grey-background;
+    padding: 12px 12px 24px;
+    box-sizing: border-box;
+    border-radius: 2px;
+    margin-bottom: 20px;
+
+    .assessment-controls__note {
+      display: block;
+      line-height: 24px;
+      font-size: 13px;
+      color: $icon-color-hover;
+      padding: 0 28px 8px;
+    }
+
+    .attachment-list li {
+      margin: 0;
+      line-height: 18px;
+    }
+  }
+
+  .assessment-controls__extra-controls {
+    display: flex;
+    align-items: stretch;
+    flex-wrap: wrap;
+
+    > * {
+      position: relative;
+      box-sizing: border-box;
+      padding: 0 16px 0 28px;
+      flex: 1 1 50%;
+      max-width: 50%;
+    }
+  }
+}
+
+.assessment-module {
+  &.info {
+    padding: 16px 20px;
+    border-radius: 2px;
+    box-shadow: 0 3px 8px -3px rgba(0, 0, 0, 0.3);
+
+    ggrc-gdrive-picker-launcher {
+      display: inline-block;
+      margin: 4px 0;
+
+      a.btn {
+        background: rgba(0, 0,0, 0.15);
+        &:hover {
+          background: rgba(0, 0,0, 0.175);
+        }
+      }
+    }
+
+    h6 {
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pane-header {
+      h6 {
+        margin: 0;
+      }
+      .pane-header__title {
+        line-height: 24px;
+        display: flex;
+
+        h3 {
+          line-height: 24px;
+          margin: 0;
+          box-sizing: border-box;
+          padding: 0 16px 0 0;
+        }
+
+        i.fa {
+          line-height: 24px;
+          width: 24px;
+        }
+
+        .state-value {
+          padding: 0 8px;
+          box-sizing: border-box;
+          height: 22px;
+          margin: 0 16px 0 0;
+          line-height: 22px;
+          align-self: center;
+        }
+      }
+    }
+
+
+    .assessment-controls {
+      h6 {
+        margin: 0;
+      }
+
+      .alert {
+        position: relative;
+
+        .close {
+          position: absolute;
+          top: 5px;
+          right: 12px;
+          line-height: 18px;
+        }
+      }
+
+      .ggrc_controllers_quick_form {
+        margin: 8px 6px 0;
+        display: flex;
+        box-sizing: border-box;
+        flex-direction: row-reverse;
+
+        > * {
+          text-align: center;
+          margin: 0 8px;
+        }
+      }
+    }
+  }
+
+  .assessment-summary {
+    flex: 1;
+    margin: 0 0 28px;
+
+    .side-content {
+      margin: 0;
+    }
+
+    h6 {
+      margin: 0;
+      padding: 0 0 8px;
+    }
+  }
+}
+
+.assessment-custom-attributes {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+
+  .ql-container {
+    background: #fff;
+  }
+
+  .inline-edit {
+    padding: 0;
+    margin: 0 0 16px;
+  }
+
+  .inline-edit__title {
+    line-height: 22px;
+    margin: 0;
+    height: 22px;
+    box-sizing: border-box;
+    padding: 0 48px 0 4px;
+    position: relative;
+    display: block;
+
+    .fa {
+      width: 24px;
+      text-align: center;
+      line-height: 22px;
+    }
+
+    .inline-edit__title-body {
+      display: inline-block;
+      max-width: 100%;
+      overflow: hidden;
+      line-height: 22px;
+      box-sizing: border-box;
+      padding: 0 24px 0 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      position: relative;
+
+      .fa {
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+    }
+
+    &:hover {
+      .inline-edit__extra-controls {
+        .fa {
+          opacity: 1;
+        }
+      }
+    }
+
+    .inline-edit__extra-controls {
+      height: 22px;
+      display: inline-block;
+
+      .fa {
+        float: left;
+        width: 24px;
+        padding: 0;
+        text-align: center;
+        font-size: 12px;
+        color: $icon-color-normal;
+        opacity: 0;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .inline-edit--active {
+    .inline-edit__content--wide {
+      width: auto;
+    }
+  }
+  .inline-edit__controls--edit-mode {
+    background: #fff;
+    box-sizing: border-box;
+    height: 32px;
+    bottom: -33px;
+    line-height: 32px;
+    margin: 0;
+    padding: 0;
+    width: 66px;
+    z-index: 1;
+
+    li {
+      box-sizing: border-box;
+      float: left;
+      width: 32px;
+      line-height: 31px;
+
+      a {
+        display: inline-block;
+        line-height: 31px;
+        width: 32px;
+      }
+    }
+  }
+
+  .inline-edit__content {
+    box-sizing: border-box;
+    width: auto;
+    line-height: 24px;
+    margin-left: 0;
+
+    &:hover {
+      background: #fff;
+    }
+
+    input[type="checkbox"] {
+      float: left;
+      margin: 3px 6px 0 0;
+    }
+    .datepicker__calendar {
+      top: -250px;
+      left: -6px;
+      z-index: 4000;
+    }
+  }
+}
+
+.assessment-url-list__add-btn {
+  position: absolute;
+  top: 1px;
+  cursor: pointer;
+  left: 57px;
+
+  .fa {
+    color: $icon-color-dark;
+
+    &:hover {
+      color: $icon-color-hover;
+    }
+  }
+}

@@ -1,0 +1,29 @@
+-# Copyright (C) 2016 Google Inc.
+-# Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+
+-extends "layouts/dashboard.haml"
+
+-set model = controller.model
+-set model_title = model._inflector.title_singular
+-set model_name = model._inflector.table_singular
+-set model_display_class = model|display_class
+
+-block title
+  =instance.title
+
+-block extra_javascript
+  =super()
+  GGRC.page_object = ={ instance_json()|safe };
+
+  -# Since it is expensive (issues a DB query), only invoke user_task_count()
+  -# once and use the resulting list. An auxiliary property is used to store
+  -# the result, because there are no other better ways (?) to do that in HAML
+  GGRC.counters = {
+    "_task_counts": ={ user_task_count()|safe }
+  }
+  GGRC.counters = {
+    "user_task_count": GGRC.counters._task_counts[0],
+    "user_overdue_task_count": GGRC.counters._task_counts[1]
+  };
+
+-block widget_area

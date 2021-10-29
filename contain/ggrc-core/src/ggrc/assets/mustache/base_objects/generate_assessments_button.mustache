@@ -1,0 +1,24 @@
+{{!
+    Copyright (C) 2016 Google Inc.
+    Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+}}
+
+{{#if_instance_of parent_instance 'Audit'}}
+  {{#if_helpers '\
+    #if_equals' model.shortName 'Control' '\
+    or #if_equals' model.shortName 'Assessment'}}
+      {{#is_allowed 'update' parent_instance context="for"}}
+        <li class="generate-control-assessments">
+          <a href="javascript://">
+            <i
+              class="fa fa-magic"
+              rel="tooltip"
+              data-placement="left"
+              title=""
+              data-original-title="Generate Assessments"
+             ></i>
+          </a>
+        </li>
+      {{/is_allowed}}
+  {{/if_helpers}}
+{{/if_instance_of}}

@@ -1,0 +1,58 @@
+html {
+	font: 15px/20px "Georgia", serif;
+}
+
+a {
+  color:#0000ee;
+}
+a:hover {
+  background:#FFFFAC;
+}
+
+h1 {
+  font:normal 30px/40px "Georgia";
+}
+
+h2 {
+  font:normal 25px/40px "Georgia";
+}
+
+p {
+	font: 15px/20px "Georgia", serif;
+  margin:10px 0;
+}
+
+.box {
+	border: 3px solid #ccc;
+	padding:14px;
+	margin-left:14px;
+	margin-bottom:14px;
+}
+
+.limiter {
+  padding:20px;
+}
+
+ul {
+  margin-left:25px;
+}
+
+form.vertical label {
+  display:block;
+}
+
+.box input {
+	font-size:1.2em;
+}
+
+.box.float {
+	width:330px;
+	float:left;
+}
+
+#palette { padding:10px; }
+#palette span { padding:3px;color:white;margin-right:4px; }
+#palette .red { background:red; }
+#palette .green { background:green; }
+#palette .blue { background:blue; }
+#palette .yellow { background:yellow;color:#000; }

@@ -1,0 +1,391 @@
+Title         : CoinText: SMS Wallet
+Subtitle      : Send & Receive Bitcoin Cash without Internet <br> <small>CoinText.io and @CoinText</small> 
+Author        : Vin Armani <br> Las Vegas, NV <br> Vin@VinArmani.com <br> <i>In cooperation with Counter Markets and Coinivore</i><br><br> **White Paper** <br>February 2018
+Logo          : false
+Package       : [T1]fontenc
+Package       : [bitstream-charter]mathdesign
+Heading depth : 0
+
+~ HtmlOnly
+[TITLE]
+~ 
+
+~ TexOnly
+~~ Snippet
+\title{
+    \textbf{CoinText: SMS Wallet} \\
+    Send \& Receive Bitcoin Cash without Internet \\
+    \large CoinText.io and @CoinText
+}
+\author{
+Vin Armani \\
+Las Vegas, NV \\
+Vin@VinArmani.com \\
+\textit{In cooperation with Counter Markets and Coinivore}}
+
+\date{\textbf{White Paper} \\ February 2018}
+\maketitle
+~~
+~
+
+~ Center
+&br;&br;
+![logo]
+&br;
+~
+
+
+
+# Description
+
+> Send and receive Bitcoin Cash without Internet. A wallet for the world's
+unbanked.
+
+CoinText is a text message (SMS) Bitcoin Cash wallet. Transact bitcoin
+cash with any mobile phone in the world using simple text commands
+without Internet, smartphones, apps, accounts or passwords. Secured and
+settled on the Bitcoin Cash (BCH) blockchain.
+
+
+  # Mission statement
+
+Cryptocurrency will only change the world if people use it as money. Our
+mission is to introduce billions of new users to Bitcoin Cash by on-boarding
+them through our CoinText SMS wallet.
+
+We believe CoinText is the easiest and most powerful tool to increase
+Bitcoin Cash adoption because it doesn't require registration, downloads,
+or Internet and it incentivizes people to join. People get a wallet by texting
+CoinText, or when someone sends BCH to their phone. In this way, one
+person can on-board many others into CoinText merely by texting some
+BCH to their friends and family. No other tool or service creates a wallet for
+new users this easily.
+
+The ability to transact with an international currency like Bitcoin Cash over
+SMS (Short Message Service), without Internet, will uncap the immense
+potential of underbanked people around the world. Many people in
+developing areas are already familiar with trading mobile minutes as
+currency over SMS using feature phones (dumbphones). The CoinText
+wallet is just as easy to use but connects them to global finance.
+
+Besides facilitating phone-to-phone transfers, CoinText plans to develop a
+full suite of tools where transacting Bitcoin Cash over SMS is beneficial
+including merchant solutions, ATMs, gaming and sports betting, vending
+machines, smartlocks and much more in the SMS-Economy-of-Things.
+
+
+
+# History
+
+Early Bitcoin developers waxed poetic about helping the world's poor and
+unbanked, but high Bitcoin Core (BTC) network fees and slow transactions
+killed many promising projects. An early attempt at an SMS bitcoin wallet
+was Coinapult, first conceived by cryptocurrency pioneer Erik Voorhees.
+Coinapult never caught on because it was clunky to use with complicated
+commands, and it required users to register and create a web wallet on
+their system in order to transact over SMS. Additionally, Coinapult didn't
+succeed because it didn't properly incentivize new adoption.
+
+Now that Bitcoin Cash has restored the vision of on-chain scaling, CoinText
+is positioned to deliver on the original promise of helping the unbanked and
+tap the potential of global commerce using SMS. CoinText doesn't require
+registration, offers painless and incentivized on-boarding, has simple
+intuitive commands, is secured directly on the BCH blockchain, and will
+have native uses like gaming.
+
+
+
+
+# Target population
+Feature-phone users without an Internet connection will likely benefit most
+from the CoinText SMS wallet. However, it also has many exciting usecases
+for smartphones in the industrialized world. Ultimately CoinText is
+unique because it also allows users to transact phone-to-phone without an
+Internet connection. This feature opens a wide range of market possibilities
+for CoinText in rural areas where people are underbanked and
+smartphone adoption has yet to reach maturity.
+While smartphone adoption appears to have taken over the industrialized
+world (77% in US[^pewresearch]), a majority of humans still don't have them. According to
+Statista: 
+> "The number of smartphone users is forecast to grow from 2.1
+billion in 2016 to around 2.5 billion in 2019, with smartphone penetration
+rates increasing as well. Just over 36 percent of the world's population is
+projected to use a smartphone by 2018, up from about 10 percent in 2011." [^statista] 
+
+Although smartphone adoption is experiencing incredible growth, 64\% of
+the world still doesn't have one. We have a great opportunity to introduce
+feature phone users to Bitcoin Cash while also creating compelling uses
+for smartphones.
+
+The first (beta) users will be Bitcoin Cash enthusiasts who we believe will
+become ambassadors for the CoinText project. Out of the gate CoinText
+will have local numbers in Western countries. Anyone residing outside of
+those regions can still use the CoinText numbers if they have an
+international texting plan with their cell provider. Our ultimate objective is to
+reach every mobile phone in the world with as local a number as feasible.
+
+
+[^pewresearch]: http://www.pewresearch.org/fact-tank/2017/01/12/evolution-of-technology/
+[^statista]: https://www.statista.com/statistics/330695/number-of-smartphone-users-worldwide/
+
+
+
+
+
+
+
+# Product overview
+Every full phone number (country code + area code + number) is unique to
+a single mobile device. CoinText leverages each phone number as a
+unique identifier and puts them through a proprietary algorithm. The result
+is used as the seed for a Bitcoin Cash keypair, which is always created on
+the fly and never stored. This means that every phone number in the world
+can have a corresponding Bitcoin Cash address that is unique to that
+number.
+
+The system stacks an API server, consisting of the Bitcoin Cash and
+CoinText libraries and an in-memory data cache. The system does not
+write data to disk and stores no information about phone numbers,
+keypairs, or transactions pushed through the system. All transactions are
+settled immediately on-chain and all transaction records are pulled from
+the Bitcoin Cash blockchain. The API server communicates with a global
+Tier-1+ SMS gateway provider, offering carrier redundancy with send and
+receive to every phone on Earth.
+
+Users can on-board to the system by using the “cash” or “deposit”
+commands. They can also be on-boarded by another user who sends
+Bitcoin Cash to either a phone number (using “send”) or its associated
+address (using “withdraw”). The “balance” command retrieves the balance
+of the unspent outputs for the phone number (address). More on
+commands below.
+
+
+
+#Privacy & security
+
+App wallets like Jaxx or Coinomi require permission from app stores before
+users can access them. If app stores don't like something they do, the
+apps can be banned. App wallets also tell the world that you have
+cryptocurrency on your phone. As long as you delete your chat history with
+the CoinText wallet, no one can see that you have access to
+cryptocurrency. This may be important, for instance, if you're at a bordercrossing in a country that's unfriendly to cryptocurrency; they won't know
+you're hodling. Incidentally, the CoinText wallet may protect users in all civil
+asset forfeiture or theft scenarios better than wallet apps, making it a more
+private walking-around wallet.
+
+CoinText doesn't hold private keys or keep records of transactions. The
+wallet is a bot. It only does what users command it to do. CoinText has no
+ability to stop or censor transactions. Nor can CoinText recover wallets if
+users lose their mobile numbers. But even in the heavily-surveilled
+Western world, using CoinText with a prepaid burner phone makes it
+extremely private and difficult to stop. Grey marketeers will rejoice.
+
+The wallet does rely on some third-party infrastructure to function. CoinText
+has no control over those APIs. If for any reason they are compromised,
+the wallet could cease to function and will not be recoverable by CoinText
+or anybody else. We'll have shadows for these APIs in case one goes
+down, but we don't have backups of wallets. Thus, CoinText is best used
+as a wallet to use bitcoin cash, not for storing life savings.
+
+
+
+
+# Simple commands
+CoinText wallet has four basic commands; balance, deposit, send, and
+withdraw. CoinText sends a confirmation after every successful action.
+Save CoinText's number to your Contacts for easier use in the future.
+
+## Get Started
+
+You get a CoinText wallet and some free BCH when you text the word
+**`CASH`** to CoinText's number in your region.
+
+## Check Your Balance
+Text the word **`BALANCE`** to CoinText.
+
+
+> ![balance] 
+
+## Add Funds
+Text the word **`DEPOSIT`** to CoinText.
+
+> ![deposit]
+> &br; ![deposit2]
+
+
+## Send BCH to a Phone Number
+Text the word "**`SEND`**" space "**`$amount`**" space "**`your friend's cell
+number`**" to CoinText.
+
+
+> ![send]
+
+
+The Send command also works by replacing the dollar amount with the
+exact amount of BCH being sent or by texting the word “**ALL**” in place of
+the amount as a shortcut to moving the full balance of your CoinText wallet.
+
+* Text: Send .001 BCH 8084443122
+
+* Text: Send ALL 8084443122
+
+Sending to a US number with the "1" in front also works. 
+
+
+## Withdraw BCH to External Wallet
+
+Text the word "**`WITHDRAW`**" space "**`$amount`**” space "**`your external BCH
+address`**" to CoinText
+
+
+> ![withdraw]
+
+
+The withdraw command also works with using the amount of BCH being
+sent or by texting the word "**`ALL`**" to withdraw the full balance.
+
+* Text: Withdraw .0002 BCH 1HV68SwpbRwLhM3gYfMTZNnt7uQgo1fNuM
+
+* Text: Withdraw ALL 1HV68SwpbRwLhM3gYfMTZNnt7uQgo1fNuM
+
+
+## Help
+
+Text "**`HELP`**" to CoinText to review wallet commands.
+
+
+
+# Additional uses
+
+Because the CoinText wallet works over cellular networks without Internet,
+there are many other exciting potential uses. CoinText will offer an API and
+development stack for businesses and other developers to expand the
+SMS economy and SMS-of-Things.
+
+Here are some the applications beyond simple phone-to-phone
+transactions that CoinText aims to develop:
+
+
+## Merchant solutions for independent vendors
+
+* Food trucks, street kiosks, ticket scalpers, drug dealers, etc.
+* Text “Buy Hat10 VendorsCell#” to CoinText
+  * Response: “That item costs \$15 (.0075 BCH). Are you sure you
+want to buy it? Text YES if you're sure.”
+
+
+
+## ATMs
+
+* SMS Bitcoin Cash ATMs can function independently of Internet
+  * Works in rural areas
+  * Much more portable and easy to set up than ATMs that require WiFi.
+
+
+## On-demand utilities
+
+* Instantly pay for 1 hour of electricity without Internet
+* Pay for potable water instantly by text
+* SMS pay-at-the-pump rural gas pumps
+
+
+
+## SMS gaming and sports betting
+
+* Simple games like coin flip, rock-paper-scissors, blackjack, and emoji slots can be done over SMS
+  * Text "Bet \$1 Heads" to CoinFlip API number, or Text "Spin \$1" to Emoji Slots API number
+* Sports betting can also be done over SMS
+  * Text “Bet \$100 Mayweather” to Sportsbook API number
+    * Response: "You have successfully placed a \$100 wager on
+Mayweather v McGregor. If you win, \$130 will be returned to
+your wallet shortly after the fight."
+  * API service in area with legal gaming. Anyone with international
+texting could technically participate.
+
+
+
+## Vending machines in rural areas
+
+* Anyone with a phone could buy from cashless vending machines
+without Internet using our SMS technology.
+
+## SMS Smartlocks
+
+* Airbnb lock that opens only if guest's phone number pays
+* Hotels and rural cabins
+* Self-storage and lockers
+* Gated entrances
+
+
+
+
+# Objectives
+
+Our long-term objective is to create a self-sustaining tool that is used by
+billions of people. This means eventually collecting enough in fees to fund
+ongoing management, marketing and development. Our first objective in
+2018 is to spread adoption of Bitcoin Cash by on-boarding 1 million new
+users with a faucet. We need funding for this faucet and the marketing to
+drive traffic to it. Additionally, we'll use funds to expand the suite of SMS
+tools to further grow adoption for Bitcoin Cash by multiplying the amount of
+use-cases. CoinText is currently exploring seed funding.
+
+
+# 2018 Roadmap
+
+## First Quarter
+
+* Launch beta with basic wallet commands in US, Canada, UK and
+Australia.
+* Test and launch merchant commands and solutions
+
+
+## Second Quarter
+
+* Expand to more regions with local numbers
+  * South Africa, Northern Europe, Malaysia, India (English-speaking)
+* Add more currency pairs (euro, yuan, yen)
+* Test gaming and betting applications
+
+
+## Third Quarter
+
+* Language translations for Japanese, Chinese, Spanish, and
+Portuguese
+* Launch number in Japan, China,
+* Develop and test ATMs
+Fourth Quarter:
+* Launch local numbers in Spanish-speaking nations.
+* Make and deploy SMS Bitcoin Cash ATMs
+
+
+# About CoinText
+CoinText was founded in 2018 by developer Vin Armani in cooperation with
+Counter Markets and Coinivore. We are committed to creating a world that
+doesn't need fiat currency. CoinText will remain unbanked like its users. All
+labor and expenses will be paid using Bitcoin Cash to encourage
+circulation.
+
+----
+&br;_For all inquiries use the information below:_
+
+
+> Vin Armani, Lead Developer 
+> &br;Vin@VinArmani.com
+&br;&br;
+> Jeff Paul, Marketing 
+> &br; Contact@CoinText.io
+
+----
+
+[deposit2]: images/deposit2.jpg "deposit2" { width:auto; max-width:50% }
+
+[deposit]: images/deposit.jpg "deposit" { width:auto; max-width:50% }
+
+[balance]: images/balance.jpg "balance" { width:auto; max-width:50%;}
+
+[withdraw]: images/withdraw.jpg "withdraw" { width:auto; max-width:50% }
+
+[send]: images/send.jpg "send" { width:auto; max-width:50% }
+
+[logo]: images/logo.jpg "logo" { width:auto; max-width:50% }

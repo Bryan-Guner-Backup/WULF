@@ -1,9 +1,17 @@
 *:hover > .anchorjs-link,
-.anchorjs-link:focus  {
-  transition: color .16s linear;
+.anchorjs-link:focus {
+  transition: color 0.16s linear;
 }
 
-.anchorjs-link:link    { color: #DFD487; }
-.anchorjs-link:visited { color: #DFD487; }
-.anchorjs-link:hover   { color: #EC7963; }
-.anchorjs-link:active  { color: #EC7963; }
+.anchorjs-link:link {
+  color: #dfd487;
+}
+.anchorjs-link:visited {
+  color: #dfd487;
+}
+.anchorjs-link:hover {
+  color: #ec7963;
+}
+.anchorjs-link:active {
+  color: #ec7963;
+}

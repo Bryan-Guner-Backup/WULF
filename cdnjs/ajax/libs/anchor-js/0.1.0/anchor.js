@@ -5,8 +5,8 @@
  */
 function addAnchors(selector) {
   // Sensible default selector, if none is provided.
-  selector = selector || 'h1, h2, h3, h4, h5, h6';
-  
+  selector = selector || "h1, h2, h3, h4, h5, h6";
+
   // Select any elements that match the provided selector.
   var elements = document.querySelectorAll(selector);
 
@@ -14,8 +14,8 @@ function addAnchors(selector) {
   for (var i = 0; i < elements.length; i++) {
     var elementID;
 
-    if (elements[i].hasAttribute('id')) {
-      elementID = elements[i].getAttribute('id');
+    if (elements[i].hasAttribute("id")) {
+      elementID = elements[i].getAttribute("id");
     } else {
       // We need to create an id on our element. First, we find which text selection method is available to the browser.
       var textMethod = document.body.textContent ? "textContent" : "innerText";
@@ -25,16 +25,19 @@ function addAnchors(selector) {
 
       // Refine it so it makes a good ID. Makes all lowercase and hyphen separated.
       // Ex. Hello World > hello-world
-      tidyText = roughText.replace(/\s+/g, '-').toLowerCase();
+      tidyText = roughText.replace(/\s+/g, "-").toLowerCase();
 
       // Assign it to our element.
       // Currently the setAttribute element is only supported in IE9 and above.
-      elements[i].setAttribute('id', tidyText);
+      elements[i].setAttribute("id", tidyText);
 
       // Grab it for use in our anchor.
       elementID = tidyText;
     }
-    var anchor = '<a class="anchor-link" href="#' + elementID + '"><span class="icon-link"></span></a>';
+    var anchor =
+      '<a class="anchor-link" href="#' +
+      elementID +
+      '"><span class="icon-link"></span></a>';
 
     elements[i].innerHTML = elements[i].innerHTML + anchor;
   }

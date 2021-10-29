@@ -58,12 +58,15 @@
     };
 
 //*/
-;
-(function /*Notify users of ajile's default configuration*/ (global, undefined) {
-    var console = global.console;
+(function (
+  /*Notify users of ajile's default configuration*/ global,
+  undefined
+) {
+  var console = global.console;
 
-    if (!(console && console.log)) return;
+  if (!(console && console.log)) return;
 
-    console.log ("ajile: config: Automatically loaded <ajile-path>/index.js. View that file to understand why.");
-}(this))
-;
+  console.log(
+    "ajile: config: Automatically loaded <ajile-path>/index.js. View that file to understand why."
+  );
+})(this);

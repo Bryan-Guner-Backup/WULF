@@ -1,11 +1,10 @@
-'use strict';
+"use strict";
 
 /**
  * @license AngularJS v"NG_VERSION_FULL"
  * (c) 2010-2011 AngularJS http://angularjs.org
  * License: MIT
  */
-
 
 /*
 
@@ -39,7 +38,6 @@
 
  */
 
-
 /**
  * @workInProgress
  * @ngdoc overview
@@ -58,7 +56,6 @@
  * * {@link angular.mock.service.$log $log } - A mock implementation of the angular service log.
  */
 angular.mock = {};
-
 
 /**
  * @workInProgress
@@ -85,77 +82,79 @@ angular.mock = {};
  */
 function MockBrowser() {
   var self = this,
-      expectations = {},
-      requests = [];
+    expectations = {},
+    requests = [];
 
   this.isMock = true;
   self.url = "http://server";
   self.lastUrl = self.url; // used by url polling fn
   self.pollFns = [];
 
-
   // register url polling fn
 
-  self.onHashChange = function(listener) {
-    self.pollFns.push(
-      function() {
-        if (self.lastUrl != self.url) {
-          self.lastUrl = self.url;
-          listener();
-        }
+  self.onHashChange = function (listener) {
+    self.pollFns.push(function () {
+      if (self.lastUrl != self.url) {
+        self.lastUrl = self.url;
+        listener();
       }
-    );
+    });
 
     return listener;
   };
 
-
   /**
-    * @ngdoc function
-    * @name angular.mock.service.$browser.xhr
-    *
-    * @description
-    * Generic method for training browser to expect a request in a test and respond to it.
-    *
-    * See also convenience methods for browser training:
-    *
-    * - {@link angular.mock.service.$browser.xhr.expectGET $browser.xhr.expectGET}
-    * - {@link angular.mock.service.$browser.xhr.expectPOST $browser.xhr.expectPOST}
-    * - {@link angular.mock.service.$browser.xhr.expectPUT $browser.xhr.expectPUT}
-    * - {@link angular.mock.service.$browser.xhr.expectDELETE $browser.xhr.expectDELETE}
-    * - {@link angular.mock.service.$browser.xhr.expectJSON $browser.xhr.expectJSON}
-    *
-    * To flush pending requests in tests use
-    * {@link angular.mock.service.$browser.xhr.flush $browser.xhr.flush}.
-    *
-    * @param {string} method Expected HTTP method.
-    * @param {string} url Url path for which a request is expected.
-    * @param {(object|string)=} data Expected body of the (POST) HTTP request.
-    * @param {function(number, *)} callback Callback to call when response is flushed.
-    * @param {object} headers Key-value pairs of expected headers.
-    * @returns {object} Response configuration object. You can call its `respond()` method to
-    *   configure what should the browser mock return when the response is
-    *   {@link angular.mock.service.$browser.xhr.flush flushed}.
-    */
-  self.xhr = function(method, url, data, callback, headers) {
+   * @ngdoc function
+   * @name angular.mock.service.$browser.xhr
+   *
+   * @description
+   * Generic method for training browser to expect a request in a test and respond to it.
+   *
+   * See also convenience methods for browser training:
+   *
+   * - {@link angular.mock.service.$browser.xhr.expectGET $browser.xhr.expectGET}
+   * - {@link angular.mock.service.$browser.xhr.expectPOST $browser.xhr.expectPOST}
+   * - {@link angular.mock.service.$browser.xhr.expectPUT $browser.xhr.expectPUT}
+   * - {@link angular.mock.service.$browser.xhr.expectDELETE $browser.xhr.expectDELETE}
+   * - {@link angular.mock.service.$browser.xhr.expectJSON $browser.xhr.expectJSON}
+   *
+   * To flush pending requests in tests use
+   * {@link angular.mock.service.$browser.xhr.flush $browser.xhr.flush}.
+   *
+   * @param {string} method Expected HTTP method.
+   * @param {string} url Url path for which a request is expected.
+   * @param {(object|string)=} data Expected body of the (POST) HTTP request.
+   * @param {function(number, *)} callback Callback to call when response is flushed.
+   * @param {object} headers Key-value pairs of expected headers.
+   * @returns {object} Response configuration object. You can call its `respond()` method to
+   *   configure what should the browser mock return when the response is
+   *   {@link angular.mock.service.$browser.xhr.flush flushed}.
+   */
+  self.xhr = function (method, url, data, callback, headers) {
     headers = headers || {};
     if (data && angular.isObject(data)) data = angular.toJson(data);
     if (data && angular.isString(data)) url += "|" + data;
     var expect = expectations[method] || {};
     var expectation = expect[url];
     if (!expectation) {
-      throw new Error("Unexpected request for method '" + method + "' and url '" + url + "'.");
+      throw new Error(
+        "Unexpected request for method '" + method + "' and url '" + url + "'."
+      );
     }
-    requests.push(function(){
-      angular.forEach(expectation.headers, function(value, key){
+    requests.push(function () {
+      angular.forEach(expectation.headers, function (value, key) {
         if (headers[key] !== value) {
           throw new Error("Missing HTTP request header: " + key + ": " + value);
         }
       });
-      callback(expectation.code, expectation.response, function(header) {
+      callback(expectation.code, expectation.response, function (header) {
         if (header) {
           header = header.toLowerCase();
-          return expectation.responseHeaders && expectation.responseHeaders[header] || null;
+          return (
+            (expectation.responseHeaders &&
+              expectation.responseHeaders[header]) ||
+            null
+          );
         } else {
           return expectation.responseHeaders || {};
         }
@@ -164,18 +163,18 @@ function MockBrowser() {
   };
   self.xhr.expectations = expectations;
   self.xhr.requests = requests;
-  self.xhr.expect = function(method, url, data, headers) {
+  self.xhr.expect = function (method, url, data, headers) {
     if (data && angular.isObject(data)) data = angular.toJson(data);
     if (data && angular.isString(data)) url += "|" + data;
     var expect = expectations[method] || (expectations[method] = {});
     return {
-      respond: function(code, response, responseHeaders) {
+      respond: function (code, response, responseHeaders) {
         if (!angular.isNumber(code)) {
           responseHeaders = response;
           response = code;
           code = 200;
         }
-        angular.forEach(responseHeaders, function(value, key) {
+        angular.forEach(responseHeaders, function (value, key) {
           delete responseHeaders[key];
           responseHeaders[key.toLowerCase()] = value;
         });
@@ -183,96 +182,96 @@ function MockBrowser() {
           code: code,
           response: response,
           headers: headers || {},
-          responseHeaders: responseHeaders || {}
+          responseHeaders: responseHeaders || {},
         };
-      }
+      },
     };
   };
 
   /**
-    * @ngdoc function
-    * @name angular.mock.service.$browser.xhr.expectGET
-    *
-    * @description
-    * Trains browser to expect a `GET` request and respond to it.
-    *
-    * @param {string} url Url path for which a request is expected.
-    * @returns {object} Response configuration object. You can call its `respond()` method to
-    *   configure what should the browser mock return when the response is
-    *   {@link angular.mock.service.$browser.xhr.flush flushed}.
-    */
-  self.xhr.expectGET    = angular.bind(self, self.xhr.expect, 'GET');
+   * @ngdoc function
+   * @name angular.mock.service.$browser.xhr.expectGET
+   *
+   * @description
+   * Trains browser to expect a `GET` request and respond to it.
+   *
+   * @param {string} url Url path for which a request is expected.
+   * @returns {object} Response configuration object. You can call its `respond()` method to
+   *   configure what should the browser mock return when the response is
+   *   {@link angular.mock.service.$browser.xhr.flush flushed}.
+   */
+  self.xhr.expectGET = angular.bind(self, self.xhr.expect, "GET");
 
   /**
-    * @ngdoc function
-    * @name angular.mock.service.$browser.xhr.expectPOST
-    *
-    * @description
-    * Trains browser to expect a `POST` request and respond to it.
-    *
-    * @param {string} url Url path for which a request is expected.
-    * @returns {object} Response configuration object. You can call its `respond()` method to
-    *   configure what should the browser mock return when the response is
-    *   {@link angular.mock.service.$browser.xhr.flush flushed}.
-    */
-  self.xhr.expectPOST   = angular.bind(self, self.xhr.expect, 'POST');
+   * @ngdoc function
+   * @name angular.mock.service.$browser.xhr.expectPOST
+   *
+   * @description
+   * Trains browser to expect a `POST` request and respond to it.
+   *
+   * @param {string} url Url path for which a request is expected.
+   * @returns {object} Response configuration object. You can call its `respond()` method to
+   *   configure what should the browser mock return when the response is
+   *   {@link angular.mock.service.$browser.xhr.flush flushed}.
+   */
+  self.xhr.expectPOST = angular.bind(self, self.xhr.expect, "POST");
 
   /**
-    * @ngdoc function
-    * @name angular.mock.service.$browser.xhr.expectDELETE
-    *
-    * @description
-    * Trains browser to expect a `DELETE` request and respond to it.
-    *
-    * @param {string} url Url path for which a request is expected.
-    * @returns {object} Response configuration object. You can call its `respond()` method to
-    *   configure what should the browser mock return when the response is
-    *   {@link angular.mock.service.$browser.xhr.flush flushed}.
-    */
-  self.xhr.expectDELETE = angular.bind(self, self.xhr.expect, 'DELETE');
+   * @ngdoc function
+   * @name angular.mock.service.$browser.xhr.expectDELETE
+   *
+   * @description
+   * Trains browser to expect a `DELETE` request and respond to it.
+   *
+   * @param {string} url Url path for which a request is expected.
+   * @returns {object} Response configuration object. You can call its `respond()` method to
+   *   configure what should the browser mock return when the response is
+   *   {@link angular.mock.service.$browser.xhr.flush flushed}.
+   */
+  self.xhr.expectDELETE = angular.bind(self, self.xhr.expect, "DELETE");
 
   /**
-    * @ngdoc function
-    * @name angular.mock.service.$browser.xhr.expectPUT
-    *
-    * @description
-    * Trains browser to expect a `PUT` request and respond to it.
-    *
-    * @param {string} url Url path for which a request is expected.
-    * @returns {object} Response configuration object. You can call its `respond()` method to
-    *   configure what should the browser mock return when the response is
-    *   {@link angular.mock.service.$browser.xhr.flush flushed}.
-    */
-  self.xhr.expectPUT    = angular.bind(self, self.xhr.expect, 'PUT');
+   * @ngdoc function
+   * @name angular.mock.service.$browser.xhr.expectPUT
+   *
+   * @description
+   * Trains browser to expect a `PUT` request and respond to it.
+   *
+   * @param {string} url Url path for which a request is expected.
+   * @returns {object} Response configuration object. You can call its `respond()` method to
+   *   configure what should the browser mock return when the response is
+   *   {@link angular.mock.service.$browser.xhr.flush flushed}.
+   */
+  self.xhr.expectPUT = angular.bind(self, self.xhr.expect, "PUT");
 
   /**
-    * @ngdoc function
-    * @name angular.mock.service.$browser.xhr.expectJSON
-    *
-    * @description
-    * Trains browser to expect a `JSON` request and respond to it.
-    *
-    * @param {string} url Url path for which a request is expected.
-    * @returns {object} Response configuration object. You can call its `respond()` method to
-    *   configure what should the browser mock return when the response is
-    *   {@link angular.mock.service.$browser.xhr.flush flushed}.
-    */
-  self.xhr.expectJSON   = angular.bind(self, self.xhr.expect, 'JSON');
+   * @ngdoc function
+   * @name angular.mock.service.$browser.xhr.expectJSON
+   *
+   * @description
+   * Trains browser to expect a `JSON` request and respond to it.
+   *
+   * @param {string} url Url path for which a request is expected.
+   * @returns {object} Response configuration object. You can call its `respond()` method to
+   *   configure what should the browser mock return when the response is
+   *   {@link angular.mock.service.$browser.xhr.flush flushed}.
+   */
+  self.xhr.expectJSON = angular.bind(self, self.xhr.expect, "JSON");
 
   /**
-    * @ngdoc function
-    * @name angular.mock.service.$browser.xhr.flush
-    *
-    * @description
-    * Flushes all pending requests and executes xhr callbacks with the trained response as the
-    * argument.
-    */
-  self.xhr.flush = function() {
+   * @ngdoc function
+   * @name angular.mock.service.$browser.xhr.flush
+   *
+   * @description
+   * Flushes all pending requests and executes xhr callbacks with the trained response as the
+   * argument.
+   */
+  self.xhr.flush = function () {
     if (requests.length == 0) {
       throw new Error("No xhr requests to be flushed!");
     }
 
-    while(requests.length) {
+    while (requests.length) {
       requests.pop()();
     }
   };
@@ -282,21 +281,25 @@ function MockBrowser() {
   self.deferredFns = [];
   self.deferredNextId = 0;
 
-  self.defer = function(fn, delay) {
+  self.defer = function (fn, delay) {
     delay = delay || 0;
-    self.deferredFns.push({time:(self.defer.now + delay), fn:fn, id: self.deferredNextId});
-    self.deferredFns.sort(function(a,b){return a.time - b.time;});
+    self.deferredFns.push({
+      time: self.defer.now + delay,
+      fn: fn,
+      id: self.deferredNextId,
+    });
+    self.deferredFns.sort(function (a, b) {
+      return a.time - b.time;
+    });
     return self.deferredNextId++;
   };
 
-
   self.defer.now = 0;
 
-
-  self.defer.cancel = function(deferId) {
+  self.defer.cancel = function (deferId) {
     var fnIndex;
 
-    forEach(self.deferredFns, function(fn, index) {
+    forEach(self.deferredFns, function (fn, index) {
       if (fn.id === deferId) fnIndex = index;
     });
 
@@ -305,59 +308,62 @@ function MockBrowser() {
     }
   };
 
-
-  self.defer.flush = function(delay) {
+  self.defer.flush = function (delay) {
     if (angular.isDefined(delay)) {
       self.defer.now += delay;
     } else {
       if (self.deferredFns.length) {
-        self.defer.now = self.deferredFns[self.deferredFns.length-1].time;
+        self.defer.now = self.deferredFns[self.deferredFns.length - 1].time;
       }
     }
 
-    while (self.deferredFns.length && self.deferredFns[0].time <= self.defer.now) {
+    while (
+      self.deferredFns.length &&
+      self.deferredFns[0].time <= self.defer.now
+    ) {
       self.deferredFns.shift().fn();
     }
   };
 }
 MockBrowser.prototype = {
-
-/**
-  * @name angular.mock.service.$browser#poll
-  * @methodOf angular.mock.service.$browser
-  *
-  * @description
-  * run all fns in pollFns
-  */
-  poll: function poll(){
-    angular.forEach(this.pollFns, function(pollFn){
+  /**
+   * @name angular.mock.service.$browser#poll
+   * @methodOf angular.mock.service.$browser
+   *
+   * @description
+   * run all fns in pollFns
+   */
+  poll: function poll() {
+    angular.forEach(this.pollFns, function (pollFn) {
       pollFn();
     });
   },
 
-  addPollFn: function(pollFn) {
+  addPollFn: function (pollFn) {
     this.pollFns.push(pollFn);
     return pollFn;
   },
 
-  hover: function(onHover) {
-  },
+  hover: function (onHover) {},
 
-  getUrl: function(){
+  getUrl: function () {
     return this.url;
   },
 
-  setUrl: function(url){
+  setUrl: function (url) {
     this.url = url;
   },
 
-  cookies:  function(name, value) {
+  cookies: function (name, value) {
     if (name) {
       if (value == undefined) {
         delete this.cookieHash[name];
       } else {
-        if (angular.isString(value) &&       //strings only
-            value.length <= 4096) {          //strict cookie storage limits
+        if (
+          angular.isString(value) && //strings only
+          value.length <= 4096
+        ) {
+          //strict cookie storage limits
           this.cookieHash[name] = value;
         }
       }
@@ -370,13 +376,12 @@ MockBrowser.prototype = {
     }
   },
 
-  addJs: function(){}
+  addJs: function () {},
 };
 
-angular.service('$browser', function(){
+angular.service("$browser", function () {
   return new MockBrowser();
 });
-
 
 /**
  * @workInProgress
@@ -390,10 +395,11 @@ angular.service('$browser', function(){
  *
  * See {@link angular.mock} for more info on angular mocks.
  */
-angular.service('$exceptionHandler', function() {
-  return function(e) {throw e;};
+angular.service("$exceptionHandler", function () {
+  return function (e) {
+    throw e;
+  };
 });
-
 
 /**
  * @workInProgress
@@ -407,14 +413,22 @@ angular.service('$exceptionHandler', function() {
  *
  * See {@link angular.mock} for more info on angular mocks.
  */
-angular.service('$log', MockLogFactory);
+angular.service("$log", MockLogFactory);
 
 function MockLogFactory() {
   var $log = {
-    log: function(){$log.log.logs.push(arguments);},
-    warn: function(){$log.warn.logs.push(arguments);},
-    info: function(){$log.info.logs.push(arguments);},
-    error: function(){$log.error.logs.push(arguments);}
+    log: function () {
+      $log.log.logs.push(arguments);
+    },
+    warn: function () {
+      $log.warn.logs.push(arguments);
+    },
+    info: function () {
+      $log.info.logs.push(arguments);
+    },
+    error: function () {
+      $log.error.logs.push(arguments);
+    },
   };
 
   $log.log.logs = [];
@@ -424,7 +438,6 @@ function MockLogFactory() {
 
   return $log;
 }
-
 
 /**
  * Mock of the Date type which has its timezone specified via constroctor arg.
@@ -466,100 +479,131 @@ function TzDate(offset, timestamp, toStringVal) {
     if (isNaN(timestamp))
       throw {
         name: "Illegal Argument",
-        message: "Arg '" + tsStr + "' passed into TzDate constructor is not a valid date string"
+        message:
+          "Arg '" +
+          tsStr +
+          "' passed into TzDate constructor is not a valid date string",
       };
   } else {
     this.origDate = new Date(timestamp);
   }
 
   var localOffset = new Date(timestamp).getTimezoneOffset();
-  this.offsetDiff = localOffset*60*1000 - offset*1000*60*60;
+  this.offsetDiff = localOffset * 60 * 1000 - offset * 1000 * 60 * 60;
   this.date = new Date(timestamp + this.offsetDiff);
 
-  this.getTime = function() {
+  this.getTime = function () {
     return this.date.getTime() - this.offsetDiff;
   };
 
-  this.toString = function() {
-   return toStringVal;
+  this.toString = function () {
+    return toStringVal;
   };
 
-  this.toLocaleDateString = function() {
+  this.toLocaleDateString = function () {
     return this.date.toLocaleDateString();
   };
 
-  this.getFullYear = function() {
+  this.getFullYear = function () {
     return this.date.getFullYear();
   };
 
-  this.getMonth = function() {
+  this.getMonth = function () {
     return this.date.getMonth();
   };
 
-  this.getDate = function() {
+  this.getDate = function () {
     return this.date.getDate();
   };
 
-  this.getHours = function() {
+  this.getHours = function () {
     return this.date.getHours();
   };
 
-  this.getMinutes = function() {
+  this.getMinutes = function () {
     return this.date.getMinutes();
   };
 
-  this.getSeconds = function() {
+  this.getSeconds = function () {
     return this.date.getSeconds();
   };
 
-  this.getTimezoneOffset = function() {
+  this.getTimezoneOffset = function () {
     return offset * 60;
   };
 
-  this.getUTCFullYear = function() {
+  this.getUTCFullYear = function () {
     return this.origDate.getUTCFullYear();
   };
 
-  this.getUTCMonth = function() {
+  this.getUTCMonth = function () {
     return this.origDate.getUTCMonth();
   };
 
-  this.getUTCDate = function() {
+  this.getUTCDate = function () {
     return this.origDate.getUTCDate();
   };
 
-  this.getUTCHours = function() {
+  this.getUTCHours = function () {
     return this.origDate.getUTCHours();
   };
 
-  this.getUTCMinutes = function() {
+  this.getUTCMinutes = function () {
     return this.origDate.getUTCMinutes();
   };
 
-  this.getUTCSeconds = function() {
+  this.getUTCSeconds = function () {
     return this.origDate.getUTCSeconds();
   };
 
-  this.getDay = function() {
+  this.getDay = function () {
     return this.origDate.getDay();
   };
 
   //hide all methods not implemented in this mock that the Date prototype exposes
   var self = this,
-      unimplementedMethods = ['getMilliseconds', 'getUTCDay',
-      'getUTCMilliseconds', 'getYear', 'setDate', 'setFullYear', 'setHours', 'setMilliseconds',
-      'setMinutes', 'setMonth', 'setSeconds', 'setTime', 'setUTCDate', 'setUTCFullYear',
-      'setUTCHours', 'setUTCMilliseconds', 'setUTCMinutes', 'setUTCMonth', 'setUTCSeconds',
-      'setYear', 'toDateString', 'toJSON', 'toGMTString', 'toLocaleFormat', 'toLocaleString',
-      'toLocaleTimeString', 'toSource', 'toString', 'toTimeString', 'toUTCString', 'valueOf'];
+    unimplementedMethods = [
+      "getMilliseconds",
+      "getUTCDay",
+      "getUTCMilliseconds",
+      "getYear",
+      "setDate",
+      "setFullYear",
+      "setHours",
+      "setMilliseconds",
+      "setMinutes",
+      "setMonth",
+      "setSeconds",
+      "setTime",
+      "setUTCDate",
+      "setUTCFullYear",
+      "setUTCHours",
+      "setUTCMilliseconds",
+      "setUTCMinutes",
+      "setUTCMonth",
+      "setUTCSeconds",
+      "setYear",
+      "toDateString",
+      "toJSON",
+      "toGMTString",
+      "toLocaleFormat",
+      "toLocaleString",
+      "toLocaleTimeString",
+      "toSource",
+      "toString",
+      "toTimeString",
+      "toUTCString",
+      "valueOf",
+    ];
 
-  angular.forEach(unimplementedMethods, function(methodName) {
-    if (methodName == 'toString' && toStringVal) return;
+  angular.forEach(unimplementedMethods, function (methodName) {
+    if (methodName == "toString" && toStringVal) return;
 
-    self[methodName] = function() {
+    self[methodName] = function () {
       throw {
         name: "MethodNotImplemented",
-        message: "Method '" + methodName + "' is not implemented in the TzDate mock"
+        message:
+          "Method '" + methodName + "' is not implemented in the TzDate mock",
       };
     };
   });

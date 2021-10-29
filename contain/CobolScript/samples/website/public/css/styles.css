@@ -1,0 +1,32 @@
+
+.view {
+    min-width: 500px;
+}
+
+.view td {
+    vertical-align: top;
+}
+
+.list {
+    min-width: 500px;
+}
+
+.form {
+    min-width: 500px;
+}
+
+.form  td {
+    vertical-align: top;
+}
+
+.content {
+    margin: 10px;
+}
+
+.actions {
+    margin-bottom: 20px;
+}
+
+.footer {
+    margin: 10px;
+}

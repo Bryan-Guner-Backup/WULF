@@ -1,0 +1,1 @@
+identification division.    program-id. hello.    author. A.J.Lopez.    installation. test.    date-written. 2012-12-22.    date-compiled. 2012-12-22.environment division.    configuration section.        source-computer. node.        object-computer. node.data division.procedure division.    display "Hello, world".

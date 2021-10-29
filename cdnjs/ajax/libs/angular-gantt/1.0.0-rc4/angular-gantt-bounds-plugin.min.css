@@ -1,1 +1,14 @@
-.gantt-task-bounds{height:125%;top:-12.5%;position:absolute;z-index:99;border:1px dashed;pointer-events:none}.gantt-task-bounds-in{border-color:#2E4F2E}.gantt-task-bounds-out{border-color:tomato}
+.gantt-task-bounds {
+  height: 125%;
+  top: -12.5%;
+  position: absolute;
+  z-index: 99;
+  border: 1px dashed;
+  pointer-events: none;
+}
+.gantt-task-bounds-in {
+  border-color: #2e4f2e;
+}
+.gantt-task-bounds-out {
+  border-color: tomato;
+}

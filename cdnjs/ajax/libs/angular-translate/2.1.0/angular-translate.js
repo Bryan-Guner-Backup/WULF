@@ -3,10 +3,11 @@
  * http://github.com/PascalPrecht/angular-translate
  * Copyright (c) 2014 ; Licensed MIT
  */
-angular.module('pascalprecht.translate', ['ng']).run([
-  '$translate',
+angular.module("pascalprecht.translate", ["ng"]).run([
+  "$translate",
   function ($translate) {
-    var key = $translate.storageKey(), storage = $translate.storage();
+    var key = $translate.storageKey(),
+      storage = $translate.storage();
     if (storage) {
       if (!storage.get(key)) {
         if (angular.isString($translate.preferredLanguage())) {
@@ -20,18 +21,50 @@ angular.module('pascalprecht.translate', ['ng']).run([
     } else if (angular.isString($translate.preferredLanguage())) {
       $translate.use($translate.preferredLanguage());
     }
-  }
+  },
 ]);
-angular.module('pascalprecht.translate').provider('$translate', [
-  '$STORAGE_KEY',
+angular.module("pascalprecht.translate").provider("$translate", [
+  "$STORAGE_KEY",
   function ($STORAGE_KEY) {
-    var $translationTable = {}, $preferredLanguage, $availableLanguageKeys = [], $languageKeyAliases, $fallbackLanguage, $fallbackWasString, $uses, $nextLang, $storageFactory, $storageKey = $STORAGE_KEY, $storagePrefix, $missingTranslationHandlerFactory, $interpolationFactory, $interpolatorFactories = [], $interpolationSanitizationStrategy = false, $loaderFactory, $cloakClassName = 'translate-cloak', $loaderOptions, $notFoundIndicatorLeft, $notFoundIndicatorRight, $postCompilingEnabled = false, NESTED_OBJECT_DELIMITER = '.';
+    var $translationTable = {},
+      $preferredLanguage,
+      $availableLanguageKeys = [],
+      $languageKeyAliases,
+      $fallbackLanguage,
+      $fallbackWasString,
+      $uses,
+      $nextLang,
+      $storageFactory,
+      $storageKey = $STORAGE_KEY,
+      $storagePrefix,
+      $missingTranslationHandlerFactory,
+      $interpolationFactory,
+      $interpolatorFactories = [],
+      $interpolationSanitizationStrategy = false,
+      $loaderFactory,
+      $cloakClassName = "translate-cloak",
+      $loaderOptions,
+      $notFoundIndicatorLeft,
+      $notFoundIndicatorRight,
+      $postCompilingEnabled = false,
+      NESTED_OBJECT_DELIMITER = ".";
     var getLocale = function () {
       var nav = window.navigator;
-      return (nav.language || nav.browserLanguage || nav.systemLanguage || nav.userLanguage || '').split('-').join('_');
+      return (
+        nav.language ||
+        nav.browserLanguage ||
+        nav.systemLanguage ||
+        nav.userLanguage ||
+        ""
+      )
+        .split("-")
+        .join("_");
     };
     var negotiateLocale = function (preferred) {
-      var avail = [], locale = angular.lowercase(preferred), i = 0, n = $availableLanguageKeys.length;
+      var avail = [],
+        locale = angular.lowercase(preferred),
+        i = 0,
+        n = $availableLanguageKeys.length;
       for (; i < n; i++) {
         avail.push(angular.lowercase($availableLanguageKeys[i]));
       }
@@ -41,7 +74,10 @@ angular.module('pascalprecht.translate').provider('$translate', [
       if ($languageKeyAliases) {
         var alias;
         for (var langKeyAlias in $languageKeyAliases) {
-          if ($languageKeyAliases.hasOwnProperty(langKeyAlias) && angular.lowercase(langKeyAlias) === angular.lowercase(preferred)) {
+          if (
+            $languageKeyAliases.hasOwnProperty(langKeyAlias) &&
+            angular.lowercase(langKeyAlias) === angular.lowercase(preferred)
+          ) {
             alias = $languageKeyAliases[langKeyAlias];
             if (avail.indexOf(angular.lowercase(alias)) > -1) {
               return alias;
@@ -49,7 +85,7 @@ angular.module('pascalprecht.translate').provider('$translate', [
           }
         }
       }
-      var parts = preferred.split('_');
+      var parts = preferred.split("_");
       if (parts.length > 1 && avail.indexOf(angular.lowercase(parts[0])) > -1) {
         return parts[0];
       }
@@ -66,7 +102,10 @@ angular.module('pascalprecht.translate').provider('$translate', [
         if (!angular.isObject($translationTable[langKey])) {
           $translationTable[langKey] = {};
         }
-        angular.extend($translationTable[langKey], flatObject(translationTable));
+        angular.extend(
+          $translationTable[langKey],
+          flatObject(translationTable)
+        );
       }
       return this;
     };
@@ -94,10 +133,15 @@ angular.module('pascalprecht.translate').provider('$translate', [
         if (angular.isObject(val)) {
           flatObject(val, path.concat(key), result, key);
         } else {
-          keyWithPath = path.length ? '' + path.join(NESTED_OBJECT_DELIMITER) + NESTED_OBJECT_DELIMITER + key : key;
+          keyWithPath = path.length
+            ? "" +
+              path.join(NESTED_OBJECT_DELIMITER) +
+              NESTED_OBJECT_DELIMITER +
+              key
+            : key;
           if (path.length && key === prevKey) {
-            keyWithShortPath = '' + path.join(NESTED_OBJECT_DELIMITER);
-            result[keyWithShortPath] = '@:' + keyWithPath;
+            keyWithShortPath = "" + path.join(NESTED_OBJECT_DELIMITER);
+            result[keyWithShortPath] = "@:" + keyWithPath;
           }
           result[keyWithPath] = val;
         }
@@ -109,7 +153,7 @@ angular.module('pascalprecht.translate').provider('$translate', [
       return this;
     };
     this.useMessageFormatInterpolation = function () {
-      return this.useInterpolation('$translateMessageFormatInterpolation');
+      return this.useInterpolation("$translateMessageFormatInterpolation");
     };
     this.useInterpolation = function (factory) {
       $interpolationFactory = factory;
@@ -173,7 +217,11 @@ angular.module('pascalprecht.translate').provider('$translate', [
     this.use = function (langKey) {
       if (langKey) {
         if (!$translationTable[langKey] && !$loaderFactory) {
-          throw new Error('$translateProvider couldn\'t find translationTable for langKey: \'' + langKey + '\'');
+          throw new Error(
+            "$translateProvider couldn't find translationTable for langKey: '" +
+              langKey +
+              "'"
+          );
         }
         $uses = langKey;
         return this;
@@ -191,10 +239,10 @@ angular.module('pascalprecht.translate').provider('$translate', [
     };
     this.storageKey = storageKey;
     this.useUrlLoader = function (url) {
-      return this.useLoader('$translateUrlLoader', { url: url });
+      return this.useLoader("$translateUrlLoader", { url: url });
     };
     this.useStaticFilesLoader = function (options) {
-      return this.useLoader('$translateStaticFilesLoader', options);
+      return this.useLoader("$translateStaticFilesLoader", options);
     };
     this.useLoader = function (loaderFactory, options) {
       $loaderFactory = loaderFactory;
@@ -202,10 +250,10 @@ angular.module('pascalprecht.translate').provider('$translate', [
       return this;
     };
     this.useLocalStorage = function () {
-      return this.useStorage('$translateLocalStorage');
+      return this.useStorage("$translateLocalStorage");
     };
     this.useCookieStorage = function () {
-      return this.useStorage('$translateCookieStorage');
+      return this.useStorage("$translateCookieStorage");
     };
     this.useStorage = function (storageFactory) {
       $storageFactory = storageFactory;
@@ -219,7 +267,9 @@ angular.module('pascalprecht.translate').provider('$translate', [
       return this;
     };
     this.useMissingTranslationHandlerLog = function () {
-      return this.useMissingTranslationHandler('$translateMissingTranslationHandlerLog');
+      return this.useMissingTranslationHandler(
+        "$translateMissingTranslationHandlerLog"
+      );
     };
     this.useMissingTranslationHandler = function (factory) {
       $missingTranslationHandlerFactory = factory;
@@ -249,13 +299,25 @@ angular.module('pascalprecht.translate').provider('$translate', [
       return $availableLanguageKeys;
     };
     this.$get = [
-      '$log',
-      '$injector',
-      '$rootScope',
-      '$q',
+      "$log",
+      "$injector",
+      "$rootScope",
+      "$q",
       function ($log, $injector, $rootScope, $q) {
-        var Storage, defaultInterpolator = $injector.get($interpolationFactory || '$translateDefaultInterpolation'), pendingLoader = false, interpolatorHashMap = {}, langPromises = {}, fallbackIndex, startFallbackIteration;
-        var $translate = function (translationId, interpolateParams, interpolationId) {
+        var Storage,
+          defaultInterpolator = $injector.get(
+            $interpolationFactory || "$translateDefaultInterpolation"
+          ),
+          pendingLoader = false,
+          interpolatorHashMap = {},
+          langPromises = {},
+          fallbackIndex,
+          startFallbackIteration;
+        var $translate = function (
+          translationId,
+          interpolateParams,
+          interpolationId
+        ) {
           if (angular.isArray(translationId)) {
             var translateAll = function (translationIds) {
               var results = {};
@@ -264,12 +326,13 @@ angular.module('pascalprecht.translate').provider('$translate', [
                 var deferred = $q.defer();
                 var regardless = function (value) {
                   results[translationId] = value;
-                  deferred.resolve([
-                    translationId,
-                    value
-                  ]);
+                  deferred.resolve([translationId, value]);
                 };
-                $translate(translationId, interpolateParams, interpolationId).then(regardless, regardless);
+                $translate(
+                  translationId,
+                  interpolateParams,
+                  interpolationId
+                ).then(regardless, regardless);
                 return deferred.promise;
               };
               for (var i = 0, c = translationIds.length; i < c; i++) {
@@ -283,25 +346,35 @@ angular.module('pascalprecht.translate').provider('$translate', [
           }
           var deferred = $q.defer();
           translationId = translationId.trim();
-          var promiseToWaitFor = function () {
-              var promise = $preferredLanguage ? langPromises[$preferredLanguage] : langPromises[$uses];
-              fallbackIndex = 0;
-              if ($storageFactory && !promise) {
-                var langKey = Storage.get($storageKey);
-                promise = langPromises[langKey];
-                if ($fallbackLanguage && $fallbackLanguage.length) {
-                  var index = indexOf($fallbackLanguage, langKey);
-                  fallbackIndex = index > -1 ? index += 1 : 0;
-                  $fallbackLanguage.push($preferredLanguage);
-                }
+          var promiseToWaitFor = (function () {
+            var promise = $preferredLanguage
+              ? langPromises[$preferredLanguage]
+              : langPromises[$uses];
+            fallbackIndex = 0;
+            if ($storageFactory && !promise) {
+              var langKey = Storage.get($storageKey);
+              promise = langPromises[langKey];
+              if ($fallbackLanguage && $fallbackLanguage.length) {
+                var index = indexOf($fallbackLanguage, langKey);
+                fallbackIndex = index > -1 ? (index += 1) : 0;
+                $fallbackLanguage.push($preferredLanguage);
               }
-              return promise;
-            }();
+            }
+            return promise;
+          })();
           if (!promiseToWaitFor) {
-            determineTranslation(translationId, interpolateParams, interpolationId).then(deferred.resolve, deferred.reject);
+            determineTranslation(
+              translationId,
+              interpolateParams,
+              interpolationId
+            ).then(deferred.resolve, deferred.reject);
           } else {
             promiseToWaitFor.then(function () {
-              determineTranslation(translationId, interpolateParams, interpolationId).then(deferred.resolve, deferred.reject);
+              determineTranslation(
+                translationId,
+                interpolateParams,
+                interpolationId
+              ).then(deferred.resolve, deferred.reject);
             }, deferred.reject);
           }
           return deferred.promise;
@@ -316,22 +389,16 @@ angular.module('pascalprecht.translate').provider('$translate', [
         };
         var applyNotFoundIndicators = function (translationId) {
           if ($notFoundIndicatorLeft) {
-            translationId = [
-              $notFoundIndicatorLeft,
-              translationId
-            ].join(' ');
+            translationId = [$notFoundIndicatorLeft, translationId].join(" ");
           }
           if ($notFoundIndicatorRight) {
-            translationId = [
-              translationId,
-              $notFoundIndicatorRight
-            ].join(' ');
+            translationId = [translationId, $notFoundIndicatorRight].join(" ");
           }
           return translationId;
         };
         var useLanguage = function (key) {
           $uses = key;
-          $rootScope.$emit('$translateChangeSuccess');
+          $rootScope.$emit("$translateChangeSuccess");
           if ($storageFactory) {
             Storage.set($translate.storageKey(), $uses);
           }
@@ -339,56 +406,73 @@ angular.module('pascalprecht.translate').provider('$translate', [
           angular.forEach(interpolatorHashMap, function (interpolator, id) {
             interpolatorHashMap[id].setLocale($uses);
           });
-          $rootScope.$emit('$translateChangeEnd');
+          $rootScope.$emit("$translateChangeEnd");
         };
         var loadAsync = function (key) {
           if (!key) {
-            throw 'No language key specified for loading.';
+            throw "No language key specified for loading.";
           }
           var deferred = $q.defer();
-          $rootScope.$emit('$translateLoadingStart');
+          $rootScope.$emit("$translateLoadingStart");
           pendingLoader = true;
-          $injector.get($loaderFactory)(angular.extend($loaderOptions, { key: key })).then(function (data) {
-            var translationTable = {};
-            $rootScope.$emit('$translateLoadingSuccess');
-            if (angular.isArray(data)) {
-              angular.forEach(data, function (table) {
-                angular.extend(translationTable, flatObject(table));
-              });
-            } else {
-              angular.extend(translationTable, flatObject(data));
-            }
-            pendingLoader = false;
-            deferred.resolve({
-              key: key,
-              table: translationTable
-            });
-            $rootScope.$emit('$translateLoadingEnd');
-          }, function (key) {
-            $rootScope.$emit('$translateLoadingError');
-            deferred.reject(key);
-            $rootScope.$emit('$translateLoadingEnd');
-          });
+          $injector
+            .get($loaderFactory)(angular.extend($loaderOptions, { key: key }))
+            .then(
+              function (data) {
+                var translationTable = {};
+                $rootScope.$emit("$translateLoadingSuccess");
+                if (angular.isArray(data)) {
+                  angular.forEach(data, function (table) {
+                    angular.extend(translationTable, flatObject(table));
+                  });
+                } else {
+                  angular.extend(translationTable, flatObject(data));
+                }
+                pendingLoader = false;
+                deferred.resolve({
+                  key: key,
+                  table: translationTable,
+                });
+                $rootScope.$emit("$translateLoadingEnd");
+              },
+              function (key) {
+                $rootScope.$emit("$translateLoadingError");
+                deferred.reject(key);
+                $rootScope.$emit("$translateLoadingEnd");
+              }
+            );
           return deferred.promise;
         };
         if ($storageFactory) {
           Storage = $injector.get($storageFactory);
           if (!Storage.get || !Storage.set) {
-            throw new Error('Couldn\'t use storage \'' + $storageFactory + '\', missing get() or set() method!');
+            throw new Error(
+              "Couldn't use storage '" +
+                $storageFactory +
+                "', missing get() or set() method!"
+            );
           }
         }
         if (angular.isFunction(defaultInterpolator.useSanitizeValueStrategy)) {
-          defaultInterpolator.useSanitizeValueStrategy($interpolationSanitizationStrategy);
+          defaultInterpolator.useSanitizeValueStrategy(
+            $interpolationSanitizationStrategy
+          );
         }
         if ($interpolatorFactories.length) {
-          angular.forEach($interpolatorFactories, function (interpolatorFactory) {
-            var interpolator = $injector.get(interpolatorFactory);
-            interpolator.setLocale($preferredLanguage || $uses);
-            if (angular.isFunction(interpolator.useSanitizeValueStrategy)) {
-              interpolator.useSanitizeValueStrategy($interpolationSanitizationStrategy);
+          angular.forEach(
+            $interpolatorFactories,
+            function (interpolatorFactory) {
+              var interpolator = $injector.get(interpolatorFactory);
+              interpolator.setLocale($preferredLanguage || $uses);
+              if (angular.isFunction(interpolator.useSanitizeValueStrategy)) {
+                interpolator.useSanitizeValueStrategy(
+                  $interpolationSanitizationStrategy
+                );
+              }
+              interpolatorHashMap[interpolator.getInterpolationIdentifier()] =
+                interpolator;
             }
-            interpolatorHashMap[interpolator.getInterpolationIdentifier()] = interpolator;
-          });
+          );
         }
         var getTranslationTable = function (langKey) {
           var deferred = $q.defer();
@@ -403,12 +487,22 @@ angular.module('pascalprecht.translate').provider('$translate', [
           }
           return deferred.promise;
         };
-        var getFallbackTranslation = function (langKey, translationId, interpolateParams, Interpolator) {
+        var getFallbackTranslation = function (
+          langKey,
+          translationId,
+          interpolateParams,
+          Interpolator
+        ) {
           var deferred = $q.defer();
           getTranslationTable(langKey).then(function (translationTable) {
             if (translationTable.hasOwnProperty(translationId)) {
               Interpolator.setLocale(langKey);
-              deferred.resolve(Interpolator.interpolate(translationTable[translationId], interpolateParams));
+              deferred.resolve(
+                Interpolator.interpolate(
+                  translationTable[translationId],
+                  interpolateParams
+                )
+              );
               Interpolator.setLocale($uses);
             } else {
               deferred.reject();
@@ -416,89 +510,191 @@ angular.module('pascalprecht.translate').provider('$translate', [
           }, deferred.reject);
           return deferred.promise;
         };
-        var getFallbackTranslationInstant = function (langKey, translationId, interpolateParams, Interpolator) {
-          var result, translationTable = $translationTable[langKey];
+        var getFallbackTranslationInstant = function (
+          langKey,
+          translationId,
+          interpolateParams,
+          Interpolator
+        ) {
+          var result,
+            translationTable = $translationTable[langKey];
           if (translationTable.hasOwnProperty(translationId)) {
             Interpolator.setLocale(langKey);
-            result = Interpolator.interpolate(translationTable[translationId], interpolateParams);
+            result = Interpolator.interpolate(
+              translationTable[translationId],
+              interpolateParams
+            );
             Interpolator.setLocale($uses);
           }
           return result;
         };
-        var resolveForFallbackLanguage = function (fallbackLanguageIndex, translationId, interpolateParams, Interpolator) {
+        var resolveForFallbackLanguage = function (
+          fallbackLanguageIndex,
+          translationId,
+          interpolateParams,
+          Interpolator
+        ) {
           var deferred = $q.defer();
           if (fallbackLanguageIndex < $fallbackLanguage.length) {
             var langKey = $fallbackLanguage[fallbackLanguageIndex];
-            getFallbackTranslation(langKey, translationId, interpolateParams, Interpolator).then(function (translation) {
-              deferred.resolve(translation);
-            }, function () {
-              var nextFallbackLanguagePromise = resolveForFallbackLanguage(fallbackLanguageIndex + 1, translationId, interpolateParams, Interpolator);
-              deferred.resolve(nextFallbackLanguagePromise);
-            });
+            getFallbackTranslation(
+              langKey,
+              translationId,
+              interpolateParams,
+              Interpolator
+            ).then(
+              function (translation) {
+                deferred.resolve(translation);
+              },
+              function () {
+                var nextFallbackLanguagePromise = resolveForFallbackLanguage(
+                  fallbackLanguageIndex + 1,
+                  translationId,
+                  interpolateParams,
+                  Interpolator
+                );
+                deferred.resolve(nextFallbackLanguagePromise);
+              }
+            );
           } else {
             deferred.resolve(translationId);
           }
           return deferred.promise;
         };
-        var resolveForFallbackLanguageInstant = function (fallbackLanguageIndex, translationId, interpolateParams, Interpolator) {
+        var resolveForFallbackLanguageInstant = function (
+          fallbackLanguageIndex,
+          translationId,
+          interpolateParams,
+          Interpolator
+        ) {
           var result;
           if (fallbackLanguageIndex < $fallbackLanguage.length) {
             var langKey = $fallbackLanguage[fallbackLanguageIndex];
-            result = getFallbackTranslationInstant(langKey, translationId, interpolateParams, Interpolator);
+            result = getFallbackTranslationInstant(
+              langKey,
+              translationId,
+              interpolateParams,
+              Interpolator
+            );
             if (!result) {
-              result = resolveForFallbackLanguageInstant(fallbackLanguageIndex + 1, translationId, interpolateParams, Interpolator);
+              result = resolveForFallbackLanguageInstant(
+                fallbackLanguageIndex + 1,
+                translationId,
+                interpolateParams,
+                Interpolator
+              );
             }
           }
           return result;
         };
-        var fallbackTranslation = function (translationId, interpolateParams, Interpolator) {
-          return resolveForFallbackLanguage(startFallbackIteration > 0 ? startFallbackIteration : fallbackIndex, translationId, interpolateParams, Interpolator);
+        var fallbackTranslation = function (
+          translationId,
+          interpolateParams,
+          Interpolator
+        ) {
+          return resolveForFallbackLanguage(
+            startFallbackIteration > 0 ? startFallbackIteration : fallbackIndex,
+            translationId,
+            interpolateParams,
+            Interpolator
+          );
         };
-        var fallbackTranslationInstant = function (translationId, interpolateParams, Interpolator) {
-          return resolveForFallbackLanguageInstant(startFallbackIteration > 0 ? startFallbackIteration : fallbackIndex, translationId, interpolateParams, Interpolator);
+        var fallbackTranslationInstant = function (
+          translationId,
+          interpolateParams,
+          Interpolator
+        ) {
+          return resolveForFallbackLanguageInstant(
+            startFallbackIteration > 0 ? startFallbackIteration : fallbackIndex,
+            translationId,
+            interpolateParams,
+            Interpolator
+          );
         };
-        var determineTranslation = function (translationId, interpolateParams, interpolationId) {
+        var determineTranslation = function (
+          translationId,
+          interpolateParams,
+          interpolationId
+        ) {
           var deferred = $q.defer();
-          var table = $uses ? $translationTable[$uses] : $translationTable, Interpolator = interpolationId ? interpolatorHashMap[interpolationId] : defaultInterpolator;
+          var table = $uses ? $translationTable[$uses] : $translationTable,
+            Interpolator = interpolationId
+              ? interpolatorHashMap[interpolationId]
+              : defaultInterpolator;
           if (table && table.hasOwnProperty(translationId)) {
             var translation = table[translationId];
-            if (translation.substr(0, 2) === '@:') {
-              $translate(translation.substr(2), interpolateParams, interpolationId).then(deferred.resolve, deferred.reject);
+            if (translation.substr(0, 2) === "@:") {
+              $translate(
+                translation.substr(2),
+                interpolateParams,
+                interpolationId
+              ).then(deferred.resolve, deferred.reject);
             } else {
-              deferred.resolve(Interpolator.interpolate(translation, interpolateParams));
+              deferred.resolve(
+                Interpolator.interpolate(translation, interpolateParams)
+              );
             }
           } else {
             if ($missingTranslationHandlerFactory && !pendingLoader) {
-              $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
+              $injector.get($missingTranslationHandlerFactory)(
+                translationId,
+                $uses
+              );
             }
             if ($uses && $fallbackLanguage && $fallbackLanguage.length) {
-              fallbackTranslation(translationId, interpolateParams, Interpolator).then(function (translation) {
-                deferred.resolve(translation);
-              }, function (_translationId) {
-                deferred.reject(applyNotFoundIndicators(_translationId));
-              });
+              fallbackTranslation(
+                translationId,
+                interpolateParams,
+                Interpolator
+              ).then(
+                function (translation) {
+                  deferred.resolve(translation);
+                },
+                function (_translationId) {
+                  deferred.reject(applyNotFoundIndicators(_translationId));
+                }
+              );
             } else {
               deferred.reject(applyNotFoundIndicators(translationId));
             }
           }
           return deferred.promise;
         };
-        var determineTranslationInstant = function (translationId, interpolateParams, interpolationId) {
-          var result, table = $uses ? $translationTable[$uses] : $translationTable, Interpolator = interpolationId ? interpolatorHashMap[interpolationId] : defaultInterpolator;
+        var determineTranslationInstant = function (
+          translationId,
+          interpolateParams,
+          interpolationId
+        ) {
+          var result,
+            table = $uses ? $translationTable[$uses] : $translationTable,
+            Interpolator = interpolationId
+              ? interpolatorHashMap[interpolationId]
+              : defaultInterpolator;
           if (table && table.hasOwnProperty(translationId)) {
             var translation = table[translationId];
-            if (translation.substr(0, 2) === '@:') {
-              result = determineTranslationInstant(translation.substr(2), interpolateParams, interpolationId);
+            if (translation.substr(0, 2) === "@:") {
+              result = determineTranslationInstant(
+                translation.substr(2),
+                interpolateParams,
+                interpolationId
+              );
             } else {
               result = Interpolator.interpolate(translation, interpolateParams);
             }
           } else {
             if ($missingTranslationHandlerFactory && !pendingLoader) {
-              $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
+              $injector.get($missingTranslationHandlerFactory)(
+                translationId,
+                $uses
+              );
             }
             if ($uses && $fallbackLanguage && $fallbackLanguage.length) {
               fallbackIndex = 0;
-              result = fallbackTranslationInstant(translationId, interpolateParams, Interpolator);
+              result = fallbackTranslationInstant(
+                translationId,
+                interpolateParams,
+                Interpolator
+              );
             } else {
               result = applyNotFoundIndicators(translationId);
             }
@@ -518,7 +714,9 @@ angular.module('pascalprecht.translate').provider('$translate', [
               if ($fallbackLanguage && $fallbackLanguage.length) {
                 for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
                   if (!langPromises[$fallbackLanguage[i]]) {
-                    langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]);
+                    langPromises[$fallbackLanguage[i]] = loadAsync(
+                      $fallbackLanguage[i]
+                    );
                   }
                 }
               }
@@ -554,22 +752,25 @@ angular.module('pascalprecht.translate').provider('$translate', [
             return $uses;
           }
           var deferred = $q.defer();
-          $rootScope.$emit('$translateChangeStart');
+          $rootScope.$emit("$translateChangeStart");
           if (!$translationTable[key] && $loaderFactory) {
             $nextLang = key;
-            langPromises[key] = loadAsync(key).then(function (translation) {
-              translations(translation.key, translation.table);
-              deferred.resolve(translation.key);
-              if ($nextLang === key) {
-                useLanguage(translation.key);
+            langPromises[key] = loadAsync(key).then(
+              function (translation) {
+                translations(translation.key, translation.table);
+                deferred.resolve(translation.key);
+                if ($nextLang === key) {
+                  useLanguage(translation.key);
+                  $nextLang = undefined;
+                }
+              },
+              function (key) {
                 $nextLang = undefined;
+                $rootScope.$emit("$translateChangeError");
+                deferred.reject(key);
+                $rootScope.$emit("$translateChangeEnd");
               }
-            }, function (key) {
-              $nextLang = undefined;
-              $rootScope.$emit('$translateChangeError');
-              deferred.reject(key);
-              $rootScope.$emit('$translateChangeEnd');
-            });
+            );
           } else {
             deferred.resolve(key);
             useLanguage(key);
@@ -584,18 +785,20 @@ angular.module('pascalprecht.translate').provider('$translate', [
         };
         $translate.refresh = function (langKey) {
           if (!$loaderFactory) {
-            throw new Error('Couldn\'t refresh translation table, no loader registered!');
+            throw new Error(
+              "Couldn't refresh translation table, no loader registered!"
+            );
           }
           var deferred = $q.defer();
           function resolve() {
             deferred.resolve();
-            $rootScope.$emit('$translateRefreshEnd');
+            $rootScope.$emit("$translateRefreshEnd");
           }
           function reject() {
             deferred.reject();
-            $rootScope.$emit('$translateRefreshEnd');
+            $rootScope.$emit("$translateRefreshEnd");
           }
-          $rootScope.$emit('$translateRefreshStart');
+          $rootScope.$emit("$translateRefreshStart");
           if (!langKey) {
             var tables = [];
             if ($fallbackLanguage && $fallbackLanguage.length) {
@@ -631,19 +834,28 @@ angular.module('pascalprecht.translate').provider('$translate', [
           }
           return deferred.promise;
         };
-        $translate.instant = function (translationId, interpolateParams, interpolationId) {
+        $translate.instant = function (
+          translationId,
+          interpolateParams,
+          interpolationId
+        ) {
           if (angular.isArray(translationId)) {
             var results = {};
             for (var i = 0, c = translationId.length; i < c; i++) {
-              results[translationId[i]] = $translate.instant(translationId[i], interpolateParams, interpolationId);
+              results[translationId[i]] = $translate.instant(
+                translationId[i],
+                interpolateParams,
+                interpolationId
+              );
             }
             return results;
           }
-          if (typeof translationId === 'undefined' || translationId === '') {
+          if (typeof translationId === "undefined" || translationId === "") {
             return translationId;
           }
           translationId = translationId.trim();
-          var result, possibleLangKeys = [];
+          var result,
+            possibleLangKeys = [];
           if ($preferredLanguage) {
             possibleLangKeys.push($preferredLanguage);
           }
@@ -656,18 +868,28 @@ angular.module('pascalprecht.translate').provider('$translate', [
           for (var j = 0, d = possibleLangKeys.length; j < d; j++) {
             var possibleLangKey = possibleLangKeys[j];
             if ($translationTable[possibleLangKey]) {
-              if (typeof $translationTable[possibleLangKey][translationId] !== 'undefined') {
-                result = determineTranslationInstant(translationId, interpolateParams, interpolationId);
+              if (
+                typeof $translationTable[possibleLangKey][translationId] !==
+                "undefined"
+              ) {
+                result = determineTranslationInstant(
+                  translationId,
+                  interpolateParams,
+                  interpolationId
+                );
               }
             }
-            if (typeof result !== 'undefined') {
+            if (typeof result !== "undefined") {
               break;
             }
           }
-          if (!result && result !== '') {
+          if (!result && result !== "") {
             result = translationId;
             if ($missingTranslationHandlerFactory && !pendingLoader) {
-              $injector.get($missingTranslationHandlerFactory)(translationId, $uses);
+              $injector.get($missingTranslationHandlerFactory)(
+                translationId,
+                $uses
+              );
             }
           }
           return result;
@@ -678,90 +900,121 @@ angular.module('pascalprecht.translate').provider('$translate', [
           }
           if ($fallbackLanguage && $fallbackLanguage.length) {
             for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
-              langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]);
+              langPromises[$fallbackLanguage[i]] = loadAsync(
+                $fallbackLanguage[i]
+              );
             }
           }
         }
         return $translate;
-      }
+      },
     ];
-  }
+  },
 ]);
-angular.module('pascalprecht.translate').factory('$translateDefaultInterpolation', [
-  '$interpolate',
-  function ($interpolate) {
-    var $translateInterpolator = {}, $locale, $identifier = 'default', $sanitizeValueStrategy = null, sanitizeValueStrategies = {
-        escaped: function (params) {
-          var result = {};
-          for (var key in params) {
-            if (params.hasOwnProperty(key)) {
-              result[key] = angular.element('<div></div>').text(params[key]).html();
+angular
+  .module("pascalprecht.translate")
+  .factory("$translateDefaultInterpolation", [
+    "$interpolate",
+    function ($interpolate) {
+      var $translateInterpolator = {},
+        $locale,
+        $identifier = "default",
+        $sanitizeValueStrategy = null,
+        sanitizeValueStrategies = {
+          escaped: function (params) {
+            var result = {};
+            for (var key in params) {
+              if (params.hasOwnProperty(key)) {
+                result[key] = angular
+                  .element("<div></div>")
+                  .text(params[key])
+                  .html();
+              }
             }
-          }
-          return result;
+            return result;
+          },
+        };
+      var sanitizeParams = function (params) {
+        var result;
+        if (
+          angular.isFunction(sanitizeValueStrategies[$sanitizeValueStrategy])
+        ) {
+          result = sanitizeValueStrategies[$sanitizeValueStrategy](params);
+        } else {
+          result = params;
         }
+        return result;
       };
-    var sanitizeParams = function (params) {
-      var result;
-      if (angular.isFunction(sanitizeValueStrategies[$sanitizeValueStrategy])) {
-        result = sanitizeValueStrategies[$sanitizeValueStrategy](params);
-      } else {
-        result = params;
-      }
-      return result;
-    };
-    $translateInterpolator.setLocale = function (locale) {
-      $locale = locale;
-    };
-    $translateInterpolator.getInterpolationIdentifier = function () {
-      return $identifier;
-    };
-    $translateInterpolator.useSanitizeValueStrategy = function (value) {
-      $sanitizeValueStrategy = value;
-      return this;
-    };
-    $translateInterpolator.interpolate = function (string, interpolateParams) {
-      if ($sanitizeValueStrategy) {
-        interpolateParams = sanitizeParams(interpolateParams);
-      }
-      return $interpolate(string)(interpolateParams);
-    };
-    return $translateInterpolator;
-  }
-]);
-angular.module('pascalprecht.translate').constant('$STORAGE_KEY', 'NG_TRANSLATE_LANG_KEY');
-angular.module('pascalprecht.translate').directive('translate', [
-  '$translate',
-  '$q',
-  '$interpolate',
-  '$compile',
-  '$parse',
-  '$rootScope',
+      $translateInterpolator.setLocale = function (locale) {
+        $locale = locale;
+      };
+      $translateInterpolator.getInterpolationIdentifier = function () {
+        return $identifier;
+      };
+      $translateInterpolator.useSanitizeValueStrategy = function (value) {
+        $sanitizeValueStrategy = value;
+        return this;
+      };
+      $translateInterpolator.interpolate = function (
+        string,
+        interpolateParams
+      ) {
+        if ($sanitizeValueStrategy) {
+          interpolateParams = sanitizeParams(interpolateParams);
+        }
+        return $interpolate(string)(interpolateParams);
+      };
+      return $translateInterpolator;
+    },
+  ]);
+angular
+  .module("pascalprecht.translate")
+  .constant("$STORAGE_KEY", "NG_TRANSLATE_LANG_KEY");
+angular.module("pascalprecht.translate").directive("translate", [
+  "$translate",
+  "$q",
+  "$interpolate",
+  "$compile",
+  "$parse",
+  "$rootScope",
   function ($translate, $q, $interpolate, $compile, $parse, $rootScope) {
     return {
-      restrict: 'AE',
+      restrict: "AE",
       scope: true,
       compile: function (tElement, tAttr) {
-        var translateValuesExist = tAttr.translateValues ? tAttr.translateValues : undefined;
-        var translateInterpolation = tAttr.translateInterpolation ? tAttr.translateInterpolation : undefined;
-        var translateValueExist = tElement[0].outerHTML.match(/translate-value-+/i);
+        var translateValuesExist = tAttr.translateValues
+          ? tAttr.translateValues
+          : undefined;
+        var translateInterpolation = tAttr.translateInterpolation
+          ? tAttr.translateInterpolation
+          : undefined;
+        var translateValueExist =
+          tElement[0].outerHTML.match(/translate-value-+/i);
         return function linkFn(scope, iElement, iAttr) {
           scope.interpolateParams = {};
-          iAttr.$observe('translate', function (translationId) {
-            if (angular.equals(translationId, '') || !angular.isDefined(translationId)) {
-              scope.translationId = $interpolate(iElement.text().replace(/^\s+|\s+$/g, ''))(scope.$parent);
+          iAttr.$observe("translate", function (translationId) {
+            if (
+              angular.equals(translationId, "") ||
+              !angular.isDefined(translationId)
+            ) {
+              scope.translationId = $interpolate(
+                iElement.text().replace(/^\s+|\s+$/g, "")
+              )(scope.$parent);
             } else {
               scope.translationId = translationId;
             }
           });
-          iAttr.$observe('translateDefault', function (value) {
+          iAttr.$observe("translateDefault", function (value) {
             scope.defaultText = value;
           });
           if (translateValuesExist) {
-            iAttr.$observe('translateValues', function (interpolateParams) {
+            iAttr.$observe("translateValues", function (interpolateParams) {
               if (interpolateParams) {
                 scope.$parent.$watch(function () {
-                  angular.extend(scope.interpolateParams, $parse(interpolateParams)(scope.$parent));
+                  angular.extend(
+                    scope.interpolateParams,
+                    $parse(interpolateParams)(scope.$parent)
+                  );
                 });
               }
             });
@@ -769,89 +1022,118 @@ angular.module('pascalprecht.translate').directive('translate', [
           if (translateValueExist) {
             var fn = function (attrName) {
               iAttr.$observe(attrName, function (value) {
-                scope.interpolateParams[angular.lowercase(attrName.substr(14, 1)) + attrName.substr(15)] = value;
+                scope.interpolateParams[
+                  angular.lowercase(attrName.substr(14, 1)) +
+                    attrName.substr(15)
+                ] = value;
               });
             };
             for (var attr in iAttr) {
-              if (iAttr.hasOwnProperty(attr) && attr.substr(0, 14) === 'translateValue' && attr !== 'translateValues') {
+              if (
+                iAttr.hasOwnProperty(attr) &&
+                attr.substr(0, 14) === "translateValue" &&
+                attr !== "translateValues"
+              ) {
                 fn(attr);
               }
             }
           }
           var applyElementContent = function (value, scope, successful) {
-            if (!successful && typeof scope.defaultText !== 'undefined') {
+            if (!successful && typeof scope.defaultText !== "undefined") {
               value = scope.defaultText;
             }
             iElement.html(value);
             var globallyEnabled = $translate.isPostCompilingEnabled();
-            var locallyDefined = typeof tAttr.translateCompile !== 'undefined';
-            var locallyEnabled = locallyDefined && tAttr.translateCompile !== 'false';
-            if (globallyEnabled && !locallyDefined || locallyEnabled) {
+            var locallyDefined = typeof tAttr.translateCompile !== "undefined";
+            var locallyEnabled =
+              locallyDefined && tAttr.translateCompile !== "false";
+            if ((globallyEnabled && !locallyDefined) || locallyEnabled) {
               $compile(iElement.contents())(scope);
             }
           };
-          var updateTranslationFn = function () {
-              if (!translateValuesExist && !translateValueExist) {
-                return function () {
-                  var unwatch = scope.$watch('translationId', function (value) {
-                      if (scope.translationId && value) {
-                        $translate(value, {}, translateInterpolation).then(function (translation) {
+          var updateTranslationFn = (function () {
+            if (!translateValuesExist && !translateValueExist) {
+              return function () {
+                var unwatch = scope.$watch(
+                  "translationId",
+                  function (value) {
+                    if (scope.translationId && value) {
+                      $translate(value, {}, translateInterpolation).then(
+                        function (translation) {
                           applyElementContent(translation, scope, true);
                           unwatch();
-                        }, function (translationId) {
+                        },
+                        function (translationId) {
                           applyElementContent(translationId, scope, false);
                           unwatch();
-                        });
-                      }
-                    }, true);
-                };
-              } else {
-                return function () {
-                  var updateTranslations = function () {
-                    if (scope.translationId && scope.interpolateParams) {
-                      $translate(scope.translationId, scope.interpolateParams, translateInterpolation).then(function (translation) {
-                        applyElementContent(translation, scope, true);
-                      }, function (translationId) {
-                        applyElementContent(translationId, scope, false);
-                      });
+                        }
+                      );
                     }
-                  };
-                  scope.$watch('interpolateParams', updateTranslations, true);
-                  scope.$watch('translationId', updateTranslations);
+                  },
+                  true
+                );
+              };
+            } else {
+              return function () {
+                var updateTranslations = function () {
+                  if (scope.translationId && scope.interpolateParams) {
+                    $translate(
+                      scope.translationId,
+                      scope.interpolateParams,
+                      translateInterpolation
+                    ).then(
+                      function (translation) {
+                        applyElementContent(translation, scope, true);
+                      },
+                      function (translationId) {
+                        applyElementContent(translationId, scope, false);
+                      }
+                    );
+                  }
                 };
-              }
-            }();
-          var unbind = $rootScope.$on('$translateChangeSuccess', updateTranslationFn);
+                scope.$watch("interpolateParams", updateTranslations, true);
+                scope.$watch("translationId", updateTranslations);
+              };
+            }
+          })();
+          var unbind = $rootScope.$on(
+            "$translateChangeSuccess",
+            updateTranslationFn
+          );
           updateTranslationFn();
-          scope.$on('$destroy', unbind);
+          scope.$on("$destroy", unbind);
         };
-      }
+      },
     };
-  }
+  },
 ]);
-angular.module('pascalprecht.translate').directive('translateCloak', [
-  '$rootScope',
-  '$translate',
+angular.module("pascalprecht.translate").directive("translateCloak", [
+  "$rootScope",
+  "$translate",
   function ($rootScope, $translate) {
     return {
       compile: function (tElement) {
-        $rootScope.$on('$translateLoadingSuccess', function () {
+        $rootScope.$on("$translateLoadingSuccess", function () {
           tElement.removeClass($translate.cloakClassName());
         });
         tElement.addClass($translate.cloakClassName());
-      }
+      },
     };
-  }
+  },
 ]);
-angular.module('pascalprecht.translate').filter('translate', [
-  '$parse',
-  '$translate',
+angular.module("pascalprecht.translate").filter("translate", [
+  "$parse",
+  "$translate",
   function ($parse, $translate) {
     return function (translationId, interpolateParams, interpolation) {
       if (!angular.isObject(interpolateParams)) {
         interpolateParams = $parse(interpolateParams)();
       }
-      return $translate.instant(translationId, interpolateParams, interpolation);
+      return $translate.instant(
+        translationId,
+        interpolateParams,
+        interpolation
+      );
     };
-  }
+  },
 ]);

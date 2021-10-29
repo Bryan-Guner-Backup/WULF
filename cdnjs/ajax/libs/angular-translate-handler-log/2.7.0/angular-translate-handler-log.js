@@ -4,12 +4,12 @@
  * Copyright (c) 2015 ; Licensed MIT
  */
 (function (root, factory) {
-  if (typeof define === 'function' && define.amd) {
+  if (typeof define === "function" && define.amd) {
     // AMD. Register as an anonymous module unless amdModuleId is set
     define([], function () {
-      return (factory());
+      return factory();
     });
-  } else if (typeof exports === 'object') {
+  } else if (typeof exports === "object") {
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
@@ -17,34 +17,36 @@
   } else {
     factory();
   }
-}(this, function () {
+})(this, function () {
+  angular
+    .module("pascalprecht.translate")
 
-angular.module('pascalprecht.translate')
+    /**
+     * @ngdoc object
+     * @name pascalprecht.translate.$translateMissingTranslationHandlerLog
+     * @requires $log
+     *
+     * @description
+     * Uses angular's `$log` service to give a warning when trying to translate a
+     * translation id which doesn't exist.
+     *
+     * @returns {function} Handler function
+     */
+    .factory(
+      "$translateMissingTranslationHandlerLog",
+      $translateMissingTranslationHandlerLog
+    );
 
-/**
- * @ngdoc object
- * @name pascalprecht.translate.$translateMissingTranslationHandlerLog
- * @requires $log
- *
- * @description
- * Uses angular's `$log` service to give a warning when trying to translate a
- * translation id which doesn't exist.
- *
- * @returns {function} Handler function
- */
-.factory('$translateMissingTranslationHandlerLog', $translateMissingTranslationHandlerLog);
+  function $translateMissingTranslationHandlerLog($log) {
+    "use strict";
 
-function $translateMissingTranslationHandlerLog ($log) {
+    return function (translationId) {
+      $log.warn("Translation for " + translationId + " doesn't exist");
+    };
+  }
+  $translateMissingTranslationHandlerLog.$inject = ["$log"];
 
-  'use strict';
-
-  return function (translationId) {
-    $log.warn('Translation for ' + translationId + ' doesn\'t exist');
-  };
-}
-$translateMissingTranslationHandlerLog.$inject = ['$log'];
-
-$translateMissingTranslationHandlerLog.displayName = '$translateMissingTranslationHandlerLog';
-return 'pascalprecht.translate';
-
-}));
+  $translateMissingTranslationHandlerLog.displayName =
+    "$translateMissingTranslationHandlerLog";
+  return "pascalprecht.translate";
+});

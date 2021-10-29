@@ -4,12 +4,12 @@
  * Copyright (c) 2015 ; Licensed MIT
  */
 (function (root, factory) {
-  if (typeof define === 'function' && define.amd) {
+  if (typeof define === "function" && define.amd) {
     // AMD. Register as an anonymous module unless amdModuleId is set
     define([], function () {
-      return (factory());
+      return factory();
     });
-  } else if (typeof exports === 'object') {
+  } else if (typeof exports === "object") {
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
@@ -17,107 +17,110 @@
   } else {
     factory();
   }
-}(this, function () {
+})(this, function () {
+  angular
+    .module("pascalprecht.translate")
 
-angular.module('pascalprecht.translate')
+    /**
+     * @ngdoc object
+     * @name pascalprecht.translate.$translateLocalStorage
+     * @requires $window
+     * @requires $translateCookieStorage
+     *
+     * @description
+     * Abstraction layer for localStorage. This service is used when telling angular-translate
+     * to use localStorage as storage.
+     *
+     */
+    .factory("$translateLocalStorage", $translateLocalStorageFactory);
 
-/**
- * @ngdoc object
- * @name pascalprecht.translate.$translateLocalStorage
- * @requires $window
- * @requires $translateCookieStorage
- *
- * @description
- * Abstraction layer for localStorage. This service is used when telling angular-translate
- * to use localStorage as storage.
- *
- */
-.factory('$translateLocalStorage', $translateLocalStorageFactory);
+  function $translateLocalStorageFactory($window, $translateCookieStorage) {
+    "use strict";
 
-function $translateLocalStorageFactory($window, $translateCookieStorage) {
+    // Setup adapter
+    var localStorageAdapter = (function () {
+      var langKey;
+      return {
+        /**
+         * @ngdoc function
+         * @name pascalprecht.translate.$translateLocalStorage#get
+         * @methodOf pascalprecht.translate.$translateLocalStorage
+         *
+         * @description
+         * Returns an item from localStorage by given name.
+         *
+         * @param {string} name Item name
+         * @return {string} Value of item name
+         */
+        get: function (name) {
+          if (!langKey) {
+            langKey = $window.localStorage.getItem(name);
+          }
 
-  'use strict';
+          return langKey;
+        },
+        /**
+         * @ngdoc function
+         * @name pascalprecht.translate.$translateLocalStorage#set
+         * @methodOf pascalprecht.translate.$translateLocalStorage
+         *
+         * @description
+         * Sets an item in localStorage by given name.
+         *
+         * @deprecated use #put
+         *
+         * @param {string} name Item name
+         * @param {string} value Item value
+         */
+        set: function (name, value) {
+          langKey = value;
+          $window.localStorage.setItem(name, value);
+        },
+        /**
+         * @ngdoc function
+         * @name pascalprecht.translate.$translateLocalStorage#put
+         * @methodOf pascalprecht.translate.$translateLocalStorage
+         *
+         * @description
+         * Sets an item in localStorage by given name.
+         *
+         * @param {string} name Item name
+         * @param {string} value Item value
+         */
+        put: function (name, value) {
+          langKey = value;
+          $window.localStorage.setItem(name, value);
+        },
+      };
+    })();
 
-  // Setup adapter
-  var localStorageAdapter = (function(){
-    var langKey;
-    return {
-      /**
-       * @ngdoc function
-       * @name pascalprecht.translate.$translateLocalStorage#get
-       * @methodOf pascalprecht.translate.$translateLocalStorage
-       *
-       * @description
-       * Returns an item from localStorage by given name.
-       *
-       * @param {string} name Item name
-       * @return {string} Value of item name
-       */
-      get: function (name) {
-        if(!langKey) {
-          langKey = $window.localStorage.getItem(name);
+    var hasLocalStorageSupport = "localStorage" in $window;
+    if (hasLocalStorageSupport) {
+      var testKey = "pascalprecht.translate.storageTest";
+      try {
+        // this check have to be wrapped within a try/catch because on
+        // a SecurityError: Dom Exception 18 on iOS
+        if ($window.localStorage !== null) {
+          $window.localStorage.setItem(testKey, "foo");
+          $window.localStorage.removeItem(testKey);
+          hasLocalStorageSupport = true;
+        } else {
+          hasLocalStorageSupport = false;
         }
-
-        return langKey;
-      },
-      /**
-       * @ngdoc function
-       * @name pascalprecht.translate.$translateLocalStorage#set
-       * @methodOf pascalprecht.translate.$translateLocalStorage
-       *
-       * @description
-       * Sets an item in localStorage by given name.
-       *
-       * @deprecated use #put
-       *
-       * @param {string} name Item name
-       * @param {string} value Item value
-       */
-      set: function (name, value) {
-        langKey=value;
-        $window.localStorage.setItem(name, value);
-      },
-      /**
-       * @ngdoc function
-       * @name pascalprecht.translate.$translateLocalStorage#put
-       * @methodOf pascalprecht.translate.$translateLocalStorage
-       *
-       * @description
-       * Sets an item in localStorage by given name.
-       *
-       * @param {string} name Item name
-       * @param {string} value Item value
-       */
-      put: function (name, value) {
-        langKey=value;
-        $window.localStorage.setItem(name, value);
-      }
-    };
-  }());
-
-  var hasLocalStorageSupport = 'localStorage' in $window;
-  if (hasLocalStorageSupport) {
-    var testKey = 'pascalprecht.translate.storageTest';
-    try {
-      // this check have to be wrapped within a try/catch because on
-      // a SecurityError: Dom Exception 18 on iOS
-      if ($window.localStorage !== null) {
-        $window.localStorage.setItem(testKey, 'foo');
-        $window.localStorage.removeItem(testKey);
-        hasLocalStorageSupport = true;
-      } else {
+      } catch (e) {
         hasLocalStorageSupport = false;
       }
-    } catch (e){
-      hasLocalStorageSupport = false;
     }
+    var $translateLocalStorage = hasLocalStorageSupport
+      ? localStorageAdapter
+      : $translateCookieStorage;
+    return $translateLocalStorage;
   }
-  var $translateLocalStorage = hasLocalStorageSupport ? localStorageAdapter : $translateCookieStorage;
-  return $translateLocalStorage;
-}
-$translateLocalStorageFactory.$inject = ['$window', '$translateCookieStorage'];
+  $translateLocalStorageFactory.$inject = [
+    "$window",
+    "$translateCookieStorage",
+  ];
 
-$translateLocalStorageFactory.displayName = '$translateLocalStorageFactory';
-return 'pascalprecht.translate';
-
-}));
+  $translateLocalStorageFactory.displayName = "$translateLocalStorageFactory";
+  return "pascalprecht.translate";
+});

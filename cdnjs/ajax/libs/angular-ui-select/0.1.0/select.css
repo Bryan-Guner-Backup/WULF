@@ -3,9 +3,7 @@
   font-weight: bold;
 }
 
-
 /* Select2 theme */
-
 
 /* Selectize theme */
 
@@ -19,7 +17,6 @@
   width: 100%;
 }
 
-
 /* Bootstrap theme */
 
 /* Fix Bootstrap dropdown position when inside a input-group */
@@ -29,7 +26,7 @@
 }
 
 .input-group > .ui-select-bootstrap > input.ui-select-search.form-control {
-  border-radius: 4px;  /* FIXME hardcoded value :-/ */
+  border-radius: 4px; /* FIXME hardcoded value :-/ */
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }

@@ -3,9 +3,7 @@
   font-weight: bold;
 }
 
-
 /* Select2 theme */
-
 
 /* Selectize theme */
 
@@ -18,7 +16,6 @@
 .selectize-control > .selectize-dropdown {
   width: 100%;
 }
-
 
 /* Bootstrap theme */
 
@@ -59,5 +56,5 @@
 /* fix hide/show angular animation */
 .ui-select-match.ng-hide-add,
 .ui-select-search.ng-hide-add {
-    display: none !important;
+  display: none !important;
 }

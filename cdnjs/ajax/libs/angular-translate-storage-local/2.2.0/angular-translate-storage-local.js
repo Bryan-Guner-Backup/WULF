@@ -3,36 +3,39 @@
  * http://github.com/PascalPrecht/angular-translate
  * Copyright (c) 2014 ; Licensed MIT
  */
-angular.module('pascalprecht.translate').factory('$translateLocalStorage', [
-  '$window',
-  '$translateCookieStorage',
+angular.module("pascalprecht.translate").factory("$translateLocalStorage", [
+  "$window",
+  "$translateCookieStorage",
   function ($window, $translateCookieStorage) {
-    var localStorageAdapter = function () {
-        var langKey;
-        return {
-          get: function (name) {
-            if (!langKey) {
-              langKey = $window.localStorage.getItem(name);
-            }
-            return langKey;
-          },
-          set: function (name, value) {
-            langKey = value;
-            $window.localStorage.setItem(name, value);
+    var localStorageAdapter = (function () {
+      var langKey;
+      return {
+        get: function (name) {
+          if (!langKey) {
+            langKey = $window.localStorage.getItem(name);
           }
-        };
-      }();
-    var hasLocalStorageSupport = 'localStorage' in $window && $window.localStorage !== null;
+          return langKey;
+        },
+        set: function (name, value) {
+          langKey = value;
+          $window.localStorage.setItem(name, value);
+        },
+      };
+    })();
+    var hasLocalStorageSupport =
+      "localStorage" in $window && $window.localStorage !== null;
     if (hasLocalStorageSupport) {
-      var testKey = 'pascalprecht.translate.storageTest';
+      var testKey = "pascalprecht.translate.storageTest";
       try {
-        $window.localStorage.setItem(testKey, 'foo');
+        $window.localStorage.setItem(testKey, "foo");
         $window.localStorage.removeItem(testKey);
       } catch (e) {
         hasLocalStorageSupport = false;
       }
     }
-    var $translateLocalStorage = hasLocalStorageSupport ? localStorageAdapter : $translateCookieStorage;
+    var $translateLocalStorage = hasLocalStorageSupport
+      ? localStorageAdapter
+      : $translateCookieStorage;
     return $translateLocalStorage;
-  }
+  },
 ]);

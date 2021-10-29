@@ -21,14 +21,14 @@
 
 /* Mark invalid Select2 */
 .ng-dirty.ng-invalid > a.select2-choice {
-    border-color: #D44950;
+  border-color: #d44950;
 }
 
 /* Selectize theme */
 
 /* Helper class to show styles when focus */
-.selectize-input.selectize-focus{
-  border-color: #007FBB !important;
+.selectize-input.selectize-focus {
+  border-color: #007fbb !important;
 }
 
 /* Fix input width for Selectize theme */
@@ -43,23 +43,22 @@
 
 /* Mark invalid Selectize */
 .ng-dirty.ng-invalid > div.selectize-input {
-    border-color: #D44950;
+  border-color: #d44950;
 }
-
 
 /* Bootstrap theme */
 
 /* Helper class to show styles when focus */
 .btn-default-focus {
   color: #333;
-  background-color: #EBEBEB;
-  border-color: #ADADAD;
+  background-color: #ebebeb;
+  border-color: #adadad;
   text-decoration: none;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+    0 0 8px rgba(102, 175, 233, 0.6);
 }
-
 
 /* Fix Bootstrap dropdown position when inside a input-group */
 .input-group > .ui-select-bootstrap.dropdown {
@@ -98,10 +97,10 @@
 /* fix hide/show angular animation */
 .ui-select-match.ng-hide-add,
 .ui-select-search.ng-hide-add {
-    display: none !important;
+  display: none !important;
 }
 
 /* Mark invalid Bootstrap */
 .ui-select-bootstrap.ng-dirty.ng-invalid > button.btn.ui-select-match {
-    border-color: #D44950;
+  border-color: #d44950;
 }

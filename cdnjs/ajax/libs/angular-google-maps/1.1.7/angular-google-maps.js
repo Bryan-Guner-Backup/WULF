@@ -34,67 +34,85 @@ Nicolas Laplante - https://plus.google.com/108189012221374960701
 Nicholas McCready - https://twitter.com/nmccready
 */
 
-
-(function() {
+(function () {
   angular.module("google-maps.directives.api.utils", []);
 
   angular.module("google-maps.directives.api.managers", []);
 
-  angular.module("google-maps.directives.api.models.child", ["google-maps.directives.api.utils"]);
-
-  angular.module("google-maps.directives.api.models.parent", ["google-maps.directives.api.managers", "google-maps.directives.api.models.child"]);
-
-  angular.module("google-maps.directives.api", ["google-maps.directives.api.models.parent"]);
-
-  angular.module("google-maps", ["google-maps.directives.api"]).factory("debounce", [
-    "$timeout", function($timeout) {
-      return function(fn) {
-        var nthCall;
-        nthCall = 0;
-        return function() {
-          var argz, later, that;
-          that = this;
-          argz = arguments;
-          nthCall++;
-          later = (function(version) {
-            return function() {
-              if (version === nthCall) {
-                return fn.apply(that, argz);
-              }
-            };
-          })(nthCall);
-          return $timeout(later, 0, true);
-        };
-      };
-    }
+  angular.module("google-maps.directives.api.models.child", [
+    "google-maps.directives.api.utils",
   ]);
 
-}).call(this);
+  angular.module("google-maps.directives.api.models.parent", [
+    "google-maps.directives.api.managers",
+    "google-maps.directives.api.models.child",
+  ]);
 
-(function() {
-  angular.element(document).ready(function() {
-    if (!(google || (typeof google !== "undefined" && google !== null ? google.maps : void 0) || (google.maps.InfoWindow != null))) {
+  angular.module("google-maps.directives.api", [
+    "google-maps.directives.api.models.parent",
+  ]);
+
+  angular
+    .module("google-maps", ["google-maps.directives.api"])
+    .factory("debounce", [
+      "$timeout",
+      function ($timeout) {
+        return function (fn) {
+          var nthCall;
+          nthCall = 0;
+          return function () {
+            var argz, later, that;
+            that = this;
+            argz = arguments;
+            nthCall++;
+            later = (function (version) {
+              return function () {
+                if (version === nthCall) {
+                  return fn.apply(that, argz);
+                }
+              };
+            })(nthCall);
+            return $timeout(later, 0, true);
+          };
+        };
+      },
+    ]);
+}.call(this));
+
+(function () {
+  angular.element(document).ready(function () {
+    if (
+      !(
+        google ||
+        (typeof google !== "undefined" && google !== null
+          ? google.maps
+          : void 0) ||
+        google.maps.InfoWindow != null
+      )
+    ) {
       return;
     }
-    google.maps.InfoWindow.prototype._open = google.maps.InfoWindow.prototype.open;
-    google.maps.InfoWindow.prototype._close = google.maps.InfoWindow.prototype.close;
+    google.maps.InfoWindow.prototype._open =
+      google.maps.InfoWindow.prototype.open;
+    google.maps.InfoWindow.prototype._close =
+      google.maps.InfoWindow.prototype.close;
     google.maps.InfoWindow.prototype._isOpen = false;
-    google.maps.InfoWindow.prototype.open = function(map, anchor) {
+    google.maps.InfoWindow.prototype.open = function (map, anchor) {
       this._isOpen = true;
       this._open(map, anchor);
     };
-    google.maps.InfoWindow.prototype.close = function() {
+    google.maps.InfoWindow.prototype.close = function () {
       this._isOpen = false;
       this._close();
     };
-    google.maps.InfoWindow.prototype.isOpen = function(val) {
+    google.maps.InfoWindow.prototype.isOpen = function (val) {
       if (val == null) {
         val = void 0;
       }
       if (val == null) {
         return this._isOpen;
       } else {
-        return this._isOpen = val;
+        return (this._isOpen = val);
       }
     };
     /*
@@ -108,27 +126,26 @@ Nicholas McCready - https://twitter.com/nmccready
     window.InfoBox.prototype._open = window.InfoBox.prototype.open;
     window.InfoBox.prototype._close = window.InfoBox.prototype.close;
     window.InfoBox.prototype._isOpen = false;
-    window.InfoBox.prototype.open = function(map, anchor) {
+    window.InfoBox.prototype.open = function (map, anchor) {
       this._isOpen = true;
       this._open(map, anchor);
     };
-    window.InfoBox.prototype.close = function() {
+    window.InfoBox.prototype.close = function () {
       this._isOpen = false;
       this._close();
     };
-    return window.InfoBox.prototype.isOpen = function(val) {
+    return (window.InfoBox.prototype.isOpen = function (val) {
       if (val == null) {
         val = void 0;
       }
       if (val == null) {
         return this._isOpen;
       } else {
-        return this._isOpen = val;
+        return (this._isOpen = val);
       }
-    };
+    });
   });
-
-}).call(this);
+}.call(this));
 
 /*
     Author Nick McCready
@@ -136,16 +153,15 @@ Nicholas McCready - https://twitter.com/nmccready
     in an new array.
 */
 
-
-(function() {
-  _.intersectionObjects = function(array1, array2, comparison) {
+(function () {
+  _.intersectionObjects = function (array1, array2, comparison) {
     var res,
       _this = this;
     if (comparison == null) {
       comparison = void 0;
     }
-    res = _.map(array1, function(obj1) {
-      return _.find(array2, function(obj2) {
+    res = _.map(array1, function (obj1) {
+      return _.find(array2, function (obj2) {
         if (comparison != null) {
           return comparison(obj1, obj2);
         } else {
@@ -153,12 +169,12 @@ Nicholas McCready - https://twitter.com/nmccready
         }
       });
     });
-    return _.filter(res, function(o) {
+    return _.filter(res, function (o) {
       return o != null;
     });
   };
 
-  _.containsObject = _.includeObject = function(obj, target, comparison) {
+  _.containsObject = _.includeObject = function (obj, target, comparison) {
     var _this = this;
     if (comparison == null) {
       comparison = void 0;
@@ -166,7 +182,7 @@ Nicholas McCready - https://twitter.com/nmccready
     if (obj === null) {
       return false;
     }
-    return _.any(obj, function(value) {
+    return _.any(obj, function (value) {
       if (comparison != null) {
         return comparison(value, target);
       } else {
@@ -175,20 +191,20 @@ Nicholas McCready - https://twitter.com/nmccready
     });
   };
 
-  _.differenceObjects = function(array1, array2, comparison) {
+  _.differenceObjects = function (array1, array2, comparison) {
     if (comparison == null) {
       comparison = void 0;
     }
-    return _.filter(array1, function(value) {
+    return _.filter(array1, function (value) {
       return !_.containsObject(array2, value);
     });
   };
 
-  _.withoutObjects = function(array, array2) {
+  _.withoutObjects = function (array, array2) {
     return _.differenceObjects(array, array2);
   };
 
-  _.indexOfObject = function(array, item, comparison, isSorted) {
+  _.indexOfObject = function (array, item, comparison, isSorted) {
     var i, length;
     if (array == null) {
       return -1;
@@ -197,10 +213,10 @@ Nicholas McCready - https://twitter.com/nmccready
     length = array.length;
     if (isSorted) {
       if (typeof isSorted === "number") {
-        i = (isSorted < 0 ? Math.max(0, length + isSorted) : isSorted);
+        i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
       } else {
         i = _.sortedIndex(array, item);
-        return (array[i] === item ? i : -1);
+        return array[i] === item ? i : -1;
       }
     }
     while (i < length) {
@@ -218,13 +234,16 @@ Nicholas McCready - https://twitter.com/nmccready
     return -1;
   };
 
-  _["extends"] = function(arrayOfObjectsToCombine) {
-    return _.reduce(arrayOfObjectsToCombine, function(combined, toAdd) {
-      return _.extend(combined, toAdd);
-    }, {});
+  _["extends"] = function (arrayOfObjectsToCombine) {
+    return _.reduce(
+      arrayOfObjectsToCombine,
+      function (combined, toAdd) {
+        return _.extend(combined, toAdd);
+      },
+      {}
+    );
   };
-
-}).call(this);
+}.call(this));
 
 /*
     Author: Nicholas McCready & jfriend00
@@ -237,12 +256,19 @@ Nicholas McCready - https://twitter.com/nmccready
     TODO: Handle Object iteration like underscore and lodash as well.. not that important right now
 */
 
-
-(function() {
+(function () {
   var async;
 
   async = {
-    each: function(array, callback, doneCallBack, pausedCallBack, chunk, index, pause) {
+    each: function (
+      array,
+      callback,
+      doneCallBack,
+      pausedCallBack,
+      chunk,
+      index,
+      pause
+    ) {
       var doChunk;
       if (chunk == null) {
         chunk = 20;
@@ -261,7 +287,7 @@ Nicholas McCready - https://twitter.com/nmccready
         doneCallBack();
         return;
       }
-      doChunk = function() {
+      doChunk = function () {
         var cnt, i;
         cnt = chunk;
         i = index;
@@ -285,72 +311,86 @@ Nicholas McCready - https://twitter.com/nmccready
       };
       return doChunk();
     },
-    map: function(objs, iterator, doneCallBack, pausedCallBack, chunk) {
+    map: function (objs, iterator, doneCallBack, pausedCallBack, chunk) {
       var results;
       results = [];
       if (objs == null) {
         return results;
       }
-      return _async.each(objs, function(o) {
-        return results.push(iterator(o));
-      }, function() {
-        return doneCallBack(results);
-      }, pausedCallBack, chunk);
-    }
+      return _async.each(
+        objs,
+        function (o) {
+          return results.push(iterator(o));
+        },
+        function () {
+          return doneCallBack(results);
+        },
+        pausedCallBack,
+        chunk
+      );
+    },
   };
 
   window._async = async;
 
-  angular.module("google-maps.directives.api.utils").factory("async", function() {
-    return window._async;
-  });
+  angular
+    .module("google-maps.directives.api.utils")
+    .factory("async", function () {
+      return window._async;
+    });
+}.call(this));
 
-}).call(this);
+(function () {
+  var __indexOf =
+    [].indexOf ||
+    function (item) {
+      for (var i = 0, l = this.length; i < l; i++) {
+        if (i in this && this[i] === item) return i;
+      }
+      return -1;
+    };
 
-(function() {
-  var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  angular
+    .module("google-maps.directives.api.utils")
+    .factory("BaseObject", function () {
+      var BaseObject, baseObjectKeywords;
+      baseObjectKeywords = ["extended", "included"];
+      BaseObject = (function () {
+        function BaseObject() {}
 
-  angular.module("google-maps.directives.api.utils").factory("BaseObject", function() {
-    var BaseObject, baseObjectKeywords;
-    baseObjectKeywords = ['extended', 'included'];
-    BaseObject = (function() {
-      function BaseObject() {}
-
-      BaseObject.extend = function(obj) {
-        var key, value, _ref;
-        for (key in obj) {
-          value = obj[key];
-          if (__indexOf.call(baseObjectKeywords, key) < 0) {
-            this[key] = value;
+        BaseObject.extend = function (obj) {
+          var key, value, _ref;
+          for (key in obj) {
+            value = obj[key];
+            if (__indexOf.call(baseObjectKeywords, key) < 0) {
+              this[key] = value;
+            }
           }
-        }
-        if ((_ref = obj.extended) != null) {
-          _ref.apply(this);
-        }
-        return this;
-      };
-
-      BaseObject.include = function(obj) {
-        var key, value, _ref;
-        for (key in obj) {
-          value = obj[key];
-          if (__indexOf.call(baseObjectKeywords, key) < 0) {
-            this.prototype[key] = value;
+          if ((_ref = obj.extended) != null) {
+            _ref.apply(this);
           }
-        }
-        if ((_ref = obj.included) != null) {
-          _ref.apply(this);
-        }
-        return this;
-      };
+          return this;
+        };
 
+        BaseObject.include = function (obj) {
+          var key, value, _ref;
+          for (key in obj) {
+            value = obj[key];
+            if (__indexOf.call(baseObjectKeywords, key) < 0) {
+              this.prototype[key] = value;
+            }
+          }
+          if ((_ref = obj.included) != null) {
+            _ref.apply(this);
+          }
+          return this;
+        };
+
+        return BaseObject;
+      })();
       return BaseObject;
-
-    })();
-    return BaseObject;
-  });
-
-}).call(this);
+    });
+}.call(this));
 
 /*
     Useful function callbacks that should be defined at later time.
@@ -359,47 +399,80 @@ Nicholas McCready - https://twitter.com/nmccready
     This is to lead a common design in notifying child stuff.
 */
 
-
-(function() {
-  angular.module("google-maps.directives.api.utils").factory("ChildEvents", function() {
-    return {
-      onChildCreation: function(child) {}
-    };
-  });
-
-}).call(this);
-
-(function() {
-  angular.module("google-maps.directives.api.utils").service("EventsHelper", [
-    "Logger", function($log) {
+(function () {
+  angular
+    .module("google-maps.directives.api.utils")
+    .factory("ChildEvents", function () {
       return {
-        setEvents: function(marker, scope, model) {
-          if (angular.isDefined(scope.events) && (scope.events != null) && angular.isObject(scope.events)) {
-            return _.compact(_.map(scope.events, function(eventHandler, eventName) {
-              if (scope.events.hasOwnProperty(eventName) && angular.isFunction(scope.events[eventName])) {
-                return google.maps.event.addListener(marker, eventName, function() {
-                  return eventHandler.apply(scope, [marker, eventName, model, arguments]);
-                });
-              } else {
-                return $log.info("MarkerEventHelper: invalid event listener " + eventName);
-              }
-            }));
-          }
-        }
+        onChildCreation: function (child) {},
       };
-    }
+    });
+}.call(this));
+
+(function () {
+  angular.module("google-maps.directives.api.utils").service("EventsHelper", [
+    "Logger",
+    function ($log) {
+      return {
+        setEvents: function (marker, scope, model) {
+          if (
+            angular.isDefined(scope.events) &&
+            scope.events != null &&
+            angular.isObject(scope.events)
+          ) {
+            return _.compact(
+              _.map(scope.events, function (eventHandler, eventName) {
+                if (
+                  scope.events.hasOwnProperty(eventName) &&
+                  angular.isFunction(scope.events[eventName])
+                ) {
+                  return google.maps.event.addListener(
+                    marker,
+                    eventName,
+                    function () {
+                      return eventHandler.apply(scope, [
+                        marker,
+                        eventName,
+                        model,
+                        arguments,
+                      ]);
+                    }
+                  );
+                } else {
+                  return $log.info(
+                    "MarkerEventHelper: invalid event listener " + eventName
+                  );
+                }
+              })
+            );
+          }
+        },
+      };
+    },
   ]);
+}.call(this));
 
-}).call(this);
-
-(function() {
+(function () {
   var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
   angular.module("google-maps.directives.api.utils").factory("FitHelper", [
-    "BaseObject", "Logger", function(BaseObject, $log) {
+    "BaseObject",
+    "Logger",
+    function (BaseObject, $log) {
       var FitHelper, _ref;
-      return FitHelper = (function(_super) {
+      return (FitHelper = (function (_super) {
         __extends(FitHelper, _super);
 
         function FitHelper() {
@@ -407,49 +480,57 @@ Nicholas McCready - https://twitter.com/nmccready
           return _ref;
         }
 
-        FitHelper.prototype.fit = function(gMarkers, gMap) {
-          var bounds, everSet,
+        FitHelper.prototype.fit = function (gMarkers, gMap) {
+          var bounds,
+            everSet,
             _this = this;
           if (gMap && gMarkers && gMarkers.length > 0) {
             bounds = new google.maps.LatLngBounds();
             everSet = false;
-            return _async.each(gMarkers, function(gMarker) {
-              if (gMarker) {
-                if (!everSet) {
-                  everSet = true;
+            return _async.each(
+              gMarkers,
+              function (gMarker) {
+                if (gMarker) {
+                  if (!everSet) {
+                    everSet = true;
+                  }
+                  return bounds.extend(gMarker.getPosition());
                 }
-                return bounds.extend(gMarker.getPosition());
+              },
+              function () {
+                if (everSet) {
+                  return gMap.fitBounds(bounds);
+                }
               }
-            }, function() {
-              if (everSet) {
-                return gMap.fitBounds(bounds);
-              }
-            });
+            );
           }
         };
 
         return FitHelper;
-
-      })(BaseObject);
-    }
+      })(BaseObject));
+    },
   ]);
+}.call(this));
 
-}).call(this);
-
-(function() {
+(function () {
   angular.module("google-maps.directives.api.utils").service("GmapUtil", [
-    "Logger", "$compile", function(Logger, $compile) {
+    "Logger",
+    "$compile",
+    function (Logger, $compile) {
       var getCoords, validateCoords;
-      getCoords = function(value) {
+      getCoords = function (value) {
         if (Array.isArray(value) && value.length === 2) {
           return new google.maps.LatLng(value[1], value[0]);
         } else if (angular.isDefined(value.type) && value.type === "Point") {
-          return new google.maps.LatLng(value.coordinates[1], value.coordinates[0]);
+          return new google.maps.LatLng(
+            value.coordinates[1],
+            value.coordinates[0]
+          );
         } else {
           return new google.maps.LatLng(value.latitude, value.longitude);
         }
       };
-      validateCoords = function(coords) {
+      validateCoords = function (coords) {
         if (angular.isUndefined(coords)) {
           return false;
         }
@@ -457,18 +538,28 @@ Nicholas McCready - https://twitter.com/nmccready
           if (coords.length === 2) {
             return true;
           }
-        } else if ((coords != null) && (coords != null ? coords.type : void 0)) {
-          if (coords.type === "Point" && _.isArray(coords.coordinates) && coords.coordinates.length === 2) {
+        } else if (coords != null && (coords != null ? coords.type : void 0)) {
+          if (
+            coords.type === "Point" &&
+            _.isArray(coords.coordinates) &&
+            coords.coordinates.length === 2
+          ) {
             return true;
           }
         }
-        if (coords && angular.isDefined((coords != null ? coords.latitude : void 0) && angular.isDefined(coords != null ? coords.longitude : void 0))) {
+        if (
+          coords &&
+          angular.isDefined(
+            (coords != null ? coords.latitude : void 0) &&
+              angular.isDefined(coords != null ? coords.longitude : void 0)
+          )
+        ) {
           return true;
         }
         return false;
       };
       return {
-        getLabelPositionPoint: function(anchor) {
+        getLabelPositionPoint: function (anchor) {
           var xPos, yPos;
           if (anchor === void 0) {
             return void 0;
@@ -476,11 +567,11 @@ Nicholas McCready - https://twitter.com/nmccready
           anchor = /^([-\d\.]+)\s([-\d\.]+)$/.exec(anchor);
           xPos = parseFloat(anchor[1]);
           yPos = parseFloat(anchor[2]);
-          if ((xPos != null) && (yPos != null)) {
+          if (xPos != null && yPos != null) {
             return new google.maps.Point(xPos, yPos);
           }
         },
-        createMarkerOptions: function(coords, icon, defaults, map) {
+        createMarkerOptions: function (coords, icon, defaults, map) {
           var opts;
           if (map == null) {
             map = void 0;
@@ -489,20 +580,29 @@ Nicholas McCready - https://twitter.com/nmccready
             defaults = {};
           }
           opts = angular.extend({}, defaults, {
-            position: defaults.position != null ? defaults.position : getCoords(coords),
+            position:
+              defaults.position != null ? defaults.position : getCoords(coords),
             icon: defaults.icon != null ? defaults.icon : icon,
-            visible: defaults.visible != null ? defaults.visible : validateCoords(coords)
+            visible:
+              defaults.visible != null
+                ? defaults.visible
+                : validateCoords(coords),
           });
           if (map != null) {
             opts.map = map;
           }
           return opts;
         },
-        createWindowOptions: function(gMarker, scope, content, defaults) {
-          if ((content != null) && (defaults != null) && ($compile != null)) {
+        createWindowOptions: function (gMarker, scope, content, defaults) {
+          if (content != null && defaults != null && $compile != null) {
             return angular.extend({}, defaults, {
               content: this.buildContent(scope, defaults, content),
-              position: defaults.position != null ? defaults.position : angular.isObject(gMarker) ? gMarker.getPosition() : getCoords(scope.coords)
+              position:
+                defaults.position != null
+                  ? defaults.position
+                  : angular.isObject(gMarker)
+                  ? gMarker.getPosition()
+                  : getCoords(scope.coords),
             });
           } else {
             if (!defaults) {
@@ -515,7 +615,7 @@ Nicholas McCready - https://twitter.com/nmccready
             }
           }
         },
-        buildContent: function(scope, defaults, content) {
+        buildContent: function (scope, defaults, content) {
           var parsed, ret;
           if (defaults.content != null) {
             ret = defaults.content;
@@ -532,15 +632,22 @@ Nicholas McCready - https://twitter.com/nmccready
           return ret;
         },
         defaultDelay: 50,
-        isTrue: function(val) {
-          return angular.isDefined(val) && val !== null && val === true || val === "1" || val === "y" || val === "true";
+        isTrue: function (val) {
+          return (
+            (angular.isDefined(val) && val !== null && val === true) ||
+            val === "1" ||
+            val === "y" ||
+            val === "true"
+          );
         },
-        isFalse: function(value) {
-          return ['false', 'FALSE', 0, 'n', 'N', 'no', 'NO'].indexOf(value) !== -1;
+        isFalse: function (value) {
+          return (
+            ["false", "FALSE", 0, "n", "N", "no", "NO"].indexOf(value) !== -1
+          );
         },
         getCoords: getCoords,
         validateCoords: validateCoords,
-        validatePath: function(path) {
+        validatePath: function (path) {
           var array, i, polygon, trackMaxVertices;
           i = 0;
           if (angular.isUndefined(path.type)) {
@@ -548,7 +655,14 @@ Nicholas McCready - https://twitter.com/nmccready
               return false;
             }
             while (i < path.length) {
-              if (!((angular.isDefined(path[i].latitude) && angular.isDefined(path[i].longitude)) || (typeof path[i].lat === "function" && typeof path[i].lng === "function"))) {
+              if (
+                !(
+                  (angular.isDefined(path[i].latitude) &&
+                    angular.isDefined(path[i].longitude)) ||
+                  (typeof path[i].lat === "function" &&
+                    typeof path[i].lng === "function")
+                )
+              ) {
                 return false;
               }
               i++;
@@ -566,14 +680,18 @@ Nicholas McCready - https://twitter.com/nmccready
             } else if (path.type === "MultiPolygon") {
               trackMaxVertices = {
                 max: 0,
-                index: 0
+                index: 0,
               };
-              _.forEach(path.coordinates, function(polygon, index) {
-                if (polygon[0].length > this.max) {
-                  this.max = polygon[0].length;
-                  return this.index = index;
-                }
-              }, trackMaxVertices);
+              _.forEach(
+                path.coordinates,
+                function (polygon, index) {
+                  if (polygon[0].length > this.max) {
+                    this.max = polygon[0].length;
+                    return (this.index = index);
+                  }
+                },
+                trackMaxVertices
+              );
               polygon = path.coordinates[trackMaxVertices.index];
               array = polygon[0];
               if (array.length < 4) {
@@ -596,16 +714,25 @@ Nicholas McCready - https://twitter.com/nmccready
             return true;
           }
         },
-        convertPathPoints: function(path) {
+        convertPathPoints: function (path) {
           var array, i, latlng, result, trackMaxVertices;
           i = 0;
           result = new google.maps.MVCArray();
           if (angular.isUndefined(path.type)) {
             while (i < path.length) {
               latlng;
-              if (angular.isDefined(path[i].latitude) && angular.isDefined(path[i].longitude)) {
-                latlng = new google.maps.LatLng(path[i].latitude, path[i].longitude);
-              } else if (typeof path[i].lat === "function" && typeof path[i].lng === "function") {
+              if (
+                angular.isDefined(path[i].latitude) &&
+                angular.isDefined(path[i].longitude)
+              ) {
+                latlng = new google.maps.LatLng(
+                  path[i].latitude,
+                  path[i].longitude
+                );
+              } else if (
+                typeof path[i].lat === "function" &&
+                typeof path[i].lng === "function"
+              ) {
                 latlng = path[i];
               }
               result.push(latlng);
@@ -618,14 +745,18 @@ Nicholas McCready - https://twitter.com/nmccready
             } else if (path.type === "MultiPolygon") {
               trackMaxVertices = {
                 max: 0,
-                index: 0
+                index: 0,
               };
-              _.forEach(path.coordinates, function(polygon, index) {
-                if (polygon[0].length > this.max) {
-                  this.max = polygon[0].length;
-                  return this.index = index;
-                }
-              }, trackMaxVertices);
+              _.forEach(
+                path.coordinates,
+                function (polygon, index) {
+                  if (polygon[0].length > this.max) {
+                    this.max = polygon[0].length;
+                    return (this.index = index);
+                  }
+                },
+                trackMaxVertices
+              );
               array = path.coordinates[trackMaxVertices.index][0];
             } else if (path.type === "LineString") {
               array = path.coordinates;
@@ -637,7 +768,7 @@ Nicholas McCready - https://twitter.com/nmccready
           }
           return result;
         },
-        extendMapBounds: function(map, points) {
+        extendMapBounds: function (map, points) {
           var bounds, i;
           bounds = new google.maps.LatLngBounds();
           i = 0;
@@ -646,21 +777,32 @@ Nicholas McCready - https://twitter.com/nmccready
             i++;
           }
           return map.fitBounds(bounds);
-        }
+        },
       };
-    }
+    },
   ]);
+}.call(this));
 
-}).call(this);
-
-(function() {
+(function () {
   var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
   angular.module("google-maps.directives.api.utils").factory("Linked", [
-    "BaseObject", function(BaseObject) {
+    "BaseObject",
+    function (BaseObject) {
       var Linked;
-      Linked = (function(_super) {
+      Linked = (function (_super) {
         __extends(Linked, _super);
 
         function Linked(scope, element, attrs, ctrls) {
@@ -671,21 +813,20 @@ Nicholas McCready - https://twitter.com/nmccready
         }
 
         return Linked;
-
       })(BaseObject);
       return Linked;
-    }
+    },
   ]);
+}.call(this));
 
-}).call(this);
-
-(function() {
+(function () {
   angular.module("google-maps.directives.api.utils").service("Logger", [
-    "$log", function($log) {
+    "$log",
+    function ($log) {
       return {
         logger: $log,
         doLog: false,
-        info: function(msg) {
+        info: function (msg) {
           if (this.doLog) {
             if (this.logger != null) {
               return this.logger.info(msg);
@@ -694,7 +835,7 @@ Nicholas McCready - https://twitter.com/nmccready
             }
           }
         },
-        error: function(msg) {
+        error: function (msg) {
           if (this.doLog) {
             if (this.logger != null) {
               return this.logger.error(msg);
@@ -703,7 +844,7 @@ Nicholas McCready - https://twitter.com/nmccready
             }
           }
         },
-        warn: function(msg) {
+        warn: function (msg) {
           if (this.doLog) {
             if (this.logger != null) {
               return this.logger.warn(msg);
@@ -711,22 +852,37 @@ Nicholas McCready - https://twitter.com/nmccready
               return console.warn(msg);
             }
           }
-        }
+        },
       };
-    }
+    },
   ]);
+}.call(this));
 
-}).call(this);
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
   angular.module("google-maps.directives.api.utils").factory("ModelKey", [
-    "BaseObject", function(BaseObject) {
+    "BaseObject",
+    function (BaseObject) {
       var ModelKey;
-      return ModelKey = (function(_super) {
+      return (ModelKey = (function (_super) {
         __extends(ModelKey, _super);
 
         function ModelKey(scope) {
@@ -738,427 +894,563 @@ Nicholas McCready - https://twitter.com/nmccready
           this.idKey = void 0;
         }
 
-        ModelKey.prototype.evalModelHandle = function(model, modelKey) {
+        ModelKey.prototype.evalModelHandle = function (model, modelKey) {
           if (model === void 0) {
             return void 0;
           }
-          if (modelKey === 'self') {
+          if (modelKey === "self") {
             return model;
           } else {
             return model[modelKey];
           }
         };
 
-        ModelKey.prototype.modelKeyComparison = function(model1, model2) {
+        ModelKey.prototype.modelKeyComparison = function (model1, model2) {
           var scope;
           scope = this.scope.coords != null ? this.scope : this.parentScope;
           if (scope == null) {
             throw "No scope or parentScope set!";
           }
-          return this.evalModelHandle(model1, scope.coords).latitude === this.evalModelHandle(model2, scope.coords).latitude && this.evalModelHandle(model1, scope.coords).longitude === this.evalModelHandle(model2, scope.coords).longitude;
+          return (
+            this.evalModelHandle(model1, scope.coords).latitude ===
+              this.evalModelHandle(model2, scope.coords).latitude &&
+            this.evalModelHandle(model1, scope.coords).longitude ===
+              this.evalModelHandle(model2, scope.coords).longitude
+          );
         };
 
-        ModelKey.prototype.setIdKey = function(scope) {
-          return this.idKey = scope.idKey != null ? scope.idKey : this.defaultIdKey;
+        ModelKey.prototype.setIdKey = function (scope) {
+          return (this.idKey =
+            scope.idKey != null ? scope.idKey : this.defaultIdKey);
         };
 
         return ModelKey;
-
-      })(BaseObject);
-    }
+      })(BaseObject));
+    },
   ]);
+}.call(this));
 
-}).call(this);
-
-(function() {
+(function () {
   angular.module("google-maps.directives.api.utils").factory("ModelsWatcher", [
-    "Logger", function(Logger) {
+    "Logger",
+    function (Logger) {
       return {
-        figureOutState: function(idKey, scope, childObjects, comparison, callBack) {
-          var adds, mappedScopeModelIds, removals,
+        figureOutState: function (
+          idKey,
+          scope,
+          childObjects,
+          comparison,
+          callBack
+        ) {
+          var adds,
+            mappedScopeModelIds,
+            removals,
             _this = this;
           adds = [];
           mappedScopeModelIds = {};
           removals = [];
-          return _async.each(scope.models, function(m) {
-            var child;
-            if (m[idKey] != null) {
-              mappedScopeModelIds[m[idKey]] = {};
-              if (childObjects[m[idKey]] == null) {
-                return adds.push(m);
-              } else {
-                child = childObjects[m[idKey]];
-                if (!comparison(m, child.model)) {
-                  adds.push(m);
-                  return removals.push(child);
+          return _async.each(
+            scope.models,
+            function (m) {
+              var child;
+              if (m[idKey] != null) {
+                mappedScopeModelIds[m[idKey]] = {};
+                if (childObjects[m[idKey]] == null) {
+                  return adds.push(m);
+                } else {
+                  child = childObjects[m[idKey]];
+                  if (!comparison(m, child.model)) {
+                    adds.push(m);
+                    return removals.push(child);
+                  }
                 }
+              } else {
+                return Logger.error(
+                  "id missing for model " +
+                    m.toString() +
+                    ", can not use do comparison/insertion"
+                );
               }
-            } else {
-              return Logger.error("id missing for model " + (m.toString()) + ", can not use do comparison/insertion");
+            },
+            function () {
+              return _async.each(
+                childObjects.values(),
+                function (c) {
+                  var id;
+                  if (c == null) {
+                    Logger.error("child undefined in ModelsWatcher.");
+                    return;
+                  }
+                  if (c.model == null) {
+                    Logger.error("child.model undefined in ModelsWatcher.");
+                    return;
+                  }
+                  id = c.model[idKey];
+                  if (mappedScopeModelIds[id] == null) {
+                    return removals.push(c.model[idKey]);
+                  }
+                },
+                function () {
+                  return callBack({
+                    adds: adds,
+                    removals: removals,
+                  });
+                }
+              );
             }
-          }, function() {
-            return _async.each(childObjects.values(), function(c) {
-              var id;
-              if (c == null) {
-                Logger.error("child undefined in ModelsWatcher.");
-                return;
-              }
-              if (c.model == null) {
-                Logger.error("child.model undefined in ModelsWatcher.");
-                return;
-              }
-              id = c.model[idKey];
-              if (mappedScopeModelIds[id] == null) {
-                return removals.push(c.model[idKey]);
-              }
-            }, function() {
-              return callBack({
-                adds: adds,
-                removals: removals
-              });
-            });
-          });
-        }
+          );
+        },
       };
-    }
+    },
   ]);
-
-}).call(this);
+}.call(this));
 
 /*
     Simple Object Map with a lenght property to make it easy to track length/size
 */
 
+(function () {
+  var __bind = function (fn, me) {
+    return function () {
+      return fn.apply(me, arguments);
+    };
+  };
 
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-
-  angular.module("google-maps.directives.api.utils").factory("PropMap", function() {
-    var PropMap, propsToPop;
-    propsToPop = ['get', 'put', 'remove', 'values', 'keys', 'length'];
-    PropMap = (function() {
-      function PropMap() {
-        this.keys = __bind(this.keys, this);
-        this.values = __bind(this.values, this);
-        this.remove = __bind(this.remove, this);
-        this.put = __bind(this.put, this);
-        this.get = __bind(this.get, this);
-        this.length = 0;
-      }
-
-      PropMap.prototype.get = function(key) {
-        return this[key];
-      };
-
-      PropMap.prototype.put = function(key, value) {
-        if (this[key] == null) {
-          this.length++;
+  angular
+    .module("google-maps.directives.api.utils")
+    .factory("PropMap", function () {
+      var PropMap, propsToPop;
+      propsToPop = ["get", "put", "remove", "values", "keys", "length"];
+      PropMap = (function () {
+        function PropMap() {
+          this.keys = __bind(this.keys, this);
+          this.values = __bind(this.values, this);
+          this.remove = __bind(this.remove, this);
+          this.put = __bind(this.put, this);
+          this.get = __bind(this.get, this);
+          this.length = 0;
         }
-        return this[key] = value;
-      };
 
-      PropMap.prototype.remove = function(key) {
-        delete this[key];
-        return this.length--;
-      };
+        PropMap.prototype.get = function (key) {
+          return this[key];
+        };
 
-      PropMap.prototype.values = function() {
-        var all, keys,
-          _this = this;
-        all = [];
-        keys = _.keys(this);
-        _.each(keys, function(value) {
-          if (_.indexOf(propsToPop, value) === -1) {
-            return all.push(_this[value]);
+        PropMap.prototype.put = function (key, value) {
+          if (this[key] == null) {
+            this.length++;
           }
-        });
-        return all;
-      };
+          return (this[key] = value);
+        };
 
-      PropMap.prototype.keys = function() {
-        var all, keys,
-          _this = this;
-        keys = _.keys(this);
-        all = [];
-        _.each(keys, function(prop) {
-          if (_.indexOf(propsToPop, prop) === -1) {
-            return all.push(prop);
-          }
-        });
-        return all;
-      };
+        PropMap.prototype.remove = function (key) {
+          delete this[key];
+          return this.length--;
+        };
 
+        PropMap.prototype.values = function () {
+          var all,
+            keys,
+            _this = this;
+          all = [];
+          keys = _.keys(this);
+          _.each(keys, function (value) {
+            if (_.indexOf(propsToPop, value) === -1) {
+              return all.push(_this[value]);
+            }
+          });
+          return all;
+        };
+
+        PropMap.prototype.keys = function () {
+          var all,
+            keys,
+            _this = this;
+          keys = _.keys(this);
+          all = [];
+          _.each(keys, function (prop) {
+            if (_.indexOf(propsToPop, prop) === -1) {
+              return all.push(prop);
+            }
+          });
+          return all;
+        };
+
+        return PropMap;
+      })();
       return PropMap;
+    });
+}.call(this));
 
-    })();
-    return PropMap;
-  });
-
-}).call(this);
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
-  angular.module("google-maps.directives.api.managers").factory("ClustererMarkerManager", [
-    "Logger", "FitHelper", function($log, FitHelper) {
-      var ClustererMarkerManager;
-      ClustererMarkerManager = (function(_super) {
-        __extends(ClustererMarkerManager, _super);
+  angular
+    .module("google-maps.directives.api.managers")
+    .factory("ClustererMarkerManager", [
+      "Logger",
+      "FitHelper",
+      function ($log, FitHelper) {
+        var ClustererMarkerManager;
+        ClustererMarkerManager = (function (_super) {
+          __extends(ClustererMarkerManager, _super);
 
-        function ClustererMarkerManager(gMap, opt_markers, opt_options, opt_events) {
-          var self;
-          this.opt_events = opt_events;
-          this.fit = __bind(this.fit, this);
-          this.destroy = __bind(this.destroy, this);
-          this.clear = __bind(this.clear, this);
-          this.draw = __bind(this.draw, this);
-          this.removeMany = __bind(this.removeMany, this);
-          this.remove = __bind(this.remove, this);
-          this.addMany = __bind(this.addMany, this);
-          this.add = __bind(this.add, this);
-          ClustererMarkerManager.__super__.constructor.call(this);
-          self = this;
-          this.opt_options = opt_options;
-          if ((opt_options != null) && opt_markers === void 0) {
-            this.clusterer = new MarkerClusterer(gMap, void 0, opt_options);
-          } else if ((opt_options != null) && (opt_markers != null)) {
-            this.clusterer = new MarkerClusterer(gMap, opt_markers, opt_options);
-          } else {
-            this.clusterer = new MarkerClusterer(gMap);
-          }
-          this.attachEvents(this.opt_events, "opt_events");
-          this.clusterer.setIgnoreHidden(true);
-          this.noDrawOnSingleAddRemoves = true;
-          $log.info(this);
-        }
-
-        ClustererMarkerManager.prototype.add = function(gMarker) {
-          return this.clusterer.addMarker(gMarker, this.noDrawOnSingleAddRemoves);
-        };
-
-        ClustererMarkerManager.prototype.addMany = function(gMarkers) {
-          return this.clusterer.addMarkers(gMarkers);
-        };
-
-        ClustererMarkerManager.prototype.remove = function(gMarker) {
-          return this.clusterer.removeMarker(gMarker, this.noDrawOnSingleAddRemoves);
-        };
-
-        ClustererMarkerManager.prototype.removeMany = function(gMarkers) {
-          return this.clusterer.addMarkers(gMarkers);
-        };
-
-        ClustererMarkerManager.prototype.draw = function() {
-          return this.clusterer.repaint();
-        };
-
-        ClustererMarkerManager.prototype.clear = function() {
-          this.clusterer.clearMarkers();
-          return this.clusterer.repaint();
-        };
-
-        ClustererMarkerManager.prototype.attachEvents = function(options, optionsName) {
-          var eventHandler, eventName, _results;
-          if (angular.isDefined(options) && (options != null) && angular.isObject(options)) {
-            _results = [];
-            for (eventName in options) {
-              eventHandler = options[eventName];
-              if (options.hasOwnProperty(eventName) && angular.isFunction(options[eventName])) {
-                $log.info("" + optionsName + ": Attaching event: " + eventName + " to clusterer");
-                _results.push(google.maps.event.addListener(this.clusterer, eventName, options[eventName]));
-              } else {
-                _results.push(void 0);
-              }
+          function ClustererMarkerManager(
+            gMap,
+            opt_markers,
+            opt_options,
+            opt_events
+          ) {
+            var self;
+            this.opt_events = opt_events;
+            this.fit = __bind(this.fit, this);
+            this.destroy = __bind(this.destroy, this);
+            this.clear = __bind(this.clear, this);
+            this.draw = __bind(this.draw, this);
+            this.removeMany = __bind(this.removeMany, this);
+            this.remove = __bind(this.remove, this);
+            this.addMany = __bind(this.addMany, this);
+            this.add = __bind(this.add, this);
+            ClustererMarkerManager.__super__.constructor.call(this);
+            self = this;
+            this.opt_options = opt_options;
+            if (opt_options != null && opt_markers === void 0) {
+              this.clusterer = new MarkerClusterer(gMap, void 0, opt_options);
+            } else if (opt_options != null && opt_markers != null) {
+              this.clusterer = new MarkerClusterer(
+                gMap,
+                opt_markers,
+                opt_options
+              );
+            } else {
+              this.clusterer = new MarkerClusterer(gMap);
             }
-            return _results;
+            this.attachEvents(this.opt_events, "opt_events");
+            this.clusterer.setIgnoreHidden(true);
+            this.noDrawOnSingleAddRemoves = true;
+            $log.info(this);
           }
-        };
 
-        ClustererMarkerManager.prototype.clearEvents = function(options) {
-          var eventHandler, eventName, _results;
-          if (angular.isDefined(options) && (options != null) && angular.isObject(options)) {
-            _results = [];
-            for (eventName in options) {
-              eventHandler = options[eventName];
-              if (options.hasOwnProperty(eventName) && angular.isFunction(options[eventName])) {
-                $log.info("" + optionsName + ": Clearing event: " + eventName + " to clusterer");
-                _results.push(google.maps.event.clearListeners(this.clusterer, eventName));
-              } else {
-                _results.push(void 0);
+          ClustererMarkerManager.prototype.add = function (gMarker) {
+            return this.clusterer.addMarker(
+              gMarker,
+              this.noDrawOnSingleAddRemoves
+            );
+          };
+
+          ClustererMarkerManager.prototype.addMany = function (gMarkers) {
+            return this.clusterer.addMarkers(gMarkers);
+          };
+
+          ClustererMarkerManager.prototype.remove = function (gMarker) {
+            return this.clusterer.removeMarker(
+              gMarker,
+              this.noDrawOnSingleAddRemoves
+            );
+          };
+
+          ClustererMarkerManager.prototype.removeMany = function (gMarkers) {
+            return this.clusterer.addMarkers(gMarkers);
+          };
+
+          ClustererMarkerManager.prototype.draw = function () {
+            return this.clusterer.repaint();
+          };
+
+          ClustererMarkerManager.prototype.clear = function () {
+            this.clusterer.clearMarkers();
+            return this.clusterer.repaint();
+          };
+
+          ClustererMarkerManager.prototype.attachEvents = function (
+            options,
+            optionsName
+          ) {
+            var eventHandler, eventName, _results;
+            if (
+              angular.isDefined(options) &&
+              options != null &&
+              angular.isObject(options)
+            ) {
+              _results = [];
+              for (eventName in options) {
+                eventHandler = options[eventName];
+                if (
+                  options.hasOwnProperty(eventName) &&
+                  angular.isFunction(options[eventName])
+                ) {
+                  $log.info(
+                    "" +
+                      optionsName +
+                      ": Attaching event: " +
+                      eventName +
+                      " to clusterer"
+                  );
+                  _results.push(
+                    google.maps.event.addListener(
+                      this.clusterer,
+                      eventName,
+                      options[eventName]
+                    )
+                  );
+                } else {
+                  _results.push(void 0);
+                }
               }
+              return _results;
             }
-            return _results;
-          }
-        };
+          };
 
-        ClustererMarkerManager.prototype.destroy = function() {
-          this.clearEvents(this.opt_events);
-          this.clearEvents(this.opt_internal_events);
-          return this.clear();
-        };
+          ClustererMarkerManager.prototype.clearEvents = function (options) {
+            var eventHandler, eventName, _results;
+            if (
+              angular.isDefined(options) &&
+              options != null &&
+              angular.isObject(options)
+            ) {
+              _results = [];
+              for (eventName in options) {
+                eventHandler = options[eventName];
+                if (
+                  options.hasOwnProperty(eventName) &&
+                  angular.isFunction(options[eventName])
+                ) {
+                  $log.info(
+                    "" +
+                      optionsName +
+                      ": Clearing event: " +
+                      eventName +
+                      " to clusterer"
+                  );
+                  _results.push(
+                    google.maps.event.clearListeners(this.clusterer, eventName)
+                  );
+                } else {
+                  _results.push(void 0);
+                }
+              }
+              return _results;
+            }
+          };
 
-        ClustererMarkerManager.prototype.fit = function() {
-          return ClustererMarkerManager.__super__.fit.call(this, this.clusterer.getMarkers(), this.clusterer.getMap());
-        };
+          ClustererMarkerManager.prototype.destroy = function () {
+            this.clearEvents(this.opt_events);
+            this.clearEvents(this.opt_internal_events);
+            return this.clear();
+          };
 
+          ClustererMarkerManager.prototype.fit = function () {
+            return ClustererMarkerManager.__super__.fit.call(
+              this,
+              this.clusterer.getMarkers(),
+              this.clusterer.getMap()
+            );
+          };
+
+          return ClustererMarkerManager;
+        })(FitHelper);
         return ClustererMarkerManager;
+      },
+    ]);
+}.call(this));
 
-      })(FitHelper);
-      return ClustererMarkerManager;
-    }
-  ]);
-
-}).call(this);
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
-  angular.module("google-maps.directives.api.managers").factory("MarkerManager", [
-    "Logger", "FitHelper", function(Logger, FitHelper) {
-      var MarkerManager;
-      MarkerManager = (function(_super) {
-        __extends(MarkerManager, _super);
+  angular
+    .module("google-maps.directives.api.managers")
+    .factory("MarkerManager", [
+      "Logger",
+      "FitHelper",
+      function (Logger, FitHelper) {
+        var MarkerManager;
+        MarkerManager = (function (_super) {
+          __extends(MarkerManager, _super);
 
-        MarkerManager.include(FitHelper);
+          MarkerManager.include(FitHelper);
 
-        function MarkerManager(gMap, opt_markers, opt_options) {
-          this.fit = __bind(this.fit, this);
-          this.handleOptDraw = __bind(this.handleOptDraw, this);
-          this.clear = __bind(this.clear, this);
-          this.draw = __bind(this.draw, this);
-          this.removeMany = __bind(this.removeMany, this);
-          this.remove = __bind(this.remove, this);
-          this.addMany = __bind(this.addMany, this);
-          this.add = __bind(this.add, this);
-          var self;
-          MarkerManager.__super__.constructor.call(this);
-          self = this;
-          this.gMap = gMap;
-          this.gMarkers = [];
-          this.$log = Logger;
-          this.$log.info(this);
-        }
-
-        MarkerManager.prototype.add = function(gMarker, optDraw, redraw) {
-          if (redraw == null) {
-            redraw = true;
+          function MarkerManager(gMap, opt_markers, opt_options) {
+            this.fit = __bind(this.fit, this);
+            this.handleOptDraw = __bind(this.handleOptDraw, this);
+            this.clear = __bind(this.clear, this);
+            this.draw = __bind(this.draw, this);
+            this.removeMany = __bind(this.removeMany, this);
+            this.remove = __bind(this.remove, this);
+            this.addMany = __bind(this.addMany, this);
+            this.add = __bind(this.add, this);
+            var self;
+            MarkerManager.__super__.constructor.call(this);
+            self = this;
+            this.gMap = gMap;
+            this.gMarkers = [];
+            this.$log = Logger;
+            this.$log.info(this);
           }
-          this.handleOptDraw(gMarker, optDraw, redraw);
-          return this.gMarkers.push(gMarker);
-        };
 
-        MarkerManager.prototype.addMany = function(gMarkers) {
-          var gMarker, _i, _len, _results;
-          _results = [];
-          for (_i = 0, _len = gMarkers.length; _i < _len; _i++) {
-            gMarker = gMarkers[_i];
-            _results.push(this.add(gMarker));
-          }
-          return _results;
-        };
+          MarkerManager.prototype.add = function (gMarker, optDraw, redraw) {
+            if (redraw == null) {
+              redraw = true;
+            }
+            this.handleOptDraw(gMarker, optDraw, redraw);
+            return this.gMarkers.push(gMarker);
+          };
 
-        MarkerManager.prototype.remove = function(gMarker, optDraw) {
-          var index, tempIndex;
-          this.handleOptDraw(gMarker, optDraw, false);
-          if (!optDraw) {
-            return;
-          }
-          index = void 0;
-          if (this.gMarkers.indexOf != null) {
-            index = this.gMarkers.indexOf(gMarker);
-          } else {
-            tempIndex = 0;
-            _.find(this.gMarkers, function(marker) {
-              tempIndex += 1;
-              if (marker === gMarker) {
-                index = tempIndex;
+          MarkerManager.prototype.addMany = function (gMarkers) {
+            var gMarker, _i, _len, _results;
+            _results = [];
+            for (_i = 0, _len = gMarkers.length; _i < _len; _i++) {
+              gMarker = gMarkers[_i];
+              _results.push(this.add(gMarker));
+            }
+            return _results;
+          };
+
+          MarkerManager.prototype.remove = function (gMarker, optDraw) {
+            var index, tempIndex;
+            this.handleOptDraw(gMarker, optDraw, false);
+            if (!optDraw) {
+              return;
+            }
+            index = void 0;
+            if (this.gMarkers.indexOf != null) {
+              index = this.gMarkers.indexOf(gMarker);
+            } else {
+              tempIndex = 0;
+              _.find(this.gMarkers, function (marker) {
+                tempIndex += 1;
+                if (marker === gMarker) {
+                  index = tempIndex;
+                }
+              });
+            }
+            if (index != null) {
+              return this.gMarkers.splice(index, 1);
+            }
+          };
+
+          MarkerManager.prototype.removeMany = function (gMarkers) {
+            var _this = this;
+            return this.gMarkers.forEach(function (marker) {
+              return _this.remove(marker);
+            });
+          };
+
+          MarkerManager.prototype.draw = function () {
+            var deletes,
+              _this = this;
+            deletes = [];
+            this.gMarkers.forEach(function (gMarker) {
+              if (!gMarker.isDrawn) {
+                if (gMarker.doAdd) {
+                  gMarker.setMap(_this.gMap);
+                  return (gMarker.isDrawn = true);
+                } else {
+                  return deletes.push(gMarker);
+                }
               }
             });
-          }
-          if (index != null) {
-            return this.gMarkers.splice(index, 1);
-          }
-        };
+            return deletes.forEach(function (gMarker) {
+              gMarker.isDrawn = false;
+              return _this.remove(gMarker, true);
+            });
+          };
 
-        MarkerManager.prototype.removeMany = function(gMarkers) {
-          var _this = this;
-          return this.gMarkers.forEach(function(marker) {
-            return _this.remove(marker);
-          });
-        };
-
-        MarkerManager.prototype.draw = function() {
-          var deletes,
-            _this = this;
-          deletes = [];
-          this.gMarkers.forEach(function(gMarker) {
-            if (!gMarker.isDrawn) {
-              if (gMarker.doAdd) {
-                gMarker.setMap(_this.gMap);
-                return gMarker.isDrawn = true;
-              } else {
-                return deletes.push(gMarker);
-              }
-            }
-          });
-          return deletes.forEach(function(gMarker) {
-            gMarker.isDrawn = false;
-            return _this.remove(gMarker, true);
-          });
-        };
-
-        MarkerManager.prototype.clear = function() {
-          var gMarker, _i, _len, _ref;
-          _ref = this.gMarkers;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            gMarker = _ref[_i];
-            gMarker.setMap(null);
-          }
-          delete this.gMarkers;
-          return this.gMarkers = [];
-        };
-
-        MarkerManager.prototype.handleOptDraw = function(gMarker, optDraw, doAdd) {
-          if (optDraw === true) {
-            if (doAdd) {
-              gMarker.setMap(this.gMap);
-            } else {
+          MarkerManager.prototype.clear = function () {
+            var gMarker, _i, _len, _ref;
+            _ref = this.gMarkers;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              gMarker = _ref[_i];
               gMarker.setMap(null);
             }
-            return gMarker.isDrawn = true;
-          } else {
-            gMarker.isDrawn = false;
-            return gMarker.doAdd = doAdd;
-          }
-        };
+            delete this.gMarkers;
+            return (this.gMarkers = []);
+          };
 
-        MarkerManager.prototype.fit = function() {
-          return MarkerManager.__super__.fit.call(this, this.gMarkers, this.gMap);
-        };
+          MarkerManager.prototype.handleOptDraw = function (
+            gMarker,
+            optDraw,
+            doAdd
+          ) {
+            if (optDraw === true) {
+              if (doAdd) {
+                gMarker.setMap(this.gMap);
+              } else {
+                gMarker.setMap(null);
+              }
+              return (gMarker.isDrawn = true);
+            } else {
+              gMarker.isDrawn = false;
+              return (gMarker.doAdd = doAdd);
+            }
+          };
 
+          MarkerManager.prototype.fit = function () {
+            return MarkerManager.__super__.fit.call(
+              this,
+              this.gMarkers,
+              this.gMap
+            );
+          };
+
+          return MarkerManager;
+        })(FitHelper);
         return MarkerManager;
+      },
+    ]);
+}.call(this));
 
-      })(FitHelper);
-      return MarkerManager;
-    }
-  ]);
-
-}).call(this);
-
-(function() {
+(function () {
   angular.module("google-maps").factory("array-sync", [
-    "add-events", function(mapEvents) {
-      return function(mapArray, scope, pathEval, pathChangedFn) {
-        var geojsonArray, geojsonHandlers, geojsonWatcher, isSetFromScope, legacyHandlers, legacyWatcher, mapArrayListener, scopePath, watchListener;
+    "add-events",
+    function (mapEvents) {
+      return function (mapArray, scope, pathEval, pathChangedFn) {
+        var geojsonArray,
+          geojsonHandlers,
+          geojsonWatcher,
+          isSetFromScope,
+          legacyHandlers,
+          legacyWatcher,
+          mapArrayListener,
+          scopePath,
+          watchListener;
         isSetFromScope = false;
         scopePath = scope.$eval(pathEval);
         if (!scope["static"]) {
           legacyHandlers = {
-            set_at: function(index) {
+            set_at: function (index) {
               var value;
               if (isSetFromScope) {
                 return;
@@ -1168,13 +1460,13 @@ Nicholas McCready - https://twitter.com/nmccready
                 return;
               }
               if (!value.lng || !value.lat) {
-                return scopePath[index] = value;
+                return (scopePath[index] = value);
               } else {
                 scopePath[index].latitude = value.lat();
-                return scopePath[index].longitude = value.lng();
+                return (scopePath[index].longitude = value.lng());
               }
             },
-            insert_at: function(index) {
+            insert_at: function (index) {
               var value;
               if (isSetFromScope) {
                 return;
@@ -1188,16 +1480,16 @@ Nicholas McCready - https://twitter.com/nmccready
               } else {
                 return scopePath.splice(index, 0, {
                   latitude: value.lat(),
-                  longitude: value.lng()
+                  longitude: value.lng(),
                 });
               }
             },
-            remove_at: function(index) {
+            remove_at: function (index) {
               if (isSetFromScope) {
                 return;
               }
               return scopePath.splice(index, 1);
-            }
+            },
           };
           geojsonArray;
           if (scopePath.type === "Polygon") {
@@ -1206,7 +1498,7 @@ Nicholas McCready - https://twitter.com/nmccready
             geojsonArray = scopePath.coordinates;
           }
           geojsonHandlers = {
-            set_at: function(index) {
+            set_at: function (index) {
               var value;
               if (isSetFromScope) {
                 return;
@@ -1219,9 +1511,9 @@ Nicholas McCready - https://twitter.com/nmccready
                 return;
               }
               geojsonArray[index][1] = value.lat();
-              return geojsonArray[index][0] = value.lng();
+              return (geojsonArray[index][0] = value.lng());
             },
-            insert_at: function(index) {
+            insert_at: function (index) {
               var value;
               if (isSetFromScope) {
                 return;
@@ -1235,16 +1527,21 @@ Nicholas McCready - https://twitter.com/nmccready
               }
               return geojsonArray.splice(index, 0, [value.lng(), value.lat()]);
             },
-            remove_at: function(index) {
+            remove_at: function (index) {
               if (isSetFromScope) {
                 return;
               }
               return geojsonArray.splice(index, 1);
-            }
+            },
           };
-          mapArrayListener = mapEvents(mapArray, angular.isUndefined(scopePath.type) ? legacyHandlers : geojsonHandlers);
+          mapArrayListener = mapEvents(
+            mapArray,
+            angular.isUndefined(scopePath.type)
+              ? legacyHandlers
+              : geojsonHandlers
+          );
         }
-        legacyWatcher = function(newPath) {
+        legacyWatcher = function (newPath) {
           var i, l, newLength, newValue, oldArray, oldLength, oldValue;
           isSetFromScope = true;
           oldArray = mapArray;
@@ -1262,18 +1559,32 @@ Nicholas McCready - https://twitter.com/nmccready
                   oldArray.setAt(i, newValue);
                 }
               } else {
-                if ((oldValue.lat() !== newValue.latitude) || (oldValue.lng() !== newValue.longitude)) {
-                  oldArray.setAt(i, new google.maps.LatLng(newValue.latitude, newValue.longitude));
+                if (
+                  oldValue.lat() !== newValue.latitude ||
+                  oldValue.lng() !== newValue.longitude
+                ) {
+                  oldArray.setAt(
+                    i,
+                    new google.maps.LatLng(
+                      newValue.latitude,
+                      newValue.longitude
+                    )
+                  );
                 }
               }
               i++;
             }
             while (i < newLength) {
               newValue = newPath[i];
-              if (typeof newValue.lat === "function" && typeof newValue.lng === "function") {
+              if (
+                typeof newValue.lat === "function" &&
+                typeof newValue.lng === "function"
+              ) {
                 oldArray.push(newValue);
               } else {
-                oldArray.push(new google.maps.LatLng(newValue.latitude, newValue.longitude));
+                oldArray.push(
+                  new google.maps.LatLng(newValue.latitude, newValue.longitude)
+                );
               }
               i++;
             }
@@ -1282,9 +1593,9 @@ Nicholas McCready - https://twitter.com/nmccready
               i++;
             }
           }
-          return isSetFromScope = false;
+          return (isSetFromScope = false);
         };
-        geojsonWatcher = function(newPath) {
+        geojsonWatcher = function (newPath) {
           var array, i, l, newLength, newValue, oldArray, oldLength, oldValue;
           isSetFromScope = true;
           oldArray = mapArray;
@@ -1303,8 +1614,14 @@ Nicholas McCready - https://twitter.com/nmccready
             while (i < l) {
               oldValue = oldArray.getAt(i);
               newValue = array[i];
-              if ((oldValue.lat() !== newValue[1]) || (oldValue.lng() !== newValue[0])) {
-                oldArray.setAt(i, new google.maps.LatLng(newValue[1], newValue[0]));
+              if (
+                oldValue.lat() !== newValue[1] ||
+                oldValue.lng() !== newValue[0]
+              ) {
+                oldArray.setAt(
+                  i,
+                  new google.maps.LatLng(newValue[1], newValue[0])
+                );
               }
               i++;
             }
@@ -1318,7 +1635,7 @@ Nicholas McCready - https://twitter.com/nmccready
               i++;
             }
           }
-          return isSetFromScope = false;
+          return (isSetFromScope = false);
         };
         watchListener;
         if (!scope["static"]) {
@@ -1328,421 +1645,600 @@ Nicholas McCready - https://twitter.com/nmccready
             watchListener = scope.$watch(pathEval, geojsonWatcher, true);
           }
         }
-        return function() {
+        return function () {
           if (mapArrayListener) {
             mapArrayListener();
             mapArrayListener = null;
           }
           if (watchListener) {
             watchListener();
-            return watchListener = null;
+            return (watchListener = null);
           }
         };
       };
-    }
+    },
   ]);
+}.call(this));
 
-}).call(this);
-
-(function() {
+(function () {
   angular.module("google-maps").factory("add-events", [
-    "$timeout", function($timeout) {
+    "$timeout",
+    function ($timeout) {
       var addEvent, addEvents;
-      addEvent = function(target, eventName, handler) {
-        return google.maps.event.addListener(target, eventName, function() {
+      addEvent = function (target, eventName, handler) {
+        return google.maps.event.addListener(target, eventName, function () {
           handler.apply(this, arguments);
-          return $timeout((function() {}), true);
+          return $timeout(function () {}, true);
         });
       };
-      addEvents = function(target, eventName, handler) {
+      addEvents = function (target, eventName, handler) {
         var remove;
         if (handler) {
           return addEvent(target, eventName, handler);
         }
         remove = [];
-        angular.forEach(eventName, function(_handler, key) {
+        angular.forEach(eventName, function (_handler, key) {
           return remove.push(addEvent(target, key, _handler));
         });
-        return function() {
-          angular.forEach(remove, function(listener) {
+        return function () {
+          angular.forEach(remove, function (listener) {
             return google.maps.event.removeListener(listener);
           });
-          return remove = null;
+          return (remove = null);
         };
       };
       return addEvents;
-    }
+    },
   ]);
+}.call(this));
 
-}).call(this);
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
-  angular.module("google-maps.directives.api.models.child").factory("MarkerLabelChildModel", [
-    "BaseObject", "GmapUtil", function(BaseObject, GmapUtil) {
-      var MarkerLabelChildModel;
-      MarkerLabelChildModel = (function(_super) {
-        __extends(MarkerLabelChildModel, _super);
+  angular
+    .module("google-maps.directives.api.models.child")
+    .factory("MarkerLabelChildModel", [
+      "BaseObject",
+      "GmapUtil",
+      function (BaseObject, GmapUtil) {
+        var MarkerLabelChildModel;
+        MarkerLabelChildModel = (function (_super) {
+          __extends(MarkerLabelChildModel, _super);
 
-        MarkerLabelChildModel.include(GmapUtil);
+          MarkerLabelChildModel.include(GmapUtil);
 
-        function MarkerLabelChildModel(gMarker, opt_options) {
-          this.destroy = __bind(this.destroy, this);
-          this.draw = __bind(this.draw, this);
-          this.setPosition = __bind(this.setPosition, this);
-          this.setZIndex = __bind(this.setZIndex, this);
-          this.setVisible = __bind(this.setVisible, this);
-          this.setAnchor = __bind(this.setAnchor, this);
-          this.setMandatoryStyles = __bind(this.setMandatoryStyles, this);
-          this.setStyles = __bind(this.setStyles, this);
-          this.setContent = __bind(this.setContent, this);
-          this.setTitle = __bind(this.setTitle, this);
-          this.getSharedCross = __bind(this.getSharedCross, this);
-          var self, _ref, _ref1;
-          MarkerLabelChildModel.__super__.constructor.call(this);
-          self = this;
-          this.marker = gMarker;
-          this.marker.set("labelContent", opt_options.labelContent);
-          this.marker.set("labelAnchor", this.getLabelPositionPoint(opt_options.labelAnchor));
-          this.marker.set("labelClass", opt_options.labelClass || 'labels');
-          this.marker.set("labelStyle", opt_options.labelStyle || {
-            opacity: 100
-          });
-          this.marker.set("labelInBackground", opt_options.labelInBackground || false);
-          if (!opt_options.labelVisible) {
-            this.marker.set("labelVisible", true);
+          function MarkerLabelChildModel(gMarker, opt_options) {
+            this.destroy = __bind(this.destroy, this);
+            this.draw = __bind(this.draw, this);
+            this.setPosition = __bind(this.setPosition, this);
+            this.setZIndex = __bind(this.setZIndex, this);
+            this.setVisible = __bind(this.setVisible, this);
+            this.setAnchor = __bind(this.setAnchor, this);
+            this.setMandatoryStyles = __bind(this.setMandatoryStyles, this);
+            this.setStyles = __bind(this.setStyles, this);
+            this.setContent = __bind(this.setContent, this);
+            this.setTitle = __bind(this.setTitle, this);
+            this.getSharedCross = __bind(this.getSharedCross, this);
+            var self, _ref, _ref1;
+            MarkerLabelChildModel.__super__.constructor.call(this);
+            self = this;
+            this.marker = gMarker;
+            this.marker.set("labelContent", opt_options.labelContent);
+            this.marker.set(
+              "labelAnchor",
+              this.getLabelPositionPoint(opt_options.labelAnchor)
+            );
+            this.marker.set("labelClass", opt_options.labelClass || "labels");
+            this.marker.set(
+              "labelStyle",
+              opt_options.labelStyle || {
+                opacity: 100,
+              }
+            );
+            this.marker.set(
+              "labelInBackground",
+              opt_options.labelInBackground || false
+            );
+            if (!opt_options.labelVisible) {
+              this.marker.set("labelVisible", true);
+            }
+            if (!opt_options.raiseOnDrag) {
+              this.marker.set("raiseOnDrag", true);
+            }
+            if (!opt_options.clickable) {
+              this.marker.set("clickable", true);
+            }
+            if (!opt_options.draggable) {
+              this.marker.set("draggable", false);
+            }
+            if (!opt_options.optimized) {
+              this.marker.set("optimized", false);
+            }
+            opt_options.crossImage =
+              (_ref = opt_options.crossImage) != null
+                ? _ref
+                : document.location.protocol +
+                  "//maps.gstatic.com/intl/en_us/mapfiles/drag_cross_67_16.png";
+            opt_options.handCursor =
+              (_ref1 = opt_options.handCursor) != null
+                ? _ref1
+                : document.location.protocol +
+                  "//maps.gstatic.com/intl/en_us/mapfiles/closedhand_8_8.cur";
+            this.markerLabel = new MarkerLabel_(
+              this.marker,
+              opt_options.crossImage,
+              opt_options.handCursor
+            );
+            this.marker.set("setMap", function (theMap) {
+              google.maps.Marker.prototype.setMap.apply(this, arguments);
+              return self.markerLabel.setMap(theMap);
+            });
+            this.marker.setMap(this.marker.getMap());
           }
-          if (!opt_options.raiseOnDrag) {
-            this.marker.set("raiseOnDrag", true);
-          }
-          if (!opt_options.clickable) {
-            this.marker.set("clickable", true);
-          }
-          if (!opt_options.draggable) {
-            this.marker.set("draggable", false);
-          }
-          if (!opt_options.optimized) {
-            this.marker.set("optimized", false);
-          }
-          opt_options.crossImage = (_ref = opt_options.crossImage) != null ? _ref : document.location.protocol + "//maps.gstatic.com/intl/en_us/mapfiles/drag_cross_67_16.png";
-          opt_options.handCursor = (_ref1 = opt_options.handCursor) != null ? _ref1 : document.location.protocol + "//maps.gstatic.com/intl/en_us/mapfiles/closedhand_8_8.cur";
-          this.markerLabel = new MarkerLabel_(this.marker, opt_options.crossImage, opt_options.handCursor);
-          this.marker.set("setMap", function(theMap) {
-            google.maps.Marker.prototype.setMap.apply(this, arguments);
-            return self.markerLabel.setMap(theMap);
-          });
-          this.marker.setMap(this.marker.getMap());
-        }
 
-        MarkerLabelChildModel.prototype.getSharedCross = function(crossUrl) {
-          return this.markerLabel.getSharedCross(crossUrl);
-        };
+          MarkerLabelChildModel.prototype.getSharedCross = function (crossUrl) {
+            return this.markerLabel.getSharedCross(crossUrl);
+          };
 
-        MarkerLabelChildModel.prototype.setTitle = function() {
-          return this.markerLabel.setTitle();
-        };
+          MarkerLabelChildModel.prototype.setTitle = function () {
+            return this.markerLabel.setTitle();
+          };
 
-        MarkerLabelChildModel.prototype.setContent = function() {
-          return this.markerLabel.setContent();
-        };
+          MarkerLabelChildModel.prototype.setContent = function () {
+            return this.markerLabel.setContent();
+          };
 
-        MarkerLabelChildModel.prototype.setStyles = function() {
-          return this.markerLabel.setStyles();
-        };
+          MarkerLabelChildModel.prototype.setStyles = function () {
+            return this.markerLabel.setStyles();
+          };
 
-        MarkerLabelChildModel.prototype.setMandatoryStyles = function() {
-          return this.markerLabel.setMandatoryStyles();
-        };
+          MarkerLabelChildModel.prototype.setMandatoryStyles = function () {
+            return this.markerLabel.setMandatoryStyles();
+          };
 
-        MarkerLabelChildModel.prototype.setAnchor = function() {
-          return this.markerLabel.setAnchor();
-        };
+          MarkerLabelChildModel.prototype.setAnchor = function () {
+            return this.markerLabel.setAnchor();
+          };
 
-        MarkerLabelChildModel.prototype.setVisible = function() {
-          return this.markerLabel.setVisible();
-        };
+          MarkerLabelChildModel.prototype.setVisible = function () {
+            return this.markerLabel.setVisible();
+          };
 
-        MarkerLabelChildModel.prototype.setZIndex = function() {
-          return this.markerLabel.setZIndex();
-        };
+          MarkerLabelChildModel.prototype.setZIndex = function () {
+            return this.markerLabel.setZIndex();
+          };
 
-        MarkerLabelChildModel.prototype.setPosition = function() {
-          return this.markerLabel.setPosition();
-        };
+          MarkerLabelChildModel.prototype.setPosition = function () {
+            return this.markerLabel.setPosition();
+          };
 
-        MarkerLabelChildModel.prototype.draw = function() {
-          return this.markerLabel.draw();
-        };
+          MarkerLabelChildModel.prototype.draw = function () {
+            return this.markerLabel.draw();
+          };
 
-        MarkerLabelChildModel.prototype.destroy = function() {
-          if ((this.markerLabel.labelDiv_.parentNode != null) && (this.markerLabel.eventDiv_.parentNode != null)) {
-            return this.markerLabel.onRemove();
-          }
-        };
+          MarkerLabelChildModel.prototype.destroy = function () {
+            if (
+              this.markerLabel.labelDiv_.parentNode != null &&
+              this.markerLabel.eventDiv_.parentNode != null
+            ) {
+              return this.markerLabel.onRemove();
+            }
+          };
 
+          return MarkerLabelChildModel;
+        })(BaseObject);
         return MarkerLabelChildModel;
+      },
+    ]);
+}.call(this));
 
-      })(BaseObject);
-      return MarkerLabelChildModel;
-    }
-  ]);
-
-}).call(this);
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
-  angular.module("google-maps.directives.api.models.child").factory("MarkerChildModel", [
-    "ModelKey", "GmapUtil", "Logger", "$injector", "EventsHelper", function(ModelKey, GmapUtil, Logger, $injector, EventsHelper) {
-      var MarkerChildModel;
-      MarkerChildModel = (function(_super) {
-        __extends(MarkerChildModel, _super);
+  angular
+    .module("google-maps.directives.api.models.child")
+    .factory("MarkerChildModel", [
+      "ModelKey",
+      "GmapUtil",
+      "Logger",
+      "$injector",
+      "EventsHelper",
+      function (ModelKey, GmapUtil, Logger, $injector, EventsHelper) {
+        var MarkerChildModel;
+        MarkerChildModel = (function (_super) {
+          __extends(MarkerChildModel, _super);
 
-        MarkerChildModel.include(GmapUtil);
+          MarkerChildModel.include(GmapUtil);
 
-        MarkerChildModel.include(EventsHelper);
+          MarkerChildModel.include(EventsHelper);
 
-        function MarkerChildModel(model, parentScope, gMap, $timeout, defaults, doClick, gMarkerManager, idKey) {
-          var self,
-            _this = this;
-          this.model = model;
-          this.parentScope = parentScope;
-          this.gMap = gMap;
-          this.$timeout = $timeout;
-          this.defaults = defaults;
-          this.doClick = doClick;
-          this.gMarkerManager = gMarkerManager;
-          this.idKey = idKey;
-          this.watchDestroy = __bind(this.watchDestroy, this);
-          this.setLabelOptions = __bind(this.setLabelOptions, this);
-          this.isLabelDefined = __bind(this.isLabelDefined, this);
-          this.setOptions = __bind(this.setOptions, this);
-          this.setIcon = __bind(this.setIcon, this);
-          this.setCoords = __bind(this.setCoords, this);
-          this.destroy = __bind(this.destroy, this);
-          this.maybeSetScopeValue = __bind(this.maybeSetScopeValue, this);
-          this.createMarker = __bind(this.createMarker, this);
-          this.setMyScope = __bind(this.setMyScope, this);
-          self = this;
-          if (this.model[this.idKey]) {
-            this.id = this.model[this.idKey];
-          }
-          this.iconKey = this.parentScope.icon;
-          this.coordsKey = this.parentScope.coords;
-          this.clickKey = this.parentScope.click();
-          this.labelContentKey = this.parentScope.labelContent;
-          this.optionsKey = this.parentScope.options;
-          this.labelOptionsKey = this.parentScope.labelOptions;
-          MarkerChildModel.__super__.constructor.call(this, this.parentScope.$new(false));
-          this.scope.model = this.model;
-          this.setMyScope(this.model, void 0, true);
-          this.createMarker(this.model);
-          this.scope.$watch('model', function(newValue, oldValue) {
-            if (newValue !== oldValue) {
-              return _this.setMyScope(newValue, oldValue);
+          function MarkerChildModel(
+            model,
+            parentScope,
+            gMap,
+            $timeout,
+            defaults,
+            doClick,
+            gMarkerManager,
+            idKey
+          ) {
+            var self,
+              _this = this;
+            this.model = model;
+            this.parentScope = parentScope;
+            this.gMap = gMap;
+            this.$timeout = $timeout;
+            this.defaults = defaults;
+            this.doClick = doClick;
+            this.gMarkerManager = gMarkerManager;
+            this.idKey = idKey;
+            this.watchDestroy = __bind(this.watchDestroy, this);
+            this.setLabelOptions = __bind(this.setLabelOptions, this);
+            this.isLabelDefined = __bind(this.isLabelDefined, this);
+            this.setOptions = __bind(this.setOptions, this);
+            this.setIcon = __bind(this.setIcon, this);
+            this.setCoords = __bind(this.setCoords, this);
+            this.destroy = __bind(this.destroy, this);
+            this.maybeSetScopeValue = __bind(this.maybeSetScopeValue, this);
+            this.createMarker = __bind(this.createMarker, this);
+            this.setMyScope = __bind(this.setMyScope, this);
+            self = this;
+            if (this.model[this.idKey]) {
+              this.id = this.model[this.idKey];
             }
-          }, true);
-          this.$log = Logger;
-          this.$log.info(self);
-          this.watchDestroy(this.scope);
-        }
+            this.iconKey = this.parentScope.icon;
+            this.coordsKey = this.parentScope.coords;
+            this.clickKey = this.parentScope.click();
+            this.labelContentKey = this.parentScope.labelContent;
+            this.optionsKey = this.parentScope.options;
+            this.labelOptionsKey = this.parentScope.labelOptions;
+            MarkerChildModel.__super__.constructor.call(
+              this,
+              this.parentScope.$new(false)
+            );
+            this.scope.model = this.model;
+            this.setMyScope(this.model, void 0, true);
+            this.createMarker(this.model);
+            this.scope.$watch(
+              "model",
+              function (newValue, oldValue) {
+                if (newValue !== oldValue) {
+                  return _this.setMyScope(newValue, oldValue);
+                }
+              },
+              true
+            );
+            this.$log = Logger;
+            this.$log.info(self);
+            this.watchDestroy(this.scope);
+          }
 
-        MarkerChildModel.prototype.setMyScope = function(model, oldModel, isInit) {
-          var _this = this;
-          if (oldModel == null) {
-            oldModel = void 0;
-          }
-          if (isInit == null) {
-            isInit = false;
-          }
-          this.maybeSetScopeValue('icon', model, oldModel, this.iconKey, this.evalModelHandle, isInit, this.setIcon);
-          this.maybeSetScopeValue('coords', model, oldModel, this.coordsKey, this.evalModelHandle, isInit, this.setCoords);
-          this.maybeSetScopeValue('labelContent', model, oldModel, this.labelContentKey, this.evalModelHandle, isInit);
-          if (_.isFunction(this.clickKey) && $injector) {
-            return this.scope.click = function() {
-              return $injector.invoke(_this.clickKey, void 0, {
-                "$markerModel": model
+          MarkerChildModel.prototype.setMyScope = function (
+            model,
+            oldModel,
+            isInit
+          ) {
+            var _this = this;
+            if (oldModel == null) {
+              oldModel = void 0;
+            }
+            if (isInit == null) {
+              isInit = false;
+            }
+            this.maybeSetScopeValue(
+              "icon",
+              model,
+              oldModel,
+              this.iconKey,
+              this.evalModelHandle,
+              isInit,
+              this.setIcon
+            );
+            this.maybeSetScopeValue(
+              "coords",
+              model,
+              oldModel,
+              this.coordsKey,
+              this.evalModelHandle,
+              isInit,
+              this.setCoords
+            );
+            this.maybeSetScopeValue(
+              "labelContent",
+              model,
+              oldModel,
+              this.labelContentKey,
+              this.evalModelHandle,
+              isInit
+            );
+            if (_.isFunction(this.clickKey) && $injector) {
+              return (this.scope.click = function () {
+                return $injector.invoke(_this.clickKey, void 0, {
+                  $markerModel: model,
+                });
               });
-            };
-          } else {
-            this.maybeSetScopeValue('click', model, oldModel, this.clickKey, this.evalModelHandle, isInit);
-            return this.createMarker(model, oldModel, isInit);
-          }
-        };
-
-        MarkerChildModel.prototype.createMarker = function(model, oldModel, isInit) {
-          var _this = this;
-          if (oldModel == null) {
-            oldModel = void 0;
-          }
-          if (isInit == null) {
-            isInit = false;
-          }
-          return this.maybeSetScopeValue('options', model, oldModel, this.optionsKey, function(lModel, lModelKey) {
-            var value;
-            if (lModel === void 0) {
-              return void 0;
-            }
-            value = lModelKey === 'self' ? lModel : lModel[lModelKey];
-            if (value === void 0) {
-              return value = lModelKey === void 0 ? _this.defaults : _this.scope.options;
             } else {
-              return value;
+              this.maybeSetScopeValue(
+                "click",
+                model,
+                oldModel,
+                this.clickKey,
+                this.evalModelHandle,
+                isInit
+              );
+              return this.createMarker(model, oldModel, isInit);
             }
-          }, isInit, this.setOptions);
-        };
+          };
 
-        MarkerChildModel.prototype.maybeSetScopeValue = function(scopePropName, model, oldModel, modelKey, evaluate, isInit, gSetter) {
-          var newValue, oldVal;
-          if (gSetter == null) {
-            gSetter = void 0;
-          }
-          if (oldModel === void 0) {
-            this.scope[scopePropName] = evaluate(model, modelKey);
-            if (!isInit) {
-              if (gSetter != null) {
-                gSetter(this.scope);
+          MarkerChildModel.prototype.createMarker = function (
+            model,
+            oldModel,
+            isInit
+          ) {
+            var _this = this;
+            if (oldModel == null) {
+              oldModel = void 0;
+            }
+            if (isInit == null) {
+              isInit = false;
+            }
+            return this.maybeSetScopeValue(
+              "options",
+              model,
+              oldModel,
+              this.optionsKey,
+              function (lModel, lModelKey) {
+                var value;
+                if (lModel === void 0) {
+                  return void 0;
+                }
+                value = lModelKey === "self" ? lModel : lModel[lModelKey];
+                if (value === void 0) {
+                  return (value =
+                    lModelKey === void 0
+                      ? _this.defaults
+                      : _this.scope.options);
+                } else {
+                  return value;
+                }
+              },
+              isInit,
+              this.setOptions
+            );
+          };
+
+          MarkerChildModel.prototype.maybeSetScopeValue = function (
+            scopePropName,
+            model,
+            oldModel,
+            modelKey,
+            evaluate,
+            isInit,
+            gSetter
+          ) {
+            var newValue, oldVal;
+            if (gSetter == null) {
+              gSetter = void 0;
+            }
+            if (oldModel === void 0) {
+              this.scope[scopePropName] = evaluate(model, modelKey);
+              if (!isInit) {
+                if (gSetter != null) {
+                  gSetter(this.scope);
+                }
               }
-            }
-            return;
-          }
-          oldVal = evaluate(oldModel, modelKey);
-          newValue = evaluate(model, modelKey);
-          if (newValue !== oldVal && this.scope[scopePropName] !== newValue) {
-            this.scope[scopePropName] = newValue;
-            if (!isInit) {
-              if (gSetter != null) {
-                gSetter(this.scope);
-              }
-              return this.gMarkerManager.draw();
-            }
-          }
-        };
-
-        MarkerChildModel.prototype.destroy = function() {
-          return this.scope.$destroy();
-        };
-
-        MarkerChildModel.prototype.setCoords = function(scope) {
-          if (scope.$id !== this.scope.$id || this.gMarker === void 0) {
-            return;
-          }
-          if ((scope.coords != null)) {
-            if (!this.validateCoords(this.scope.coords)) {
-              this.$log.error("MarkerChildMarker cannot render marker as scope.coords as no position on marker: " + (JSON.stringify(this.model)));
               return;
             }
-            this.gMarker.setPosition(this.getCoords(scope.coords));
-            this.gMarker.setVisible(this.validateCoords(scope.coords));
-            this.gMarkerManager.remove(this.gMarker);
-            return this.gMarkerManager.add(this.gMarker);
-          } else {
-            return this.gMarkerManager.remove(this.gMarker);
-          }
-        };
-
-        MarkerChildModel.prototype.setIcon = function(scope) {
-          if (scope.$id !== this.scope.$id || this.gMarker === void 0) {
-            return;
-          }
-          this.gMarkerManager.remove(this.gMarker);
-          this.gMarker.setIcon(scope.icon);
-          this.gMarkerManager.add(this.gMarker);
-          this.gMarker.setPosition(this.getCoords(scope.coords));
-          return this.gMarker.setVisible(this.validateCoords(scope.coords));
-        };
-
-        MarkerChildModel.prototype.setOptions = function(scope) {
-          var _ref,
-            _this = this;
-          if (scope.$id !== this.scope.$id) {
-            return;
-          }
-          if (this.gMarker != null) {
-            this.gMarkerManager.remove(this.gMarker);
-            delete this.gMarker;
-          }
-          if (!((_ref = scope.coords) != null ? _ref : typeof scope.icon === "function" ? scope.icon(scope.options != null) : void 0)) {
-            return;
-          }
-          this.opts = this.createMarkerOptions(scope.coords, scope.icon, scope.options);
-          delete this.gMarker;
-          if (this.isLabelDefined(scope)) {
-            this.gMarker = new MarkerWithLabel(this.setLabelOptions(this.opts, scope));
-          } else {
-            this.gMarker = new google.maps.Marker(this.opts);
-          }
-          this.setEvents(this.gMarker, this.parentScope, this.model);
-          if (this.id) {
-            this.gMarker.key = this.id;
-          }
-          this.gMarkerManager.add(this.gMarker);
-          return google.maps.event.addListener(this.gMarker, 'click', function() {
-            if (_this.doClick && (_this.scope.click != null)) {
-              return _this.scope.click();
-            }
-          });
-        };
-
-        MarkerChildModel.prototype.isLabelDefined = function(scope) {
-          return scope.labelContent != null;
-        };
-
-        MarkerChildModel.prototype.setLabelOptions = function(opts, scope) {
-          opts.labelAnchor = this.getLabelPositionPoint(scope.labelAnchor);
-          opts.labelClass = scope.labelClass;
-          opts.labelContent = scope.labelContent;
-          return opts;
-        };
-
-        MarkerChildModel.prototype.watchDestroy = function(scope) {
-          var _this = this;
-          return scope.$on("$destroy", function() {
-            var self, _ref;
-            if (_this.gMarker != null) {
-              google.maps.event.clearListeners(_this.gMarker, 'click');
-              if (((_ref = _this.parentScope) != null ? _ref.events : void 0) && _.isArray(_this.parentScope.events)) {
-                _this.parentScope.events.forEach(function(event, eventName) {
-                  return google.maps.event.clearListeners(this.gMarker, eventName);
-                });
+            oldVal = evaluate(oldModel, modelKey);
+            newValue = evaluate(model, modelKey);
+            if (newValue !== oldVal && this.scope[scopePropName] !== newValue) {
+              this.scope[scopePropName] = newValue;
+              if (!isInit) {
+                if (gSetter != null) {
+                  gSetter(this.scope);
+                }
+                return this.gMarkerManager.draw();
               }
-              _this.gMarkerManager.remove(_this.gMarker, true);
-              delete _this.gMarker;
             }
-            return self = void 0;
-          });
-        };
+          };
 
+          MarkerChildModel.prototype.destroy = function () {
+            return this.scope.$destroy();
+          };
+
+          MarkerChildModel.prototype.setCoords = function (scope) {
+            if (scope.$id !== this.scope.$id || this.gMarker === void 0) {
+              return;
+            }
+            if (scope.coords != null) {
+              if (!this.validateCoords(this.scope.coords)) {
+                this.$log.error(
+                  "MarkerChildMarker cannot render marker as scope.coords as no position on marker: " +
+                    JSON.stringify(this.model)
+                );
+                return;
+              }
+              this.gMarker.setPosition(this.getCoords(scope.coords));
+              this.gMarker.setVisible(this.validateCoords(scope.coords));
+              this.gMarkerManager.remove(this.gMarker);
+              return this.gMarkerManager.add(this.gMarker);
+            } else {
+              return this.gMarkerManager.remove(this.gMarker);
+            }
+          };
+
+          MarkerChildModel.prototype.setIcon = function (scope) {
+            if (scope.$id !== this.scope.$id || this.gMarker === void 0) {
+              return;
+            }
+            this.gMarkerManager.remove(this.gMarker);
+            this.gMarker.setIcon(scope.icon);
+            this.gMarkerManager.add(this.gMarker);
+            this.gMarker.setPosition(this.getCoords(scope.coords));
+            return this.gMarker.setVisible(this.validateCoords(scope.coords));
+          };
+
+          MarkerChildModel.prototype.setOptions = function (scope) {
+            var _ref,
+              _this = this;
+            if (scope.$id !== this.scope.$id) {
+              return;
+            }
+            if (this.gMarker != null) {
+              this.gMarkerManager.remove(this.gMarker);
+              delete this.gMarker;
+            }
+            if (
+              !((_ref = scope.coords) != null
+                ? _ref
+                : typeof scope.icon === "function"
+                ? scope.icon(scope.options != null)
+                : void 0)
+            ) {
+              return;
+            }
+            this.opts = this.createMarkerOptions(
+              scope.coords,
+              scope.icon,
+              scope.options
+            );
+            delete this.gMarker;
+            if (this.isLabelDefined(scope)) {
+              this.gMarker = new MarkerWithLabel(
+                this.setLabelOptions(this.opts, scope)
+              );
+            } else {
+              this.gMarker = new google.maps.Marker(this.opts);
+            }
+            this.setEvents(this.gMarker, this.parentScope, this.model);
+            if (this.id) {
+              this.gMarker.key = this.id;
+            }
+            this.gMarkerManager.add(this.gMarker);
+            return google.maps.event.addListener(
+              this.gMarker,
+              "click",
+              function () {
+                if (_this.doClick && _this.scope.click != null) {
+                  return _this.scope.click();
+                }
+              }
+            );
+          };
+
+          MarkerChildModel.prototype.isLabelDefined = function (scope) {
+            return scope.labelContent != null;
+          };
+
+          MarkerChildModel.prototype.setLabelOptions = function (opts, scope) {
+            opts.labelAnchor = this.getLabelPositionPoint(scope.labelAnchor);
+            opts.labelClass = scope.labelClass;
+            opts.labelContent = scope.labelContent;
+            return opts;
+          };
+
+          MarkerChildModel.prototype.watchDestroy = function (scope) {
+            var _this = this;
+            return scope.$on("$destroy", function () {
+              var self, _ref;
+              if (_this.gMarker != null) {
+                google.maps.event.clearListeners(_this.gMarker, "click");
+                if (
+                  ((_ref = _this.parentScope) != null ? _ref.events : void 0) &&
+                  _.isArray(_this.parentScope.events)
+                ) {
+                  _this.parentScope.events.forEach(function (event, eventName) {
+                    return google.maps.event.clearListeners(
+                      this.gMarker,
+                      eventName
+                    );
+                  });
+                }
+                _this.gMarkerManager.remove(_this.gMarker, true);
+                delete _this.gMarker;
+              }
+              return (self = void 0);
+            });
+          };
+
+          return MarkerChildModel;
+        })(ModelKey);
         return MarkerChildModel;
+      },
+    ]);
+}.call(this));
 
-      })(ModelKey);
-      return MarkerChildModel;
-    }
-  ]);
-
-}).call(this);
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
   angular.module("google-maps.directives.api").factory("PolylineChildModel", [
-    "BaseObject", "Logger", "$timeout", "array-sync", "GmapUtil", function(BaseObject, Logger, $timeout, arraySync, GmapUtil) {
+    "BaseObject",
+    "Logger",
+    "$timeout",
+    "array-sync",
+    "GmapUtil",
+    function (BaseObject, Logger, $timeout, arraySync, GmapUtil) {
       var $log, PolylineChildModel;
       $log = Logger;
-      return PolylineChildModel = (function(_super) {
+      return (PolylineChildModel = (function (_super) {
         __extends(PolylineChildModel, _super);
 
         PolylineChildModel.include(GmapUtil);
 
         function PolylineChildModel(scope, attrs, map, defaults, model) {
-          var arraySyncer, pathPoints,
+          var arraySyncer,
+            pathPoints,
             _this = this;
           this.scope = scope;
           this.attrs = attrs;
@@ -1756,79 +2252,103 @@ Nicholas McCready - https://twitter.com/nmccready
             GmapUtil.extendMapBounds(map, pathPoints);
           }
           if (!scope["static"] && angular.isDefined(scope.editable)) {
-            scope.$watch("editable", function(newValue, oldValue) {
+            scope.$watch("editable", function (newValue, oldValue) {
               if (newValue !== oldValue) {
                 return _this.polyline.setEditable(newValue);
               }
             });
           }
           if (angular.isDefined(scope.draggable)) {
-            scope.$watch("draggable", function(newValue, oldValue) {
+            scope.$watch("draggable", function (newValue, oldValue) {
               if (newValue !== oldValue) {
                 return _this.polyline.setDraggable(newValue);
               }
             });
           }
           if (angular.isDefined(scope.visible)) {
-            scope.$watch("visible", function(newValue, oldValue) {
+            scope.$watch("visible", function (newValue, oldValue) {
               if (newValue !== oldValue) {
                 return _this.polyline.setVisible(newValue);
               }
             });
           }
           if (angular.isDefined(scope.geodesic)) {
-            scope.$watch("geodesic", function(newValue, oldValue) {
+            scope.$watch("geodesic", function (newValue, oldValue) {
               if (newValue !== oldValue) {
-                return _this.polyline.setOptions(_this.buildOpts(_this.polyline.getPath()));
+                return _this.polyline.setOptions(
+                  _this.buildOpts(_this.polyline.getPath())
+                );
               }
             });
           }
-          if (angular.isDefined(scope.stroke) && angular.isDefined(scope.stroke.weight)) {
-            scope.$watch("stroke.weight", function(newValue, oldValue) {
+          if (
+            angular.isDefined(scope.stroke) &&
+            angular.isDefined(scope.stroke.weight)
+          ) {
+            scope.$watch("stroke.weight", function (newValue, oldValue) {
               if (newValue !== oldValue) {
-                return _this.polyline.setOptions(_this.buildOpts(_this.polyline.getPath()));
+                return _this.polyline.setOptions(
+                  _this.buildOpts(_this.polyline.getPath())
+                );
               }
             });
           }
-          if (angular.isDefined(scope.stroke) && angular.isDefined(scope.stroke.color)) {
-            scope.$watch("stroke.color", function(newValue, oldValue) {
+          if (
+            angular.isDefined(scope.stroke) &&
+            angular.isDefined(scope.stroke.color)
+          ) {
+            scope.$watch("stroke.color", function (newValue, oldValue) {
               if (newValue !== oldValue) {
-                return _this.polyline.setOptions(_this.buildOpts(_this.polyline.getPath()));
+                return _this.polyline.setOptions(
+                  _this.buildOpts(_this.polyline.getPath())
+                );
               }
             });
           }
-          if (angular.isDefined(scope.stroke) && angular.isDefined(scope.stroke.opacity)) {
-            scope.$watch("stroke.opacity", function(newValue, oldValue) {
+          if (
+            angular.isDefined(scope.stroke) &&
+            angular.isDefined(scope.stroke.opacity)
+          ) {
+            scope.$watch("stroke.opacity", function (newValue, oldValue) {
               if (newValue !== oldValue) {
-                return _this.polyline.setOptions(_this.buildOpts(_this.polyline.getPath()));
+                return _this.polyline.setOptions(
+                  _this.buildOpts(_this.polyline.getPath())
+                );
               }
             });
           }
           if (angular.isDefined(scope.icons)) {
-            scope.$watch("icons", function(newValue, oldValue) {
+            scope.$watch("icons", function (newValue, oldValue) {
               if (newValue !== oldValue) {
-                return _this.polyline.setOptions(_this.buildOpts(_this.polyline.getPath()));
+                return _this.polyline.setOptions(
+                  _this.buildOpts(_this.polyline.getPath())
+                );
               }
             });
           }
-          arraySyncer = arraySync(this.polyline.getPath(), scope, "path", function(pathPoints) {
-            if (scope.fit) {
-              return GmapUtil.extendMapBounds(map, pathPoints);
+          arraySyncer = arraySync(
+            this.polyline.getPath(),
+            scope,
+            "path",
+            function (pathPoints) {
+              if (scope.fit) {
+                return GmapUtil.extendMapBounds(map, pathPoints);
+              }
             }
-          });
-          scope.$on("$destroy", function() {
+          );
+          scope.$on("$destroy", function () {
             _this.polyline.setMap(null);
             _this.polyline = null;
             _this.scope = null;
             if (arraySyncer) {
               arraySyncer();
-              return arraySyncer = null;
+              return (arraySyncer = null);
             }
           });
           $log.info(this);
         }
 
-        PolylineChildModel.prototype.buildOpts = function(pathPoints) {
+        PolylineChildModel.prototype.buildOpts = function (pathPoints) {
           var opts,
             _this = this;
           opts = angular.extend({}, this.defaults, {
@@ -1837,286 +2357,370 @@ Nicholas McCready - https://twitter.com/nmccready
             icons: this.scope.icons,
             strokeColor: this.scope.stroke && this.scope.stroke.color,
             strokeOpacity: this.scope.stroke && this.scope.stroke.opacity,
-            strokeWeight: this.scope.stroke && this.scope.stroke.weight
+            strokeWeight: this.scope.stroke && this.scope.stroke.weight,
           });
-          angular.forEach({
-            clickable: true,
-            draggable: false,
-            editable: false,
-            geodesic: false,
-            visible: true,
-            "static": false,
-            fit: false
-          }, function(defaultValue, key) {
-            if (angular.isUndefined(_this.scope[key]) || _this.scope[key] === null) {
-              return opts[key] = defaultValue;
-            } else {
-              return opts[key] = _this.scope[key];
+          angular.forEach(
+            {
+              clickable: true,
+              draggable: false,
+              editable: false,
+              geodesic: false,
+              visible: true,
+              static: false,
+              fit: false,
+            },
+            function (defaultValue, key) {
+              if (
+                angular.isUndefined(_this.scope[key]) ||
+                _this.scope[key] === null
+              ) {
+                return (opts[key] = defaultValue);
+              } else {
+                return (opts[key] = _this.scope[key]);
+              }
             }
-          });
+          );
           if (opts["static"]) {
             opts.editable = false;
           }
           return opts;
         };
 
-        PolylineChildModel.prototype.destroy = function() {
+        PolylineChildModel.prototype.destroy = function () {
           return this.scope.$destroy();
         };
 
         return PolylineChildModel;
-
-      })(BaseObject);
-    }
+      })(BaseObject));
+    },
   ]);
+}.call(this));
 
-}).call(this);
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
-  angular.module("google-maps.directives.api.models.child").factory("WindowChildModel", [
-    "BaseObject", "GmapUtil", "Logger", "$compile", "$http", "$templateCache", function(BaseObject, GmapUtil, Logger, $compile, $http, $templateCache) {
-      var WindowChildModel;
-      WindowChildModel = (function(_super) {
-        __extends(WindowChildModel, _super);
+  angular
+    .module("google-maps.directives.api.models.child")
+    .factory("WindowChildModel", [
+      "BaseObject",
+      "GmapUtil",
+      "Logger",
+      "$compile",
+      "$http",
+      "$templateCache",
+      function (BaseObject, GmapUtil, Logger, $compile, $http, $templateCache) {
+        var WindowChildModel;
+        WindowChildModel = (function (_super) {
+          __extends(WindowChildModel, _super);
 
-        WindowChildModel.include(GmapUtil);
+          WindowChildModel.include(GmapUtil);
 
-        function WindowChildModel(model, scope, opts, isIconVisibleOnClick, mapCtrl, markerCtrl, element, needToManualDestroy, markerIsVisibleAfterWindowClose) {
-          this.model = model;
-          this.scope = scope;
-          this.opts = opts;
-          this.isIconVisibleOnClick = isIconVisibleOnClick;
-          this.mapCtrl = mapCtrl;
-          this.markerCtrl = markerCtrl;
-          this.element = element;
-          this.needToManualDestroy = needToManualDestroy != null ? needToManualDestroy : false;
-          this.markerIsVisibleAfterWindowClose = markerIsVisibleAfterWindowClose != null ? markerIsVisibleAfterWindowClose : true;
-          this.destroy = __bind(this.destroy, this);
-          this.remove = __bind(this.remove, this);
-          this.hideWindow = __bind(this.hideWindow, this);
-          this.getLatestPosition = __bind(this.getLatestPosition, this);
-          this.showWindow = __bind(this.showWindow, this);
-          this.handleClick = __bind(this.handleClick, this);
-          this.watchCoords = __bind(this.watchCoords, this);
-          this.watchShow = __bind(this.watchShow, this);
-          this.createGWin = __bind(this.createGWin, this);
-          this.watchElement = __bind(this.watchElement, this);
-          this.googleMapsHandles = [];
-          this.$log = Logger;
-          this.createGWin();
-          if (this.markerCtrl != null) {
-            this.markerCtrl.setClickable(true);
+          function WindowChildModel(
+            model,
+            scope,
+            opts,
+            isIconVisibleOnClick,
+            mapCtrl,
+            markerCtrl,
+            element,
+            needToManualDestroy,
+            markerIsVisibleAfterWindowClose
+          ) {
+            this.model = model;
+            this.scope = scope;
+            this.opts = opts;
+            this.isIconVisibleOnClick = isIconVisibleOnClick;
+            this.mapCtrl = mapCtrl;
+            this.markerCtrl = markerCtrl;
+            this.element = element;
+            this.needToManualDestroy =
+              needToManualDestroy != null ? needToManualDestroy : false;
+            this.markerIsVisibleAfterWindowClose =
+              markerIsVisibleAfterWindowClose != null
+                ? markerIsVisibleAfterWindowClose
+                : true;
+            this.destroy = __bind(this.destroy, this);
+            this.remove = __bind(this.remove, this);
+            this.hideWindow = __bind(this.hideWindow, this);
+            this.getLatestPosition = __bind(this.getLatestPosition, this);
+            this.showWindow = __bind(this.showWindow, this);
+            this.handleClick = __bind(this.handleClick, this);
+            this.watchCoords = __bind(this.watchCoords, this);
+            this.watchShow = __bind(this.watchShow, this);
+            this.createGWin = __bind(this.createGWin, this);
+            this.watchElement = __bind(this.watchElement, this);
+            this.googleMapsHandles = [];
+            this.$log = Logger;
+            this.createGWin();
+            if (this.markerCtrl != null) {
+              this.markerCtrl.setClickable(true);
+            }
+            this.handleClick();
+            this.watchElement();
+            this.watchShow();
+            this.watchCoords();
+            this.$log.info(this);
           }
-          this.handleClick();
-          this.watchElement();
-          this.watchShow();
-          this.watchCoords();
-          this.$log.info(this);
-        }
 
-        WindowChildModel.prototype.watchElement = function() {
-          var _this = this;
-          return this.scope.$watch(function() {
-            var _ref;
-            if (!_this.element || !_this.html) {
-              return;
-            }
-            if (_this.html !== _this.element.html()) {
-              if (_this.gWin) {
-                if ((_ref = _this.opts) != null) {
-                  _ref.content = void 0;
-                }
-                _this.remove();
-                _this.createGWin();
-                return _this.showHide();
-              }
-            }
-          });
-        };
-
-        WindowChildModel.prototype.createGWin = function() {
-          var defaults,
-            _this = this;
-          if (this.gWin == null) {
-            defaults = {};
-            if (this.opts != null) {
-              if (this.scope.coords) {
-                this.opts.position = this.getCoords(this.scope.coords);
-              }
-              defaults = this.opts;
-            }
-            if (this.element) {
-              this.html = _.isObject(this.element) ? this.element.html() : this.element;
-            }
-            this.opts = this.createWindowOptions(this.markerCtrl, this.scope, this.html, defaults);
-          }
-          if ((this.opts != null) && !this.gWin) {
-            if (this.opts.boxClass && (window.InfoBox && typeof window.InfoBox === 'function')) {
-              this.gWin = new window.InfoBox(this.opts);
-            } else {
-              this.gWin = new google.maps.InfoWindow(this.opts);
-            }
-            return this.googleMapsHandles.push(google.maps.event.addListener(this.gWin, 'closeclick', function() {
+          WindowChildModel.prototype.watchElement = function () {
+            var _this = this;
+            return this.scope.$watch(function () {
               var _ref;
-              if ((_ref = _this.markerCtrl) != null) {
-                _ref.setVisible(_this.markerIsVisibleAfterWindowClose);
+              if (!_this.element || !_this.html) {
+                return;
               }
-              _this.gWin.isOpen(false);
-              if (_this.scope.closeClick != null) {
-                return _this.scope.closeClick();
-              }
-            }));
-          }
-        };
-
-        WindowChildModel.prototype.watchShow = function() {
-          var _this = this;
-          return this.scope.$watch('show', function(newValue, oldValue) {
-            if (newValue !== oldValue) {
-              if (newValue) {
-                return _this.showWindow();
-              } else {
-                return _this.hideWindow();
-              }
-            } else {
-              if (_this.gWin != null) {
-                if (newValue && !_this.gWin.getMap()) {
-                  return _this.showWindow();
+              if (_this.html !== _this.element.html()) {
+                if (_this.gWin) {
+                  if ((_ref = _this.opts) != null) {
+                    _ref.content = void 0;
+                  }
+                  _this.remove();
+                  _this.createGWin();
+                  return _this.showHide();
                 }
               }
+            });
+          };
+
+          WindowChildModel.prototype.createGWin = function () {
+            var defaults,
+              _this = this;
+            if (this.gWin == null) {
+              defaults = {};
+              if (this.opts != null) {
+                if (this.scope.coords) {
+                  this.opts.position = this.getCoords(this.scope.coords);
+                }
+                defaults = this.opts;
+              }
+              if (this.element) {
+                this.html = _.isObject(this.element)
+                  ? this.element.html()
+                  : this.element;
+              }
+              this.opts = this.createWindowOptions(
+                this.markerCtrl,
+                this.scope,
+                this.html,
+                defaults
+              );
             }
-          }, true);
-        };
-
-        WindowChildModel.prototype.watchCoords = function() {
-          var scope,
-            _this = this;
-          scope = this.markerCtrl != null ? this.scope.$parent : this.scope;
-          return scope.$watch('coords', function(newValue, oldValue) {
-            var pos;
-            if (newValue !== oldValue) {
-              if (newValue == null) {
-                return _this.hideWindow();
+            if (this.opts != null && !this.gWin) {
+              if (
+                this.opts.boxClass &&
+                window.InfoBox &&
+                typeof window.InfoBox === "function"
+              ) {
+                this.gWin = new window.InfoBox(this.opts);
               } else {
-                if (!_this.validateCoords(newValue)) {
-                  _this.$log.error("WindowChildMarker cannot render marker as scope.coords as no position on marker: " + (JSON.stringify(_this.model)));
-                  return;
-                }
-                pos = _this.getCoords(newValue);
-                _this.gWin.setPosition(pos);
-                if (_this.opts) {
-                  return _this.opts.position = pos;
-                }
+                this.gWin = new google.maps.InfoWindow(this.opts);
               }
-            }
-          }, true);
-        };
-
-        WindowChildModel.prototype.handleClick = function() {
-          var _this = this;
-          if (this.markerCtrl != null) {
-            return this.googleMapsHandles.push(google.maps.event.addListener(this.markerCtrl, 'click', function() {
-              var pos;
-              if (_this.gWin == null) {
-                _this.createGWin();
-              }
-              pos = _this.markerCtrl.getPosition();
-              if (_this.gWin != null) {
-                _this.gWin.setPosition(pos);
-                if (_this.opts) {
-                  _this.opts.position = pos;
-                }
-                _this.showWindow();
-              }
-              _this.initialMarkerVisibility = _this.markerCtrl.getVisible();
-              return _this.markerCtrl.setVisible(_this.isIconVisibleOnClick);
-            }));
-          }
-        };
-
-        WindowChildModel.prototype.showWindow = function() {
-          var show,
-            _this = this;
-          show = function() {
-            if (_this.gWin) {
-              if ((_this.scope.show || (_this.scope.show == null)) && !_this.gWin.isOpen()) {
-                return _this.gWin.open(_this.mapCtrl);
-              }
+              return this.googleMapsHandles.push(
+                google.maps.event.addListener(
+                  this.gWin,
+                  "closeclick",
+                  function () {
+                    var _ref;
+                    if ((_ref = _this.markerCtrl) != null) {
+                      _ref.setVisible(_this.markerIsVisibleAfterWindowClose);
+                    }
+                    _this.gWin.isOpen(false);
+                    if (_this.scope.closeClick != null) {
+                      return _this.scope.closeClick();
+                    }
+                  }
+                )
+              );
             }
           };
-          if (this.scope.templateUrl) {
-            if (this.gWin) {
-              $http.get(this.scope.templateUrl, {
-                cache: $templateCache
-              }).then(function(content) {
-                var compiled, templateScope;
-                templateScope = _this.scope.$new();
-                if (angular.isDefined(_this.scope.templateParameter)) {
-                  templateScope.parameter = _this.scope.templateParameter;
+
+          WindowChildModel.prototype.watchShow = function () {
+            var _this = this;
+            return this.scope.$watch(
+              "show",
+              function (newValue, oldValue) {
+                if (newValue !== oldValue) {
+                  if (newValue) {
+                    return _this.showWindow();
+                  } else {
+                    return _this.hideWindow();
+                  }
+                } else {
+                  if (_this.gWin != null) {
+                    if (newValue && !_this.gWin.getMap()) {
+                      return _this.showWindow();
+                    }
+                  }
                 }
-                compiled = $compile(content.data)(templateScope);
-                return _this.gWin.setContent(compiled[0]);
-              });
+              },
+              true
+            );
+          };
+
+          WindowChildModel.prototype.watchCoords = function () {
+            var scope,
+              _this = this;
+            scope = this.markerCtrl != null ? this.scope.$parent : this.scope;
+            return scope.$watch(
+              "coords",
+              function (newValue, oldValue) {
+                var pos;
+                if (newValue !== oldValue) {
+                  if (newValue == null) {
+                    return _this.hideWindow();
+                  } else {
+                    if (!_this.validateCoords(newValue)) {
+                      _this.$log.error(
+                        "WindowChildMarker cannot render marker as scope.coords as no position on marker: " +
+                          JSON.stringify(_this.model)
+                      );
+                      return;
+                    }
+                    pos = _this.getCoords(newValue);
+                    _this.gWin.setPosition(pos);
+                    if (_this.opts) {
+                      return (_this.opts.position = pos);
+                    }
+                  }
+                }
+              },
+              true
+            );
+          };
+
+          WindowChildModel.prototype.handleClick = function () {
+            var _this = this;
+            if (this.markerCtrl != null) {
+              return this.googleMapsHandles.push(
+                google.maps.event.addListener(
+                  this.markerCtrl,
+                  "click",
+                  function () {
+                    var pos;
+                    if (_this.gWin == null) {
+                      _this.createGWin();
+                    }
+                    pos = _this.markerCtrl.getPosition();
+                    if (_this.gWin != null) {
+                      _this.gWin.setPosition(pos);
+                      if (_this.opts) {
+                        _this.opts.position = pos;
+                      }
+                      _this.showWindow();
+                    }
+                    _this.initialMarkerVisibility =
+                      _this.markerCtrl.getVisible();
+                    return _this.markerCtrl.setVisible(
+                      _this.isIconVisibleOnClick
+                    );
+                  }
+                )
+              );
             }
-            return show();
-          } else {
-            return show();
-          }
-        };
+          };
 
-        WindowChildModel.prototype.showHide = function() {
-          if (this.scope.show) {
-            return this.showWindow();
-          } else {
-            return this.hideWindow();
-          }
-        };
+          WindowChildModel.prototype.showWindow = function () {
+            var show,
+              _this = this;
+            show = function () {
+              if (_this.gWin) {
+                if (
+                  (_this.scope.show || _this.scope.show == null) &&
+                  !_this.gWin.isOpen()
+                ) {
+                  return _this.gWin.open(_this.mapCtrl);
+                }
+              }
+            };
+            if (this.scope.templateUrl) {
+              if (this.gWin) {
+                $http
+                  .get(this.scope.templateUrl, {
+                    cache: $templateCache,
+                  })
+                  .then(function (content) {
+                    var compiled, templateScope;
+                    templateScope = _this.scope.$new();
+                    if (angular.isDefined(_this.scope.templateParameter)) {
+                      templateScope.parameter = _this.scope.templateParameter;
+                    }
+                    compiled = $compile(content.data)(templateScope);
+                    return _this.gWin.setContent(compiled[0]);
+                  });
+              }
+              return show();
+            } else {
+              return show();
+            }
+          };
 
-        WindowChildModel.prototype.getLatestPosition = function() {
-          if ((this.gWin != null) && (this.markerCtrl != null)) {
-            return this.gWin.setPosition(this.markerCtrl.getPosition());
-          }
-        };
+          WindowChildModel.prototype.showHide = function () {
+            if (this.scope.show) {
+              return this.showWindow();
+            } else {
+              return this.hideWindow();
+            }
+          };
 
-        WindowChildModel.prototype.hideWindow = function() {
-          if ((this.gWin != null) && this.gWin.isOpen()) {
-            return this.gWin.close();
-          }
-        };
+          WindowChildModel.prototype.getLatestPosition = function () {
+            if (this.gWin != null && this.markerCtrl != null) {
+              return this.gWin.setPosition(this.markerCtrl.getPosition());
+            }
+          };
 
-        WindowChildModel.prototype.remove = function() {
-          this.hideWindow();
-          _.each(this.googleMapsHandles, function(h) {
-            return google.maps.event.removeListener(h);
-          });
-          this.googleMapsHandles.length = 0;
-          return delete this.gWin;
-        };
+          WindowChildModel.prototype.hideWindow = function () {
+            if (this.gWin != null && this.gWin.isOpen()) {
+              return this.gWin.close();
+            }
+          };
 
-        WindowChildModel.prototype.destroy = function(manualOverride) {
-          var self;
-          if (manualOverride == null) {
-            manualOverride = false;
-          }
-          this.remove();
-          if ((this.scope != null) && (this.needToManualDestroy || manualOverride)) {
-            this.scope.$destroy();
-          }
-          return self = void 0;
-        };
+          WindowChildModel.prototype.remove = function () {
+            this.hideWindow();
+            _.each(this.googleMapsHandles, function (h) {
+              return google.maps.event.removeListener(h);
+            });
+            this.googleMapsHandles.length = 0;
+            return delete this.gWin;
+          };
 
+          WindowChildModel.prototype.destroy = function (manualOverride) {
+            var self;
+            if (manualOverride == null) {
+              manualOverride = false;
+            }
+            this.remove();
+            if (
+              this.scope != null &&
+              (this.needToManualDestroy || manualOverride)
+            ) {
+              this.scope.$destroy();
+            }
+            return (self = void 0);
+          };
+
+          return WindowChildModel;
+        })(BaseObject);
         return WindowChildModel;
-
-      })(BaseObject);
-      return WindowChildModel;
-    }
-  ]);
-
-}).call(this);
+      },
+    ]);
+}.call(this));
 
 /*
 	- interface for all markers to derrive from
@@ -2127,932 +2731,1439 @@ Nicholas McCready - https://twitter.com/nmccready
 		- implementation needed on watches
 */
 
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
-  angular.module("google-maps.directives.api.models.parent").factory("IMarkerParentModel", [
-    "ModelKey", "Logger", function(ModelKey, Logger) {
-      var IMarkerParentModel;
-      IMarkerParentModel = (function(_super) {
-        __extends(IMarkerParentModel, _super);
+  angular
+    .module("google-maps.directives.api.models.parent")
+    .factory("IMarkerParentModel", [
+      "ModelKey",
+      "Logger",
+      function (ModelKey, Logger) {
+        var IMarkerParentModel;
+        IMarkerParentModel = (function (_super) {
+          __extends(IMarkerParentModel, _super);
 
-        IMarkerParentModel.prototype.DEFAULTS = {};
+          IMarkerParentModel.prototype.DEFAULTS = {};
 
-        function IMarkerParentModel(scope, element, attrs, mapCtrl, $timeout) {
-          var self,
-            _this = this;
-          this.scope = scope;
-          this.element = element;
-          this.attrs = attrs;
-          this.mapCtrl = mapCtrl;
-          this.$timeout = $timeout;
-          this.linkInit = __bind(this.linkInit, this);
-          this.onDestroy = __bind(this.onDestroy, this);
-          this.onWatch = __bind(this.onWatch, this);
-          this.watch = __bind(this.watch, this);
-          this.validateScope = __bind(this.validateScope, this);
-          this.onTimeOut = __bind(this.onTimeOut, this);
-          IMarkerParentModel.__super__.constructor.call(this, this.scope);
-          self = this;
-          this.$log = Logger;
-          if (!this.validateScope(scope)) {
-            throw new String("Unable to construct IMarkerParentModel due to invalid scope");
-          }
-          this.doClick = angular.isDefined(attrs.click);
-          if (scope.options != null) {
-            this.DEFAULTS = scope.options;
-          }
-          this.$timeout(function() {
-            _this.onTimeOut(scope);
-            _this.watch('coords', _this.scope);
-            _this.watch('icon', _this.scope);
-            _this.watch('options', _this.scope);
-            return scope.$on("$destroy", function() {
-              return _this.onDestroy(scope);
-            });
-          });
-        }
-
-        IMarkerParentModel.prototype.onTimeOut = function(scope) {};
-
-        IMarkerParentModel.prototype.validateScope = function(scope) {
-          var ret;
-          if (scope == null) {
-            this.$log.error(this.constructor.name + ": invalid scope used");
-            return false;
-          }
-          ret = scope.coords != null;
-          if (!ret) {
-            this.$log.error(this.constructor.name + ": no valid coords attribute found");
-            return false;
-          }
-          return ret;
-        };
-
-        IMarkerParentModel.prototype.watch = function(propNameToWatch, scope) {
-          var watchFunc,
-            _this = this;
-          watchFunc = function(newValue, oldValue) {
-            if (newValue !== oldValue) {
-              return _this.onWatch(propNameToWatch, scope, newValue, oldValue);
+          function IMarkerParentModel(
+            scope,
+            element,
+            attrs,
+            mapCtrl,
+            $timeout
+          ) {
+            var self,
+              _this = this;
+            this.scope = scope;
+            this.element = element;
+            this.attrs = attrs;
+            this.mapCtrl = mapCtrl;
+            this.$timeout = $timeout;
+            this.linkInit = __bind(this.linkInit, this);
+            this.onDestroy = __bind(this.onDestroy, this);
+            this.onWatch = __bind(this.onWatch, this);
+            this.watch = __bind(this.watch, this);
+            this.validateScope = __bind(this.validateScope, this);
+            this.onTimeOut = __bind(this.onTimeOut, this);
+            IMarkerParentModel.__super__.constructor.call(this, this.scope);
+            self = this;
+            this.$log = Logger;
+            if (!this.validateScope(scope)) {
+              throw new String(
+                "Unable to construct IMarkerParentModel due to invalid scope"
+              );
             }
+            this.doClick = angular.isDefined(attrs.click);
+            if (scope.options != null) {
+              this.DEFAULTS = scope.options;
+            }
+            this.$timeout(function () {
+              _this.onTimeOut(scope);
+              _this.watch("coords", _this.scope);
+              _this.watch("icon", _this.scope);
+              _this.watch("options", _this.scope);
+              return scope.$on("$destroy", function () {
+                return _this.onDestroy(scope);
+              });
+            });
+          }
+
+          IMarkerParentModel.prototype.onTimeOut = function (scope) {};
+
+          IMarkerParentModel.prototype.validateScope = function (scope) {
+            var ret;
+            if (scope == null) {
+              this.$log.error(this.constructor.name + ": invalid scope used");
+              return false;
+            }
+            ret = scope.coords != null;
+            if (!ret) {
+              this.$log.error(
+                this.constructor.name + ": no valid coords attribute found"
+              );
+              return false;
+            }
+            return ret;
           };
-          return scope.$watch(propNameToWatch, watchFunc, true);
-        };
 
-        IMarkerParentModel.prototype.onWatch = function(propNameToWatch, scope, newValue, oldValue) {
-          throw new String("OnWatch Not Implemented!!");
-        };
+          IMarkerParentModel.prototype.watch = function (
+            propNameToWatch,
+            scope
+          ) {
+            var watchFunc,
+              _this = this;
+            watchFunc = function (newValue, oldValue) {
+              if (newValue !== oldValue) {
+                return _this.onWatch(
+                  propNameToWatch,
+                  scope,
+                  newValue,
+                  oldValue
+                );
+              }
+            };
+            return scope.$watch(propNameToWatch, watchFunc, true);
+          };
 
-        IMarkerParentModel.prototype.onDestroy = function(scope) {
-          throw new String("OnDestroy Not Implemented!!");
-        };
+          IMarkerParentModel.prototype.onWatch = function (
+            propNameToWatch,
+            scope,
+            newValue,
+            oldValue
+          ) {
+            throw new String("OnWatch Not Implemented!!");
+          };
 
-        IMarkerParentModel.prototype.linkInit = function(element, mapCtrl, scope, animate) {
-          throw new String("LinkInit Not Implemented!!");
-        };
+          IMarkerParentModel.prototype.onDestroy = function (scope) {
+            throw new String("OnDestroy Not Implemented!!");
+          };
 
+          IMarkerParentModel.prototype.linkInit = function (
+            element,
+            mapCtrl,
+            scope,
+            animate
+          ) {
+            throw new String("LinkInit Not Implemented!!");
+          };
+
+          return IMarkerParentModel;
+        })(ModelKey);
         return IMarkerParentModel;
-
-      })(ModelKey);
-      return IMarkerParentModel;
-    }
-  ]);
-
-}).call(this);
+      },
+    ]);
+}.call(this));
 
 /*
 	- interface directive for all window(s) to derrive from
 */
 
-
-(function() {
+(function () {
   var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
-  angular.module("google-maps.directives.api.models.parent").factory("IWindowParentModel", [
-    "ModelKey", "GmapUtil", "Logger", function(ModelKey, GmapUtil, Logger) {
-      var IWindowParentModel;
-      IWindowParentModel = (function(_super) {
-        __extends(IWindowParentModel, _super);
+  angular
+    .module("google-maps.directives.api.models.parent")
+    .factory("IWindowParentModel", [
+      "ModelKey",
+      "GmapUtil",
+      "Logger",
+      function (ModelKey, GmapUtil, Logger) {
+        var IWindowParentModel;
+        IWindowParentModel = (function (_super) {
+          __extends(IWindowParentModel, _super);
 
-        IWindowParentModel.include(GmapUtil);
+          IWindowParentModel.include(GmapUtil);
 
-        IWindowParentModel.prototype.DEFAULTS = {};
+          IWindowParentModel.prototype.DEFAULTS = {};
 
-        function IWindowParentModel(scope, element, attrs, ctrls, $timeout, $compile, $http, $templateCache) {
-          var self;
-          IWindowParentModel.__super__.constructor.call(this, scope);
-          self = this;
-          this.$log = Logger;
-          this.$timeout = $timeout;
-          this.$compile = $compile;
-          this.$http = $http;
-          this.$templateCache = $templateCache;
-          if (scope.options != null) {
-            this.DEFAULTS = scope.options;
+          function IWindowParentModel(
+            scope,
+            element,
+            attrs,
+            ctrls,
+            $timeout,
+            $compile,
+            $http,
+            $templateCache
+          ) {
+            var self;
+            IWindowParentModel.__super__.constructor.call(this, scope);
+            self = this;
+            this.$log = Logger;
+            this.$timeout = $timeout;
+            this.$compile = $compile;
+            this.$http = $http;
+            this.$templateCache = $templateCache;
+            if (scope.options != null) {
+              this.DEFAULTS = scope.options;
+            }
           }
-        }
 
+          return IWindowParentModel;
+        })(ModelKey);
         return IWindowParentModel;
+      },
+    ]);
+}.call(this));
 
-      })(ModelKey);
-      return IWindowParentModel;
-    }
-  ]);
-
-}).call(this);
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
-  angular.module("google-maps.directives.api.models.parent").factory("LayerParentModel", [
-    "BaseObject", "Logger", function(BaseObject, Logger) {
-      var LayerParentModel;
-      LayerParentModel = (function(_super) {
-        __extends(LayerParentModel, _super);
+  angular
+    .module("google-maps.directives.api.models.parent")
+    .factory("LayerParentModel", [
+      "BaseObject",
+      "Logger",
+      function (BaseObject, Logger) {
+        var LayerParentModel;
+        LayerParentModel = (function (_super) {
+          __extends(LayerParentModel, _super);
 
-        function LayerParentModel(scope, element, attrs, mapCtrl, $timeout, onLayerCreated, $log) {
-          var _this = this;
-          this.scope = scope;
-          this.element = element;
-          this.attrs = attrs;
-          this.mapCtrl = mapCtrl;
-          this.$timeout = $timeout;
-          this.onLayerCreated = onLayerCreated != null ? onLayerCreated : void 0;
-          this.$log = $log != null ? $log : Logger;
-          this.createGoogleLayer = __bind(this.createGoogleLayer, this);
-          if (this.attrs.type == null) {
-            this.$log.info("type attribute for the layer directive is mandatory. Layer creation aborted!!");
-            return;
+          function LayerParentModel(
+            scope,
+            element,
+            attrs,
+            mapCtrl,
+            $timeout,
+            onLayerCreated,
+            $log
+          ) {
+            var _this = this;
+            this.scope = scope;
+            this.element = element;
+            this.attrs = attrs;
+            this.mapCtrl = mapCtrl;
+            this.$timeout = $timeout;
+            this.onLayerCreated =
+              onLayerCreated != null ? onLayerCreated : void 0;
+            this.$log = $log != null ? $log : Logger;
+            this.createGoogleLayer = __bind(this.createGoogleLayer, this);
+            if (this.attrs.type == null) {
+              this.$log.info(
+                "type attribute for the layer directive is mandatory. Layer creation aborted!!"
+              );
+              return;
+            }
+            this.createGoogleLayer();
+            this.gMap = void 0;
+            this.doShow = true;
+            this.$timeout(function () {
+              _this.gMap = mapCtrl.getMap();
+              if (angular.isDefined(_this.attrs.show)) {
+                _this.doShow = _this.scope.show;
+              }
+              if (_this.doShow && _this.gMap != null) {
+                _this.layer.setMap(_this.gMap);
+              }
+              _this.scope.$watch(
+                "show",
+                function (newValue, oldValue) {
+                  if (newValue !== oldValue) {
+                    _this.doShow = newValue;
+                    if (newValue) {
+                      return _this.layer.setMap(_this.gMap);
+                    } else {
+                      return _this.layer.setMap(null);
+                    }
+                  }
+                },
+                true
+              );
+              _this.scope.$watch(
+                "options",
+                function (newValue, oldValue) {
+                  if (newValue !== oldValue) {
+                    _this.layer.setMap(null);
+                    _this.layer = null;
+                    return _this.createGoogleLayer();
+                  }
+                },
+                true
+              );
+              return _this.scope.$on("$destroy", function () {
+                return _this.layer.setMap(null);
+              });
+            });
           }
-          this.createGoogleLayer();
-          this.gMap = void 0;
-          this.doShow = true;
-          this.$timeout(function() {
-            _this.gMap = mapCtrl.getMap();
-            if (angular.isDefined(_this.attrs.show)) {
-              _this.doShow = _this.scope.show;
+
+          LayerParentModel.prototype.createGoogleLayer = function () {
+            var _this = this;
+            if (this.attrs.options == null) {
+              this.layer =
+                this.attrs.namespace === void 0
+                  ? new google.maps[this.attrs.type]()
+                  : new google.maps[this.attrs.namespace][this.attrs.type]();
+            } else {
+              this.layer =
+                this.attrs.namespace === void 0
+                  ? new google.maps[this.attrs.type](this.scope.options)
+                  : new google.maps[this.attrs.namespace][this.attrs.type](
+                      this.scope.options
+                    );
             }
-            if (_this.doShow && (_this.gMap != null)) {
-              _this.layer.setMap(_this.gMap);
-            }
-            _this.scope.$watch("show", function(newValue, oldValue) {
-              if (newValue !== oldValue) {
-                _this.doShow = newValue;
-                if (newValue) {
-                  return _this.layer.setMap(_this.gMap);
-                } else {
-                  return _this.layer.setMap(null);
+            return this.$timeout(function () {
+              var fn;
+              if (_this.layer != null && _this.onLayerCreated != null) {
+                fn = _this.onLayerCreated(_this.scope, _this.layer);
+                if (fn) {
+                  return fn(_this.layer);
                 }
               }
-            }, true);
-            _this.scope.$watch("options", function(newValue, oldValue) {
-              if (newValue !== oldValue) {
-                _this.layer.setMap(null);
-                _this.layer = null;
-                return _this.createGoogleLayer();
-              }
-            }, true);
-            return _this.scope.$on("$destroy", function() {
-              return _this.layer.setMap(null);
             });
-          });
-        }
+          };
 
-        LayerParentModel.prototype.createGoogleLayer = function() {
-          var _this = this;
-          if (this.attrs.options == null) {
-            this.layer = this.attrs.namespace === void 0 ? new google.maps[this.attrs.type]() : new google.maps[this.attrs.namespace][this.attrs.type]();
-          } else {
-            this.layer = this.attrs.namespace === void 0 ? new google.maps[this.attrs.type](this.scope.options) : new google.maps[this.attrs.namespace][this.attrs.type](this.scope.options);
-          }
-          return this.$timeout(function() {
-            var fn;
-            if ((_this.layer != null) && (_this.onLayerCreated != null)) {
-              fn = _this.onLayerCreated(_this.scope, _this.layer);
-              if (fn) {
-                return fn(_this.layer);
-              }
-            }
-          });
-        };
-
+          return LayerParentModel;
+        })(BaseObject);
         return LayerParentModel;
-
-      })(BaseObject);
-      return LayerParentModel;
-    }
-  ]);
-
-}).call(this);
+      },
+    ]);
+}.call(this));
 
 /*
 	Basic Directive api for a marker. Basic in the sense that this directive contains 1:1 on scope and model.
 	Thus there will be one html element per marker within the directive.
 */
 
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
-  angular.module("google-maps.directives.api.models.parent").factory("MarkerParentModel", [
-    "IMarkerParentModel", "GmapUtil", "EventsHelper", function(IMarkerParentModel, GmapUtil, EventsHelper) {
-      var MarkerParentModel;
-      MarkerParentModel = (function(_super) {
-        __extends(MarkerParentModel, _super);
+  angular
+    .module("google-maps.directives.api.models.parent")
+    .factory("MarkerParentModel", [
+      "IMarkerParentModel",
+      "GmapUtil",
+      "EventsHelper",
+      function (IMarkerParentModel, GmapUtil, EventsHelper) {
+        var MarkerParentModel;
+        MarkerParentModel = (function (_super) {
+          __extends(MarkerParentModel, _super);
 
-        MarkerParentModel.include(GmapUtil);
+          MarkerParentModel.include(GmapUtil);
 
-        MarkerParentModel.include(EventsHelper);
+          MarkerParentModel.include(EventsHelper);
 
-        function MarkerParentModel(scope, element, attrs, mapCtrl, $timeout, gMarkerManager, doFit) {
-          var self;
-          this.gMarkerManager = gMarkerManager;
-          this.doFit = doFit;
-          this.onDestroy = __bind(this.onDestroy, this);
-          this.setGMarker = __bind(this.setGMarker, this);
-          this.onWatch = __bind(this.onWatch, this);
-          this.onTimeOut = __bind(this.onTimeOut, this);
-          MarkerParentModel.__super__.constructor.call(this, scope, element, attrs, mapCtrl, $timeout);
-          self = this;
-        }
-
-        MarkerParentModel.prototype.onTimeOut = function(scope) {
-          var opts,
-            _this = this;
-          opts = this.createMarkerOptions(scope.coords, scope.icon, scope.options, this.mapCtrl.getMap());
-          this.setGMarker(new google.maps.Marker(opts));
-          google.maps.event.addListener(this.scope.gMarker, 'click', function() {
-            if (_this.doClick && (scope.click != null)) {
-              return _this.$timeout(function() {
-                return _this.scope.click();
-              });
-            }
-          });
-          this.setEvents(this.scope.gMarker, scope, scope);
-          return this.$log.info(this);
-        };
-
-        MarkerParentModel.prototype.onWatch = function(propNameToWatch, scope) {
-          switch (propNameToWatch) {
-            case 'coords':
-              if (this.validateCoords(scope.coords) && (this.scope.gMarker != null)) {
-                this.scope.gMarker.setMap(this.mapCtrl.getMap());
-                this.scope.gMarker.setPosition(this.getCoords(scope.coords));
-                this.scope.gMarker.setVisible(this.validateCoords(scope.coords));
-                return this.scope.gMarker.setOptions(scope.options);
-              } else {
-                return this.scope.gMarker.setMap(null);
-              }
-              break;
-            case 'icon':
-              if ((scope.icon != null) && this.validateCoords(scope.coords) && (this.scope.gMarker != null)) {
-                this.scope.gMarker.setOptions(scope.options);
-                this.scope.gMarker.setIcon(scope.icon);
-                this.scope.gMarker.setMap(null);
-                this.scope.gMarker.setMap(this.mapCtrl.getMap());
-                this.scope.gMarker.setPosition(this.getCoords(scope.coords));
-                return this.scope.gMarker.setVisible(this.validateCoords(scope.coords));
-              }
-              break;
-            case 'options':
-              if (this.validateCoords(scope.coords) && (scope.icon != null) && scope.options) {
-                if (this.scope.gMarker != null) {
-                  this.scope.gMarker.setMap(null);
-                }
-                return this.setGMarker(new google.maps.Marker(this.createMarkerOptions(scope.coords, scope.icon, scope.options, this.mapCtrl.getMap())));
-              }
+          function MarkerParentModel(
+            scope,
+            element,
+            attrs,
+            mapCtrl,
+            $timeout,
+            gMarkerManager,
+            doFit
+          ) {
+            var self;
+            this.gMarkerManager = gMarkerManager;
+            this.doFit = doFit;
+            this.onDestroy = __bind(this.onDestroy, this);
+            this.setGMarker = __bind(this.setGMarker, this);
+            this.onWatch = __bind(this.onWatch, this);
+            this.onTimeOut = __bind(this.onTimeOut, this);
+            MarkerParentModel.__super__.constructor.call(
+              this,
+              scope,
+              element,
+              attrs,
+              mapCtrl,
+              $timeout
+            );
+            self = this;
           }
-        };
 
-        MarkerParentModel.prototype.setGMarker = function(gMarker) {
-          if (this.scope.gMarker) {
-            delete this.scope.gMarker;
-            this.gMarkerManager.remove(this.scope.gMarker, false);
-          }
-          this.scope.gMarker = gMarker;
-          if (this.scope.gMarker) {
-            this.gMarkerManager.add(this.scope.gMarker, false);
-            if (this.doFit) {
-              return this.gMarkerManager.fit();
-            }
-          }
-        };
-
-        MarkerParentModel.prototype.onDestroy = function(scope) {
-          var self;
-          if (!this.scope.gMarker) {
-            self = void 0;
-            return;
-          }
-          this.scope.gMarker.setMap(null);
-          this.gMarkerManager.remove(this.scope.gMarker, false);
-          delete this.scope.gMarker;
-          return self = void 0;
-        };
-
-        return MarkerParentModel;
-
-      })(IMarkerParentModel);
-      return MarkerParentModel;
-    }
-  ]);
-
-}).call(this);
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  angular.module("google-maps.directives.api.models.parent").factory("MarkersParentModel", [
-    "IMarkerParentModel", "ModelsWatcher", "PropMap", "MarkerChildModel", "ClustererMarkerManager", "MarkerManager", function(IMarkerParentModel, ModelsWatcher, PropMap, MarkerChildModel, ClustererMarkerManager, MarkerManager) {
-      var MarkersParentModel;
-      MarkersParentModel = (function(_super) {
-        __extends(MarkersParentModel, _super);
-
-        MarkersParentModel.include(ModelsWatcher);
-
-        function MarkersParentModel(scope, element, attrs, mapCtrl, $timeout) {
-          this.onDestroy = __bind(this.onDestroy, this);
-          this.newChildMarker = __bind(this.newChildMarker, this);
-          this.pieceMealMarkers = __bind(this.pieceMealMarkers, this);
-          this.reBuildMarkers = __bind(this.reBuildMarkers, this);
-          this.createMarkersFromScratch = __bind(this.createMarkersFromScratch, this);
-          this.validateScope = __bind(this.validateScope, this);
-          this.onWatch = __bind(this.onWatch, this);
-          this.onTimeOut = __bind(this.onTimeOut, this);
-          var self,
-            _this = this;
-          MarkersParentModel.__super__.constructor.call(this, scope, element, attrs, mapCtrl, $timeout);
-          self = this;
-          this.scope.markerModels = new PropMap();
-          this.$timeout = $timeout;
-          this.$log.info(this);
-          this.doRebuildAll = this.scope.doRebuildAll != null ? this.scope.doRebuildAll : false;
-          this.setIdKey(scope);
-          this.scope.$watch('doRebuildAll', function(newValue, oldValue) {
-            if (newValue !== oldValue) {
-              return _this.doRebuildAll = newValue;
-            }
-          });
-        }
-
-        MarkersParentModel.prototype.onTimeOut = function(scope) {
-          this.watch('models', scope);
-          this.watch('doCluster', scope);
-          this.watch('clusterOptions', scope);
-          this.watch('clusterEvents', scope);
-          this.watch('fit', scope);
-          this.watch('idKey', scope);
-          this.gMarkerManager = void 0;
-          return this.createMarkersFromScratch(scope);
-        };
-
-        MarkersParentModel.prototype.onWatch = function(propNameToWatch, scope, newValue, oldValue) {
-          if (propNameToWatch === "idKey" && newValue !== oldValue) {
-            this.idKey = newValue;
-          }
-          if (this.doRebuildAll) {
-            return this.reBuildMarkers(scope);
-          } else {
-            return this.pieceMealMarkers(scope);
-          }
-        };
-
-        MarkersParentModel.prototype.validateScope = function(scope) {
-          var modelsNotDefined;
-          modelsNotDefined = angular.isUndefined(scope.models) || scope.models === void 0;
-          if (modelsNotDefined) {
-            this.$log.error(this.constructor.name + ": no valid models attribute found");
-          }
-          return MarkersParentModel.__super__.validateScope.call(this, scope) || modelsNotDefined;
-        };
-
-        MarkersParentModel.prototype.createMarkersFromScratch = function(scope) {
-          var _this = this;
-          if (scope.doCluster) {
-            if (scope.clusterEvents) {
-              this.clusterInternalOptions = _.once(function() {
-                var self, _ref, _ref1, _ref2;
-                self = _this;
-                if (!_this.origClusterEvents) {
-                  _this.origClusterEvents = {
-                    click: (_ref = scope.clusterEvents) != null ? _ref.click : void 0,
-                    mouseout: (_ref1 = scope.clusterEvents) != null ? _ref1.mouseout : void 0,
-                    mouseover: (_ref2 = scope.clusterEvents) != null ? _ref2.mouseover : void 0
-                  };
-                  return _.extend(scope.clusterEvents, {
-                    click: function(cluster) {
-                      return self.maybeExecMappedEvent(cluster, "click");
-                    },
-                    mouseout: function(cluster) {
-                      return self.maybeExecMappedEvent(cluster, "mouseout");
-                    },
-                    mouseover: function(cluster) {
-                      return self.maybeExecMappedEvent(cluster, "mouseover");
-                    }
+          MarkerParentModel.prototype.onTimeOut = function (scope) {
+            var opts,
+              _this = this;
+            opts = this.createMarkerOptions(
+              scope.coords,
+              scope.icon,
+              scope.options,
+              this.mapCtrl.getMap()
+            );
+            this.setGMarker(new google.maps.Marker(opts));
+            google.maps.event.addListener(
+              this.scope.gMarker,
+              "click",
+              function () {
+                if (_this.doClick && scope.click != null) {
+                  return _this.$timeout(function () {
+                    return _this.scope.click();
                   });
                 }
-              })();
-            }
-            if (scope.clusterOptions || scope.clusterEvents) {
-              if (this.gMarkerManager === void 0) {
-                this.gMarkerManager = new ClustererMarkerManager(this.mapCtrl.getMap(), void 0, scope.clusterOptions, this.clusterInternalOptions);
-              } else {
-                if (this.gMarkerManager.opt_options !== scope.clusterOptions) {
-                  this.gMarkerManager = new ClustererMarkerManager(this.mapCtrl.getMap(), void 0, scope.clusterOptions, this.clusterInternalOptions);
+              }
+            );
+            this.setEvents(this.scope.gMarker, scope, scope);
+            return this.$log.info(this);
+          };
+
+          MarkerParentModel.prototype.onWatch = function (
+            propNameToWatch,
+            scope
+          ) {
+            switch (propNameToWatch) {
+              case "coords":
+                if (
+                  this.validateCoords(scope.coords) &&
+                  this.scope.gMarker != null
+                ) {
+                  this.scope.gMarker.setMap(this.mapCtrl.getMap());
+                  this.scope.gMarker.setPosition(this.getCoords(scope.coords));
+                  this.scope.gMarker.setVisible(
+                    this.validateCoords(scope.coords)
+                  );
+                  return this.scope.gMarker.setOptions(scope.options);
+                } else {
+                  return this.scope.gMarker.setMap(null);
                 }
+                break;
+              case "icon":
+                if (
+                  scope.icon != null &&
+                  this.validateCoords(scope.coords) &&
+                  this.scope.gMarker != null
+                ) {
+                  this.scope.gMarker.setOptions(scope.options);
+                  this.scope.gMarker.setIcon(scope.icon);
+                  this.scope.gMarker.setMap(null);
+                  this.scope.gMarker.setMap(this.mapCtrl.getMap());
+                  this.scope.gMarker.setPosition(this.getCoords(scope.coords));
+                  return this.scope.gMarker.setVisible(
+                    this.validateCoords(scope.coords)
+                  );
+                }
+                break;
+              case "options":
+                if (
+                  this.validateCoords(scope.coords) &&
+                  scope.icon != null &&
+                  scope.options
+                ) {
+                  if (this.scope.gMarker != null) {
+                    this.scope.gMarker.setMap(null);
+                  }
+                  return this.setGMarker(
+                    new google.maps.Marker(
+                      this.createMarkerOptions(
+                        scope.coords,
+                        scope.icon,
+                        scope.options,
+                        this.mapCtrl.getMap()
+                      )
+                    )
+                  );
+                }
+            }
+          };
+
+          MarkerParentModel.prototype.setGMarker = function (gMarker) {
+            if (this.scope.gMarker) {
+              delete this.scope.gMarker;
+              this.gMarkerManager.remove(this.scope.gMarker, false);
+            }
+            this.scope.gMarker = gMarker;
+            if (this.scope.gMarker) {
+              this.gMarkerManager.add(this.scope.gMarker, false);
+              if (this.doFit) {
+                return this.gMarkerManager.fit();
+              }
+            }
+          };
+
+          MarkerParentModel.prototype.onDestroy = function (scope) {
+            var self;
+            if (!this.scope.gMarker) {
+              self = void 0;
+              return;
+            }
+            this.scope.gMarker.setMap(null);
+            this.gMarkerManager.remove(this.scope.gMarker, false);
+            delete this.scope.gMarker;
+            return (self = void 0);
+          };
+
+          return MarkerParentModel;
+        })(IMarkerParentModel);
+        return MarkerParentModel;
+      },
+    ]);
+}.call(this));
+
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
+    __hasProp = {}.hasOwnProperty,
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
+
+  angular
+    .module("google-maps.directives.api.models.parent")
+    .factory("MarkersParentModel", [
+      "IMarkerParentModel",
+      "ModelsWatcher",
+      "PropMap",
+      "MarkerChildModel",
+      "ClustererMarkerManager",
+      "MarkerManager",
+      function (
+        IMarkerParentModel,
+        ModelsWatcher,
+        PropMap,
+        MarkerChildModel,
+        ClustererMarkerManager,
+        MarkerManager
+      ) {
+        var MarkersParentModel;
+        MarkersParentModel = (function (_super) {
+          __extends(MarkersParentModel, _super);
+
+          MarkersParentModel.include(ModelsWatcher);
+
+          function MarkersParentModel(
+            scope,
+            element,
+            attrs,
+            mapCtrl,
+            $timeout
+          ) {
+            this.onDestroy = __bind(this.onDestroy, this);
+            this.newChildMarker = __bind(this.newChildMarker, this);
+            this.pieceMealMarkers = __bind(this.pieceMealMarkers, this);
+            this.reBuildMarkers = __bind(this.reBuildMarkers, this);
+            this.createMarkersFromScratch = __bind(
+              this.createMarkersFromScratch,
+              this
+            );
+            this.validateScope = __bind(this.validateScope, this);
+            this.onWatch = __bind(this.onWatch, this);
+            this.onTimeOut = __bind(this.onTimeOut, this);
+            var self,
+              _this = this;
+            MarkersParentModel.__super__.constructor.call(
+              this,
+              scope,
+              element,
+              attrs,
+              mapCtrl,
+              $timeout
+            );
+            self = this;
+            this.scope.markerModels = new PropMap();
+            this.$timeout = $timeout;
+            this.$log.info(this);
+            this.doRebuildAll =
+              this.scope.doRebuildAll != null ? this.scope.doRebuildAll : false;
+            this.setIdKey(scope);
+            this.scope.$watch("doRebuildAll", function (newValue, oldValue) {
+              if (newValue !== oldValue) {
+                return (_this.doRebuildAll = newValue);
+              }
+            });
+          }
+
+          MarkersParentModel.prototype.onTimeOut = function (scope) {
+            this.watch("models", scope);
+            this.watch("doCluster", scope);
+            this.watch("clusterOptions", scope);
+            this.watch("clusterEvents", scope);
+            this.watch("fit", scope);
+            this.watch("idKey", scope);
+            this.gMarkerManager = void 0;
+            return this.createMarkersFromScratch(scope);
+          };
+
+          MarkersParentModel.prototype.onWatch = function (
+            propNameToWatch,
+            scope,
+            newValue,
+            oldValue
+          ) {
+            if (propNameToWatch === "idKey" && newValue !== oldValue) {
+              this.idKey = newValue;
+            }
+            if (this.doRebuildAll) {
+              return this.reBuildMarkers(scope);
+            } else {
+              return this.pieceMealMarkers(scope);
+            }
+          };
+
+          MarkersParentModel.prototype.validateScope = function (scope) {
+            var modelsNotDefined;
+            modelsNotDefined =
+              angular.isUndefined(scope.models) || scope.models === void 0;
+            if (modelsNotDefined) {
+              this.$log.error(
+                this.constructor.name + ": no valid models attribute found"
+              );
+            }
+            return (
+              MarkersParentModel.__super__.validateScope.call(this, scope) ||
+              modelsNotDefined
+            );
+          };
+
+          MarkersParentModel.prototype.createMarkersFromScratch = function (
+            scope
+          ) {
+            var _this = this;
+            if (scope.doCluster) {
+              if (scope.clusterEvents) {
+                this.clusterInternalOptions = _.once(function () {
+                  var self, _ref, _ref1, _ref2;
+                  self = _this;
+                  if (!_this.origClusterEvents) {
+                    _this.origClusterEvents = {
+                      click:
+                        (_ref = scope.clusterEvents) != null
+                          ? _ref.click
+                          : void 0,
+                      mouseout:
+                        (_ref1 = scope.clusterEvents) != null
+                          ? _ref1.mouseout
+                          : void 0,
+                      mouseover:
+                        (_ref2 = scope.clusterEvents) != null
+                          ? _ref2.mouseover
+                          : void 0,
+                    };
+                    return _.extend(scope.clusterEvents, {
+                      click: function (cluster) {
+                        return self.maybeExecMappedEvent(cluster, "click");
+                      },
+                      mouseout: function (cluster) {
+                        return self.maybeExecMappedEvent(cluster, "mouseout");
+                      },
+                      mouseover: function (cluster) {
+                        return self.maybeExecMappedEvent(cluster, "mouseover");
+                      },
+                    });
+                  }
+                })();
+              }
+              if (scope.clusterOptions || scope.clusterEvents) {
+                if (this.gMarkerManager === void 0) {
+                  this.gMarkerManager = new ClustererMarkerManager(
+                    this.mapCtrl.getMap(),
+                    void 0,
+                    scope.clusterOptions,
+                    this.clusterInternalOptions
+                  );
+                } else {
+                  if (
+                    this.gMarkerManager.opt_options !== scope.clusterOptions
+                  ) {
+                    this.gMarkerManager = new ClustererMarkerManager(
+                      this.mapCtrl.getMap(),
+                      void 0,
+                      scope.clusterOptions,
+                      this.clusterInternalOptions
+                    );
+                  }
+                }
+              } else {
+                this.gMarkerManager = new ClustererMarkerManager(
+                  this.mapCtrl.getMap()
+                );
               }
             } else {
-              this.gMarkerManager = new ClustererMarkerManager(this.mapCtrl.getMap());
+              this.gMarkerManager = new MarkerManager(this.mapCtrl.getMap());
             }
-          } else {
-            this.gMarkerManager = new MarkerManager(this.mapCtrl.getMap());
-          }
-          return _async.each(scope.models, function(model) {
-            return _this.newChildMarker(model, scope);
-          }, function() {
-            _this.gMarkerManager.draw();
-            if (scope.fit) {
-              return _this.gMarkerManager.fit();
-            }
-          });
-        };
-
-        MarkersParentModel.prototype.reBuildMarkers = function(scope) {
-          if (!scope.doRebuild && scope.doRebuild !== void 0) {
-            return;
-          }
-          this.onDestroy(scope);
-          return this.createMarkersFromScratch(scope);
-        };
-
-        MarkersParentModel.prototype.pieceMealMarkers = function(scope) {
-          var _this = this;
-          if ((this.scope.models != null) && this.scope.models.length > 0 && this.scope.markerModels.length > 0) {
-            return this.figureOutState(this.idKey, scope, this.scope.markerModels, this.modelKeyComparison, function(state) {
-              var payload;
-              payload = state;
-              return _async.each(payload.removals, function(child) {
-                if (child != null) {
-                  if (child.destroy != null) {
-                    child.destroy();
-                  }
-                  return _this.scope.markerModels.remove(child.id);
+            return _async.each(
+              scope.models,
+              function (model) {
+                return _this.newChildMarker(model, scope);
+              },
+              function () {
+                _this.gMarkerManager.draw();
+                if (scope.fit) {
+                  return _this.gMarkerManager.fit();
                 }
-              }, function() {
-                return _async.each(payload.adds, function(modelToAdd) {
-                  return _this.newChildMarker(modelToAdd, scope);
-                }, function() {
-                  if (payload.adds.length > 0 || payload.removals.length > 0) {
-                    _this.gMarkerManager.draw();
-                    return scope.markerModels = _this.scope.markerModels;
-                  }
-                });
-              });
-            });
-          } else {
-            return this.reBuildMarkers(scope);
-          }
-        };
-
-        MarkersParentModel.prototype.newChildMarker = function(model, scope) {
-          var child;
-          if (model[this.idKey] == null) {
-            this.$log.error("Marker model has no id to assign a child to. This is required for performance. Please assign id, or redirect id to a different key.");
-            return;
-          }
-          this.$log.info('child', child, 'markers', this.scope.markerModels);
-          child = new MarkerChildModel(model, scope, this.mapCtrl, this.$timeout, this.DEFAULTS, this.doClick, this.gMarkerManager, this.idKey);
-          this.scope.markerModels.put(model[this.idKey], child);
-          return child;
-        };
-
-        MarkersParentModel.prototype.onDestroy = function(scope) {
-          _.each(this.scope.markerModels.values(), function(model) {
-            if (model != null) {
-              return model.destroy();
-            }
-          });
-          delete this.scope.markerModels;
-          this.scope.markerModels = new PropMap();
-          if (this.gMarkerManager != null) {
-            return this.gMarkerManager.clear();
-          }
-        };
-
-        MarkersParentModel.prototype.maybeExecMappedEvent = function(cluster, fnName) {
-          var pair, _ref;
-          if (_.isFunction((_ref = this.scope.clusterEvents) != null ? _ref[fnName] : void 0)) {
-            pair = this.mapClusterToMarkerModels(cluster);
-            if (this.origClusterEvents[fnName]) {
-              return this.origClusterEvents[fnName](pair.cluster, pair.mapped);
-            }
-          }
-        };
-
-        MarkersParentModel.prototype.mapClusterToMarkerModels = function(cluster) {
-          var gMarkers, mapped,
-            _this = this;
-          gMarkers = cluster.getMarkers();
-          mapped = gMarkers.map(function(g) {
-            return _this.scope.markerModels[g.key].model;
-          });
-          return {
-            cluster: cluster,
-            mapped: mapped
+              }
+            );
           };
-        };
 
-        return MarkersParentModel;
-
-      })(IMarkerParentModel);
-      return MarkersParentModel;
-    }
-  ]);
-
-}).call(this);
-
-/*
-	Windows directive where many windows map to the models property
-*/
-
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  angular.module("google-maps.directives.api.models.parent").factory("PolylinesParentModel", [
-    "$timeout", "Logger", "ModelKey", "ModelsWatcher", "PropMap", "PolylineChildModel", function($timeout, Logger, ModelKey, ModelsWatcher, PropMap, PolylineChildModel) {
-      var PolylinesParentModel;
-      return PolylinesParentModel = (function(_super) {
-        __extends(PolylinesParentModel, _super);
-
-        PolylinesParentModel.include(ModelsWatcher);
-
-        function PolylinesParentModel(scope, element, attrs, gMap, defaults) {
-          var self,
-            _this = this;
-          this.scope = scope;
-          this.element = element;
-          this.attrs = attrs;
-          this.gMap = gMap;
-          this.defaults = defaults;
-          this.modelKeyComparison = __bind(this.modelKeyComparison, this);
-          this.setChildScope = __bind(this.setChildScope, this);
-          this.createChild = __bind(this.createChild, this);
-          this.pieceMeal = __bind(this.pieceMeal, this);
-          this.createAllNew = __bind(this.createAllNew, this);
-          this.watchIdKey = __bind(this.watchIdKey, this);
-          this.createChildScopes = __bind(this.createChildScopes, this);
-          this.watchOurScope = __bind(this.watchOurScope, this);
-          this.watchDestroy = __bind(this.watchDestroy, this);
-          this.rebuildAll = __bind(this.rebuildAll, this);
-          this.doINeedToWipe = __bind(this.doINeedToWipe, this);
-          this.watchModels = __bind(this.watchModels, this);
-          this.watch = __bind(this.watch, this);
-          PolylinesParentModel.__super__.constructor.call(this, scope);
-          self = this;
-          this.$log = Logger;
-          this.plurals = new PropMap();
-          this.scopePropNames = ['path', 'stroke', 'clickable', 'draggable', 'editable', 'geodesic', 'icons', 'visible'];
-          _.each(this.scopePropNames, function(name) {
-            return _this[name + 'Key'] = void 0;
-          });
-          this.models = void 0;
-          this.firstTime = true;
-          this.$log.info(this);
-          $timeout(function() {
-            _this.watchOurScope(scope);
-            return _this.createChildScopes();
-          });
-        }
-
-        PolylinesParentModel.prototype.watch = function(scope, name, nameKey) {
-          var _this = this;
-          return scope.$watch(name, function(newValue, oldValue) {
-            if (newValue !== oldValue) {
-              _this[nameKey] = typeof newValue === 'function' ? newValue() : newValue;
-              return _async.each(_.values(_this.plurals), function(model) {
-                return model.scope[name] = _this[nameKey] === 'self' ? model : model[_this[nameKey]];
-              }, function() {});
+          MarkersParentModel.prototype.reBuildMarkers = function (scope) {
+            if (!scope.doRebuild && scope.doRebuild !== void 0) {
+              return;
             }
-          });
-        };
+            this.onDestroy(scope);
+            return this.createMarkersFromScratch(scope);
+          };
 
-        PolylinesParentModel.prototype.watchModels = function(scope) {
-          var _this = this;
-          return scope.$watch('models', function(newValue, oldValue) {
-            if (!_.isEqual(newValue, oldValue)) {
-              if (_this.doINeedToWipe(newValue)) {
-                return _this.rebuildAll(scope, true, true);
-              } else {
-                return _this.createChildScopes(false);
-              }
-            }
-          }, true);
-        };
-
-        PolylinesParentModel.prototype.doINeedToWipe = function(newValue) {
-          var newValueIsEmpty;
-          newValueIsEmpty = newValue != null ? newValue.length === 0 : true;
-          return this.plurals.length > 0 && newValueIsEmpty;
-        };
-
-        PolylinesParentModel.prototype.rebuildAll = function(scope, doCreate, doDelete) {
-          var _this = this;
-          return _async.each(this.plurals.values(), function(model) {
-            return model.destroy();
-          }, function() {
-            if (doDelete) {
-              delete _this.plurals;
-            }
-            _this.plurals = new PropMap();
-            if (doCreate) {
-              return _this.createChildScopes();
-            }
-          });
-        };
-
-        PolylinesParentModel.prototype.watchDestroy = function(scope) {
-          var _this = this;
-          return scope.$on("$destroy", function() {
-            return _this.rebuildAll(scope, false, true);
-          });
-        };
-
-        PolylinesParentModel.prototype.watchOurScope = function(scope) {
-          var _this = this;
-          return _.each(this.scopePropNames, function(name) {
-            var nameKey;
-            nameKey = name + 'Key';
-            _this[nameKey] = typeof scope[name] === 'function' ? scope[name]() : scope[name];
-            return _this.watch(scope, name, nameKey);
-          });
-        };
-
-        PolylinesParentModel.prototype.createChildScopes = function(isCreatingFromScratch) {
-          if (isCreatingFromScratch == null) {
-            isCreatingFromScratch = true;
-          }
-          if (angular.isUndefined(this.scope.models)) {
-            this.$log.error("No models to create polylines from! I Need direct models!");
-            return;
-          }
-          if (this.gMap != null) {
-            if (this.scope.models != null) {
-              this.watchIdKey(this.scope);
-              if (isCreatingFromScratch) {
-                return this.createAllNew(this.scope, false);
-              } else {
-                return this.pieceMeal(this.scope, false);
-              }
-            }
-          }
-        };
-
-        PolylinesParentModel.prototype.watchIdKey = function(scope) {
-          var _this = this;
-          this.setIdKey(scope);
-          return scope.$watch('idKey', function(newValue, oldValue) {
-            if (newValue !== oldValue && (newValue == null)) {
-              _this.idKey = newValue;
-              return _this.rebuildAll(scope, true, true);
-            }
-          });
-        };
-
-        PolylinesParentModel.prototype.createAllNew = function(scope, isArray) {
-          var _this = this;
-          if (isArray == null) {
-            isArray = false;
-          }
-          this.models = scope.models;
-          if (this.firstTime) {
-            this.watchModels(scope);
-            this.watchDestroy(scope);
-          }
-          return _async.each(scope.models, function(model) {
-            return _this.createChild(model, _this.gMap);
-          }, function() {
-            return _this.firstTime = false;
-          });
-        };
-
-        PolylinesParentModel.prototype.pieceMeal = function(scope, isArray) {
-          var _this = this;
-          if (isArray == null) {
-            isArray = true;
-          }
-          this.models = scope.models;
-          if ((scope != null) && (scope.models != null) && scope.models.length > 0 && this.plurals.length > 0) {
-            return this.figureOutState(this.idKey, scope, this.plurals, this.modelKeyComparison, function(state) {
-              var payload;
-              payload = state;
-              return _async.each(payload.removals, function(id) {
-                var child;
-                child = _this.plurals[id];
-                if (child != null) {
-                  child.destroy();
-                  return _this.plurals.remove(id);
+          MarkersParentModel.prototype.pieceMealMarkers = function (scope) {
+            var _this = this;
+            if (
+              this.scope.models != null &&
+              this.scope.models.length > 0 &&
+              this.scope.markerModels.length > 0
+            ) {
+              return this.figureOutState(
+                this.idKey,
+                scope,
+                this.scope.markerModels,
+                this.modelKeyComparison,
+                function (state) {
+                  var payload;
+                  payload = state;
+                  return _async.each(
+                    payload.removals,
+                    function (child) {
+                      if (child != null) {
+                        if (child.destroy != null) {
+                          child.destroy();
+                        }
+                        return _this.scope.markerModels.remove(child.id);
+                      }
+                    },
+                    function () {
+                      return _async.each(
+                        payload.adds,
+                        function (modelToAdd) {
+                          return _this.newChildMarker(modelToAdd, scope);
+                        },
+                        function () {
+                          if (
+                            payload.adds.length > 0 ||
+                            payload.removals.length > 0
+                          ) {
+                            _this.gMarkerManager.draw();
+                            return (scope.markerModels =
+                              _this.scope.markerModels);
+                          }
+                        }
+                      );
+                    }
+                  );
                 }
-              }, function() {
-                return _async.each(payload.adds, function(modelToAdd) {
-                  return _this.createChild(modelToAdd, _this.gMap);
-                }, function() {});
-              });
+              );
+            } else {
+              return this.reBuildMarkers(scope);
+            }
+          };
+
+          MarkersParentModel.prototype.newChildMarker = function (
+            model,
+            scope
+          ) {
+            var child;
+            if (model[this.idKey] == null) {
+              this.$log.error(
+                "Marker model has no id to assign a child to. This is required for performance. Please assign id, or redirect id to a different key."
+              );
+              return;
+            }
+            this.$log.info("child", child, "markers", this.scope.markerModels);
+            child = new MarkerChildModel(
+              model,
+              scope,
+              this.mapCtrl,
+              this.$timeout,
+              this.DEFAULTS,
+              this.doClick,
+              this.gMarkerManager,
+              this.idKey
+            );
+            this.scope.markerModels.put(model[this.idKey], child);
+            return child;
+          };
+
+          MarkersParentModel.prototype.onDestroy = function (scope) {
+            _.each(this.scope.markerModels.values(), function (model) {
+              if (model != null) {
+                return model.destroy();
+              }
             });
-          } else {
-            return this.rebuildAll(this.scope, true, true);
-          }
-        };
-
-        PolylinesParentModel.prototype.createChild = function(model, gMap) {
-          var child, childScope,
-            _this = this;
-          childScope = this.scope.$new(false);
-          this.setChildScope(childScope, model);
-          childScope.$watch('model', function(newValue, oldValue) {
-            if (newValue !== oldValue) {
-              return _this.setChildScope(childScope, newValue);
+            delete this.scope.markerModels;
+            this.scope.markerModels = new PropMap();
+            if (this.gMarkerManager != null) {
+              return this.gMarkerManager.clear();
             }
-          }, true);
-          childScope["static"] = this.scope["static"];
-          child = new PolylineChildModel(childScope, this.attrs, gMap, this.defaults, model);
-          if (model[this.idKey] == null) {
-            this.$log.error("Polyline model has no id to assign a child to. This is required for performance. Please assign id, or redirect id to a different key.");
-            return;
-          }
-          this.plurals.put(model[this.idKey], child);
-          return child;
-        };
+          };
 
-        PolylinesParentModel.prototype.setChildScope = function(childScope, model) {
-          var _this = this;
-          _.each(this.scopePropNames, function(name) {
-            var nameKey, newValue;
-            nameKey = name + 'Key';
-            newValue = _this[nameKey] === 'self' ? model : model[_this[nameKey]];
-            if (newValue !== childScope[name]) {
-              return childScope[name] = newValue;
+          MarkersParentModel.prototype.maybeExecMappedEvent = function (
+            cluster,
+            fnName
+          ) {
+            var pair, _ref;
+            if (
+              _.isFunction(
+                (_ref = this.scope.clusterEvents) != null
+                  ? _ref[fnName]
+                  : void 0
+              )
+            ) {
+              pair = this.mapClusterToMarkerModels(cluster);
+              if (this.origClusterEvents[fnName]) {
+                return this.origClusterEvents[fnName](
+                  pair.cluster,
+                  pair.mapped
+                );
+              }
             }
-          });
-          return childScope.model = model;
-        };
+          };
 
-        PolylinesParentModel.prototype.modelKeyComparison = function(model1, model2) {
-          return _.isEqual(this.evalModelHandle(model1, this.scope.path), this.evalModelHandle(model2, this.scope.path));
-        };
+          MarkersParentModel.prototype.mapClusterToMarkerModels = function (
+            cluster
+          ) {
+            var gMarkers,
+              mapped,
+              _this = this;
+            gMarkers = cluster.getMarkers();
+            mapped = gMarkers.map(function (g) {
+              return _this.scope.markerModels[g.key].model;
+            });
+            return {
+              cluster: cluster,
+              mapped: mapped,
+            };
+          };
 
-        return PolylinesParentModel;
-
-      })(ModelKey);
-    }
-  ]);
-
-}).call(this);
+          return MarkersParentModel;
+        })(IMarkerParentModel);
+        return MarkersParentModel;
+      },
+    ]);
+}.call(this));
 
 /*
 	Windows directive where many windows map to the models property
 */
 
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
-  angular.module("google-maps.directives.api.models.parent").factory("WindowsParentModel", [
-    "IWindowParentModel", "ModelsWatcher", "PropMap", "WindowChildModel", "Linked", function(IWindowParentModel, ModelsWatcher, PropMap, WindowChildModel, Linked) {
-      var WindowsParentModel;
-      WindowsParentModel = (function(_super) {
-        __extends(WindowsParentModel, _super);
+  angular
+    .module("google-maps.directives.api.models.parent")
+    .factory("PolylinesParentModel", [
+      "$timeout",
+      "Logger",
+      "ModelKey",
+      "ModelsWatcher",
+      "PropMap",
+      "PolylineChildModel",
+      function (
+        $timeout,
+        Logger,
+        ModelKey,
+        ModelsWatcher,
+        PropMap,
+        PolylineChildModel
+      ) {
+        var PolylinesParentModel;
+        return (PolylinesParentModel = (function (_super) {
+          __extends(PolylinesParentModel, _super);
 
-        WindowsParentModel.include(ModelsWatcher);
+          PolylinesParentModel.include(ModelsWatcher);
 
-        function WindowsParentModel(scope, element, attrs, ctrls, $timeout, $compile, $http, $templateCache, $interpolate) {
-          var self,
-            _this = this;
-          this.$interpolate = $interpolate;
-          this.interpolateContent = __bind(this.interpolateContent, this);
-          this.setChildScope = __bind(this.setChildScope, this);
-          this.createWindow = __bind(this.createWindow, this);
-          this.setContentKeys = __bind(this.setContentKeys, this);
-          this.pieceMealWindows = __bind(this.pieceMealWindows, this);
-          this.createAllNewWindows = __bind(this.createAllNewWindows, this);
-          this.watchIdKey = __bind(this.watchIdKey, this);
-          this.createChildScopesWindows = __bind(this.createChildScopesWindows, this);
-          this.watchOurScope = __bind(this.watchOurScope, this);
-          this.watchDestroy = __bind(this.watchDestroy, this);
-          this.rebuildAll = __bind(this.rebuildAll, this);
-          this.doINeedToWipe = __bind(this.doINeedToWipe, this);
-          this.watchModels = __bind(this.watchModels, this);
-          this.watch = __bind(this.watch, this);
-          WindowsParentModel.__super__.constructor.call(this, scope, element, attrs, ctrls, $timeout, $compile, $http, $templateCache);
-          self = this;
-          this.windows = new PropMap();
-          this.scopePropNames = ['show', 'coords', 'templateUrl', 'templateParameter', 'isIconVisibleOnClick', 'closeClick'];
-          _.each(this.scopePropNames, function(name) {
-            return _this[name + 'Key'] = void 0;
-          });
-          this.linked = new Linked(scope, element, attrs, ctrls);
-          this.models = void 0;
-          this.contentKeys = void 0;
-          this.isIconVisibleOnClick = void 0;
-          this.firstTime = true;
-          this.$log.info(self);
-          this.parentScope = void 0;
-          this.$timeout(function() {
-            _this.watchOurScope(scope);
-            _this.doRebuildAll = _this.scope.doRebuildAll != null ? _this.scope.doRebuildAll : false;
-            scope.$watch('doRebuildAll', function(newValue, oldValue) {
+          function PolylinesParentModel(scope, element, attrs, gMap, defaults) {
+            var self,
+              _this = this;
+            this.scope = scope;
+            this.element = element;
+            this.attrs = attrs;
+            this.gMap = gMap;
+            this.defaults = defaults;
+            this.modelKeyComparison = __bind(this.modelKeyComparison, this);
+            this.setChildScope = __bind(this.setChildScope, this);
+            this.createChild = __bind(this.createChild, this);
+            this.pieceMeal = __bind(this.pieceMeal, this);
+            this.createAllNew = __bind(this.createAllNew, this);
+            this.watchIdKey = __bind(this.watchIdKey, this);
+            this.createChildScopes = __bind(this.createChildScopes, this);
+            this.watchOurScope = __bind(this.watchOurScope, this);
+            this.watchDestroy = __bind(this.watchDestroy, this);
+            this.rebuildAll = __bind(this.rebuildAll, this);
+            this.doINeedToWipe = __bind(this.doINeedToWipe, this);
+            this.watchModels = __bind(this.watchModels, this);
+            this.watch = __bind(this.watch, this);
+            PolylinesParentModel.__super__.constructor.call(this, scope);
+            self = this;
+            this.$log = Logger;
+            this.plurals = new PropMap();
+            this.scopePropNames = [
+              "path",
+              "stroke",
+              "clickable",
+              "draggable",
+              "editable",
+              "geodesic",
+              "icons",
+              "visible",
+            ];
+            _.each(this.scopePropNames, function (name) {
+              return (_this[name + "Key"] = void 0);
+            });
+            this.models = void 0;
+            this.firstTime = true;
+            this.$log.info(this);
+            $timeout(function () {
+              _this.watchOurScope(scope);
+              return _this.createChildScopes();
+            });
+          }
+
+          PolylinesParentModel.prototype.watch = function (
+            scope,
+            name,
+            nameKey
+          ) {
+            var _this = this;
+            return scope.$watch(name, function (newValue, oldValue) {
               if (newValue !== oldValue) {
-                return _this.doRebuildAll = newValue;
+                _this[nameKey] =
+                  typeof newValue === "function" ? newValue() : newValue;
+                return _async.each(
+                  _.values(_this.plurals),
+                  function (model) {
+                    return (model.scope[name] =
+                      _this[nameKey] === "self"
+                        ? model
+                        : model[_this[nameKey]]);
+                  },
+                  function () {}
+                );
               }
             });
-            return _this.createChildScopesWindows();
-          }, 50);
-        }
+          };
 
-        WindowsParentModel.prototype.watch = function(scope, name, nameKey) {
-          var _this = this;
-          return scope.$watch(name, function(newValue, oldValue) {
-            if (newValue !== oldValue) {
-              _this[nameKey] = typeof newValue === 'function' ? newValue() : newValue;
-              return _async.each(_.values(_this.windows), function(model) {
-                return model.scope[name] = _this[nameKey] === 'self' ? model : model[_this[nameKey]];
-              }, function() {});
+          PolylinesParentModel.prototype.watchModels = function (scope) {
+            var _this = this;
+            return scope.$watch(
+              "models",
+              function (newValue, oldValue) {
+                if (!_.isEqual(newValue, oldValue)) {
+                  if (_this.doINeedToWipe(newValue)) {
+                    return _this.rebuildAll(scope, true, true);
+                  } else {
+                    return _this.createChildScopes(false);
+                  }
+                }
+              },
+              true
+            );
+          };
+
+          PolylinesParentModel.prototype.doINeedToWipe = function (newValue) {
+            var newValueIsEmpty;
+            newValueIsEmpty = newValue != null ? newValue.length === 0 : true;
+            return this.plurals.length > 0 && newValueIsEmpty;
+          };
+
+          PolylinesParentModel.prototype.rebuildAll = function (
+            scope,
+            doCreate,
+            doDelete
+          ) {
+            var _this = this;
+            return _async.each(
+              this.plurals.values(),
+              function (model) {
+                return model.destroy();
+              },
+              function () {
+                if (doDelete) {
+                  delete _this.plurals;
+                }
+                _this.plurals = new PropMap();
+                if (doCreate) {
+                  return _this.createChildScopes();
+                }
+              }
+            );
+          };
+
+          PolylinesParentModel.prototype.watchDestroy = function (scope) {
+            var _this = this;
+            return scope.$on("$destroy", function () {
+              return _this.rebuildAll(scope, false, true);
+            });
+          };
+
+          PolylinesParentModel.prototype.watchOurScope = function (scope) {
+            var _this = this;
+            return _.each(this.scopePropNames, function (name) {
+              var nameKey;
+              nameKey = name + "Key";
+              _this[nameKey] =
+                typeof scope[name] === "function" ? scope[name]() : scope[name];
+              return _this.watch(scope, name, nameKey);
+            });
+          };
+
+          PolylinesParentModel.prototype.createChildScopes = function (
+            isCreatingFromScratch
+          ) {
+            if (isCreatingFromScratch == null) {
+              isCreatingFromScratch = true;
             }
-          });
-        };
-
-        WindowsParentModel.prototype.watchModels = function(scope) {
-          var _this = this;
-          return scope.$watch('models', function(newValue, oldValue) {
-            if (!_.isEqual(newValue, oldValue)) {
-              if (_this.doRebuildAll || _this.doINeedToWipe(newValue)) {
-                return _this.rebuildAll(scope, true, true);
-              } else {
-                return _this.createChildScopesWindows(false);
+            if (angular.isUndefined(this.scope.models)) {
+              this.$log.error(
+                "No models to create polylines from! I Need direct models!"
+              );
+              return;
+            }
+            if (this.gMap != null) {
+              if (this.scope.models != null) {
+                this.watchIdKey(this.scope);
+                if (isCreatingFromScratch) {
+                  return this.createAllNew(this.scope, false);
+                } else {
+                  return this.pieceMeal(this.scope, false);
+                }
               }
             }
-          });
-        };
+          };
 
-        WindowsParentModel.prototype.doINeedToWipe = function(newValue) {
-          var newValueIsEmpty;
-          newValueIsEmpty = newValue != null ? newValue.length === 0 : true;
-          return this.windows.length > 0 && newValueIsEmpty;
-        };
+          PolylinesParentModel.prototype.watchIdKey = function (scope) {
+            var _this = this;
+            this.setIdKey(scope);
+            return scope.$watch("idKey", function (newValue, oldValue) {
+              if (newValue !== oldValue && newValue == null) {
+                _this.idKey = newValue;
+                return _this.rebuildAll(scope, true, true);
+              }
+            });
+          };
 
-        WindowsParentModel.prototype.rebuildAll = function(scope, doCreate, doDelete) {
-          var _this = this;
-          return _async.each(this.windows.values(), function(model) {
-            return model.destroy();
-          }, function() {
-            if (doDelete) {
-              delete _this.windows;
+          PolylinesParentModel.prototype.createAllNew = function (
+            scope,
+            isArray
+          ) {
+            var _this = this;
+            if (isArray == null) {
+              isArray = false;
             }
-            _this.windows = new PropMap();
-            if (doCreate) {
+            this.models = scope.models;
+            if (this.firstTime) {
+              this.watchModels(scope);
+              this.watchDestroy(scope);
+            }
+            return _async.each(
+              scope.models,
+              function (model) {
+                return _this.createChild(model, _this.gMap);
+              },
+              function () {
+                return (_this.firstTime = false);
+              }
+            );
+          };
+
+          PolylinesParentModel.prototype.pieceMeal = function (scope, isArray) {
+            var _this = this;
+            if (isArray == null) {
+              isArray = true;
+            }
+            this.models = scope.models;
+            if (
+              scope != null &&
+              scope.models != null &&
+              scope.models.length > 0 &&
+              this.plurals.length > 0
+            ) {
+              return this.figureOutState(
+                this.idKey,
+                scope,
+                this.plurals,
+                this.modelKeyComparison,
+                function (state) {
+                  var payload;
+                  payload = state;
+                  return _async.each(
+                    payload.removals,
+                    function (id) {
+                      var child;
+                      child = _this.plurals[id];
+                      if (child != null) {
+                        child.destroy();
+                        return _this.plurals.remove(id);
+                      }
+                    },
+                    function () {
+                      return _async.each(
+                        payload.adds,
+                        function (modelToAdd) {
+                          return _this.createChild(modelToAdd, _this.gMap);
+                        },
+                        function () {}
+                      );
+                    }
+                  );
+                }
+              );
+            } else {
+              return this.rebuildAll(this.scope, true, true);
+            }
+          };
+
+          PolylinesParentModel.prototype.createChild = function (model, gMap) {
+            var child,
+              childScope,
+              _this = this;
+            childScope = this.scope.$new(false);
+            this.setChildScope(childScope, model);
+            childScope.$watch(
+              "model",
+              function (newValue, oldValue) {
+                if (newValue !== oldValue) {
+                  return _this.setChildScope(childScope, newValue);
+                }
+              },
+              true
+            );
+            childScope["static"] = this.scope["static"];
+            child = new PolylineChildModel(
+              childScope,
+              this.attrs,
+              gMap,
+              this.defaults,
+              model
+            );
+            if (model[this.idKey] == null) {
+              this.$log.error(
+                "Polyline model has no id to assign a child to. This is required for performance. Please assign id, or redirect id to a different key."
+              );
+              return;
+            }
+            this.plurals.put(model[this.idKey], child);
+            return child;
+          };
+
+          PolylinesParentModel.prototype.setChildScope = function (
+            childScope,
+            model
+          ) {
+            var _this = this;
+            _.each(this.scopePropNames, function (name) {
+              var nameKey, newValue;
+              nameKey = name + "Key";
+              newValue =
+                _this[nameKey] === "self" ? model : model[_this[nameKey]];
+              if (newValue !== childScope[name]) {
+                return (childScope[name] = newValue);
+              }
+            });
+            return (childScope.model = model);
+          };
+
+          PolylinesParentModel.prototype.modelKeyComparison = function (
+            model1,
+            model2
+          ) {
+            return _.isEqual(
+              this.evalModelHandle(model1, this.scope.path),
+              this.evalModelHandle(model2, this.scope.path)
+            );
+          };
+
+          return PolylinesParentModel;
+        })(ModelKey));
+      },
+    ]);
+}.call(this));
+
+/*
+	Windows directive where many windows map to the models property
+*/
+
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
+    __hasProp = {}.hasOwnProperty,
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
+
+  angular
+    .module("google-maps.directives.api.models.parent")
+    .factory("WindowsParentModel", [
+      "IWindowParentModel",
+      "ModelsWatcher",
+      "PropMap",
+      "WindowChildModel",
+      "Linked",
+      function (
+        IWindowParentModel,
+        ModelsWatcher,
+        PropMap,
+        WindowChildModel,
+        Linked
+      ) {
+        var WindowsParentModel;
+        WindowsParentModel = (function (_super) {
+          __extends(WindowsParentModel, _super);
+
+          WindowsParentModel.include(ModelsWatcher);
+
+          function WindowsParentModel(
+            scope,
+            element,
+            attrs,
+            ctrls,
+            $timeout,
+            $compile,
+            $http,
+            $templateCache,
+            $interpolate
+          ) {
+            var self,
+              _this = this;
+            this.$interpolate = $interpolate;
+            this.interpolateContent = __bind(this.interpolateContent, this);
+            this.setChildScope = __bind(this.setChildScope, this);
+            this.createWindow = __bind(this.createWindow, this);
+            this.setContentKeys = __bind(this.setContentKeys, this);
+            this.pieceMealWindows = __bind(this.pieceMealWindows, this);
+            this.createAllNewWindows = __bind(this.createAllNewWindows, this);
+            this.watchIdKey = __bind(this.watchIdKey, this);
+            this.createChildScopesWindows = __bind(
+              this.createChildScopesWindows,
+              this
+            );
+            this.watchOurScope = __bind(this.watchOurScope, this);
+            this.watchDestroy = __bind(this.watchDestroy, this);
+            this.rebuildAll = __bind(this.rebuildAll, this);
+            this.doINeedToWipe = __bind(this.doINeedToWipe, this);
+            this.watchModels = __bind(this.watchModels, this);
+            this.watch = __bind(this.watch, this);
+            WindowsParentModel.__super__.constructor.call(
+              this,
+              scope,
+              element,
+              attrs,
+              ctrls,
+              $timeout,
+              $compile,
+              $http,
+              $templateCache
+            );
+            self = this;
+            this.windows = new PropMap();
+            this.scopePropNames = [
+              "show",
+              "coords",
+              "templateUrl",
+              "templateParameter",
+              "isIconVisibleOnClick",
+              "closeClick",
+            ];
+            _.each(this.scopePropNames, function (name) {
+              return (_this[name + "Key"] = void 0);
+            });
+            this.linked = new Linked(scope, element, attrs, ctrls);
+            this.models = void 0;
+            this.contentKeys = void 0;
+            this.isIconVisibleOnClick = void 0;
+            this.firstTime = true;
+            this.$log.info(self);
+            this.parentScope = void 0;
+            this.$timeout(function () {
+              _this.watchOurScope(scope);
+              _this.doRebuildAll =
+                _this.scope.doRebuildAll != null
+                  ? _this.scope.doRebuildAll
+                  : false;
+              scope.$watch("doRebuildAll", function (newValue, oldValue) {
+                if (newValue !== oldValue) {
+                  return (_this.doRebuildAll = newValue);
+                }
+              });
               return _this.createChildScopesWindows();
-            }
-          });
-        };
-
-        WindowsParentModel.prototype.watchDestroy = function(scope) {
-          var _this = this;
-          return scope.$on("$destroy", function() {
-            return _this.rebuildAll(scope, false, true);
-          });
-        };
-
-        WindowsParentModel.prototype.watchOurScope = function(scope) {
-          var _this = this;
-          return _.each(this.scopePropNames, function(name) {
-            var nameKey;
-            nameKey = name + 'Key';
-            _this[nameKey] = typeof scope[name] === 'function' ? scope[name]() : scope[name];
-            return _this.watch(scope, name, nameKey);
-          });
-        };
-
-        WindowsParentModel.prototype.createChildScopesWindows = function(isCreatingFromScratch) {
-          var markersScope, modelsNotDefined;
-          if (isCreatingFromScratch == null) {
-            isCreatingFromScratch = true;
+            }, 50);
           }
-          /*
+
+          WindowsParentModel.prototype.watch = function (scope, name, nameKey) {
+            var _this = this;
+            return scope.$watch(name, function (newValue, oldValue) {
+              if (newValue !== oldValue) {
+                _this[nameKey] =
+                  typeof newValue === "function" ? newValue() : newValue;
+                return _async.each(
+                  _.values(_this.windows),
+                  function (model) {
+                    return (model.scope[name] =
+                      _this[nameKey] === "self"
+                        ? model
+                        : model[_this[nameKey]]);
+                  },
+                  function () {}
+                );
+              }
+            });
+          };
+
+          WindowsParentModel.prototype.watchModels = function (scope) {
+            var _this = this;
+            return scope.$watch("models", function (newValue, oldValue) {
+              if (!_.isEqual(newValue, oldValue)) {
+                if (_this.doRebuildAll || _this.doINeedToWipe(newValue)) {
+                  return _this.rebuildAll(scope, true, true);
+                } else {
+                  return _this.createChildScopesWindows(false);
+                }
+              }
+            });
+          };
+
+          WindowsParentModel.prototype.doINeedToWipe = function (newValue) {
+            var newValueIsEmpty;
+            newValueIsEmpty = newValue != null ? newValue.length === 0 : true;
+            return this.windows.length > 0 && newValueIsEmpty;
+          };
+
+          WindowsParentModel.prototype.rebuildAll = function (
+            scope,
+            doCreate,
+            doDelete
+          ) {
+            var _this = this;
+            return _async.each(
+              this.windows.values(),
+              function (model) {
+                return model.destroy();
+              },
+              function () {
+                if (doDelete) {
+                  delete _this.windows;
+                }
+                _this.windows = new PropMap();
+                if (doCreate) {
+                  return _this.createChildScopesWindows();
+                }
+              }
+            );
+          };
+
+          WindowsParentModel.prototype.watchDestroy = function (scope) {
+            var _this = this;
+            return scope.$on("$destroy", function () {
+              return _this.rebuildAll(scope, false, true);
+            });
+          };
+
+          WindowsParentModel.prototype.watchOurScope = function (scope) {
+            var _this = this;
+            return _.each(this.scopePropNames, function (name) {
+              var nameKey;
+              nameKey = name + "Key";
+              _this[nameKey] =
+                typeof scope[name] === "function" ? scope[name]() : scope[name];
+              return _this.watch(scope, name, nameKey);
+            });
+          };
+
+          WindowsParentModel.prototype.createChildScopesWindows = function (
+            isCreatingFromScratch
+          ) {
+            var markersScope, modelsNotDefined;
+            if (isCreatingFromScratch == null) {
+              isCreatingFromScratch = true;
+            }
+            /*
           being that we cannot tell the difference in Key String vs. a normal value string (TemplateUrl)
           we will assume that all scope values are string expressions either pointing to a key (propName) or using
           'self' to point the model as container/object of interest.
@@ -3060,173 +4171,271 @@ Nicholas McCready - https://twitter.com/nmccready
           This may force redundant information into the model, but this appears to be the most flexible approach.
           */
 
-          this.isIconVisibleOnClick = true;
-          if (angular.isDefined(this.linked.attrs.isiconvisibleonclick)) {
-            this.isIconVisibleOnClick = this.linked.scope.isIconVisibleOnClick;
-          }
-          this.gMap = this.linked.ctrls[0].getMap();
-          if (this.linked.ctrls[1] != null) {
-            markersScope = this.linked.ctrls.length > 1 ? this.linked.ctrls[1].getMarkersScope() : void 0;
-          }
-          modelsNotDefined = angular.isUndefined(this.linked.scope.models);
-          if (modelsNotDefined && (markersScope === void 0 || (markersScope.markerModels === void 0 || markersScope.models === void 0))) {
-            this.$log.error("No models to create windows from! Need direct models or models derrived from markers!");
-            return;
-          }
-          if (this.gMap != null) {
-            if (this.linked.scope.models != null) {
-              this.watchIdKey(this.linked.scope);
-              if (isCreatingFromScratch) {
-                return this.createAllNewWindows(this.linked.scope, false);
-              } else {
-                return this.pieceMealWindows(this.linked.scope, false);
-              }
-            } else {
-              this.parentScope = markersScope;
-              this.watchIdKey(this.parentScope);
-              if (isCreatingFromScratch) {
-                return this.createAllNewWindows(markersScope, true, 'markerModels', false);
-              } else {
-                return this.pieceMealWindows(markersScope, true, 'markerModels', false);
-              }
+            this.isIconVisibleOnClick = true;
+            if (angular.isDefined(this.linked.attrs.isiconvisibleonclick)) {
+              this.isIconVisibleOnClick =
+                this.linked.scope.isIconVisibleOnClick;
             }
-          }
-        };
-
-        WindowsParentModel.prototype.watchIdKey = function(scope) {
-          var _this = this;
-          this.setIdKey(scope);
-          return scope.$watch('idKey', function(newValue, oldValue) {
-            if (newValue !== oldValue && (newValue == null)) {
-              _this.idKey = newValue;
-              return _this.rebuildAll(scope, true, true);
+            this.gMap = this.linked.ctrls[0].getMap();
+            if (this.linked.ctrls[1] != null) {
+              markersScope =
+                this.linked.ctrls.length > 1
+                  ? this.linked.ctrls[1].getMarkersScope()
+                  : void 0;
             }
-          });
-        };
-
-        WindowsParentModel.prototype.createAllNewWindows = function(scope, hasGMarker, modelsPropToIterate, isArray) {
-          var _this = this;
-          if (modelsPropToIterate == null) {
-            modelsPropToIterate = 'models';
-          }
-          if (isArray == null) {
-            isArray = false;
-          }
-          this.models = scope.models;
-          if (this.firstTime) {
-            this.watchModels(scope);
-            this.watchDestroy(scope);
-          }
-          this.setContentKeys(scope.models);
-          return _async.each(scope.models, function(model) {
-            var gMarker;
-            gMarker = hasGMarker ? scope[modelsPropToIterate][[model[_this.idKey]]].gMarker : void 0;
-            return _this.createWindow(model, gMarker, _this.gMap);
-          }, function() {
-            return _this.firstTime = false;
-          });
-        };
-
-        WindowsParentModel.prototype.pieceMealWindows = function(scope, hasGMarker, modelsPropToIterate, isArray) {
-          var _this = this;
-          if (modelsPropToIterate == null) {
-            modelsPropToIterate = 'models';
-          }
-          if (isArray == null) {
-            isArray = true;
-          }
-          this.models = scope.models;
-          if ((scope != null) && (scope.models != null) && scope.models.length > 0 && this.windows.length > 0) {
-            return this.figureOutState(this.idKey, scope, this.windows, this.modelKeyComparison, function(state) {
-              var payload;
-              payload = state;
-              return _async.each(payload.removals, function(child) {
-                if (child != null) {
-                  if (child.destroy != null) {
-                    child.destroy();
-                  }
-                  return _this.windows.remove(child.id);
+            modelsNotDefined = angular.isUndefined(this.linked.scope.models);
+            if (
+              modelsNotDefined &&
+              (markersScope === void 0 ||
+                markersScope.markerModels === void 0 ||
+                markersScope.models === void 0)
+            ) {
+              this.$log.error(
+                "No models to create windows from! Need direct models or models derrived from markers!"
+              );
+              return;
+            }
+            if (this.gMap != null) {
+              if (this.linked.scope.models != null) {
+                this.watchIdKey(this.linked.scope);
+                if (isCreatingFromScratch) {
+                  return this.createAllNewWindows(this.linked.scope, false);
+                } else {
+                  return this.pieceMealWindows(this.linked.scope, false);
                 }
-              }, function() {
-                return _async.each(payload.adds, function(modelToAdd) {
-                  var gMarker;
-                  gMarker = scope[modelsPropToIterate][modelToAdd[_this.idKey]].gMarker;
-                  return _this.createWindow(modelToAdd, gMarker, _this.gMap);
-                }, function() {});
-              });
-            });
-          } else {
-            return this.rebuildAll(this.scope, true, true);
-          }
-        };
-
-        WindowsParentModel.prototype.setContentKeys = function(models) {
-          if (models.length > 0) {
-            return this.contentKeys = Object.keys(models[0]);
-          }
-        };
-
-        WindowsParentModel.prototype.createWindow = function(model, gMarker, gMap) {
-          var child, childScope, fakeElement, opts,
-            _this = this;
-          childScope = this.linked.scope.$new(false);
-          this.setChildScope(childScope, model);
-          childScope.$watch('model', function(newValue, oldValue) {
-            if (newValue !== oldValue) {
-              return _this.setChildScope(childScope, newValue);
-            }
-          }, true);
-          fakeElement = {
-            html: function() {
-              return _this.interpolateContent(_this.linked.element.html(), model);
+              } else {
+                this.parentScope = markersScope;
+                this.watchIdKey(this.parentScope);
+                if (isCreatingFromScratch) {
+                  return this.createAllNewWindows(
+                    markersScope,
+                    true,
+                    "markerModels",
+                    false
+                  );
+                } else {
+                  return this.pieceMealWindows(
+                    markersScope,
+                    true,
+                    "markerModels",
+                    false
+                  );
+                }
+              }
             }
           };
-          opts = this.createWindowOptions(gMarker, childScope, fakeElement.html(), this.DEFAULTS);
-          child = new WindowChildModel(model, childScope, opts, this.isIconVisibleOnClick, gMap, gMarker, fakeElement, true, true);
-          if (model[this.idKey] == null) {
-            this.$log.error("Window model has no id to assign a child to. This is required for performance. Please assign id, or redirect id to a different key.");
-            return;
-          }
-          this.windows.put(model[this.idKey], child);
-          return child;
-        };
 
-        WindowsParentModel.prototype.setChildScope = function(childScope, model) {
-          var _this = this;
-          _.each(this.scopePropNames, function(name) {
-            var nameKey, newValue;
-            nameKey = name + 'Key';
-            newValue = _this[nameKey] === 'self' ? model : model[_this[nameKey]];
-            if (newValue !== childScope[name]) {
-              return childScope[name] = newValue;
+          WindowsParentModel.prototype.watchIdKey = function (scope) {
+            var _this = this;
+            this.setIdKey(scope);
+            return scope.$watch("idKey", function (newValue, oldValue) {
+              if (newValue !== oldValue && newValue == null) {
+                _this.idKey = newValue;
+                return _this.rebuildAll(scope, true, true);
+              }
+            });
+          };
+
+          WindowsParentModel.prototype.createAllNewWindows = function (
+            scope,
+            hasGMarker,
+            modelsPropToIterate,
+            isArray
+          ) {
+            var _this = this;
+            if (modelsPropToIterate == null) {
+              modelsPropToIterate = "models";
             }
-          });
-          return childScope.model = model;
-        };
+            if (isArray == null) {
+              isArray = false;
+            }
+            this.models = scope.models;
+            if (this.firstTime) {
+              this.watchModels(scope);
+              this.watchDestroy(scope);
+            }
+            this.setContentKeys(scope.models);
+            return _async.each(
+              scope.models,
+              function (model) {
+                var gMarker;
+                gMarker = hasGMarker
+                  ? scope[modelsPropToIterate][[model[_this.idKey]]].gMarker
+                  : void 0;
+                return _this.createWindow(model, gMarker, _this.gMap);
+              },
+              function () {
+                return (_this.firstTime = false);
+              }
+            );
+          };
 
-        WindowsParentModel.prototype.interpolateContent = function(content, model) {
-          var exp, interpModel, key, _i, _len, _ref;
-          if (this.contentKeys === void 0 || this.contentKeys.length === 0) {
-            return;
-          }
-          exp = this.$interpolate(content);
-          interpModel = {};
-          _ref = this.contentKeys;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            key = _ref[_i];
-            interpModel[key] = model[key];
-          }
-          return exp(interpModel);
-        };
+          WindowsParentModel.prototype.pieceMealWindows = function (
+            scope,
+            hasGMarker,
+            modelsPropToIterate,
+            isArray
+          ) {
+            var _this = this;
+            if (modelsPropToIterate == null) {
+              modelsPropToIterate = "models";
+            }
+            if (isArray == null) {
+              isArray = true;
+            }
+            this.models = scope.models;
+            if (
+              scope != null &&
+              scope.models != null &&
+              scope.models.length > 0 &&
+              this.windows.length > 0
+            ) {
+              return this.figureOutState(
+                this.idKey,
+                scope,
+                this.windows,
+                this.modelKeyComparison,
+                function (state) {
+                  var payload;
+                  payload = state;
+                  return _async.each(
+                    payload.removals,
+                    function (child) {
+                      if (child != null) {
+                        if (child.destroy != null) {
+                          child.destroy();
+                        }
+                        return _this.windows.remove(child.id);
+                      }
+                    },
+                    function () {
+                      return _async.each(
+                        payload.adds,
+                        function (modelToAdd) {
+                          var gMarker;
+                          gMarker =
+                            scope[modelsPropToIterate][modelToAdd[_this.idKey]]
+                              .gMarker;
+                          return _this.createWindow(
+                            modelToAdd,
+                            gMarker,
+                            _this.gMap
+                          );
+                        },
+                        function () {}
+                      );
+                    }
+                  );
+                }
+              );
+            } else {
+              return this.rebuildAll(this.scope, true, true);
+            }
+          };
 
+          WindowsParentModel.prototype.setContentKeys = function (models) {
+            if (models.length > 0) {
+              return (this.contentKeys = Object.keys(models[0]));
+            }
+          };
+
+          WindowsParentModel.prototype.createWindow = function (
+            model,
+            gMarker,
+            gMap
+          ) {
+            var child,
+              childScope,
+              fakeElement,
+              opts,
+              _this = this;
+            childScope = this.linked.scope.$new(false);
+            this.setChildScope(childScope, model);
+            childScope.$watch(
+              "model",
+              function (newValue, oldValue) {
+                if (newValue !== oldValue) {
+                  return _this.setChildScope(childScope, newValue);
+                }
+              },
+              true
+            );
+            fakeElement = {
+              html: function () {
+                return _this.interpolateContent(
+                  _this.linked.element.html(),
+                  model
+                );
+              },
+            };
+            opts = this.createWindowOptions(
+              gMarker,
+              childScope,
+              fakeElement.html(),
+              this.DEFAULTS
+            );
+            child = new WindowChildModel(
+              model,
+              childScope,
+              opts,
+              this.isIconVisibleOnClick,
+              gMap,
+              gMarker,
+              fakeElement,
+              true,
+              true
+            );
+            if (model[this.idKey] == null) {
+              this.$log.error(
+                "Window model has no id to assign a child to. This is required for performance. Please assign id, or redirect id to a different key."
+              );
+              return;
+            }
+            this.windows.put(model[this.idKey], child);
+            return child;
+          };
+
+          WindowsParentModel.prototype.setChildScope = function (
+            childScope,
+            model
+          ) {
+            var _this = this;
+            _.each(this.scopePropNames, function (name) {
+              var nameKey, newValue;
+              nameKey = name + "Key";
+              newValue =
+                _this[nameKey] === "self" ? model : model[_this[nameKey]];
+              if (newValue !== childScope[name]) {
+                return (childScope[name] = newValue);
+              }
+            });
+            return (childScope.model = model);
+          };
+
+          WindowsParentModel.prototype.interpolateContent = function (
+            content,
+            model
+          ) {
+            var exp, interpModel, key, _i, _len, _ref;
+            if (this.contentKeys === void 0 || this.contentKeys.length === 0) {
+              return;
+            }
+            exp = this.$interpolate(content);
+            interpModel = {};
+            _ref = this.contentKeys;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              key = _ref[_i];
+              interpModel[key] = model[key];
+            }
+            return exp(interpModel);
+          };
+
+          return WindowsParentModel;
+        })(IWindowParentModel);
         return WindowsParentModel;
-
-      })(IWindowParentModel);
-      return WindowsParentModel;
-    }
-  ]);
-
-}).call(this);
+      },
+    ]);
+}.call(this));
 
 /*
 	- interface for all labels to derrive from
@@ -3237,49 +4446,63 @@ Nicholas McCready - https://twitter.com/nmccready
 		- implementation needed on watches
 */
 
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
   angular.module("google-maps.directives.api").factory("ILabel", [
-    "BaseObject", "Logger", function(BaseObject, Logger) {
+    "BaseObject",
+    "Logger",
+    function (BaseObject, Logger) {
       var ILabel;
-      return ILabel = (function(_super) {
+      return (ILabel = (function (_super) {
         __extends(ILabel, _super);
 
         function ILabel($timeout) {
           this.link = __bind(this.link, this);
           var self;
           self = this;
-          this.restrict = 'ECMA';
+          this.restrict = "ECMA";
           this.replace = true;
           this.template = void 0;
           this.require = void 0;
           this.transclude = true;
           this.priority = -100;
           this.scope = {
-            labelContent: '=content',
-            labelAnchor: '@anchor',
-            labelClass: '@class',
-            labelStyle: '=style'
+            labelContent: "=content",
+            labelAnchor: "@anchor",
+            labelClass: "@class",
+            labelStyle: "=style",
           };
           this.$log = Logger;
           this.$timeout = $timeout;
         }
 
-        ILabel.prototype.link = function(scope, element, attrs, ctrl) {
+        ILabel.prototype.link = function (scope, element, attrs, ctrl) {
           throw new Exception("Not Implemented!!");
         };
 
         return ILabel;
-
-      })(BaseObject);
-    }
+      })(BaseObject));
+    },
   ]);
-
-}).call(this);
+}.call(this));
 
 /*
 	- interface for all markers to derrive from
@@ -3290,16 +4513,32 @@ Nicholas McCready - https://twitter.com/nmccready
 		- implementation needed on watches
 */
 
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
   angular.module("google-maps.directives.api").factory("IMarker", [
-    "Logger", "BaseObject", function(Logger, BaseObject) {
+    "Logger",
+    "BaseObject",
+    function (Logger, BaseObject) {
       var IMarker;
-      return IMarker = (function(_super) {
+      return (IMarker = (function (_super) {
         __extends(IMarker, _super);
 
         function IMarker($timeout) {
@@ -3308,47 +4547,61 @@ Nicholas McCready - https://twitter.com/nmccready
           self = this;
           this.$log = Logger;
           this.$timeout = $timeout;
-          this.restrict = 'ECMA';
-          this.require = '^googleMap';
+          this.restrict = "ECMA";
+          this.require = "^googleMap";
           this.priority = -1;
           this.transclude = true;
           this.replace = true;
           this.scope = {
-            coords: '=coords',
-            icon: '=icon',
-            click: '&click',
-            options: '=options',
-            events: '=events',
-            fit: '=fit'
+            coords: "=coords",
+            icon: "=icon",
+            click: "&click",
+            options: "=options",
+            events: "=events",
+            fit: "=fit",
           };
         }
 
         IMarker.prototype.controller = [
-          '$scope', '$element', function($scope, $element) {
+          "$scope",
+          "$element",
+          function ($scope, $element) {
             throw new Exception("Not Implemented!!");
-          }
+          },
         ];
 
-        IMarker.prototype.link = function(scope, element, attrs, ctrl) {
+        IMarker.prototype.link = function (scope, element, attrs, ctrl) {
           throw new Exception("Not implemented!!");
         };
 
         return IMarker;
-
-      })(BaseObject);
-    }
+      })(BaseObject));
+    },
   ]);
+}.call(this));
 
-}).call(this);
-
-(function() {
+(function () {
   var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
   angular.module("google-maps.directives.api").factory("IPolyline", [
-    "GmapUtil", "BaseObject", "Logger", function(GmapUtil, BaseObject, Logger) {
+    "GmapUtil",
+    "BaseObject",
+    "Logger",
+    function (GmapUtil, BaseObject, Logger) {
       var IPolyline;
-      return IPolyline = (function(_super) {
+      return (IPolyline = (function (_super) {
         __extends(IPolyline, _super);
 
         IPolyline.include(GmapUtil);
@@ -3373,8 +4626,8 @@ Nicholas McCready - https://twitter.com/nmccready
           geodesic: "=",
           icons: "=",
           visible: "=",
-          "static": "=",
-          fit: "="
+          static: "=",
+          fit: "=",
         };
 
         IPolyline.prototype.DEFAULTS = {};
@@ -3382,27 +4635,42 @@ Nicholas McCready - https://twitter.com/nmccready
         IPolyline.prototype.$log = Logger;
 
         return IPolyline;
-
-      })(BaseObject);
-    }
+      })(BaseObject));
+    },
   ]);
-
-}).call(this);
+}.call(this));
 
 /*
 	- interface directive for all window(s) to derrive from
 */
 
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
   angular.module("google-maps.directives.api").factory("IWindow", [
-    "BaseObject", "ChildEvents", "Logger", function(BaseObject, ChildEvents, Logger) {
+    "BaseObject",
+    "ChildEvents",
+    "Logger",
+    function (BaseObject, ChildEvents, Logger) {
       var IWindow;
-      return IWindow = (function(_super) {
+      return (IWindow = (function (_super) {
         __extends(IWindow, _super);
 
         IWindow.include(ChildEvents);
@@ -3415,50 +4683,67 @@ Nicholas McCready - https://twitter.com/nmccready
           this.$templateCache = $templateCache;
           this.link = __bind(this.link, this);
           self = this;
-          this.restrict = 'ECMA';
+          this.restrict = "ECMA";
           this.template = void 0;
           this.transclude = true;
           this.priority = -100;
           this.require = void 0;
           this.replace = true;
           this.scope = {
-            coords: '=coords',
-            show: '=show',
-            templateUrl: '=templateurl',
-            templateParameter: '=templateparameter',
-            isIconVisibleOnClick: '=isiconvisibleonclick',
-            closeClick: '&closeclick',
-            options: '=options'
+            coords: "=coords",
+            show: "=show",
+            templateUrl: "=templateurl",
+            templateParameter: "=templateparameter",
+            isIconVisibleOnClick: "=isiconvisibleonclick",
+            closeClick: "&closeclick",
+            options: "=options",
           };
           this.$log = Logger;
         }
 
-        IWindow.prototype.link = function(scope, element, attrs, ctrls) {
+        IWindow.prototype.link = function (scope, element, attrs, ctrls) {
           throw new Exception("Not Implemented!!");
         };
 
         return IWindow;
-
-      })(BaseObject);
-    }
+      })(BaseObject));
+    },
   ]);
+}.call(this));
 
-}).call(this);
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
   angular.module("google-maps.directives.api").factory("Map", [
-    "$timeout", "Logger", "GmapUtil", "BaseObject", function($timeout, Logger, GmapUtil, BaseObject) {
+    "$timeout",
+    "Logger",
+    "GmapUtil",
+    "BaseObject",
+    function ($timeout, Logger, GmapUtil, BaseObject) {
       "use strict";
       var $log, DEFAULTS, Map;
       $log = Logger;
       DEFAULTS = {
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
       };
-      return Map = (function(_super) {
+      return (Map = (function (_super) {
         __extends(Map, _super);
 
         Map.include(GmapUtil);
@@ -3475,7 +4760,8 @@ Nicholas McCready - https://twitter.com/nmccready
 
         Map.prototype.replace = false;
 
-        Map.prototype.template = "<div class=\"angular-google-map\"><div class=\"angular-google-map-container\"></div><div ng-transclude style=\"display: none\"></div></div>";
+        Map.prototype.template =
+          '<div class="angular-google-map"><div class="angular-google-map-container"></div><div ng-transclude style="display: none"></div></div>';
 
         Map.prototype.scope = {
           center: "=center",
@@ -3486,17 +4772,18 @@ Nicholas McCready - https://twitter.com/nmccready
           options: "=options",
           events: "=events",
           styles: "=styles",
-          bounds: "=bounds"
+          bounds: "=bounds",
         };
 
         Map.prototype.controller = [
-          "$scope", function($scope) {
+          "$scope",
+          function ($scope) {
             return {
-              getMap: function() {
+              getMap: function () {
                 return $scope.map;
-              }
+              },
             };
-          }
+          },
         ];
 
         /*
@@ -3505,12 +4792,20 @@ Nicholas McCready - https://twitter.com/nmccready
         @param attrs
         */
 
-
-        Map.prototype.link = function(scope, element, attrs) {
-          var dragging, el, eventName, getEventHandler, opts, settingCenterFromScope, type, _m,
+        Map.prototype.link = function (scope, element, attrs) {
+          var dragging,
+            el,
+            eventName,
+            getEventHandler,
+            opts,
+            settingCenterFromScope,
+            type,
+            _m,
             _this = this;
           if (!this.validateCoords(scope.center)) {
-            $log.error("angular-google-maps: could not find a valid center property");
+            $log.error(
+              "angular-google-maps: could not find a valid center property"
+            );
             return;
           }
           if (!angular.isDefined(scope.zoom)) {
@@ -3520,7 +4815,7 @@ Nicholas McCready - https://twitter.com/nmccready
           el = angular.element(element);
           el.addClass("angular-google-map");
           opts = {
-            options: {}
+            options: {},
           };
           if (attrs.options) {
             opts.options = scope.options;
@@ -3533,130 +4828,157 @@ Nicholas McCready - https://twitter.com/nmccready
             if (google.maps.MapTypeId.hasOwnProperty(type)) {
               opts.mapTypeId = google.maps.MapTypeId[attrs.type.toUpperCase()];
             } else {
-              $log.error("angular-google-maps: invalid map type \"" + attrs.type + "\"");
+              $log.error(
+                'angular-google-maps: invalid map type "' + attrs.type + '"'
+              );
             }
           }
-          _m = new google.maps.Map(el.find("div")[1], angular.extend({}, DEFAULTS, opts, {
-            center: this.getCoords(scope.center),
-            draggable: this.isTrue(attrs.draggable),
-            zoom: scope.zoom,
-            bounds: scope.bounds
-          }));
+          _m = new google.maps.Map(
+            el.find("div")[1],
+            angular.extend({}, DEFAULTS, opts, {
+              center: this.getCoords(scope.center),
+              draggable: this.isTrue(attrs.draggable),
+              zoom: scope.zoom,
+              bounds: scope.bounds,
+            })
+          );
           dragging = false;
-          google.maps.event.addListener(_m, "dragstart", function() {
+          google.maps.event.addListener(_m, "dragstart", function () {
             dragging = true;
-            return _.defer(function() {
-              return scope.$apply(function(s) {
+            return _.defer(function () {
+              return scope.$apply(function (s) {
                 if (s.dragging != null) {
-                  return s.dragging = dragging;
+                  return (s.dragging = dragging);
                 }
               });
             });
           });
-          google.maps.event.addListener(_m, "dragend", function() {
+          google.maps.event.addListener(_m, "dragend", function () {
             dragging = false;
-            return _.defer(function() {
-              return scope.$apply(function(s) {
+            return _.defer(function () {
+              return scope.$apply(function (s) {
                 if (s.dragging != null) {
-                  return s.dragging = dragging;
+                  return (s.dragging = dragging);
                 }
               });
             });
           });
-          google.maps.event.addListener(_m, "drag", function() {
+          google.maps.event.addListener(_m, "drag", function () {
             var c;
             c = _m.center;
-            return _.defer(function() {
-              return scope.$apply(function(s) {
+            return _.defer(function () {
+              return scope.$apply(function (s) {
                 if (angular.isDefined(s.center.type)) {
                   s.center.coordinates[1] = c.lat();
-                  return s.center.coordinates[0] = c.lng();
+                  return (s.center.coordinates[0] = c.lng());
                 } else {
                   s.center.latitude = c.lat();
-                  return s.center.longitude = c.lng();
+                  return (s.center.longitude = c.lng());
                 }
               });
             });
           });
-          google.maps.event.addListener(_m, "zoom_changed", function() {
+          google.maps.event.addListener(_m, "zoom_changed", function () {
             if (scope.zoom !== _m.zoom) {
-              return _.defer(function() {
-                return scope.$apply(function(s) {
-                  return s.zoom = _m.zoom;
+              return _.defer(function () {
+                return scope.$apply(function (s) {
+                  return (s.zoom = _m.zoom);
                 });
               });
             }
           });
           settingCenterFromScope = false;
-          google.maps.event.addListener(_m, "center_changed", function() {
+          google.maps.event.addListener(_m, "center_changed", function () {
             var c;
             c = _m.center;
             if (settingCenterFromScope) {
               return;
             }
-            return _.defer(function() {
-              return scope.$apply(function(s) {
+            return _.defer(function () {
+              return scope.$apply(function (s) {
                 if (!_m.dragging) {
                   if (angular.isDefined(s.center.type)) {
                     if (s.center.coordinates[1] !== c.lat()) {
                       s.center.coordinates[1] = c.lat();
                     }
                     if (s.center.coordinates[0] !== c.lng()) {
-                      return s.center.coordinates[0] = c.lng();
+                      return (s.center.coordinates[0] = c.lng());
                     }
                   } else {
                     if (s.center.latitude !== c.lat()) {
                       s.center.latitude = c.lat();
                     }
                     if (s.center.longitude !== c.lng()) {
-                      return s.center.longitude = c.lng();
+                      return (s.center.longitude = c.lng());
                     }
                   }
                 }
               });
             });
           });
-          google.maps.event.addListener(_m, "idle", function() {
+          google.maps.event.addListener(_m, "idle", function () {
             var b, ne, sw;
             b = _m.getBounds();
             ne = b.getNorthEast();
             sw = b.getSouthWest();
-            return _.defer(function() {
-              return scope.$apply(function(s) {
-                if (s.bounds !== null && s.bounds !== undefined && s.bounds !== void 0) {
+            return _.defer(function () {
+              return scope.$apply(function (s) {
+                if (
+                  s.bounds !== null &&
+                  s.bounds !== undefined &&
+                  s.bounds !== void 0
+                ) {
                   s.bounds.northeast = {
                     latitude: ne.lat(),
-                    longitude: ne.lng()
+                    longitude: ne.lng(),
                   };
-                  return s.bounds.southwest = {
+                  return (s.bounds.southwest = {
                     latitude: sw.lat(),
-                    longitude: sw.lng()
-                  };
+                    longitude: sw.lng(),
+                  });
                 }
               });
             });
           });
-          if (angular.isDefined(scope.events) && scope.events !== null && angular.isObject(scope.events)) {
-            getEventHandler = function(eventName) {
-              return function() {
-                return scope.events[eventName].apply(scope, [_m, eventName, arguments]);
+          if (
+            angular.isDefined(scope.events) &&
+            scope.events !== null &&
+            angular.isObject(scope.events)
+          ) {
+            getEventHandler = function (eventName) {
+              return function () {
+                return scope.events[eventName].apply(scope, [
+                  _m,
+                  eventName,
+                  arguments,
+                ]);
               };
             };
             for (eventName in scope.events) {
-              if (scope.events.hasOwnProperty(eventName) && angular.isFunction(scope.events[eventName])) {
-                google.maps.event.addListener(_m, eventName, getEventHandler(eventName));
+              if (
+                scope.events.hasOwnProperty(eventName) &&
+                angular.isFunction(scope.events[eventName])
+              ) {
+                google.maps.event.addListener(
+                  _m,
+                  eventName,
+                  getEventHandler(eventName)
+                );
               }
             }
           }
           scope.map = _m;
-          if ((attrs.control != null) && (scope.control != null)) {
-            scope.control.refresh = function(maybeCoords) {
+          if (attrs.control != null && scope.control != null) {
+            scope.control.refresh = function (maybeCoords) {
               var coords;
               if (_m == null) {
                 return;
               }
               google.maps.event.trigger(_m, "resize");
-              if (((maybeCoords != null ? maybeCoords.latitude : void 0) != null) && ((maybeCoords != null ? maybeCoords.latitude : void 0) != null)) {
+              if (
+                (maybeCoords != null ? maybeCoords.latitude : void 0) != null &&
+                (maybeCoords != null ? maybeCoords.latitude : void 0) != null
+              ) {
                 coords = _this.getCoords(maybeCoords);
                 if (_this.isTrue(attrs.pan)) {
                   return _m.panTo(coords);
@@ -3669,86 +4991,132 @@ Nicholas McCready - https://twitter.com/nmccready
             I am sure you all will love this. You want the instance here you go.. BOOM!
             */
 
-            scope.control.getGMap = function() {
+            scope.control.getGMap = function () {
               return _m;
             };
           }
-          scope.$watch("center", (function(newValue, oldValue) {
-            var coords;
-            coords = _this.getCoords(newValue);
-            if (coords.lat() === _m.center.lat() && coords.lng() === _m.center.lng()) {
-              return;
-            }
-            settingCenterFromScope = true;
-            if (!dragging) {
-              if (!_this.validateCoords(newValue)) {
-                $log.error("Invalid center for newValue: " + (JSON.stringify(newValue)));
+          scope.$watch(
+            "center",
+            function (newValue, oldValue) {
+              var coords;
+              coords = _this.getCoords(newValue);
+              if (
+                coords.lat() === _m.center.lat() &&
+                coords.lng() === _m.center.lng()
+              ) {
+                return;
               }
-              if (_this.isTrue(attrs.pan) && scope.zoom === _m.zoom) {
-                _m.panTo(coords);
-              } else {
-                _m.setCenter(coords);
+              settingCenterFromScope = true;
+              if (!dragging) {
+                if (!_this.validateCoords(newValue)) {
+                  $log.error(
+                    "Invalid center for newValue: " + JSON.stringify(newValue)
+                  );
+                }
+                if (_this.isTrue(attrs.pan) && scope.zoom === _m.zoom) {
+                  _m.panTo(coords);
+                } else {
+                  _m.setCenter(coords);
+                }
               }
-            }
-            return settingCenterFromScope = false;
-          }), true);
-          scope.$watch("zoom", function(newValue, oldValue) {
+              return (settingCenterFromScope = false);
+            },
+            true
+          );
+          scope.$watch("zoom", function (newValue, oldValue) {
             if (newValue === _m.zoom) {
               return;
             }
-            return _.defer(function() {
+            return _.defer(function () {
               return _m.setZoom(newValue);
             });
           });
-          scope.$watch("bounds", function(newValue, oldValue) {
+          scope.$watch("bounds", function (newValue, oldValue) {
             var bounds, ne, sw;
             if (newValue === oldValue) {
               return;
             }
-            if ((newValue.northeast.latitude == null) || (newValue.northeast.longitude == null) || (newValue.southwest.latitude == null) || (newValue.southwest.longitude == null)) {
-              $log.error("Invalid map bounds for new value: " + (JSON.stringify(newValue)));
+            if (
+              newValue.northeast.latitude == null ||
+              newValue.northeast.longitude == null ||
+              newValue.southwest.latitude == null ||
+              newValue.southwest.longitude == null
+            ) {
+              $log.error(
+                "Invalid map bounds for new value: " + JSON.stringify(newValue)
+              );
               return;
             }
-            ne = new google.maps.LatLng(newValue.northeast.latitude, newValue.northeast.longitude);
-            sw = new google.maps.LatLng(newValue.southwest.latitude, newValue.southwest.longitude);
+            ne = new google.maps.LatLng(
+              newValue.northeast.latitude,
+              newValue.northeast.longitude
+            );
+            sw = new google.maps.LatLng(
+              newValue.southwest.latitude,
+              newValue.southwest.longitude
+            );
             bounds = new google.maps.LatLngBounds(sw, ne);
             return _m.fitBounds(bounds);
           });
-          scope.$watch("options", function(newValue, oldValue) {
-            if (!_.isEqual(newValue, oldValue)) {
-              opts.options = newValue;
-              if (_m != null) {
-                return _m.setOptions(opts);
+          scope.$watch(
+            "options",
+            function (newValue, oldValue) {
+              if (!_.isEqual(newValue, oldValue)) {
+                opts.options = newValue;
+                if (_m != null) {
+                  return _m.setOptions(opts);
+                }
               }
-            }
-          }, true);
-          return scope.$watch("styles", function(newValue, oldValue) {
-            if (!_.isEqual(newValue, oldValue)) {
-              opts.styles = newValue;
-              if (_m != null) {
-                return _m.setOptions(opts);
+            },
+            true
+          );
+          return scope.$watch(
+            "styles",
+            function (newValue, oldValue) {
+              if (!_.isEqual(newValue, oldValue)) {
+                opts.styles = newValue;
+                if (_m != null) {
+                  return _m.setOptions(opts);
+                }
               }
-            }
-          }, true);
+            },
+            true
+          );
         };
 
         return Map;
-
-      })(BaseObject);
-    }
+      })(BaseObject));
+    },
   ]);
+}.call(this));
 
-}).call(this);
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
   angular.module("google-maps.directives.api").factory("Marker", [
-    "IMarker", "MarkerParentModel", "MarkerManager", function(IMarker, MarkerParentModel, MarkerManager) {
+    "IMarker",
+    "MarkerParentModel",
+    "MarkerManager",
+    function (IMarker, MarkerParentModel, MarkerManager) {
       var Marker;
-      return Marker = (function(_super) {
+      return (Marker = (function (_super) {
         __extends(Marker, _super);
 
         function Marker($timeout) {
@@ -3756,21 +5124,24 @@ Nicholas McCready - https://twitter.com/nmccready
           var self;
           Marker.__super__.constructor.call(this, $timeout);
           self = this;
-          this.template = '<span class="angular-google-map-marker" ng-transclude></span>';
+          this.template =
+            '<span class="angular-google-map-marker" ng-transclude></span>';
           this.$log.info(this);
         }
 
         Marker.prototype.controller = [
-          '$scope', '$element', function($scope, $element) {
+          "$scope",
+          "$element",
+          function ($scope, $element) {
             return {
-              getMarkerScope: function() {
+              getMarkerScope: function () {
                 return $scope;
-              }
+              },
             };
-          }
+          },
         ];
 
-        Marker.prototype.link = function(scope, element, attrs, ctrl) {
+        Marker.prototype.link = function (scope, element, attrs, ctrl) {
           var doFit;
           if (scope.fit) {
             doFit = true;
@@ -3778,78 +5149,127 @@ Nicholas McCready - https://twitter.com/nmccready
           if (!this.gMarkerManager) {
             this.gMarkerManager = new MarkerManager(ctrl.getMap());
           }
-          return new MarkerParentModel(scope, element, attrs, ctrl, this.$timeout, this.gMarkerManager, doFit);
+          return new MarkerParentModel(
+            scope,
+            element,
+            attrs,
+            ctrl,
+            this.$timeout,
+            this.gMarkerManager,
+            doFit
+          );
         };
 
         return Marker;
-
-      })(IMarker);
-    }
+      })(IMarker));
+    },
   ]);
+}.call(this));
 
-}).call(this);
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
   angular.module("google-maps.directives.api").factory("Markers", [
-    "IMarker", "MarkersParentModel", function(IMarker, MarkersParentModel) {
+    "IMarker",
+    "MarkersParentModel",
+    function (IMarker, MarkersParentModel) {
       var Markers;
-      return Markers = (function(_super) {
+      return (Markers = (function (_super) {
         __extends(Markers, _super);
 
         function Markers($timeout) {
           this.link = __bind(this.link, this);
           var self;
           Markers.__super__.constructor.call(this, $timeout);
-          this.template = '<span class="angular-google-map-markers" ng-transclude></span>';
-          this.scope.idKey = '=idkey';
-          this.scope.doRebuildAll = '=dorebuildall';
-          this.scope.models = '=models';
-          this.scope.doCluster = '=docluster';
-          this.scope.clusterOptions = '=clusteroptions';
-          this.scope.clusterEvents = '=clusterevents';
-          this.scope.labelContent = '=labelcontent';
-          this.scope.labelAnchor = '@labelanchor';
-          this.scope.labelClass = '@labelclass';
+          this.template =
+            '<span class="angular-google-map-markers" ng-transclude></span>';
+          this.scope.idKey = "=idkey";
+          this.scope.doRebuildAll = "=dorebuildall";
+          this.scope.models = "=models";
+          this.scope.doCluster = "=docluster";
+          this.scope.clusterOptions = "=clusteroptions";
+          this.scope.clusterEvents = "=clusterevents";
+          this.scope.labelContent = "=labelcontent";
+          this.scope.labelAnchor = "@labelanchor";
+          this.scope.labelClass = "@labelclass";
           this.$timeout = $timeout;
           self = this;
           this.$log.info(this);
         }
 
         Markers.prototype.controller = [
-          '$scope', '$element', function($scope, $element) {
+          "$scope",
+          "$element",
+          function ($scope, $element) {
             return {
-              getMarkersScope: function() {
+              getMarkersScope: function () {
                 return $scope;
-              }
+              },
             };
-          }
+          },
         ];
 
-        Markers.prototype.link = function(scope, element, attrs, ctrl) {
-          return new MarkersParentModel(scope, element, attrs, ctrl, this.$timeout);
+        Markers.prototype.link = function (scope, element, attrs, ctrl) {
+          return new MarkersParentModel(
+            scope,
+            element,
+            attrs,
+            ctrl,
+            this.$timeout
+          );
         };
 
         return Markers;
-
-      })(IMarker);
-    }
+      })(IMarker));
+    },
   ]);
+}.call(this));
 
-}).call(this);
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
   angular.module("google-maps.directives.api").factory("Polyline", [
-    "IPolyline", "$timeout", "array-sync", "PolylineChildModel", function(IPolyline, $timeout, arraySync, PolylineChildModel) {
+    "IPolyline",
+    "$timeout",
+    "array-sync",
+    "PolylineChildModel",
+    function (IPolyline, $timeout, arraySync, PolylineChildModel) {
       var Polyline, _ref;
-      return Polyline = (function(_super) {
+      return (Polyline = (function (_super) {
         __extends(Polyline, _super);
 
         function Polyline() {
@@ -3858,45 +5278,71 @@ Nicholas McCready - https://twitter.com/nmccready
           return _ref;
         }
 
-        Polyline.prototype.link = function(scope, element, attrs, mapCtrl) {
+        Polyline.prototype.link = function (scope, element, attrs, mapCtrl) {
           var _this = this;
-          if (angular.isUndefined(scope.path) || scope.path === null || !this.validatePath(scope.path)) {
+          if (
+            angular.isUndefined(scope.path) ||
+            scope.path === null ||
+            !this.validatePath(scope.path)
+          ) {
             this.$log.error("polyline: no valid path attribute found");
             return;
           }
-          return $timeout(function() {
-            return new PolylineChildModel(scope, attrs, mapCtrl.getMap(), _this.DEFAULTS);
+          return $timeout(function () {
+            return new PolylineChildModel(
+              scope,
+              attrs,
+              mapCtrl.getMap(),
+              _this.DEFAULTS
+            );
           });
         };
 
         return Polyline;
-
-      })(IPolyline);
-    }
+      })(IPolyline));
+    },
   ]);
+}.call(this));
 
-}).call(this);
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
   angular.module("google-maps.directives.api").factory("Polylines", [
-    "IPolyline", "$timeout", "array-sync", "PolylinesParentModel", function(IPolyline, $timeout, arraySync, PolylinesParentModel) {
+    "IPolyline",
+    "$timeout",
+    "array-sync",
+    "PolylinesParentModel",
+    function (IPolyline, $timeout, arraySync, PolylinesParentModel) {
       var Polylines;
-      return Polylines = (function(_super) {
+      return (Polylines = (function (_super) {
         __extends(Polylines, _super);
 
         function Polylines() {
           this.link = __bind(this.link, this);
           Polylines.__super__.constructor.call(this);
-          this.scope.idKey = '=idkey';
-          this.scope.models = '=models';
+          this.scope.idKey = "=idkey";
+          this.scope.models = "=models";
           this.$log.info(this);
         }
 
-        Polylines.prototype.link = function(scope, element, attrs, mapCtrl) {
+        Polylines.prototype.link = function (scope, element, attrs, mapCtrl) {
           var _this = this;
           if (angular.isUndefined(scope.path) || scope.path === null) {
             this.$log.error("polylines: no valid path attribute found");
@@ -3906,28 +5352,50 @@ Nicholas McCready - https://twitter.com/nmccready
             this.$log.error("polylines: no models found to create from");
             return;
           }
-          return $timeout(function() {
-            return new PolylinesParentModel(scope, element, attrs, mapCtrl.getMap(), _this.DEFAULTS);
+          return $timeout(function () {
+            return new PolylinesParentModel(
+              scope,
+              element,
+              attrs,
+              mapCtrl.getMap(),
+              _this.DEFAULTS
+            );
           });
         };
 
         return Polylines;
-
-      })(IPolyline);
-    }
+      })(IPolyline));
+    },
   ]);
+}.call(this));
 
-}).call(this);
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
   angular.module("google-maps.directives.api").factory("Window", [
-    "IWindow", "GmapUtil", "WindowChildModel", function(IWindow, GmapUtil, WindowChildModel) {
+    "IWindow",
+    "GmapUtil",
+    "WindowChildModel",
+    function (IWindow, GmapUtil, WindowChildModel) {
       var Window;
-      return Window = (function(_super) {
+      return (Window = (function (_super) {
         __extends(Window, _super);
 
         Window.include(GmapUtil);
@@ -3935,97 +5403,170 @@ Nicholas McCready - https://twitter.com/nmccready
         function Window($timeout, $compile, $http, $templateCache) {
           this.link = __bind(this.link, this);
           var self;
-          Window.__super__.constructor.call(this, $timeout, $compile, $http, $templateCache);
+          Window.__super__.constructor.call(
+            this,
+            $timeout,
+            $compile,
+            $http,
+            $templateCache
+          );
           self = this;
-          this.require = ['^googleMap', '^?marker'];
-          this.template = '<span class="angular-google-maps-window" ng-transclude></span>';
+          this.require = ["^googleMap", "^?marker"];
+          this.template =
+            '<span class="angular-google-maps-window" ng-transclude></span>';
           this.$log.info(self);
         }
 
-        Window.prototype.link = function(scope, element, attrs, ctrls) {
+        Window.prototype.link = function (scope, element, attrs, ctrls) {
           var _this = this;
-          return this.$timeout(function() {
-            var defaults, hasScopeCoords, isIconVisibleOnClick, mapCtrl, markerCtrl, markerScope, opts, window;
+          return this.$timeout(function () {
+            var defaults,
+              hasScopeCoords,
+              isIconVisibleOnClick,
+              mapCtrl,
+              markerCtrl,
+              markerScope,
+              opts,
+              window;
             isIconVisibleOnClick = true;
             if (angular.isDefined(attrs.isiconvisibleonclick)) {
               isIconVisibleOnClick = scope.isIconVisibleOnClick;
             }
             mapCtrl = ctrls[0].getMap();
-            markerCtrl = ctrls.length > 1 && (ctrls[1] != null) ? ctrls[1].getMarkerScope().gMarker : void 0;
+            markerCtrl =
+              ctrls.length > 1 && ctrls[1] != null
+                ? ctrls[1].getMarkerScope().gMarker
+                : void 0;
             defaults = scope.options != null ? scope.options : {};
-            hasScopeCoords = (scope != null) && _this.validateCoords(scope.coords);
-            opts = hasScopeCoords ? _this.createWindowOptions(markerCtrl, scope, element.html(), defaults) : defaults;
+            hasScopeCoords =
+              scope != null && _this.validateCoords(scope.coords);
+            opts = hasScopeCoords
+              ? _this.createWindowOptions(
+                  markerCtrl,
+                  scope,
+                  element.html(),
+                  defaults
+                )
+              : defaults;
             if (mapCtrl != null) {
-              window = new WindowChildModel({}, scope, opts, isIconVisibleOnClick, mapCtrl, markerCtrl, element);
+              window = new WindowChildModel(
+                {},
+                scope,
+                opts,
+                isIconVisibleOnClick,
+                mapCtrl,
+                markerCtrl,
+                element
+              );
             }
-            scope.$on("$destroy", function() {
+            scope.$on("$destroy", function () {
               return window.destroy();
             });
             if (ctrls[1] != null) {
               markerScope = ctrls[1].getMarkerScope();
-              markerScope.$watch('coords', function(newValue, oldValue) {
-                if (!_this.validateCoords(newValue)) {
-                  return window.hideWindow();
-                }
-                if (!angular.equals(newValue, oldValue)) {
-                  return window.getLatestPosition();
-                }
-              }, true);
+              markerScope.$watch(
+                "coords",
+                function (newValue, oldValue) {
+                  if (!_this.validateCoords(newValue)) {
+                    return window.hideWindow();
+                  }
+                  if (!angular.equals(newValue, oldValue)) {
+                    return window.getLatestPosition();
+                  }
+                },
+                true
+              );
             }
-            if ((_this.onChildCreation != null) && (window != null)) {
+            if (_this.onChildCreation != null && window != null) {
               return _this.onChildCreation(window);
             }
           }, GmapUtil.defaultDelay + 25);
         };
 
         return Window;
-
-      })(IWindow);
-    }
+      })(IWindow));
+    },
   ]);
+}.call(this));
 
-}).call(this);
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
   angular.module("google-maps.directives.api").factory("Windows", [
-    "IWindow", "WindowsParentModel", function(IWindow, WindowsParentModel) {
+    "IWindow",
+    "WindowsParentModel",
+    function (IWindow, WindowsParentModel) {
       /*
       Windows directive where many windows map to the models property
       */
 
       var Windows;
-      return Windows = (function(_super) {
+      return (Windows = (function (_super) {
         __extends(Windows, _super);
 
-        function Windows($timeout, $compile, $http, $templateCache, $interpolate) {
+        function Windows(
+          $timeout,
+          $compile,
+          $http,
+          $templateCache,
+          $interpolate
+        ) {
           this.link = __bind(this.link, this);
           var self;
-          Windows.__super__.constructor.call(this, $timeout, $compile, $http, $templateCache);
+          Windows.__super__.constructor.call(
+            this,
+            $timeout,
+            $compile,
+            $http,
+            $templateCache
+          );
           self = this;
           this.$interpolate = $interpolate;
-          this.require = ['^googleMap', '^?markers'];
-          this.template = '<span class="angular-google-maps-windows" ng-transclude></span>';
-          this.scope.idKey = '=idkey';
-          this.scope.doRebuildAll = '=dorebuildall';
-          this.scope.models = '=models';
+          this.require = ["^googleMap", "^?markers"];
+          this.template =
+            '<span class="angular-google-maps-windows" ng-transclude></span>';
+          this.scope.idKey = "=idkey";
+          this.scope.doRebuildAll = "=dorebuildall";
+          this.scope.models = "=models";
           this.$log.info(this);
         }
 
-        Windows.prototype.link = function(scope, element, attrs, ctrls) {
-          return new WindowsParentModel(scope, element, attrs, ctrls, this.$timeout, this.$compile, this.$http, this.$templateCache, this.$interpolate);
+        Windows.prototype.link = function (scope, element, attrs, ctrls) {
+          return new WindowsParentModel(
+            scope,
+            element,
+            attrs,
+            ctrls,
+            this.$timeout,
+            this.$compile,
+            this.$http,
+            this.$templateCache,
+            this.$interpolate
+          );
         };
 
         return Windows;
-
-      })(IWindow);
-    }
+      })(IWindow));
+    },
   ]);
-
-}).call(this);
+}.call(this));
 
 /*
 !
@@ -4060,15 +5601,14 @@ Nicholas McCready - https://twitter.com/nmccready
 Nick Baugh - https://github.com/niftylettuce
 */
 
-
-(function() {
+(function () {
   angular.module("google-maps").directive("googleMap", [
-    "Map", function(Map) {
+    "Map",
+    function (Map) {
       return new Map();
-    }
+    },
   ]);
-
-}).call(this);
+}.call(this));
 
 /*
 !
@@ -4102,7 +5642,6 @@ Nicolas Laplante - https://plus.google.com/108189012221374960701
 Nicholas McCready - https://twitter.com/nmccready
 */
 
-
 /*
 Map marker directive
 
@@ -4114,15 +5653,15 @@ This directive creates a new scope.
 {attribute animate optional} if set to false, the marker won't be animated (on by default)
 */
 
-
-(function() {
+(function () {
   angular.module("google-maps").directive("marker", [
-    "$timeout", "Marker", function($timeout, Marker) {
+    "$timeout",
+    "Marker",
+    function ($timeout, Marker) {
       return new Marker($timeout);
-    }
+    },
   ]);
-
-}).call(this);
+}.call(this));
 
 /*
 !
@@ -4156,7 +5695,6 @@ Nicolas Laplante - https://plus.google.com/108189012221374960701
 Nicholas McCready - https://twitter.com/nmccready
 */
 
-
 /*
 Map marker directive
 
@@ -4168,15 +5706,15 @@ This directive creates a new scope.
 {attribute animate optional} if set to false, the marker won't be animated (on by default)
 */
 
-
-(function() {
+(function () {
   angular.module("google-maps").directive("markers", [
-    "$timeout", "Markers", function($timeout, Markers) {
+    "$timeout",
+    "Markers",
+    function ($timeout, Markers) {
       return new Markers($timeout);
-    }
+    },
   ]);
-
-}).call(this);
+}.call(this));
 
 /*
 !
@@ -4208,7 +5746,6 @@ https://github.com/nlaplante/angular-google-maps
 @authors Bruno Queiroz, creativelikeadog@gmail.com
 */
 
-
 /*
 Marker label directive
 
@@ -4220,22 +5757,39 @@ This directive is used to create a marker label on an existing map.
 {attribute style optional} style for the label
 */
 
-
 /*
 Basic Directive api for a label. Basic in the sense that this directive contains 1:1 on scope and model.
 Thus there will be one html element per marker within the directive.
 */
 
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+(function () {
+  var __bind = function (fn, me) {
+      return function () {
+        return fn.apply(me, arguments);
+      };
+    },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function (child, parent) {
+      for (var key in parent) {
+        if (__hasProp.call(parent, key)) child[key] = parent[key];
+      }
+      function ctor() {
+        this.constructor = child;
+      }
+      ctor.prototype = parent.prototype;
+      child.prototype = new ctor();
+      child.__super__ = parent.prototype;
+      return child;
+    };
 
   angular.module("google-maps").directive("markerLabel", [
-    "$timeout", "ILabel", "MarkerLabelChildModel", "GmapUtil", function($timeout, ILabel, MarkerLabelChildModel, GmapUtil) {
+    "$timeout",
+    "ILabel",
+    "MarkerLabelChildModel",
+    "GmapUtil",
+    function ($timeout, ILabel, MarkerLabelChildModel, GmapUtil) {
       var Label;
-      Label = (function(_super) {
+      Label = (function (_super) {
         __extends(Label, _super);
 
         function Label($timeout) {
@@ -4243,33 +5797,32 @@ Thus there will be one html element per marker within the directive.
           var self;
           Label.__super__.constructor.call(this, $timeout);
           self = this;
-          this.require = '^marker';
-          this.template = '<span class="angular-google-maps-marker-label" ng-transclude></span>';
+          this.require = "^marker";
+          this.template =
+            '<span class="angular-google-maps-marker-label" ng-transclude></span>';
           this.$log.info(this);
         }
 
-        Label.prototype.link = function(scope, element, attrs, ctrl) {
+        Label.prototype.link = function (scope, element, attrs, ctrl) {
           var _this = this;
-          return this.$timeout(function() {
+          return this.$timeout(function () {
             var label, markerCtrl;
             markerCtrl = ctrl.getMarkerScope().gMarker;
             if (markerCtrl != null) {
               label = new MarkerLabelChildModel(markerCtrl, scope);
             }
-            return scope.$on("$destroy", function() {
+            return scope.$on("$destroy", function () {
               return label.destroy();
             });
           }, GmapUtil.defaultDelay + 25);
         };
 
         return Label;
-
       })(ILabel);
       return new Label($timeout);
-    }
+    },
   ]);
-
-}).call(this);
+}.call(this));
 
 /*
 !
@@ -4304,19 +5857,27 @@ Nicholas McCready - https://twitter.com/nmccready
 Rick Huizinga - https://plus.google.com/+RickHuizinga
 */
 
-
-(function() {
+(function () {
   angular.module("google-maps").directive("polygon", [
-    "$log", "$timeout", "array-sync", "GmapUtil", function($log, $timeout, arraySync, GmapUtil) {
+    "$log",
+    "$timeout",
+    "array-sync",
+    "GmapUtil",
+    function ($log, $timeout, arraySync, GmapUtil) {
       /*
       Check if a value is true
       */
 
       var DEFAULTS, isTrue;
-      isTrue = function(val) {
-        return angular.isDefined(val) && val !== null && val === true || val === "1" || val === "y" || val === "true";
+      isTrue = function (val) {
+        return (
+          (angular.isDefined(val) && val !== null && val === true) ||
+          val === "1" ||
+          val === "y" ||
+          val === "true"
+        );
       };
-      "use strict";
+      ("use strict");
       DEFAULTS = {};
       return {
         restrict: "ECA",
@@ -4332,19 +5893,29 @@ Rick Huizinga - https://plus.google.com/+RickHuizinga
           fill: "=",
           icons: "=icons",
           visible: "=",
-          "static": "=",
+          static: "=",
           events: "=",
           zIndex: "=zindex",
-          fit: "="
+          fit: "=",
         },
-        link: function(scope, element, attrs, mapCtrl) {
-          if (angular.isUndefined(scope.path) || scope.path === null || !GmapUtil.validatePath(scope.path)) {
+        link: function (scope, element, attrs, mapCtrl) {
+          if (
+            angular.isUndefined(scope.path) ||
+            scope.path === null ||
+            !GmapUtil.validatePath(scope.path)
+          ) {
             $log.error("polygon: no valid path attribute found");
             return;
           }
-          return $timeout(function() {
-            var arraySyncer, buildOpts, eventName, getEventHandler, map, pathPoints, polygon;
-            buildOpts = function(pathPoints) {
+          return $timeout(function () {
+            var arraySyncer,
+              buildOpts,
+              eventName,
+              getEventHandler,
+              map,
+              pathPoints,
+              polygon;
+            buildOpts = function (pathPoints) {
               var opts;
               opts = angular.extend({}, DEFAULTS, {
                 map: map,
@@ -4353,24 +5924,27 @@ Rick Huizinga - https://plus.google.com/+RickHuizinga
                 strokeOpacity: scope.stroke && scope.stroke.opacity,
                 strokeWeight: scope.stroke && scope.stroke.weight,
                 fillColor: scope.fill && scope.fill.color,
-                fillOpacity: scope.fill && scope.fill.opacity
+                fillOpacity: scope.fill && scope.fill.opacity,
               });
-              angular.forEach({
-                clickable: true,
-                draggable: false,
-                editable: false,
-                geodesic: false,
-                visible: true,
-                "static": false,
-                fit: false,
-                zIndex: 0
-              }, function(defaultValue, key) {
-                if (angular.isUndefined(scope[key]) || scope[key] === null) {
-                  return opts[key] = defaultValue;
-                } else {
-                  return opts[key] = scope[key];
+              angular.forEach(
+                {
+                  clickable: true,
+                  draggable: false,
+                  editable: false,
+                  geodesic: false,
+                  visible: true,
+                  static: false,
+                  fit: false,
+                  zIndex: 0,
+                },
+                function (defaultValue, key) {
+                  if (angular.isUndefined(scope[key]) || scope[key] === null) {
+                    return (opts[key] = defaultValue);
+                  } else {
+                    return (opts[key] = scope[key]);
+                  }
                 }
-              });
+              );
               if (opts["static"]) {
                 opts.editable = false;
               }
@@ -4383,104 +5957,134 @@ Rick Huizinga - https://plus.google.com/+RickHuizinga
               GmapUtil.extendMapBounds(map, pathPoints);
             }
             if (!scope["static"] && angular.isDefined(scope.editable)) {
-              scope.$watch("editable", function(newValue, oldValue) {
+              scope.$watch("editable", function (newValue, oldValue) {
                 if (newValue !== oldValue) {
                   return polygon.setEditable(newValue);
                 }
               });
             }
             if (angular.isDefined(scope.draggable)) {
-              scope.$watch("draggable", function(newValue, oldValue) {
+              scope.$watch("draggable", function (newValue, oldValue) {
                 if (newValue !== oldValue) {
                   return polygon.setDraggable(newValue);
                 }
               });
             }
             if (angular.isDefined(scope.visible)) {
-              scope.$watch("visible", function(newValue, oldValue) {
+              scope.$watch("visible", function (newValue, oldValue) {
                 if (newValue !== oldValue) {
                   return polygon.setVisible(newValue);
                 }
               });
             }
             if (angular.isDefined(scope.geodesic)) {
-              scope.$watch("geodesic", function(newValue, oldValue) {
+              scope.$watch("geodesic", function (newValue, oldValue) {
                 if (newValue !== oldValue) {
                   return polygon.setOptions(buildOpts(polygon.getPath()));
                 }
               });
             }
-            if (angular.isDefined(scope.stroke) && angular.isDefined(scope.stroke.opacity)) {
-              scope.$watch("stroke.opacity", function(newValue, oldValue) {
+            if (
+              angular.isDefined(scope.stroke) &&
+              angular.isDefined(scope.stroke.opacity)
+            ) {
+              scope.$watch("stroke.opacity", function (newValue, oldValue) {
                 return polygon.setOptions(buildOpts(polygon.getPath()));
               });
             }
-            if (angular.isDefined(scope.stroke) && angular.isDefined(scope.stroke.weight)) {
-              scope.$watch("stroke.weight", function(newValue, oldValue) {
+            if (
+              angular.isDefined(scope.stroke) &&
+              angular.isDefined(scope.stroke.weight)
+            ) {
+              scope.$watch("stroke.weight", function (newValue, oldValue) {
                 if (newValue !== oldValue) {
                   return polygon.setOptions(buildOpts(polygon.getPath()));
                 }
               });
             }
-            if (angular.isDefined(scope.stroke) && angular.isDefined(scope.stroke.color)) {
-              scope.$watch("stroke.color", function(newValue, oldValue) {
+            if (
+              angular.isDefined(scope.stroke) &&
+              angular.isDefined(scope.stroke.color)
+            ) {
+              scope.$watch("stroke.color", function (newValue, oldValue) {
                 if (newValue !== oldValue) {
                   return polygon.setOptions(buildOpts(polygon.getPath()));
                 }
               });
             }
-            if (angular.isDefined(scope.fill) && angular.isDefined(scope.fill.color)) {
-              scope.$watch("fill.color", function(newValue, oldValue) {
+            if (
+              angular.isDefined(scope.fill) &&
+              angular.isDefined(scope.fill.color)
+            ) {
+              scope.$watch("fill.color", function (newValue, oldValue) {
                 if (newValue !== oldValue) {
                   return polygon.setOptions(buildOpts(polygon.getPath()));
                 }
               });
             }
-            if (angular.isDefined(scope.fill) && angular.isDefined(scope.fill.opacity)) {
-              scope.$watch("fill.opacity", function(newValue, oldValue) {
+            if (
+              angular.isDefined(scope.fill) &&
+              angular.isDefined(scope.fill.opacity)
+            ) {
+              scope.$watch("fill.opacity", function (newValue, oldValue) {
                 if (newValue !== oldValue) {
                   return polygon.setOptions(buildOpts(polygon.getPath()));
                 }
               });
             }
             if (angular.isDefined(scope.zIndex)) {
-              scope.$watch("zIndex", function(newValue, oldValue) {
+              scope.$watch("zIndex", function (newValue, oldValue) {
                 if (newValue !== oldValue) {
                   return polygon.setOptions(buildOpts(polygon.getPath()));
                 }
               });
             }
-            if (angular.isDefined(scope.events) && scope.events !== null && angular.isObject(scope.events)) {
-              getEventHandler = function(eventName) {
-                return function() {
-                  return scope.events[eventName].apply(scope, [polygon, eventName, arguments]);
+            if (
+              angular.isDefined(scope.events) &&
+              scope.events !== null &&
+              angular.isObject(scope.events)
+            ) {
+              getEventHandler = function (eventName) {
+                return function () {
+                  return scope.events[eventName].apply(scope, [
+                    polygon,
+                    eventName,
+                    arguments,
+                  ]);
                 };
               };
               for (eventName in scope.events) {
-                if (scope.events.hasOwnProperty(eventName) && angular.isFunction(scope.events[eventName])) {
+                if (
+                  scope.events.hasOwnProperty(eventName) &&
+                  angular.isFunction(scope.events[eventName])
+                ) {
                   polygon.addListener(eventName, getEventHandler(eventName));
                 }
               }
             }
-            arraySyncer = arraySync(polygon.getPath(), scope, "path", function(pathPoints) {
-              if (scope.fit) {
-                return GmapUtil.extendMapBounds(map, pathPoints);
+            arraySyncer = arraySync(
+              polygon.getPath(),
+              scope,
+              "path",
+              function (pathPoints) {
+                if (scope.fit) {
+                  return GmapUtil.extendMapBounds(map, pathPoints);
+                }
               }
-            });
-            return scope.$on("$destroy", function() {
+            );
+            return scope.$on("$destroy", function () {
               polygon.setMap(null);
               if (arraySyncer) {
                 arraySyncer();
-                return arraySyncer = null;
+                return (arraySyncer = null);
               }
             });
           });
-        }
+        },
       };
-    }
+    },
   ]);
-
-}).call(this);
+}.call(this));
 
 /*
 !
@@ -4511,10 +6115,13 @@ Julian Popescu - https://github.com/jpopesculian
 Rick Huizinga - https://plus.google.com/+RickHuizinga
 */
 
-
-(function() {
+(function () {
   angular.module("google-maps").directive("circle", [
-    "$log", "$timeout", "GmapUtil", "EventsHelper", function($log, $timeout, GmapUtil, EventsHelper) {
+    "$log",
+    "$timeout",
+    "GmapUtil",
+    "EventsHelper",
+    function ($log, $timeout, GmapUtil, EventsHelper) {
       "use strict";
       var DEFAULTS;
       DEFAULTS = {};
@@ -4533,12 +6140,12 @@ Rick Huizinga - https://plus.google.com/+RickHuizinga
           geodesic: "=",
           icons: "=icons",
           visible: "=",
-          events: "="
+          events: "=",
         },
-        link: function(scope, element, attrs, mapCtrl) {
-          return $timeout(function() {
+        link: function (scope, element, attrs, mapCtrl) {
+          return $timeout(function () {
             var buildOpts, circle, map;
-            buildOpts = function() {
+            buildOpts = function () {
               var opts;
               if (!GmapUtil.validateCoords(scope.center)) {
                 $log.error("circle: no valid center attribute found");
@@ -4552,99 +6159,109 @@ Rick Huizinga - https://plus.google.com/+RickHuizinga
                 strokeOpacity: scope.stroke && scope.stroke.opacity,
                 strokeWeight: scope.stroke && scope.stroke.weight,
                 fillColor: scope.fill && scope.fill.color,
-                fillOpacity: scope.fill && scope.fill.opacity
+                fillOpacity: scope.fill && scope.fill.opacity,
               });
-              angular.forEach({
-                clickable: true,
-                draggable: false,
-                editable: false,
-                geodesic: false,
-                visible: true
-              }, function(defaultValue, key) {
-                if (angular.isUndefined(scope[key]) || scope[key] === null) {
-                  return opts[key] = defaultValue;
-                } else {
-                  return opts[key] = scope[key];
+              angular.forEach(
+                {
+                  clickable: true,
+                  draggable: false,
+                  editable: false,
+                  geodesic: false,
+                  visible: true,
+                },
+                function (defaultValue, key) {
+                  if (angular.isUndefined(scope[key]) || scope[key] === null) {
+                    return (opts[key] = defaultValue);
+                  } else {
+                    return (opts[key] = scope[key]);
+                  }
                 }
-              });
+              );
               return opts;
             };
             map = mapCtrl.getMap();
             circle = new google.maps.Circle(buildOpts());
-            scope.$watchCollection('center', function(newVals, oldVals) {
+            scope.$watchCollection("center", function (newVals, oldVals) {
               if (newVals !== oldVals) {
                 return circle.setOptions(buildOpts());
               }
             });
-            scope.$watchCollection('stroke', function(newVals, oldVals) {
+            scope.$watchCollection("stroke", function (newVals, oldVals) {
               if (newVals !== oldVals) {
                 return circle.setOptions(buildOpts());
               }
             });
-            scope.$watchCollection('fill', function(newVals, oldVals) {
+            scope.$watchCollection("fill", function (newVals, oldVals) {
               if (newVals !== oldVals) {
                 return circle.setOptions(buildOpts());
               }
             });
-            scope.$watch('radius', function(newVal, oldVal) {
+            scope.$watch("radius", function (newVal, oldVal) {
               if (newVal !== oldVal) {
                 return circle.setOptions(buildOpts());
               }
             });
-            scope.$watch('clickable', function(newVal, oldVal) {
+            scope.$watch("clickable", function (newVal, oldVal) {
               if (newVal !== oldVal) {
                 return circle.setOptions(buildOpts());
               }
             });
-            scope.$watch('editable', function(newVal, oldVal) {
+            scope.$watch("editable", function (newVal, oldVal) {
               if (newVal !== oldVal) {
                 return circle.setOptions(buildOpts());
               }
             });
-            scope.$watch('draggable', function(newVal, oldVal) {
+            scope.$watch("draggable", function (newVal, oldVal) {
               if (newVal !== oldVal) {
                 return circle.setOptions(buildOpts());
               }
             });
-            scope.$watch('visible', function(newVal, oldVal) {
+            scope.$watch("visible", function (newVal, oldVal) {
               if (newVal !== oldVal) {
                 return circle.setOptions(buildOpts());
               }
             });
-            scope.$watch('geodesic', function(newVal, oldVal) {
+            scope.$watch("geodesic", function (newVal, oldVal) {
               if (newVal !== oldVal) {
                 return circle.setOptions(buildOpts());
               }
             });
             EventsHelper.setEvents(circle, scope, scope);
-            google.maps.event.addListener(circle, 'radius_changed', function() {
-              scope.radius = circle.getRadius();
-              return $timeout(function() {
-                return scope.$apply();
-              });
-            });
-            google.maps.event.addListener(circle, 'center_changed', function() {
-              if (angular.isDefined(scope.center.type)) {
-                scope.center.coordinates[1] = circle.getCenter().lat();
-                scope.center.coordinates[0] = circle.getCenter().lng();
-              } else {
-                scope.center.latitude = circle.getCenter().lat();
-                scope.center.longitude = circle.getCenter().lng();
+            google.maps.event.addListener(
+              circle,
+              "radius_changed",
+              function () {
+                scope.radius = circle.getRadius();
+                return $timeout(function () {
+                  return scope.$apply();
+                });
               }
-              return $timeout(function() {
-                return scope.$apply();
-              });
-            });
-            return scope.$on("$destroy", function() {
+            );
+            google.maps.event.addListener(
+              circle,
+              "center_changed",
+              function () {
+                if (angular.isDefined(scope.center.type)) {
+                  scope.center.coordinates[1] = circle.getCenter().lat();
+                  scope.center.coordinates[0] = circle.getCenter().lng();
+                } else {
+                  scope.center.latitude = circle.getCenter().lat();
+                  scope.center.longitude = circle.getCenter().lng();
+                }
+                return $timeout(function () {
+                  return scope.$apply();
+                });
+              }
+            );
+            return scope.$on("$destroy", function () {
               return circle.setMap(null);
             });
           });
-        }
+        },
       };
-    }
+    },
   ]);
-
-}).call(this);
+}.call(this));
 
 /*
 !
@@ -4678,15 +6295,14 @@ Nicolas Laplante - https://plus.google.com/108189012221374960701
 Nicholas McCready - https://twitter.com/nmccready
 */
 
-
-(function() {
+(function () {
   angular.module("google-maps").directive("polyline", [
-    "Polyline", function(Polyline) {
+    "Polyline",
+    function (Polyline) {
       return new Polyline();
-    }
+    },
   ]);
-
-}).call(this);
+}.call(this));
 
 /*
 !
@@ -4720,15 +6336,14 @@ Nicolas Laplante - https://plus.google.com/108189012221374960701
 Nicholas McCready - https://twitter.com/nmccready
 */
 
-
-(function() {
+(function () {
   angular.module("google-maps").directive("polylines", [
-    "Polylines", function(Polylines) {
+    "Polylines",
+    function (Polylines) {
       return new Polylines();
-    }
+    },
   ]);
-
-}).call(this);
+}.call(this));
 
 /*
 !
@@ -4763,33 +6378,51 @@ Nicholas McCready - https://twitter.com/nmccready
 Chentsu Lin - https://github.com/ChenTsuLin
 */
 
-
-(function() {
+(function () {
   angular.module("google-maps").directive("rectangle", [
-    "$log", "$timeout", function($log, $timeout) {
-      var DEFAULTS, convertBoundPoints, fitMapBounds, isTrue, validateBoundPoints;
-      validateBoundPoints = function(bounds) {
-        if (angular.isUndefined(bounds.sw.latitude) || angular.isUndefined(bounds.sw.longitude) || angular.isUndefined(bounds.ne.latitude) || angular.isUndefined(bounds.ne.longitude)) {
+    "$log",
+    "$timeout",
+    function ($log, $timeout) {
+      var DEFAULTS,
+        convertBoundPoints,
+        fitMapBounds,
+        isTrue,
+        validateBoundPoints;
+      validateBoundPoints = function (bounds) {
+        if (
+          angular.isUndefined(bounds.sw.latitude) ||
+          angular.isUndefined(bounds.sw.longitude) ||
+          angular.isUndefined(bounds.ne.latitude) ||
+          angular.isUndefined(bounds.ne.longitude)
+        ) {
           return false;
         }
         return true;
       };
-      convertBoundPoints = function(bounds) {
+      convertBoundPoints = function (bounds) {
         var result;
-        result = new google.maps.LatLngBounds(new google.maps.LatLng(bounds.sw.latitude, bounds.sw.longitude), new google.maps.LatLng(bounds.ne.latitude, bounds.ne.longitude));
+        result = new google.maps.LatLngBounds(
+          new google.maps.LatLng(bounds.sw.latitude, bounds.sw.longitude),
+          new google.maps.LatLng(bounds.ne.latitude, bounds.ne.longitude)
+        );
         return result;
       };
-      fitMapBounds = function(map, bounds) {
+      fitMapBounds = function (map, bounds) {
         return map.fitBounds(bounds);
       };
       /*
       Check if a value is true
       */
 
-      isTrue = function(val) {
-        return angular.isDefined(val) && val !== null && val === true || val === "1" || val === "y" || val === "true";
+      isTrue = function (val) {
+        return (
+          (angular.isDefined(val) && val !== null && val === true) ||
+          val === "1" ||
+          val === "y" ||
+          val === "true"
+        );
       };
-      "use strict";
+      ("use strict");
       DEFAULTS = {};
       return {
         restrict: "ECA",
@@ -4802,16 +6435,24 @@ Chentsu Lin - https://github.com/ChenTsuLin
           draggable: "=",
           editable: "=",
           fill: "=",
-          visible: "="
+          visible: "=",
         },
-        link: function(scope, element, attrs, mapCtrl) {
-          if (angular.isUndefined(scope.bounds) || scope.bounds === null || angular.isUndefined(scope.bounds.sw) || scope.bounds.sw === null || angular.isUndefined(scope.bounds.ne) || scope.bounds.ne === null || !validateBoundPoints(scope.bounds)) {
+        link: function (scope, element, attrs, mapCtrl) {
+          if (
+            angular.isUndefined(scope.bounds) ||
+            scope.bounds === null ||
+            angular.isUndefined(scope.bounds.sw) ||
+            scope.bounds.sw === null ||
+            angular.isUndefined(scope.bounds.ne) ||
+            scope.bounds.ne === null ||
+            !validateBoundPoints(scope.bounds)
+          ) {
             $log.error("rectangle: no valid bound attribute found");
             return;
           }
-          return $timeout(function() {
+          return $timeout(function () {
             var buildOpts, dragging, map, rectangle, settingBoundsFromScope;
-            buildOpts = function(bounds) {
+            buildOpts = function (bounds) {
               var opts;
               opts = angular.extend({}, DEFAULTS, {
                 map: map,
@@ -4820,147 +6461,183 @@ Chentsu Lin - https://github.com/ChenTsuLin
                 strokeOpacity: scope.stroke && scope.stroke.opacity,
                 strokeWeight: scope.stroke && scope.stroke.weight,
                 fillColor: scope.fill && scope.fill.color,
-                fillOpacity: scope.fill && scope.fill.opacity
+                fillOpacity: scope.fill && scope.fill.opacity,
               });
-              angular.forEach({
-                clickable: true,
-                draggable: false,
-                editable: false,
-                visible: true
-              }, function(defaultValue, key) {
-                if (angular.isUndefined(scope[key]) || scope[key] === null) {
-                  return opts[key] = defaultValue;
-                } else {
-                  return opts[key] = scope[key];
+              angular.forEach(
+                {
+                  clickable: true,
+                  draggable: false,
+                  editable: false,
+                  visible: true,
+                },
+                function (defaultValue, key) {
+                  if (angular.isUndefined(scope[key]) || scope[key] === null) {
+                    return (opts[key] = defaultValue);
+                  } else {
+                    return (opts[key] = scope[key]);
+                  }
                 }
-              });
+              );
               return opts;
             };
             map = mapCtrl.getMap();
-            rectangle = new google.maps.Rectangle(buildOpts(convertBoundPoints(scope.bounds)));
+            rectangle = new google.maps.Rectangle(
+              buildOpts(convertBoundPoints(scope.bounds))
+            );
             if (isTrue(attrs.fit)) {
               fitMapBounds(map, bounds);
             }
             dragging = false;
-            google.maps.event.addListener(rectangle, "mousedown", function() {
-              google.maps.event.addListener(rectangle, "mousemove", function() {
-                dragging = true;
-                return _.defer(function() {
-                  return scope.$apply(function(s) {
-                    if (s.dragging != null) {
-                      return s.dragging = dragging;
-                    }
+            google.maps.event.addListener(rectangle, "mousedown", function () {
+              google.maps.event.addListener(
+                rectangle,
+                "mousemove",
+                function () {
+                  dragging = true;
+                  return _.defer(function () {
+                    return scope.$apply(function (s) {
+                      if (s.dragging != null) {
+                        return (s.dragging = dragging);
+                      }
+                    });
                   });
-                });
-              });
-              google.maps.event.addListener(rectangle, "mouseup", function() {
-                google.maps.event.clearListeners(rectangle, 'mousemove');
-                google.maps.event.clearListeners(rectangle, 'mouseup');
+                }
+              );
+              google.maps.event.addListener(rectangle, "mouseup", function () {
+                google.maps.event.clearListeners(rectangle, "mousemove");
+                google.maps.event.clearListeners(rectangle, "mouseup");
                 dragging = false;
-                return _.defer(function() {
-                  return scope.$apply(function(s) {
+                return _.defer(function () {
+                  return scope.$apply(function (s) {
                     if (s.dragging != null) {
-                      return s.dragging = dragging;
+                      return (s.dragging = dragging);
                     }
                   });
                 });
               });
             });
             settingBoundsFromScope = false;
-            google.maps.event.addListener(rectangle, "bounds_changed", function() {
-              var b, ne, sw;
-              b = rectangle.getBounds();
-              ne = b.getNorthEast();
-              sw = b.getSouthWest();
-              if (settingBoundsFromScope) {
-                return;
-              }
-              return _.defer(function() {
-                return scope.$apply(function(s) {
-                  if (!rectangle.dragging) {
-                    if (s.bounds !== null && s.bounds !== undefined && s.bounds !== void 0) {
-                      s.bounds.ne = {
-                        latitude: ne.lat(),
-                        longitude: ne.lng()
-                      };
-                      s.bounds.sw = {
-                        latitude: sw.lat(),
-                        longitude: sw.lng()
-                      };
-                    }
-                  }
-                });
-              });
-            });
-            scope.$watch("bounds", (function(newValue, oldValue) {
-              var bounds;
-              if (_.isEqual(newValue, oldValue)) {
-                return;
-              }
-              settingBoundsFromScope = true;
-              if (!dragging) {
-                if ((newValue.sw.latitude == null) || (newValue.sw.longitude == null) || (newValue.ne.latitude == null) || (newValue.ne.longitude == null)) {
-                  $log.error("Invalid bounds for newValue: " + (JSON.stringify(newValue)));
+            google.maps.event.addListener(
+              rectangle,
+              "bounds_changed",
+              function () {
+                var b, ne, sw;
+                b = rectangle.getBounds();
+                ne = b.getNorthEast();
+                sw = b.getSouthWest();
+                if (settingBoundsFromScope) {
+                  return;
                 }
-                bounds = new google.maps.LatLngBounds(new google.maps.LatLng(newValue.sw.latitude, newValue.sw.longitude), new google.maps.LatLng(newValue.ne.latitude, newValue.ne.longitude));
-                rectangle.setBounds(bounds);
+                return _.defer(function () {
+                  return scope.$apply(function (s) {
+                    if (!rectangle.dragging) {
+                      if (
+                        s.bounds !== null &&
+                        s.bounds !== undefined &&
+                        s.bounds !== void 0
+                      ) {
+                        s.bounds.ne = {
+                          latitude: ne.lat(),
+                          longitude: ne.lng(),
+                        };
+                        s.bounds.sw = {
+                          latitude: sw.lat(),
+                          longitude: sw.lng(),
+                        };
+                      }
+                    }
+                  });
+                });
               }
-              return settingBoundsFromScope = false;
-            }), true);
+            );
+            scope.$watch(
+              "bounds",
+              function (newValue, oldValue) {
+                var bounds;
+                if (_.isEqual(newValue, oldValue)) {
+                  return;
+                }
+                settingBoundsFromScope = true;
+                if (!dragging) {
+                  if (
+                    newValue.sw.latitude == null ||
+                    newValue.sw.longitude == null ||
+                    newValue.ne.latitude == null ||
+                    newValue.ne.longitude == null
+                  ) {
+                    $log.error(
+                      "Invalid bounds for newValue: " + JSON.stringify(newValue)
+                    );
+                  }
+                  bounds = new google.maps.LatLngBounds(
+                    new google.maps.LatLng(
+                      newValue.sw.latitude,
+                      newValue.sw.longitude
+                    ),
+                    new google.maps.LatLng(
+                      newValue.ne.latitude,
+                      newValue.ne.longitude
+                    )
+                  );
+                  rectangle.setBounds(bounds);
+                }
+                return (settingBoundsFromScope = false);
+              },
+              true
+            );
             if (angular.isDefined(scope.editable)) {
-              scope.$watch("editable", function(newValue, oldValue) {
+              scope.$watch("editable", function (newValue, oldValue) {
                 return rectangle.setEditable(newValue);
               });
             }
             if (angular.isDefined(scope.draggable)) {
-              scope.$watch("draggable", function(newValue, oldValue) {
+              scope.$watch("draggable", function (newValue, oldValue) {
                 return rectangle.setDraggable(newValue);
               });
             }
             if (angular.isDefined(scope.visible)) {
-              scope.$watch("visible", function(newValue, oldValue) {
+              scope.$watch("visible", function (newValue, oldValue) {
                 return rectangle.setVisible(newValue);
               });
             }
             if (angular.isDefined(scope.stroke)) {
               if (angular.isDefined(scope.stroke.color)) {
-                scope.$watch("stroke.color", function(newValue, oldValue) {
+                scope.$watch("stroke.color", function (newValue, oldValue) {
                   return rectangle.setOptions(buildOpts(rectangle.getBounds()));
                 });
               }
               if (angular.isDefined(scope.stroke.weight)) {
-                scope.$watch("stroke.weight", function(newValue, oldValue) {
+                scope.$watch("stroke.weight", function (newValue, oldValue) {
                   return rectangle.setOptions(buildOpts(rectangle.getBounds()));
                 });
               }
               if (angular.isDefined(scope.stroke.opacity)) {
-                scope.$watch("stroke.opacity", function(newValue, oldValue) {
+                scope.$watch("stroke.opacity", function (newValue, oldValue) {
                   return rectangle.setOptions(buildOpts(rectangle.getBounds()));
                 });
               }
             }
             if (angular.isDefined(scope.fill)) {
               if (angular.isDefined(scope.fill.color)) {
-                scope.$watch("fill.color", function(newValue, oldValue) {
+                scope.$watch("fill.color", function (newValue, oldValue) {
                   return rectangle.setOptions(buildOpts(rectangle.getBounds()));
                 });
               }
               if (angular.isDefined(scope.fill.opacity)) {
-                scope.$watch("fill.opacity", function(newValue, oldValue) {
+                scope.$watch("fill.opacity", function (newValue, oldValue) {
                   return rectangle.setOptions(buildOpts(rectangle.getBounds()));
                 });
               }
             }
-            return scope.$on("$destroy", function() {
+            return scope.$on("$destroy", function () {
               return rectangle.setMap(null);
             });
           });
-        }
+        },
       };
-    }
+    },
   ]);
-
-}).call(this);
+}.call(this));
 
 /*
 !
@@ -4994,7 +6671,6 @@ Nicolas Laplante - https://plus.google.com/108189012221374960701
 Nicholas McCready - https://twitter.com/nmccready
 */
 
-
 /*
 Map info window directive
 
@@ -5005,15 +6681,18 @@ This directive creates a new scope.
 {attribute show optional}    map will show when this expression returns true
 */
 
-
-(function() {
+(function () {
   angular.module("google-maps").directive("window", [
-    "$timeout", "$compile", "$http", "$templateCache", "Window", function($timeout, $compile, $http, $templateCache, Window) {
+    "$timeout",
+    "$compile",
+    "$http",
+    "$templateCache",
+    "Window",
+    function ($timeout, $compile, $http, $templateCache, Window) {
       return new Window($timeout, $compile, $http, $templateCache);
-    }
+    },
   ]);
-
-}).call(this);
+}.call(this));
 
 /*
 !
@@ -5047,7 +6726,6 @@ Nicolas Laplante - https://plus.google.com/108189012221374960701
 Nicholas McCready - https://twitter.com/nmccready
 */
 
-
 /*
 Map info window directive
 
@@ -5058,15 +6736,32 @@ This directive creates a new scope.
 {attribute show optional}    map will show when this expression returns true
 */
 
-
-(function() {
+(function () {
   angular.module("google-maps").directive("windows", [
-    "$timeout", "$compile", "$http", "$templateCache", "$interpolate", "Windows", function($timeout, $compile, $http, $templateCache, $interpolate, Windows) {
-      return new Windows($timeout, $compile, $http, $templateCache, $interpolate);
-    }
+    "$timeout",
+    "$compile",
+    "$http",
+    "$templateCache",
+    "$interpolate",
+    "Windows",
+    function (
+      $timeout,
+      $compile,
+      $http,
+      $templateCache,
+      $interpolate,
+      Windows
+    ) {
+      return new Windows(
+        $timeout,
+        $compile,
+        $http,
+        $templateCache,
+        $interpolate
+      );
+    },
   ]);
-
-}).call(this);
+}.call(this));
 
 /*
 !
@@ -5100,7 +6795,6 @@ https://github.com/nlaplante/angular-google-maps
 - Nicholas McCready - https://twitter.com/nmccready
 */
 
-
 /*
 Map Layer directive
 
@@ -5110,14 +6804,20 @@ This directive creates a new scope.
 {attribute show optional}  true (default) shows the trafficlayer otherwise it is hidden
 */
 
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+(function () {
+  var __bind = function (fn, me) {
+    return function () {
+      return fn.apply(me, arguments);
+    };
+  };
 
   angular.module("google-maps").directive("layer", [
-    "$timeout", "Logger", "LayerParentModel", function($timeout, Logger, LayerParentModel) {
+    "$timeout",
+    "Logger",
+    "LayerParentModel",
+    function ($timeout, Logger, LayerParentModel) {
       var Layer;
-      Layer = (function() {
+      Layer = (function () {
         function Layer($timeout) {
           this.$timeout = $timeout;
           this.link = __bind(this.link, this);
@@ -5126,34 +6826,46 @@ This directive creates a new scope.
           this.require = "^googleMap";
           this.priority = -1;
           this.transclude = true;
-          this.template = '<span class=\"angular-google-map-layer\" ng-transclude></span>';
+          this.template =
+            '<span class="angular-google-map-layer" ng-transclude></span>';
           this.replace = true;
           this.scope = {
             show: "=show",
             type: "=type",
             namespace: "=namespace",
-            options: '=options',
-            onCreated: '&oncreated'
+            options: "=options",
+            onCreated: "&oncreated",
           };
         }
 
-        Layer.prototype.link = function(scope, element, attrs, mapCtrl) {
+        Layer.prototype.link = function (scope, element, attrs, mapCtrl) {
           if (attrs.oncreated != null) {
-            return new LayerParentModel(scope, element, attrs, mapCtrl, this.$timeout, scope.onCreated);
+            return new LayerParentModel(
+              scope,
+              element,
+              attrs,
+              mapCtrl,
+              this.$timeout,
+              scope.onCreated
+            );
           } else {
-            return new LayerParentModel(scope, element, attrs, mapCtrl, this.$timeout);
+            return new LayerParentModel(
+              scope,
+              element,
+              attrs,
+              mapCtrl,
+              this.$timeout
+            );
           }
         };
 
         return Layer;
-
       })();
       return new Layer($timeout);
-    }
+    },
   ]);
-
-}).call(this);
-;/**
+}.call(this));
+/**
  * @name InfoBox
  * @version 1.1.12 [December 11, 2012]
  * @author Gary Little (inspired by proof-of-concept code from Pamela Fox of Google)
@@ -5165,7 +6877,6 @@ This directive creates a new scope.
  *  <p>
  *  An InfoBox also fires the same events as a <tt>google.maps.InfoWindow</tt>.
  */
-
 /*!
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -5230,50 +6941,52 @@ This directive creates a new scope.
  * @param {InfoBoxOptions} [opt_opts]
  */
 function InfoBox(opt_opts) {
+  opt_opts = opt_opts || {};
 
-    opt_opts = opt_opts || {};
+  google.maps.OverlayView.apply(this, arguments);
 
-    google.maps.OverlayView.apply(this, arguments);
+  // Standard options (in common with google.maps.InfoWindow):
+  //
+  this.content_ = opt_opts.content || "";
+  this.disableAutoPan_ = opt_opts.disableAutoPan || false;
+  this.maxWidth_ = opt_opts.maxWidth || 0;
+  this.pixelOffset_ = opt_opts.pixelOffset || new google.maps.Size(0, 0);
+  this.position_ = opt_opts.position || new google.maps.LatLng(0, 0);
+  this.zIndex_ = opt_opts.zIndex || null;
 
-    // Standard options (in common with google.maps.InfoWindow):
-    //
-    this.content_ = opt_opts.content || "";
-    this.disableAutoPan_ = opt_opts.disableAutoPan || false;
-    this.maxWidth_ = opt_opts.maxWidth || 0;
-    this.pixelOffset_ = opt_opts.pixelOffset || new google.maps.Size(0, 0);
-    this.position_ = opt_opts.position || new google.maps.LatLng(0, 0);
-    this.zIndex_ = opt_opts.zIndex || null;
+  // Additional options (unique to InfoBox):
+  //
+  this.boxClass_ = opt_opts.boxClass || "infoBox";
+  this.boxStyle_ = opt_opts.boxStyle || {};
+  this.closeBoxMargin_ = opt_opts.closeBoxMargin || "2px";
+  this.closeBoxURL_ =
+    opt_opts.closeBoxURL ||
+    "http://www.google.com/intl/en_us/mapfiles/close.gif";
+  if (opt_opts.closeBoxURL === "") {
+    this.closeBoxURL_ = "";
+  }
+  this.infoBoxClearance_ =
+    opt_opts.infoBoxClearance || new google.maps.Size(1, 1);
 
-    // Additional options (unique to InfoBox):
-    //
-    this.boxClass_ = opt_opts.boxClass || "infoBox";
-    this.boxStyle_ = opt_opts.boxStyle || {};
-    this.closeBoxMargin_ = opt_opts.closeBoxMargin || "2px";
-    this.closeBoxURL_ = opt_opts.closeBoxURL || "http://www.google.com/intl/en_us/mapfiles/close.gif";
-    if (opt_opts.closeBoxURL === "") {
-        this.closeBoxURL_ = "";
+  if (typeof opt_opts.visible === "undefined") {
+    if (typeof opt_opts.isHidden === "undefined") {
+      opt_opts.visible = true;
+    } else {
+      opt_opts.visible = !opt_opts.isHidden;
     }
-    this.infoBoxClearance_ = opt_opts.infoBoxClearance || new google.maps.Size(1, 1);
+  }
+  this.isHidden_ = !opt_opts.visible;
 
-    if (typeof opt_opts.visible === "undefined") {
-        if (typeof opt_opts.isHidden === "undefined") {
-            opt_opts.visible = true;
-        } else {
-            opt_opts.visible = !opt_opts.isHidden;
-        }
-    }
-    this.isHidden_ = !opt_opts.visible;
+  this.alignBottom_ = opt_opts.alignBottom || false;
+  this.pane_ = opt_opts.pane || "floatPane";
+  this.enableEventPropagation_ = opt_opts.enableEventPropagation || false;
 
-    this.alignBottom_ = opt_opts.alignBottom || false;
-    this.pane_ = opt_opts.pane || "floatPane";
-    this.enableEventPropagation_ = opt_opts.enableEventPropagation || false;
-
-    this.div_ = null;
-    this.closeListener_ = null;
-    this.moveListener_ = null;
-    this.contextListener_ = null;
-    this.eventListeners_ = null;
-    this.fixedWidthSet_ = null;
+  this.div_ = null;
+  this.closeListener_ = null;
+  this.moveListener_ = null;
+  this.contextListener_ = null;
+  this.eventListeners_ = null;
+  this.fixedWidthSet_ = null;
 }
 
 /* InfoBox extends OverlayView in the Google Maps API v3.
@@ -5285,111 +6998,118 @@ InfoBox.prototype = new google.maps.OverlayView();
  * @private
  */
 InfoBox.prototype.createInfoBoxDiv_ = function () {
+  var i;
+  var events;
+  var bw;
+  var me = this;
 
-    var i;
-    var events;
-    var bw;
-    var me = this;
-
-    // This handler prevents an event in the InfoBox from being passed on to the map.
-    //
-    var cancelHandler = function (e) {
-        e.cancelBubble = true;
-        if (e.stopPropagation) {
-            e.stopPropagation();
-        }
-    };
-
-    // This handler ignores the current event in the InfoBox and conditionally prevents
-    // the event from being passed on to the map. It is used for the contextmenu event.
-    //
-    var ignoreHandler = function (e) {
-
-        e.returnValue = false;
-
-        if (e.preventDefault) {
-
-            e.preventDefault();
-        }
-
-        if (!me.enableEventPropagation_) {
-
-            cancelHandler(e);
-        }
-    };
-
-    if (!this.div_) {
-
-        this.div_ = document.createElement("div");
-
-        this.setBoxStyle_();
-
-        if (typeof this.content_.nodeType === "undefined") {
-            this.div_.innerHTML = this.getCloseBoxImg_() + this.content_;
-        } else {
-            this.div_.innerHTML = this.getCloseBoxImg_();
-            this.div_.appendChild(this.content_);
-        }
-
-        // Add the InfoBox DIV to the DOM
-        this.getPanes()[this.pane_].appendChild(this.div_);
-
-        this.addClickHandler_();
-
-        if (this.div_.style.width) {
-
-            this.fixedWidthSet_ = true;
-
-        } else {
-
-            if (this.maxWidth_ !== 0 && this.div_.offsetWidth > this.maxWidth_) {
-
-                this.div_.style.width = this.maxWidth_;
-                this.div_.style.overflow = "auto";
-                this.fixedWidthSet_ = true;
-
-            } else { // The following code is needed to overcome problems with MSIE
-
-                bw = this.getBoxWidths_();
-
-                this.div_.style.width = (this.div_.offsetWidth - bw.left - bw.right) + "px";
-                this.fixedWidthSet_ = false;
-            }
-        }
-
-        this.panBox_(this.disableAutoPan_);
-
-        if (!this.enableEventPropagation_) {
-
-            this.eventListeners_ = [];
-
-            // Cancel event propagation.
-            //
-            // Note: mousemove not included (to resolve Issue 152)
-            events = ["mousedown", "mouseover", "mouseout", "mouseup",
-                "click", "dblclick", "touchstart", "touchend", "touchmove"];
-
-            for (i = 0; i < events.length; i++) {
-
-                this.eventListeners_.push(google.maps.event.addDomListener(this.div_, events[i], cancelHandler));
-            }
-
-            // Workaround for Google bug that causes the cursor to change to a pointer
-            // when the mouse moves over a marker underneath InfoBox.
-            this.eventListeners_.push(google.maps.event.addDomListener(this.div_, "mouseover", function (e) {
-                this.style.cursor = "default";
-            }));
-        }
-
-        this.contextListener_ = google.maps.event.addDomListener(this.div_, "contextmenu", ignoreHandler);
-
-        /**
-         * This event is fired when the DIV containing the InfoBox's content is attached to the DOM.
-         * @name InfoBox#domready
-         * @event
-         */
-        google.maps.event.trigger(this, "domready");
+  // This handler prevents an event in the InfoBox from being passed on to the map.
+  //
+  var cancelHandler = function (e) {
+    e.cancelBubble = true;
+    if (e.stopPropagation) {
+      e.stopPropagation();
     }
+  };
+
+  // This handler ignores the current event in the InfoBox and conditionally prevents
+  // the event from being passed on to the map. It is used for the contextmenu event.
+  //
+  var ignoreHandler = function (e) {
+    e.returnValue = false;
+
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+
+    if (!me.enableEventPropagation_) {
+      cancelHandler(e);
+    }
+  };
+
+  if (!this.div_) {
+    this.div_ = document.createElement("div");
+
+    this.setBoxStyle_();
+
+    if (typeof this.content_.nodeType === "undefined") {
+      this.div_.innerHTML = this.getCloseBoxImg_() + this.content_;
+    } else {
+      this.div_.innerHTML = this.getCloseBoxImg_();
+      this.div_.appendChild(this.content_);
+    }
+
+    // Add the InfoBox DIV to the DOM
+    this.getPanes()[this.pane_].appendChild(this.div_);
+
+    this.addClickHandler_();
+
+    if (this.div_.style.width) {
+      this.fixedWidthSet_ = true;
+    } else {
+      if (this.maxWidth_ !== 0 && this.div_.offsetWidth > this.maxWidth_) {
+        this.div_.style.width = this.maxWidth_;
+        this.div_.style.overflow = "auto";
+        this.fixedWidthSet_ = true;
+      } else {
+        // The following code is needed to overcome problems with MSIE
+
+        bw = this.getBoxWidths_();
+
+        this.div_.style.width =
+          this.div_.offsetWidth - bw.left - bw.right + "px";
+        this.fixedWidthSet_ = false;
+      }
+    }
+
+    this.panBox_(this.disableAutoPan_);
+
+    if (!this.enableEventPropagation_) {
+      this.eventListeners_ = [];
+
+      // Cancel event propagation.
+      //
+      // Note: mousemove not included (to resolve Issue 152)
+      events = [
+        "mousedown",
+        "mouseover",
+        "mouseout",
+        "mouseup",
+        "click",
+        "dblclick",
+        "touchstart",
+        "touchend",
+        "touchmove",
+      ];
+
+      for (i = 0; i < events.length; i++) {
+        this.eventListeners_.push(
+          google.maps.event.addDomListener(this.div_, events[i], cancelHandler)
+        );
+      }
+
+      // Workaround for Google bug that causes the cursor to change to a pointer
+      // when the mouse moves over a marker underneath InfoBox.
+      this.eventListeners_.push(
+        google.maps.event.addDomListener(this.div_, "mouseover", function (e) {
+          this.style.cursor = "default";
+        })
+      );
+    }
+
+    this.contextListener_ = google.maps.event.addDomListener(
+      this.div_,
+      "contextmenu",
+      ignoreHandler
+    );
+
+    /**
+     * This event is fired when the DIV containing the InfoBox's content is attached to the DOM.
+     * @name InfoBox#domready
+     * @event
+     */
+    google.maps.event.trigger(this, "domready");
+  }
 };
 
 /**
@@ -5397,22 +7117,20 @@ InfoBox.prototype.createInfoBoxDiv_ = function () {
  * @private
  */
 InfoBox.prototype.getCloseBoxImg_ = function () {
+  var img = "";
 
-    var img = "";
+  if (this.closeBoxURL_ !== "") {
+    img = "<img";
+    img += " src='" + this.closeBoxURL_ + "'";
+    img += " align=right"; // Do this because Opera chokes on style='float: right;'
+    img += " style='";
+    img += " position: relative;"; // Required by MSIE
+    img += " cursor: pointer;";
+    img += " margin: " + this.closeBoxMargin_ + ";";
+    img += "'>";
+  }
 
-    if (this.closeBoxURL_ !== "") {
-
-        img  = "<img";
-        img += " src='" + this.closeBoxURL_ + "'";
-        img += " align=right"; // Do this because Opera chokes on style='float: right;'
-        img += " style='";
-        img += " position: relative;"; // Required by MSIE
-        img += " cursor: pointer;";
-        img += " margin: " + this.closeBoxMargin_ + ";";
-        img += "'>";
-    }
-
-    return img;
+  return img;
 };
 
 /**
@@ -5420,18 +7138,18 @@ InfoBox.prototype.getCloseBoxImg_ = function () {
  * @private
  */
 InfoBox.prototype.addClickHandler_ = function () {
+  var closeBox;
 
-    var closeBox;
-
-    if (this.closeBoxURL_ !== "") {
-
-        closeBox = this.div_.firstChild;
-        this.closeListener_ = google.maps.event.addDomListener(closeBox, "click", this.getCloseClickHandler_());
-
-    } else {
-
-        this.closeListener_ = null;
-    }
+  if (this.closeBoxURL_ !== "") {
+    closeBox = this.div_.firstChild;
+    this.closeListener_ = google.maps.event.addDomListener(
+      closeBox,
+      "click",
+      this.getCloseClickHandler_()
+    );
+  } else {
+    this.closeListener_ = null;
+  }
 };
 
 /**
@@ -5439,28 +7157,25 @@ InfoBox.prototype.addClickHandler_ = function () {
  * @private
  */
 InfoBox.prototype.getCloseClickHandler_ = function () {
+  var me = this;
 
-    var me = this;
+  return function (e) {
+    // 1.0.3 fix: Always prevent propagation of a close box click to the map:
+    e.cancelBubble = true;
 
-    return function (e) {
+    if (e.stopPropagation) {
+      e.stopPropagation();
+    }
 
-        // 1.0.3 fix: Always prevent propagation of a close box click to the map:
-        e.cancelBubble = true;
+    /**
+     * This event is fired when the InfoBox's close box is clicked.
+     * @name InfoBox#closeclick
+     * @event
+     */
+    google.maps.event.trigger(me, "closeclick");
 
-        if (e.stopPropagation) {
-
-            e.stopPropagation();
-        }
-
-        /**
-         * This event is fired when the InfoBox's close box is clicked.
-         * @name InfoBox#closeclick
-         * @event
-         */
-        google.maps.event.trigger(me, "closeclick");
-
-        me.close();
-    };
+    me.close();
+  };
 };
 
 /**
@@ -5468,64 +7183,65 @@ InfoBox.prototype.getCloseClickHandler_ = function () {
  * @private
  */
 InfoBox.prototype.panBox_ = function (disablePan) {
+  var map;
+  var bounds;
+  var xOffset = 0,
+    yOffset = 0;
 
-    var map;
-    var bounds;
-    var xOffset = 0, yOffset = 0;
+  if (!disablePan) {
+    map = this.getMap();
 
-    if (!disablePan) {
+    if (map instanceof google.maps.Map) {
+      // Only pan if attached to map, not panorama
 
-        map = this.getMap();
+      if (!map.getBounds().contains(this.position_)) {
+        // Marker not in visible area of map, so set center
+        // of map to the marker position first.
+        map.setCenter(this.position_);
+      }
 
-        if (map instanceof google.maps.Map) { // Only pan if attached to map, not panorama
+      bounds = map.getBounds();
 
-            if (!map.getBounds().contains(this.position_)) {
-                // Marker not in visible area of map, so set center
-                // of map to the marker position first.
-                map.setCenter(this.position_);
-            }
+      var mapDiv = map.getDiv();
+      var mapWidth = mapDiv.offsetWidth;
+      var mapHeight = mapDiv.offsetHeight;
+      var iwOffsetX = this.pixelOffset_.width;
+      var iwOffsetY = this.pixelOffset_.height;
+      var iwWidth = this.div_.offsetWidth;
+      var iwHeight = this.div_.offsetHeight;
+      var padX = this.infoBoxClearance_.width;
+      var padY = this.infoBoxClearance_.height;
+      var pixPosition = this.getProjection().fromLatLngToContainerPixel(
+        this.position_
+      );
 
-            bounds = map.getBounds();
-
-            var mapDiv = map.getDiv();
-            var mapWidth = mapDiv.offsetWidth;
-            var mapHeight = mapDiv.offsetHeight;
-            var iwOffsetX = this.pixelOffset_.width;
-            var iwOffsetY = this.pixelOffset_.height;
-            var iwWidth = this.div_.offsetWidth;
-            var iwHeight = this.div_.offsetHeight;
-            var padX = this.infoBoxClearance_.width;
-            var padY = this.infoBoxClearance_.height;
-            var pixPosition = this.getProjection().fromLatLngToContainerPixel(this.position_);
-
-            if (pixPosition.x < (-iwOffsetX + padX)) {
-                xOffset = pixPosition.x + iwOffsetX - padX;
-            } else if ((pixPosition.x + iwWidth + iwOffsetX + padX) > mapWidth) {
-                xOffset = pixPosition.x + iwWidth + iwOffsetX + padX - mapWidth;
-            }
-            if (this.alignBottom_) {
-                if (pixPosition.y < (-iwOffsetY + padY + iwHeight)) {
-                    yOffset = pixPosition.y + iwOffsetY - padY - iwHeight;
-                } else if ((pixPosition.y + iwOffsetY + padY) > mapHeight) {
-                    yOffset = pixPosition.y + iwOffsetY + padY - mapHeight;
-                }
-            } else {
-                if (pixPosition.y < (-iwOffsetY + padY)) {
-                    yOffset = pixPosition.y + iwOffsetY - padY;
-                } else if ((pixPosition.y + iwHeight + iwOffsetY + padY) > mapHeight) {
-                    yOffset = pixPosition.y + iwHeight + iwOffsetY + padY - mapHeight;
-                }
-            }
-
-            if (!(xOffset === 0 && yOffset === 0)) {
-
-                // Move the map to the shifted center.
-                //
-                var c = map.getCenter();
-                map.panBy(xOffset, yOffset);
-            }
+      if (pixPosition.x < -iwOffsetX + padX) {
+        xOffset = pixPosition.x + iwOffsetX - padX;
+      } else if (pixPosition.x + iwWidth + iwOffsetX + padX > mapWidth) {
+        xOffset = pixPosition.x + iwWidth + iwOffsetX + padX - mapWidth;
+      }
+      if (this.alignBottom_) {
+        if (pixPosition.y < -iwOffsetY + padY + iwHeight) {
+          yOffset = pixPosition.y + iwOffsetY - padY - iwHeight;
+        } else if (pixPosition.y + iwOffsetY + padY > mapHeight) {
+          yOffset = pixPosition.y + iwOffsetY + padY - mapHeight;
         }
+      } else {
+        if (pixPosition.y < -iwOffsetY + padY) {
+          yOffset = pixPosition.y + iwOffsetY - padY;
+        } else if (pixPosition.y + iwHeight + iwOffsetY + padY > mapHeight) {
+          yOffset = pixPosition.y + iwHeight + iwOffsetY + padY - mapHeight;
+        }
+      }
+
+      if (!(xOffset === 0 && yOffset === 0)) {
+        // Move the map to the shifted center.
+        //
+        var c = map.getCenter();
+        map.panBy(xOffset, yOffset);
+      }
     }
+  }
 };
 
 /**
@@ -5534,43 +7250,41 @@ InfoBox.prototype.panBox_ = function (disablePan) {
  * @private
  */
 InfoBox.prototype.setBoxStyle_ = function () {
+  var i, boxStyle;
 
-    var i, boxStyle;
+  if (this.div_) {
+    // Apply style values from the style sheet defined in the boxClass parameter:
+    this.div_.className = this.boxClass_;
 
-    if (this.div_) {
+    // Clear existing inline style values:
+    this.div_.style.cssText = "";
 
-        // Apply style values from the style sheet defined in the boxClass parameter:
-        this.div_.className = this.boxClass_;
-
-        // Clear existing inline style values:
-        this.div_.style.cssText = "";
-
-        // Apply style values defined in the boxStyle parameter:
-        boxStyle = this.boxStyle_;
-        for (i in boxStyle) {
-
-            if (boxStyle.hasOwnProperty(i)) {
-
-                this.div_.style[i] = boxStyle[i];
-            }
-        }
-
-        // Fix up opacity style for benefit of MSIE:
-        //
-        if (typeof this.div_.style.opacity !== "undefined" && this.div_.style.opacity !== "") {
-
-            this.div_.style.filter = "alpha(opacity=" + (this.div_.style.opacity * 100) + ")";
-        }
-
-        // Apply required styles:
-        //
-        this.div_.style.position = "absolute";
-        this.div_.style.visibility = 'hidden';
-        if (this.zIndex_ !== null) {
-
-            this.div_.style.zIndex = this.zIndex_;
-        }
+    // Apply style values defined in the boxStyle parameter:
+    boxStyle = this.boxStyle_;
+    for (i in boxStyle) {
+      if (boxStyle.hasOwnProperty(i)) {
+        this.div_.style[i] = boxStyle[i];
+      }
     }
+
+    // Fix up opacity style for benefit of MSIE:
+    //
+    if (
+      typeof this.div_.style.opacity !== "undefined" &&
+      this.div_.style.opacity !== ""
+    ) {
+      this.div_.style.filter =
+        "alpha(opacity=" + this.div_.style.opacity * 100 + ")";
+    }
+
+    // Apply required styles:
+    //
+    this.div_.style.position = "absolute";
+    this.div_.style.visibility = "hidden";
+    if (this.zIndex_ !== null) {
+      this.div_.style.zIndex = this.zIndex_;
+    }
+  }
 };
 
 /**
@@ -5579,76 +7293,66 @@ InfoBox.prototype.setBoxStyle_ = function () {
  * @return {Object} widths object (top, bottom left, right)
  */
 InfoBox.prototype.getBoxWidths_ = function () {
+  var computedStyle;
+  var bw = { top: 0, bottom: 0, left: 0, right: 0 };
+  var box = this.div_;
 
-    var computedStyle;
-    var bw = {top: 0, bottom: 0, left: 0, right: 0};
-    var box = this.div_;
+  if (document.defaultView && document.defaultView.getComputedStyle) {
+    computedStyle = box.ownerDocument.defaultView.getComputedStyle(box, "");
 
-    if (document.defaultView && document.defaultView.getComputedStyle) {
-
-        computedStyle = box.ownerDocument.defaultView.getComputedStyle(box, "");
-
-        if (computedStyle) {
-
-            // The computed styles are always in pixel units (good!)
-            bw.top = parseInt(computedStyle.borderTopWidth, 10) || 0;
-            bw.bottom = parseInt(computedStyle.borderBottomWidth, 10) || 0;
-            bw.left = parseInt(computedStyle.borderLeftWidth, 10) || 0;
-            bw.right = parseInt(computedStyle.borderRightWidth, 10) || 0;
-        }
-
-    } else if (document.documentElement.currentStyle) { // MSIE
-
-        if (box.currentStyle) {
-
-            // The current styles may not be in pixel units, but assume they are (bad!)
-            bw.top = parseInt(box.currentStyle.borderTopWidth, 10) || 0;
-            bw.bottom = parseInt(box.currentStyle.borderBottomWidth, 10) || 0;
-            bw.left = parseInt(box.currentStyle.borderLeftWidth, 10) || 0;
-            bw.right = parseInt(box.currentStyle.borderRightWidth, 10) || 0;
-        }
+    if (computedStyle) {
+      // The computed styles are always in pixel units (good!)
+      bw.top = parseInt(computedStyle.borderTopWidth, 10) || 0;
+      bw.bottom = parseInt(computedStyle.borderBottomWidth, 10) || 0;
+      bw.left = parseInt(computedStyle.borderLeftWidth, 10) || 0;
+      bw.right = parseInt(computedStyle.borderRightWidth, 10) || 0;
     }
+  } else if (document.documentElement.currentStyle) {
+    // MSIE
 
-    return bw;
+    if (box.currentStyle) {
+      // The current styles may not be in pixel units, but assume they are (bad!)
+      bw.top = parseInt(box.currentStyle.borderTopWidth, 10) || 0;
+      bw.bottom = parseInt(box.currentStyle.borderBottomWidth, 10) || 0;
+      bw.left = parseInt(box.currentStyle.borderLeftWidth, 10) || 0;
+      bw.right = parseInt(box.currentStyle.borderRightWidth, 10) || 0;
+    }
+  }
+
+  return bw;
 };
 
 /**
  * Invoked when <tt>close</tt> is called. Do not call it directly.
  */
 InfoBox.prototype.onRemove = function () {
-
-    if (this.div_) {
-
-        this.div_.parentNode.removeChild(this.div_);
-        this.div_ = null;
-    }
+  if (this.div_) {
+    this.div_.parentNode.removeChild(this.div_);
+    this.div_ = null;
+  }
 };
 
 /**
  * Draws the InfoBox based on the current map projection and zoom level.
  */
 InfoBox.prototype.draw = function () {
+  this.createInfoBoxDiv_();
 
-    this.createInfoBoxDiv_();
+  var pixPosition = this.getProjection().fromLatLngToDivPixel(this.position_);
 
-    var pixPosition = this.getProjection().fromLatLngToDivPixel(this.position_);
+  this.div_.style.left = pixPosition.x + this.pixelOffset_.width + "px";
 
-    this.div_.style.left = (pixPosition.x + this.pixelOffset_.width) + "px";
+  if (this.alignBottom_) {
+    this.div_.style.bottom = -(pixPosition.y + this.pixelOffset_.height) + "px";
+  } else {
+    this.div_.style.top = pixPosition.y + this.pixelOffset_.height + "px";
+  }
 
-    if (this.alignBottom_) {
-        this.div_.style.bottom = -(pixPosition.y + this.pixelOffset_.height) + "px";
-    } else {
-        this.div_.style.top = (pixPosition.y + this.pixelOffset_.height) + "px";
-    }
-
-    if (this.isHidden_) {
-
-        this.div_.style.visibility = 'hidden';
-
-    } else {
-
-        this.div_.style.visibility = "visible";
-    }
+  if (this.isHidden_) {
+    this.div_.style.visibility = "hidden";
+  } else {
+    this.div_.style.visibility = "visible";
+  }
 };
 
 /**
@@ -5659,73 +7363,61 @@ InfoBox.prototype.draw = function () {
  * @param {InfoBoxOptions} opt_opts
  */
 InfoBox.prototype.setOptions = function (opt_opts) {
-    if (typeof opt_opts.boxClass !== "undefined") { // Must be first
+  if (typeof opt_opts.boxClass !== "undefined") {
+    // Must be first
 
-        this.boxClass_ = opt_opts.boxClass;
-        this.setBoxStyle_();
-    }
-    if (typeof opt_opts.boxStyle !== "undefined") { // Must be second
+    this.boxClass_ = opt_opts.boxClass;
+    this.setBoxStyle_();
+  }
+  if (typeof opt_opts.boxStyle !== "undefined") {
+    // Must be second
 
-        this.boxStyle_ = opt_opts.boxStyle;
-        this.setBoxStyle_();
-    }
-    if (typeof opt_opts.content !== "undefined") {
+    this.boxStyle_ = opt_opts.boxStyle;
+    this.setBoxStyle_();
+  }
+  if (typeof opt_opts.content !== "undefined") {
+    this.setContent(opt_opts.content);
+  }
+  if (typeof opt_opts.disableAutoPan !== "undefined") {
+    this.disableAutoPan_ = opt_opts.disableAutoPan;
+  }
+  if (typeof opt_opts.maxWidth !== "undefined") {
+    this.maxWidth_ = opt_opts.maxWidth;
+  }
+  if (typeof opt_opts.pixelOffset !== "undefined") {
+    this.pixelOffset_ = opt_opts.pixelOffset;
+  }
+  if (typeof opt_opts.alignBottom !== "undefined") {
+    this.alignBottom_ = opt_opts.alignBottom;
+  }
+  if (typeof opt_opts.position !== "undefined") {
+    this.setPosition(opt_opts.position);
+  }
+  if (typeof opt_opts.zIndex !== "undefined") {
+    this.setZIndex(opt_opts.zIndex);
+  }
+  if (typeof opt_opts.closeBoxMargin !== "undefined") {
+    this.closeBoxMargin_ = opt_opts.closeBoxMargin;
+  }
+  if (typeof opt_opts.closeBoxURL !== "undefined") {
+    this.closeBoxURL_ = opt_opts.closeBoxURL;
+  }
+  if (typeof opt_opts.infoBoxClearance !== "undefined") {
+    this.infoBoxClearance_ = opt_opts.infoBoxClearance;
+  }
+  if (typeof opt_opts.isHidden !== "undefined") {
+    this.isHidden_ = opt_opts.isHidden;
+  }
+  if (typeof opt_opts.visible !== "undefined") {
+    this.isHidden_ = !opt_opts.visible;
+  }
+  if (typeof opt_opts.enableEventPropagation !== "undefined") {
+    this.enableEventPropagation_ = opt_opts.enableEventPropagation;
+  }
 
-        this.setContent(opt_opts.content);
-    }
-    if (typeof opt_opts.disableAutoPan !== "undefined") {
-
-        this.disableAutoPan_ = opt_opts.disableAutoPan;
-    }
-    if (typeof opt_opts.maxWidth !== "undefined") {
-
-        this.maxWidth_ = opt_opts.maxWidth;
-    }
-    if (typeof opt_opts.pixelOffset !== "undefined") {
-
-        this.pixelOffset_ = opt_opts.pixelOffset;
-    }
-    if (typeof opt_opts.alignBottom !== "undefined") {
-
-        this.alignBottom_ = opt_opts.alignBottom;
-    }
-    if (typeof opt_opts.position !== "undefined") {
-
-        this.setPosition(opt_opts.position);
-    }
-    if (typeof opt_opts.zIndex !== "undefined") {
-
-        this.setZIndex(opt_opts.zIndex);
-    }
-    if (typeof opt_opts.closeBoxMargin !== "undefined") {
-
-        this.closeBoxMargin_ = opt_opts.closeBoxMargin;
-    }
-    if (typeof opt_opts.closeBoxURL !== "undefined") {
-
-        this.closeBoxURL_ = opt_opts.closeBoxURL;
-    }
-    if (typeof opt_opts.infoBoxClearance !== "undefined") {
-
-        this.infoBoxClearance_ = opt_opts.infoBoxClearance;
-    }
-    if (typeof opt_opts.isHidden !== "undefined") {
-
-        this.isHidden_ = opt_opts.isHidden;
-    }
-    if (typeof opt_opts.visible !== "undefined") {
-
-        this.isHidden_ = !opt_opts.visible;
-    }
-    if (typeof opt_opts.enableEventPropagation !== "undefined") {
-
-        this.enableEventPropagation_ = opt_opts.enableEventPropagation;
-    }
-
-    if (this.div_) {
-
-        this.draw();
-    }
+  if (this.div_) {
+    this.draw();
+  }
 };
 
 /**
@@ -5734,52 +7426,49 @@ InfoBox.prototype.setOptions = function (opt_opts) {
  * @param {string|Node} content
  */
 InfoBox.prototype.setContent = function (content) {
-    this.content_ = content;
+  this.content_ = content;
 
-    if (this.div_) {
-
-        if (this.closeListener_) {
-
-            google.maps.event.removeListener(this.closeListener_);
-            this.closeListener_ = null;
-        }
-
-        // Odd code required to make things work with MSIE.
-        //
-        if (!this.fixedWidthSet_) {
-
-            this.div_.style.width = "";
-        }
-
-        if (typeof content.nodeType === "undefined") {
-            this.div_.innerHTML = this.getCloseBoxImg_() + content;
-        } else {
-            this.div_.innerHTML = this.getCloseBoxImg_();
-            this.div_.appendChild(content);
-        }
-
-        // Perverse code required to make things work with MSIE.
-        // (Ensures the close box does, in fact, float to the right.)
-        //
-        if (!this.fixedWidthSet_) {
-            this.div_.style.width = this.div_.offsetWidth + "px";
-            if (typeof content.nodeType === "undefined") {
-                this.div_.innerHTML = this.getCloseBoxImg_() + content;
-            } else {
-                this.div_.innerHTML = this.getCloseBoxImg_();
-                this.div_.appendChild(content);
-            }
-        }
-
-        this.addClickHandler_();
+  if (this.div_) {
+    if (this.closeListener_) {
+      google.maps.event.removeListener(this.closeListener_);
+      this.closeListener_ = null;
     }
 
-    /**
-     * This event is fired when the content of the InfoBox changes.
-     * @name InfoBox#content_changed
-     * @event
-     */
-    google.maps.event.trigger(this, "content_changed");
+    // Odd code required to make things work with MSIE.
+    //
+    if (!this.fixedWidthSet_) {
+      this.div_.style.width = "";
+    }
+
+    if (typeof content.nodeType === "undefined") {
+      this.div_.innerHTML = this.getCloseBoxImg_() + content;
+    } else {
+      this.div_.innerHTML = this.getCloseBoxImg_();
+      this.div_.appendChild(content);
+    }
+
+    // Perverse code required to make things work with MSIE.
+    // (Ensures the close box does, in fact, float to the right.)
+    //
+    if (!this.fixedWidthSet_) {
+      this.div_.style.width = this.div_.offsetWidth + "px";
+      if (typeof content.nodeType === "undefined") {
+        this.div_.innerHTML = this.getCloseBoxImg_() + content;
+      } else {
+        this.div_.innerHTML = this.getCloseBoxImg_();
+        this.div_.appendChild(content);
+      }
+    }
+
+    this.addClickHandler_();
+  }
+
+  /**
+   * This event is fired when the content of the InfoBox changes.
+   * @name InfoBox#content_changed
+   * @event
+   */
+  google.maps.event.trigger(this, "content_changed");
 };
 
 /**
@@ -5787,20 +7476,18 @@ InfoBox.prototype.setContent = function (content) {
  * @param {LatLng} latlng
  */
 InfoBox.prototype.setPosition = function (latlng) {
+  this.position_ = latlng;
 
-    this.position_ = latlng;
+  if (this.div_) {
+    this.draw();
+  }
 
-    if (this.div_) {
-
-        this.draw();
-    }
-
-    /**
-     * This event is fired when the position of the InfoBox changes.
-     * @name InfoBox#position_changed
-     * @event
-     */
-    google.maps.event.trigger(this, "position_changed");
+  /**
+   * This event is fired when the position of the InfoBox changes.
+   * @name InfoBox#position_changed
+   * @event
+   */
+  google.maps.event.trigger(this, "position_changed");
 };
 
 /**
@@ -5808,20 +7495,18 @@ InfoBox.prototype.setPosition = function (latlng) {
  * @param {number} index
  */
 InfoBox.prototype.setZIndex = function (index) {
+  this.zIndex_ = index;
 
-    this.zIndex_ = index;
+  if (this.div_) {
+    this.div_.style.zIndex = index;
+  }
 
-    if (this.div_) {
-
-        this.div_.style.zIndex = index;
-    }
-
-    /**
-     * This event is fired when the zIndex of the InfoBox changes.
-     * @name InfoBox#zindex_changed
-     * @event
-     */
-    google.maps.event.trigger(this, "zindex_changed");
+  /**
+   * This event is fired when the zIndex of the InfoBox changes.
+   * @name InfoBox#zindex_changed
+   * @event
+   */
+  google.maps.event.trigger(this, "zindex_changed");
 };
 
 /**
@@ -5829,11 +7514,10 @@ InfoBox.prototype.setZIndex = function (index) {
  * @param {boolean} isVisible
  */
 InfoBox.prototype.setVisible = function (isVisible) {
-
-    this.isHidden_ = !isVisible;
-    if (this.div_) {
-        this.div_.style.visibility = (this.isHidden_ ? "hidden" : "visible");
-    }
+  this.isHidden_ = !isVisible;
+  if (this.div_) {
+    this.div_.style.visibility = this.isHidden_ ? "hidden" : "visible";
+  }
 };
 
 /**
@@ -5841,8 +7525,7 @@ InfoBox.prototype.setVisible = function (isVisible) {
  * @returns {string}
  */
 InfoBox.prototype.getContent = function () {
-
-    return this.content_;
+  return this.content_;
 };
 
 /**
@@ -5850,8 +7533,7 @@ InfoBox.prototype.getContent = function () {
  * @returns {LatLng}
  */
 InfoBox.prototype.getPosition = function () {
-
-    return this.position_;
+  return this.position_;
 };
 
 /**
@@ -5859,8 +7541,7 @@ InfoBox.prototype.getPosition = function () {
  * @returns {number}
  */
 InfoBox.prototype.getZIndex = function () {
-
-    return this.zIndex_;
+  return this.zIndex_;
 };
 
 /**
@@ -5868,37 +7549,34 @@ InfoBox.prototype.getZIndex = function () {
  * @returns {boolean}
  */
 InfoBox.prototype.getVisible = function () {
+  var isVisible;
 
-    var isVisible;
-
-    if ((typeof this.getMap() === "undefined") || (this.getMap() === null)) {
-        isVisible = false;
-    } else {
-        isVisible = !this.isHidden_;
-    }
-    return isVisible;
+  if (typeof this.getMap() === "undefined" || this.getMap() === null) {
+    isVisible = false;
+  } else {
+    isVisible = !this.isHidden_;
+  }
+  return isVisible;
 };
 
 /**
  * Shows the InfoBox. [Deprecated; use <tt>setVisible</tt> instead.]
  */
 InfoBox.prototype.show = function () {
-
-    this.isHidden_ = false;
-    if (this.div_) {
-        this.div_.style.visibility = "visible";
-    }
+  this.isHidden_ = false;
+  if (this.div_) {
+    this.div_.style.visibility = "visible";
+  }
 };
 
 /**
  * Hides the InfoBox. [Deprecated; use <tt>setVisible</tt> instead.]
  */
 InfoBox.prototype.hide = function () {
-
-    this.isHidden_ = true;
-    if (this.div_) {
-        this.div_.style.visibility = "hidden";
-    }
+  this.isHidden_ = true;
+  if (this.div_) {
+    this.div_.style.visibility = "hidden";
+  }
 };
 
 /**
@@ -5910,61 +7588,57 @@ InfoBox.prototype.hide = function () {
  * @param {MVCObject} [anchor]
  */
 InfoBox.prototype.open = function (map, anchor) {
+  var me = this;
 
-    var me = this;
+  if (anchor) {
+    this.position_ = anchor.getPosition();
+    this.moveListener_ = google.maps.event.addListener(
+      anchor,
+      "position_changed",
+      function () {
+        me.setPosition(this.getPosition());
+      }
+    );
+  }
 
-    if (anchor) {
+  this.setMap(map);
 
-        this.position_ = anchor.getPosition();
-        this.moveListener_ = google.maps.event.addListener(anchor, "position_changed", function () {
-            me.setPosition(this.getPosition());
-        });
-    }
-
-    this.setMap(map);
-
-    if (this.div_) {
-
-        this.panBox_();
-    }
+  if (this.div_) {
+    this.panBox_();
+  }
 };
 
 /**
  * Removes the InfoBox from the map.
  */
 InfoBox.prototype.close = function () {
+  var i;
 
-    var i;
+  if (this.closeListener_) {
+    google.maps.event.removeListener(this.closeListener_);
+    this.closeListener_ = null;
+  }
 
-    if (this.closeListener_) {
-
-        google.maps.event.removeListener(this.closeListener_);
-        this.closeListener_ = null;
+  if (this.eventListeners_) {
+    for (i = 0; i < this.eventListeners_.length; i++) {
+      google.maps.event.removeListener(this.eventListeners_[i]);
     }
+    this.eventListeners_ = null;
+  }
 
-    if (this.eventListeners_) {
+  if (this.moveListener_) {
+    google.maps.event.removeListener(this.moveListener_);
+    this.moveListener_ = null;
+  }
 
-        for (i = 0; i < this.eventListeners_.length; i++) {
+  if (this.contextListener_) {
+    google.maps.event.removeListener(this.contextListener_);
+    this.contextListener_ = null;
+  }
 
-            google.maps.event.removeListener(this.eventListeners_[i]);
-        }
-        this.eventListeners_ = null;
-    }
-
-    if (this.moveListener_) {
-
-        google.maps.event.removeListener(this.moveListener_);
-        this.moveListener_ = null;
-    }
-
-    if (this.contextListener_) {
-
-        google.maps.event.removeListener(this.contextListener_);
-        this.contextListener_ = null;
-    }
-
-    this.setMap(null);
-};;/**
+  this.setMap(null);
+};
+/**
  * @name MarkerClustererPlus for Google Maps V3
  * @version 2.1.1 [November 4, 2013]
  * @author Gary Little
@@ -6000,7 +7674,6 @@ InfoBox.prototype.close = function () {
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 /**
  * @name ClusterIconStyle
@@ -6061,189 +7734,226 @@ InfoBox.prototype.close = function () {
  * @private
  */
 function ClusterIcon(cluster, styles) {
-    cluster.getMarkerClusterer().extend(ClusterIcon, google.maps.OverlayView);
+  cluster.getMarkerClusterer().extend(ClusterIcon, google.maps.OverlayView);
 
-    this.cluster_ = cluster;
-    this.className_ = cluster.getMarkerClusterer().getClusterClass();
-    this.styles_ = styles;
-    this.center_ = null;
-    this.div_ = null;
-    this.sums_ = null;
-    this.visible_ = false;
+  this.cluster_ = cluster;
+  this.className_ = cluster.getMarkerClusterer().getClusterClass();
+  this.styles_ = styles;
+  this.center_ = null;
+  this.div_ = null;
+  this.sums_ = null;
+  this.visible_ = false;
 
-    this.setMap(cluster.getMap()); // Note: this causes onAdd to be called
+  this.setMap(cluster.getMap()); // Note: this causes onAdd to be called
 }
-
 
 /**
  * Adds the icon to the DOM.
  */
 ClusterIcon.prototype.onAdd = function () {
-    var cClusterIcon = this;
-    var cMouseDownInCluster;
-    var cDraggingMapByCluster;
+  var cClusterIcon = this;
+  var cMouseDownInCluster;
+  var cDraggingMapByCluster;
 
-    this.div_ = document.createElement("div");
-    this.div_.className = this.className_;
-    if (this.visible_) {
-        this.show();
+  this.div_ = document.createElement("div");
+  this.div_.className = this.className_;
+  if (this.visible_) {
+    this.show();
+  }
+
+  this.getPanes().overlayMouseTarget.appendChild(this.div_);
+
+  // Fix for Issue 157
+  this.boundsChangedListener_ = google.maps.event.addListener(
+    this.getMap(),
+    "bounds_changed",
+    function () {
+      cDraggingMapByCluster = cMouseDownInCluster;
     }
+  );
 
-    this.getPanes().overlayMouseTarget.appendChild(this.div_);
+  google.maps.event.addDomListener(this.div_, "mousedown", function () {
+    cMouseDownInCluster = true;
+    cDraggingMapByCluster = false;
+  });
 
-    // Fix for Issue 157
-    this.boundsChangedListener_ = google.maps.event.addListener(this.getMap(), "bounds_changed", function () {
-        cDraggingMapByCluster = cMouseDownInCluster;
-    });
+  google.maps.event.addDomListener(this.div_, "click", function (e) {
+    cMouseDownInCluster = false;
+    if (!cDraggingMapByCluster) {
+      var theBounds;
+      var mz;
+      var mc = cClusterIcon.cluster_.getMarkerClusterer();
+      /**
+       * This event is fired when a cluster marker is clicked.
+       * @name MarkerClusterer#click
+       * @param {Cluster} c The cluster that was clicked.
+       * @event
+       */
+      google.maps.event.trigger(mc, "click", cClusterIcon.cluster_);
+      google.maps.event.trigger(mc, "clusterclick", cClusterIcon.cluster_); // deprecated name
 
-    google.maps.event.addDomListener(this.div_, "mousedown", function () {
-        cMouseDownInCluster = true;
-        cDraggingMapByCluster = false;
-    });
+      // The default click handler follows. Disable it by setting
+      // the zoomOnClick property to false.
+      if (mc.getZoomOnClick()) {
+        // Zoom into the cluster.
+        mz = mc.getMaxZoom();
+        theBounds = cClusterIcon.cluster_.getBounds();
+        mc.getMap().fitBounds(theBounds);
+        // There is a fix for Issue 170 here:
+        setTimeout(function () {
+          mc.getMap().fitBounds(theBounds);
+          // Don't zoom beyond the max zoom level
+          if (mz !== null && mc.getMap().getZoom() > mz) {
+            mc.getMap().setZoom(mz + 1);
+          }
+        }, 100);
+      }
 
-    google.maps.event.addDomListener(this.div_, "click", function (e) {
-        cMouseDownInCluster = false;
-        if (!cDraggingMapByCluster) {
-            var theBounds;
-            var mz;
-            var mc = cClusterIcon.cluster_.getMarkerClusterer();
-            /**
-             * This event is fired when a cluster marker is clicked.
-             * @name MarkerClusterer#click
-             * @param {Cluster} c The cluster that was clicked.
-             * @event
-             */
-            google.maps.event.trigger(mc, "click", cClusterIcon.cluster_);
-            google.maps.event.trigger(mc, "clusterclick", cClusterIcon.cluster_); // deprecated name
+      // Prevent event propagation to the map:
+      e.cancelBubble = true;
+      if (e.stopPropagation) {
+        e.stopPropagation();
+      }
+    }
+  });
 
-            // The default click handler follows. Disable it by setting
-            // the zoomOnClick property to false.
-            if (mc.getZoomOnClick()) {
-                // Zoom into the cluster.
-                mz = mc.getMaxZoom();
-                theBounds = cClusterIcon.cluster_.getBounds();
-                mc.getMap().fitBounds(theBounds);
-                // There is a fix for Issue 170 here:
-                setTimeout(function () {
-                    mc.getMap().fitBounds(theBounds);
-                    // Don't zoom beyond the max zoom level
-                    if (mz !== null && (mc.getMap().getZoom() > mz)) {
-                        mc.getMap().setZoom(mz + 1);
-                    }
-                }, 100);
-            }
+  google.maps.event.addDomListener(this.div_, "mouseover", function () {
+    var mc = cClusterIcon.cluster_.getMarkerClusterer();
+    /**
+     * This event is fired when the mouse moves over a cluster marker.
+     * @name MarkerClusterer#mouseover
+     * @param {Cluster} c The cluster that the mouse moved over.
+     * @event
+     */
+    google.maps.event.trigger(mc, "mouseover", cClusterIcon.cluster_);
+  });
 
-            // Prevent event propagation to the map:
-            e.cancelBubble = true;
-            if (e.stopPropagation) {
-                e.stopPropagation();
-            }
-        }
-    });
-
-    google.maps.event.addDomListener(this.div_, "mouseover", function () {
-        var mc = cClusterIcon.cluster_.getMarkerClusterer();
-        /**
-         * This event is fired when the mouse moves over a cluster marker.
-         * @name MarkerClusterer#mouseover
-         * @param {Cluster} c The cluster that the mouse moved over.
-         * @event
-         */
-        google.maps.event.trigger(mc, "mouseover", cClusterIcon.cluster_);
-    });
-
-    google.maps.event.addDomListener(this.div_, "mouseout", function () {
-        var mc = cClusterIcon.cluster_.getMarkerClusterer();
-        /**
-         * This event is fired when the mouse moves out of a cluster marker.
-         * @name MarkerClusterer#mouseout
-         * @param {Cluster} c The cluster that the mouse moved out of.
-         * @event
-         */
-        google.maps.event.trigger(mc, "mouseout", cClusterIcon.cluster_);
-    });
+  google.maps.event.addDomListener(this.div_, "mouseout", function () {
+    var mc = cClusterIcon.cluster_.getMarkerClusterer();
+    /**
+     * This event is fired when the mouse moves out of a cluster marker.
+     * @name MarkerClusterer#mouseout
+     * @param {Cluster} c The cluster that the mouse moved out of.
+     * @event
+     */
+    google.maps.event.trigger(mc, "mouseout", cClusterIcon.cluster_);
+  });
 };
-
 
 /**
  * Removes the icon from the DOM.
  */
 ClusterIcon.prototype.onRemove = function () {
-    if (this.div_ && this.div_.parentNode) {
-        this.hide();
-        google.maps.event.removeListener(this.boundsChangedListener_);
-        google.maps.event.clearInstanceListeners(this.div_);
-        this.div_.parentNode.removeChild(this.div_);
-        this.div_ = null;
-    }
+  if (this.div_ && this.div_.parentNode) {
+    this.hide();
+    google.maps.event.removeListener(this.boundsChangedListener_);
+    google.maps.event.clearInstanceListeners(this.div_);
+    this.div_.parentNode.removeChild(this.div_);
+    this.div_ = null;
+  }
 };
-
 
 /**
  * Draws the icon.
  */
 ClusterIcon.prototype.draw = function () {
-    if (this.visible_) {
-        var pos = this.getPosFromLatLng_(this.center_);
-        this.div_.style.top = pos.y + "px";
-        this.div_.style.left = pos.x + "px";
-    }
+  if (this.visible_) {
+    var pos = this.getPosFromLatLng_(this.center_);
+    this.div_.style.top = pos.y + "px";
+    this.div_.style.left = pos.x + "px";
+  }
 };
-
 
 /**
  * Hides the icon.
  */
 ClusterIcon.prototype.hide = function () {
-    if (this.div_) {
-        this.div_.style.display = "none";
-    }
-    this.visible_ = false;
+  if (this.div_) {
+    this.div_.style.display = "none";
+  }
+  this.visible_ = false;
 };
-
 
 /**
  * Positions and shows the icon.
  */
 ClusterIcon.prototype.show = function () {
-    if (this.div_) {
-        var img = "";
-        // NOTE: values must be specified in px units
-        var bp = this.backgroundPosition_.split(" ");
-        var spriteH = parseInt(bp[0].trim(), 10);
-        var spriteV = parseInt(bp[1].trim(), 10);
-        var pos = this.getPosFromLatLng_(this.center_);
-        this.div_.style.cssText = this.createCss(pos);
-        img = "<img src='" + this.url_ + "' style='position: absolute; top: " + spriteV + "px; left: " + spriteH + "px; ";
-        if (!this.cluster_.getMarkerClusterer().enableRetinaIcons_) {
-            img += "clip: rect(" + (-1 * spriteV) + "px, " + ((-1 * spriteH) + this.width_) + "px, " +
-                    ((-1 * spriteV) + this.height_) + "px, " + (-1 * spriteH) + "px);";
-        }
-        img += "'>";
-        this.div_.innerHTML = img + "<div style='" +
-                "position: absolute;" +
-                "top: " + this.anchorText_[0] + "px;" +
-                "left: " + this.anchorText_[1] + "px;" +
-                "color: " + this.textColor_ + ";" +
-                "font-size: " + this.textSize_ + "px;" +
-                "font-family: " + this.fontFamily_ + ";" +
-                "font-weight: " + this.fontWeight_ + ";" +
-                "font-style: " + this.fontStyle_ + ";" +
-                "text-decoration: " + this.textDecoration_ + ";" +
-                "text-align: center;" +
-                "width: " + this.width_ + "px;" +
-                "line-height:" + this.height_ + "px;" +
-                "'>" + this.sums_.text + "</div>";
-        if (typeof this.sums_.title === "undefined" || this.sums_.title === "") {
-            this.div_.title = this.cluster_.getMarkerClusterer().getTitle();
-        } else {
-            this.div_.title = this.sums_.title;
-        }
-        this.div_.style.display = "";
+  if (this.div_) {
+    var img = "";
+    // NOTE: values must be specified in px units
+    var bp = this.backgroundPosition_.split(" ");
+    var spriteH = parseInt(bp[0].trim(), 10);
+    var spriteV = parseInt(bp[1].trim(), 10);
+    var pos = this.getPosFromLatLng_(this.center_);
+    this.div_.style.cssText = this.createCss(pos);
+    img =
+      "<img src='" +
+      this.url_ +
+      "' style='position: absolute; top: " +
+      spriteV +
+      "px; left: " +
+      spriteH +
+      "px; ";
+    if (!this.cluster_.getMarkerClusterer().enableRetinaIcons_) {
+      img +=
+        "clip: rect(" +
+        -1 * spriteV +
+        "px, " +
+        (-1 * spriteH + this.width_) +
+        "px, " +
+        (-1 * spriteV + this.height_) +
+        "px, " +
+        -1 * spriteH +
+        "px);";
     }
-    this.visible_ = true;
+    img += "'>";
+    this.div_.innerHTML =
+      img +
+      "<div style='" +
+      "position: absolute;" +
+      "top: " +
+      this.anchorText_[0] +
+      "px;" +
+      "left: " +
+      this.anchorText_[1] +
+      "px;" +
+      "color: " +
+      this.textColor_ +
+      ";" +
+      "font-size: " +
+      this.textSize_ +
+      "px;" +
+      "font-family: " +
+      this.fontFamily_ +
+      ";" +
+      "font-weight: " +
+      this.fontWeight_ +
+      ";" +
+      "font-style: " +
+      this.fontStyle_ +
+      ";" +
+      "text-decoration: " +
+      this.textDecoration_ +
+      ";" +
+      "text-align: center;" +
+      "width: " +
+      this.width_ +
+      "px;" +
+      "line-height:" +
+      this.height_ +
+      "px;" +
+      "'>" +
+      this.sums_.text +
+      "</div>";
+    if (typeof this.sums_.title === "undefined" || this.sums_.title === "") {
+      this.div_.title = this.cluster_.getMarkerClusterer().getTitle();
+    } else {
+      this.div_.title = this.sums_.title;
+    }
+    this.div_.style.display = "";
+  }
+  this.visible_ = true;
 };
-
 
 /**
  * Sets the icon styles to the appropriate element in the styles array.
@@ -6251,24 +7961,26 @@ ClusterIcon.prototype.show = function () {
  * @param {ClusterIconInfo} sums The icon label text and styles index.
  */
 ClusterIcon.prototype.useStyle = function (sums) {
-    this.sums_ = sums;
-    var index = Math.max(0, sums.index - 1);
-    index = Math.min(this.styles_.length - 1, index);
-    var style = this.styles_[index];
-    this.url_ = style.url;
-    this.height_ = style.height;
-    this.width_ = style.width;
-    this.anchorText_ = style.anchorText || [0, 0];
-    this.anchorIcon_ = style.anchorIcon || [parseInt(this.height_ / 2, 10), parseInt(this.width_ / 2, 10)];
-    this.textColor_ = style.textColor || "black";
-    this.textSize_ = style.textSize || 11;
-    this.textDecoration_ = style.textDecoration || "none";
-    this.fontWeight_ = style.fontWeight || "bold";
-    this.fontStyle_ = style.fontStyle || "normal";
-    this.fontFamily_ = style.fontFamily || "Arial,sans-serif";
-    this.backgroundPosition_ = style.backgroundPosition || "0 0";
+  this.sums_ = sums;
+  var index = Math.max(0, sums.index - 1);
+  index = Math.min(this.styles_.length - 1, index);
+  var style = this.styles_[index];
+  this.url_ = style.url;
+  this.height_ = style.height;
+  this.width_ = style.width;
+  this.anchorText_ = style.anchorText || [0, 0];
+  this.anchorIcon_ = style.anchorIcon || [
+    parseInt(this.height_ / 2, 10),
+    parseInt(this.width_ / 2, 10),
+  ];
+  this.textColor_ = style.textColor || "black";
+  this.textSize_ = style.textSize || 11;
+  this.textDecoration_ = style.textDecoration || "none";
+  this.fontWeight_ = style.fontWeight || "bold";
+  this.fontStyle_ = style.fontStyle || "normal";
+  this.fontFamily_ = style.fontFamily || "Arial,sans-serif";
+  this.backgroundPosition_ = style.backgroundPosition || "0 0";
 };
-
 
 /**
  * Sets the position at which to center the icon.
@@ -6276,9 +7988,8 @@ ClusterIcon.prototype.useStyle = function (sums) {
  * @param {google.maps.LatLng} center The latlng to set as the center.
  */
 ClusterIcon.prototype.setCenter = function (center) {
-    this.center_ = center;
+  this.center_ = center;
 };
-
 
 /**
  * Creates the cssText style parameter based on the position of the icon.
@@ -6287,13 +7998,14 @@ ClusterIcon.prototype.setCenter = function (center) {
  * @return {string} The CSS style text.
  */
 ClusterIcon.prototype.createCss = function (pos) {
-    var style = [];
-    style.push("cursor: pointer;");
-    style.push("position: absolute; top: " + pos.y + "px; left: " + pos.x + "px;");
-    style.push("width: " + this.width_ + "px; height: " + this.height_ + "px;");
-    return style.join("");
+  var style = [];
+  style.push("cursor: pointer;");
+  style.push(
+    "position: absolute; top: " + pos.y + "px; left: " + pos.x + "px;"
+  );
+  style.push("width: " + this.width_ + "px; height: " + this.height_ + "px;");
+  return style.join("");
 };
-
 
 /**
  * Returns the position at which to place the DIV depending on the latlng.
@@ -6302,14 +8014,13 @@ ClusterIcon.prototype.createCss = function (pos) {
  * @return {google.maps.Point} The position in pixels.
  */
 ClusterIcon.prototype.getPosFromLatLng_ = function (latlng) {
-    var pos = this.getProjection().fromLatLngToDivPixel(latlng);
-    pos.x -= this.anchorIcon_[1];
-    pos.y -= this.anchorIcon_[0];
-    pos.x = parseInt(pos.x, 10);
-    pos.y = parseInt(pos.y, 10);
-    return pos;
+  var pos = this.getProjection().fromLatLngToDivPixel(latlng);
+  pos.x -= this.anchorIcon_[1];
+  pos.y -= this.anchorIcon_[0];
+  pos.x = parseInt(pos.x, 10);
+  pos.y = parseInt(pos.y, 10);
+  return pos;
 };
-
 
 /**
  * Creates a single cluster that manages a group of proximate markers.
@@ -6319,17 +8030,16 @@ ClusterIcon.prototype.getPosFromLatLng_ = function (latlng) {
  *  cluster is associated.
  */
 function Cluster(mc) {
-    this.markerClusterer_ = mc;
-    this.map_ = mc.getMap();
-    this.gridSize_ = mc.getGridSize();
-    this.minClusterSize_ = mc.getMinimumClusterSize();
-    this.averageCenter_ = mc.getAverageCenter();
-    this.markers_ = [];
-    this.center_ = null;
-    this.bounds_ = null;
-    this.clusterIcon_ = new ClusterIcon(this, mc.getStyles());
+  this.markerClusterer_ = mc;
+  this.map_ = mc.getMap();
+  this.gridSize_ = mc.getGridSize();
+  this.minClusterSize_ = mc.getMinimumClusterSize();
+  this.averageCenter_ = mc.getAverageCenter();
+  this.markers_ = [];
+  this.center_ = null;
+  this.bounds_ = null;
+  this.clusterIcon_ = new ClusterIcon(this, mc.getStyles());
 }
-
 
 /**
  * Returns the number of markers managed by the cluster. You can call this from
@@ -6339,9 +8049,8 @@ function Cluster(mc) {
  * @return {number} The number of markers in the cluster.
  */
 Cluster.prototype.getSize = function () {
-    return this.markers_.length;
+  return this.markers_.length;
 };
-
 
 /**
  * Returns the array of markers managed by the cluster. You can call this from
@@ -6351,9 +8060,8 @@ Cluster.prototype.getSize = function () {
  * @return {Array} The array of markers in the cluster.
  */
 Cluster.prototype.getMarkers = function () {
-    return this.markers_;
+  return this.markers_;
 };
-
 
 /**
  * Returns the center of the cluster. You can call this from
@@ -6363,9 +8071,8 @@ Cluster.prototype.getMarkers = function () {
  * @return {google.maps.LatLng} The center of the cluster.
  */
 Cluster.prototype.getCenter = function () {
-    return this.center_;
+  return this.center_;
 };
-
 
 /**
  * Returns the map with which the cluster is associated.
@@ -6374,9 +8081,8 @@ Cluster.prototype.getCenter = function () {
  * @ignore
  */
 Cluster.prototype.getMap = function () {
-    return this.map_;
+  return this.map_;
 };
-
 
 /**
  * Returns the <code>MarkerClusterer</code> object with which the cluster is associated.
@@ -6385,9 +8091,8 @@ Cluster.prototype.getMap = function () {
  * @ignore
  */
 Cluster.prototype.getMarkerClusterer = function () {
-    return this.markerClusterer_;
+  return this.markerClusterer_;
 };
-
 
 /**
  * Returns the bounds of the cluster.
@@ -6396,15 +8101,14 @@ Cluster.prototype.getMarkerClusterer = function () {
  * @ignore
  */
 Cluster.prototype.getBounds = function () {
-    var i;
-    var bounds = new google.maps.LatLngBounds(this.center_, this.center_);
-    var markers = this.getMarkers();
-    for (i = 0; i < markers.length; i++) {
-        bounds.extend(markers[i].getPosition());
-    }
-    return bounds;
+  var i;
+  var bounds = new google.maps.LatLngBounds(this.center_, this.center_);
+  var markers = this.getMarkers();
+  for (i = 0; i < markers.length; i++) {
+    bounds.extend(markers[i].getPosition());
+  }
+  return bounds;
 };
-
 
 /**
  * Removes the cluster from the map.
@@ -6412,11 +8116,10 @@ Cluster.prototype.getBounds = function () {
  * @ignore
  */
 Cluster.prototype.remove = function () {
-    this.clusterIcon_.setMap(null);
-    this.markers_ = [];
-    delete this.markers_;
+  this.clusterIcon_.setMap(null);
+  this.markers_ = [];
+  delete this.markers_;
 };
-
 
 /**
  * Adds a marker to the cluster.
@@ -6426,55 +8129,54 @@ Cluster.prototype.remove = function () {
  * @ignore
  */
 Cluster.prototype.addMarker = function (marker) {
-    var i;
-    var mCount;
-    var mz;
+  var i;
+  var mCount;
+  var mz;
 
-    if (this.isMarkerAlreadyAdded_(marker)) {
-        return false;
+  if (this.isMarkerAlreadyAdded_(marker)) {
+    return false;
+  }
+
+  if (!this.center_) {
+    this.center_ = marker.getPosition();
+    this.calculateBounds_();
+  } else {
+    if (this.averageCenter_) {
+      var l = this.markers_.length + 1;
+      var lat = (this.center_.lat() * (l - 1) + marker.getPosition().lat()) / l;
+      var lng = (this.center_.lng() * (l - 1) + marker.getPosition().lng()) / l;
+      this.center_ = new google.maps.LatLng(lat, lng);
+      this.calculateBounds_();
     }
+  }
 
-    if (!this.center_) {
-        this.center_ = marker.getPosition();
-        this.calculateBounds_();
-    } else {
-        if (this.averageCenter_) {
-            var l = this.markers_.length + 1;
-            var lat = (this.center_.lat() * (l - 1) + marker.getPosition().lat()) / l;
-            var lng = (this.center_.lng() * (l - 1) + marker.getPosition().lng()) / l;
-            this.center_ = new google.maps.LatLng(lat, lng);
-            this.calculateBounds_();
-        }
+  marker.isAdded = true;
+  this.markers_.push(marker);
+
+  mCount = this.markers_.length;
+  mz = this.markerClusterer_.getMaxZoom();
+  if (mz !== null && this.map_.getZoom() > mz) {
+    // Zoomed in past max zoom, so show the marker.
+    if (marker.getMap() !== this.map_) {
+      marker.setMap(this.map_);
     }
-
-    marker.isAdded = true;
-    this.markers_.push(marker);
-
-    mCount = this.markers_.length;
-    mz = this.markerClusterer_.getMaxZoom();
-    if (mz !== null && this.map_.getZoom() > mz) {
-        // Zoomed in past max zoom, so show the marker.
-        if (marker.getMap() !== this.map_) {
-            marker.setMap(this.map_);
-        }
-    } else if (mCount < this.minClusterSize_) {
-        // Min cluster size not reached so show the marker.
-        if (marker.getMap() !== this.map_) {
-            marker.setMap(this.map_);
-        }
-    } else if (mCount === this.minClusterSize_) {
-        // Hide the markers that were showing.
-        for (i = 0; i < mCount; i++) {
-            this.markers_[i].setMap(null);
-        }
-    } else {
-        marker.setMap(null);
+  } else if (mCount < this.minClusterSize_) {
+    // Min cluster size not reached so show the marker.
+    if (marker.getMap() !== this.map_) {
+      marker.setMap(this.map_);
     }
+  } else if (mCount === this.minClusterSize_) {
+    // Hide the markers that were showing.
+    for (i = 0; i < mCount; i++) {
+      this.markers_[i].setMap(null);
+    }
+  } else {
+    marker.setMap(null);
+  }
 
-    this.updateIcon_();
-    return true;
+  this.updateIcon_();
+  return true;
 };
-
 
 /**
  * Determines if a marker lies within the cluster's bounds.
@@ -6484,44 +8186,41 @@ Cluster.prototype.addMarker = function (marker) {
  * @ignore
  */
 Cluster.prototype.isMarkerInClusterBounds = function (marker) {
-    return this.bounds_.contains(marker.getPosition());
+  return this.bounds_.contains(marker.getPosition());
 };
-
 
 /**
  * Calculates the extended bounds of the cluster with the grid.
  */
 Cluster.prototype.calculateBounds_ = function () {
-    var bounds = new google.maps.LatLngBounds(this.center_, this.center_);
-    this.bounds_ = this.markerClusterer_.getExtendedBounds(bounds);
+  var bounds = new google.maps.LatLngBounds(this.center_, this.center_);
+  this.bounds_ = this.markerClusterer_.getExtendedBounds(bounds);
 };
-
 
 /**
  * Updates the cluster icon.
  */
 Cluster.prototype.updateIcon_ = function () {
-    var mCount = this.markers_.length;
-    var mz = this.markerClusterer_.getMaxZoom();
+  var mCount = this.markers_.length;
+  var mz = this.markerClusterer_.getMaxZoom();
 
-    if (mz !== null && this.map_.getZoom() > mz) {
-        this.clusterIcon_.hide();
-        return;
-    }
+  if (mz !== null && this.map_.getZoom() > mz) {
+    this.clusterIcon_.hide();
+    return;
+  }
 
-    if (mCount < this.minClusterSize_) {
-        // Min cluster size not yet reached.
-        this.clusterIcon_.hide();
-        return;
-    }
+  if (mCount < this.minClusterSize_) {
+    // Min cluster size not yet reached.
+    this.clusterIcon_.hide();
+    return;
+  }
 
-    var numStyles = this.markerClusterer_.getStyles().length;
-    var sums = this.markerClusterer_.getCalculator()(this.markers_, numStyles);
-    this.clusterIcon_.setCenter(this.center_);
-    this.clusterIcon_.useStyle(sums);
-    this.clusterIcon_.show();
+  var numStyles = this.markerClusterer_.getStyles().length;
+  var sums = this.markerClusterer_.getCalculator()(this.markers_, numStyles);
+  this.clusterIcon_.setCenter(this.center_);
+  this.clusterIcon_.useStyle(sums);
+  this.clusterIcon_.show();
 };
-
 
 /**
  * Determines if a marker has already been added to the cluster.
@@ -6530,19 +8229,18 @@ Cluster.prototype.updateIcon_ = function () {
  * @return {boolean} True if the marker has already been added.
  */
 Cluster.prototype.isMarkerAlreadyAdded_ = function (marker) {
-    var i;
-    if (this.markers_.indexOf) {
-        return this.markers_.indexOf(marker) !== -1;
-    } else {
-        for (i = 0; i < this.markers_.length; i++) {
-            if (marker === this.markers_[i]) {
-                return true;
-            }
-        }
+  var i;
+  if (this.markers_.indexOf) {
+    return this.markers_.indexOf(marker) !== -1;
+  } else {
+    for (i = 0; i < this.markers_.length; i++) {
+      if (marker === this.markers_[i]) {
+        return true;
+      }
     }
-    return false;
+  }
+  return false;
 };
-
 
 /**
  * @name MarkerClustererOptions
@@ -6627,94 +8325,96 @@ Cluster.prototype.isMarkerAlreadyAdded_ = function (marker) {
  * @param {MarkerClustererOptions} [opt_options] The optional parameters.
  */
 function MarkerClusterer(map, opt_markers, opt_options) {
-    // MarkerClusterer implements google.maps.OverlayView interface. We use the
-    // extend function to extend MarkerClusterer with google.maps.OverlayView
-    // because it might not always be available when the code is defined so we
-    // look for it at the last possible moment. If it doesn't exist now then
-    // there is no point going ahead :)
-    this.extend(MarkerClusterer, google.maps.OverlayView);
+  // MarkerClusterer implements google.maps.OverlayView interface. We use the
+  // extend function to extend MarkerClusterer with google.maps.OverlayView
+  // because it might not always be available when the code is defined so we
+  // look for it at the last possible moment. If it doesn't exist now then
+  // there is no point going ahead :)
+  this.extend(MarkerClusterer, google.maps.OverlayView);
 
-    opt_markers = opt_markers || [];
-    opt_options = opt_options || {};
+  opt_markers = opt_markers || [];
+  opt_options = opt_options || {};
 
-    this.markers_ = [];
-    this.clusters_ = [];
-    this.listeners_ = [];
-    this.activeMap_ = null;
-    this.ready_ = false;
+  this.markers_ = [];
+  this.clusters_ = [];
+  this.listeners_ = [];
+  this.activeMap_ = null;
+  this.ready_ = false;
 
-    this.gridSize_ = opt_options.gridSize || 60;
-    this.minClusterSize_ = opt_options.minimumClusterSize || 2;
-    this.maxZoom_ = opt_options.maxZoom || null;
-    this.styles_ = opt_options.styles || [];
-    this.title_ = opt_options.title || "";
-    this.zoomOnClick_ = true;
-    if (opt_options.zoomOnClick !== undefined) {
-        this.zoomOnClick_ = opt_options.zoomOnClick;
-    }
-    this.averageCenter_ = false;
-    if (opt_options.averageCenter !== undefined) {
-        this.averageCenter_ = opt_options.averageCenter;
-    }
-    this.ignoreHidden_ = false;
-    if (opt_options.ignoreHidden !== undefined) {
-        this.ignoreHidden_ = opt_options.ignoreHidden;
-    }
-    this.enableRetinaIcons_ = false;
-    if (opt_options.enableRetinaIcons !== undefined) {
-        this.enableRetinaIcons_ = opt_options.enableRetinaIcons;
-    }
-    this.imagePath_ = opt_options.imagePath || MarkerClusterer.IMAGE_PATH;
-    this.imageExtension_ = opt_options.imageExtension || MarkerClusterer.IMAGE_EXTENSION;
-    this.imageSizes_ = opt_options.imageSizes || MarkerClusterer.IMAGE_SIZES;
-    this.calculator_ = opt_options.calculator || MarkerClusterer.CALCULATOR;
-    this.batchSize_ = opt_options.batchSize || MarkerClusterer.BATCH_SIZE;
-    this.batchSizeIE_ = opt_options.batchSizeIE || MarkerClusterer.BATCH_SIZE_IE;
-    this.clusterClass_ = opt_options.clusterClass || "cluster";
+  this.gridSize_ = opt_options.gridSize || 60;
+  this.minClusterSize_ = opt_options.minimumClusterSize || 2;
+  this.maxZoom_ = opt_options.maxZoom || null;
+  this.styles_ = opt_options.styles || [];
+  this.title_ = opt_options.title || "";
+  this.zoomOnClick_ = true;
+  if (opt_options.zoomOnClick !== undefined) {
+    this.zoomOnClick_ = opt_options.zoomOnClick;
+  }
+  this.averageCenter_ = false;
+  if (opt_options.averageCenter !== undefined) {
+    this.averageCenter_ = opt_options.averageCenter;
+  }
+  this.ignoreHidden_ = false;
+  if (opt_options.ignoreHidden !== undefined) {
+    this.ignoreHidden_ = opt_options.ignoreHidden;
+  }
+  this.enableRetinaIcons_ = false;
+  if (opt_options.enableRetinaIcons !== undefined) {
+    this.enableRetinaIcons_ = opt_options.enableRetinaIcons;
+  }
+  this.imagePath_ = opt_options.imagePath || MarkerClusterer.IMAGE_PATH;
+  this.imageExtension_ =
+    opt_options.imageExtension || MarkerClusterer.IMAGE_EXTENSION;
+  this.imageSizes_ = opt_options.imageSizes || MarkerClusterer.IMAGE_SIZES;
+  this.calculator_ = opt_options.calculator || MarkerClusterer.CALCULATOR;
+  this.batchSize_ = opt_options.batchSize || MarkerClusterer.BATCH_SIZE;
+  this.batchSizeIE_ = opt_options.batchSizeIE || MarkerClusterer.BATCH_SIZE_IE;
+  this.clusterClass_ = opt_options.clusterClass || "cluster";
 
-    if (navigator.userAgent.toLowerCase().indexOf("msie") !== -1) {
-        // Try to avoid IE timeout when processing a huge number of markers:
-        this.batchSize_ = this.batchSizeIE_;
-    }
+  if (navigator.userAgent.toLowerCase().indexOf("msie") !== -1) {
+    // Try to avoid IE timeout when processing a huge number of markers:
+    this.batchSize_ = this.batchSizeIE_;
+  }
 
-    this.setupStyles_();
+  this.setupStyles_();
 
-    this.addMarkers(opt_markers, true);
-    this.setMap(map); // Note: this causes onAdd to be called
+  this.addMarkers(opt_markers, true);
+  this.setMap(map); // Note: this causes onAdd to be called
 }
-
 
 /**
  * Implementation of the onAdd interface method.
  * @ignore
  */
 MarkerClusterer.prototype.onAdd = function () {
-    var cMarkerClusterer = this;
+  var cMarkerClusterer = this;
 
-    this.activeMap_ = this.getMap();
-    this.ready_ = true;
+  this.activeMap_ = this.getMap();
+  this.ready_ = true;
 
-    this.repaint();
+  this.repaint();
 
-    // Add the map event listeners
-    this.listeners_ = [
-        google.maps.event.addListener(this.getMap(), "zoom_changed", function () {
-            cMarkerClusterer.resetViewport_(false);
-            // Workaround for this Google bug: when map is at level 0 and "-" of
-            // zoom slider is clicked, a "zoom_changed" event is fired even though
-            // the map doesn't zoom out any further. In this situation, no "idle"
-            // event is triggered so the cluster markers that have been removed
-            // do not get redrawn. Same goes for a zoom in at maxZoom.
-            if (this.getZoom() === (this.get("minZoom") || 0) || this.getZoom() === this.get("maxZoom")) {
-                google.maps.event.trigger(this, "idle");
-            }
-        }),
-        google.maps.event.addListener(this.getMap(), "idle", function () {
-            cMarkerClusterer.redraw_();
-        })
-    ];
+  // Add the map event listeners
+  this.listeners_ = [
+    google.maps.event.addListener(this.getMap(), "zoom_changed", function () {
+      cMarkerClusterer.resetViewport_(false);
+      // Workaround for this Google bug: when map is at level 0 and "-" of
+      // zoom slider is clicked, a "zoom_changed" event is fired even though
+      // the map doesn't zoom out any further. In this situation, no "idle"
+      // event is triggered so the cluster markers that have been removed
+      // do not get redrawn. Same goes for a zoom in at maxZoom.
+      if (
+        this.getZoom() === (this.get("minZoom") || 0) ||
+        this.getZoom() === this.get("maxZoom")
+      ) {
+        google.maps.event.trigger(this, "idle");
+      }
+    }),
+    google.maps.event.addListener(this.getMap(), "idle", function () {
+      cMarkerClusterer.redraw_();
+    }),
+  ];
 };
-
 
 /**
  * Implementation of the onRemove interface method.
@@ -6723,31 +8423,30 @@ MarkerClusterer.prototype.onAdd = function () {
  * @ignore
  */
 MarkerClusterer.prototype.onRemove = function () {
-    var i;
+  var i;
 
-    // Put all the managed markers back on the map:
-    for (i = 0; i < this.markers_.length; i++) {
-        if (this.markers_[i].getMap() !== this.activeMap_) {
-            this.markers_[i].setMap(this.activeMap_);
-        }
+  // Put all the managed markers back on the map:
+  for (i = 0; i < this.markers_.length; i++) {
+    if (this.markers_[i].getMap() !== this.activeMap_) {
+      this.markers_[i].setMap(this.activeMap_);
     }
+  }
 
-    // Remove all clusters:
-    for (i = 0; i < this.clusters_.length; i++) {
-        this.clusters_[i].remove();
-    }
-    this.clusters_ = [];
+  // Remove all clusters:
+  for (i = 0; i < this.clusters_.length; i++) {
+    this.clusters_[i].remove();
+  }
+  this.clusters_ = [];
 
-    // Remove map event listeners:
-    for (i = 0; i < this.listeners_.length; i++) {
-        google.maps.event.removeListener(this.listeners_[i]);
-    }
-    this.listeners_ = [];
+  // Remove map event listeners:
+  for (i = 0; i < this.listeners_.length; i++) {
+    google.maps.event.removeListener(this.listeners_[i]);
+  }
+  this.listeners_ = [];
 
-    this.activeMap_ = null;
-    this.ready_ = false;
+  this.activeMap_ = null;
+  this.ready_ = false;
 };
-
 
 /**
  * Implementation of the draw interface method.
@@ -6755,41 +8454,38 @@ MarkerClusterer.prototype.onRemove = function () {
  */
 MarkerClusterer.prototype.draw = function () {};
 
-
 /**
  * Sets up the styles object.
  */
 MarkerClusterer.prototype.setupStyles_ = function () {
-    var i, size;
-    if (this.styles_.length > 0) {
-        return;
-    }
+  var i, size;
+  if (this.styles_.length > 0) {
+    return;
+  }
 
-    for (i = 0; i < this.imageSizes_.length; i++) {
-        size = this.imageSizes_[i];
-        this.styles_.push({
-            url: this.imagePath_ + (i + 1) + "." + this.imageExtension_,
-            height: size,
-            width: size
-        });
-    }
+  for (i = 0; i < this.imageSizes_.length; i++) {
+    size = this.imageSizes_[i];
+    this.styles_.push({
+      url: this.imagePath_ + (i + 1) + "." + this.imageExtension_,
+      height: size,
+      width: size,
+    });
+  }
 };
-
 
 /**
  *  Fits the map to the bounds of the markers managed by the clusterer.
  */
 MarkerClusterer.prototype.fitMapToMarkers = function () {
-    var i;
-    var markers = this.getMarkers();
-    var bounds = new google.maps.LatLngBounds();
-    for (i = 0; i < markers.length; i++) {
-        bounds.extend(markers[i].getPosition());
-    }
+  var i;
+  var markers = this.getMarkers();
+  var bounds = new google.maps.LatLngBounds();
+  for (i = 0; i < markers.length; i++) {
+    bounds.extend(markers[i].getPosition());
+  }
 
-    this.getMap().fitBounds(bounds);
+  this.getMap().fitBounds(bounds);
 };
-
 
 /**
  * Returns the value of the <code>gridSize</code> property.
@@ -6797,9 +8493,8 @@ MarkerClusterer.prototype.fitMapToMarkers = function () {
  * @return {number} The grid size.
  */
 MarkerClusterer.prototype.getGridSize = function () {
-    return this.gridSize_;
+  return this.gridSize_;
 };
-
 
 /**
  * Sets the value of the <code>gridSize</code> property.
@@ -6807,9 +8502,8 @@ MarkerClusterer.prototype.getGridSize = function () {
  * @param {number} gridSize The grid size.
  */
 MarkerClusterer.prototype.setGridSize = function (gridSize) {
-    this.gridSize_ = gridSize;
+  this.gridSize_ = gridSize;
 };
-
 
 /**
  * Returns the value of the <code>minimumClusterSize</code> property.
@@ -6817,7 +8511,7 @@ MarkerClusterer.prototype.setGridSize = function (gridSize) {
  * @return {number} The minimum cluster size.
  */
 MarkerClusterer.prototype.getMinimumClusterSize = function () {
-    return this.minClusterSize_;
+  return this.minClusterSize_;
 };
 
 /**
@@ -6825,10 +8519,11 @@ MarkerClusterer.prototype.getMinimumClusterSize = function () {
  *
  * @param {number} minimumClusterSize The minimum cluster size.
  */
-MarkerClusterer.prototype.setMinimumClusterSize = function (minimumClusterSize) {
-    this.minClusterSize_ = minimumClusterSize;
+MarkerClusterer.prototype.setMinimumClusterSize = function (
+  minimumClusterSize
+) {
+  this.minClusterSize_ = minimumClusterSize;
 };
-
 
 /**
  *  Returns the value of the <code>maxZoom</code> property.
@@ -6836,9 +8531,8 @@ MarkerClusterer.prototype.setMinimumClusterSize = function (minimumClusterSize) 
  *  @return {number} The maximum zoom level.
  */
 MarkerClusterer.prototype.getMaxZoom = function () {
-    return this.maxZoom_;
+  return this.maxZoom_;
 };
-
 
 /**
  *  Sets the value of the <code>maxZoom</code> property.
@@ -6846,9 +8540,8 @@ MarkerClusterer.prototype.getMaxZoom = function () {
  *  @param {number} maxZoom The maximum zoom level.
  */
 MarkerClusterer.prototype.setMaxZoom = function (maxZoom) {
-    this.maxZoom_ = maxZoom;
+  this.maxZoom_ = maxZoom;
 };
-
 
 /**
  *  Returns the value of the <code>styles</code> property.
@@ -6856,9 +8549,8 @@ MarkerClusterer.prototype.setMaxZoom = function (maxZoom) {
  *  @return {Array} The array of styles defining the cluster markers to be used.
  */
 MarkerClusterer.prototype.getStyles = function () {
-    return this.styles_;
+  return this.styles_;
 };
-
 
 /**
  *  Sets the value of the <code>styles</code> property.
@@ -6866,9 +8558,8 @@ MarkerClusterer.prototype.getStyles = function () {
  *  @param {Array.<ClusterIconStyle>} styles The array of styles to use.
  */
 MarkerClusterer.prototype.setStyles = function (styles) {
-    this.styles_ = styles;
+  this.styles_ = styles;
 };
-
 
 /**
  * Returns the value of the <code>title</code> property.
@@ -6876,9 +8567,8 @@ MarkerClusterer.prototype.setStyles = function (styles) {
  * @return {string} The content of the title text.
  */
 MarkerClusterer.prototype.getTitle = function () {
-    return this.title_;
+  return this.title_;
 };
-
 
 /**
  *  Sets the value of the <code>title</code> property.
@@ -6886,9 +8576,8 @@ MarkerClusterer.prototype.getTitle = function () {
  *  @param {string} title The value of the title property.
  */
 MarkerClusterer.prototype.setTitle = function (title) {
-    this.title_ = title;
+  this.title_ = title;
 };
-
 
 /**
  * Returns the value of the <code>zoomOnClick</code> property.
@@ -6896,9 +8585,8 @@ MarkerClusterer.prototype.setTitle = function (title) {
  * @return {boolean} True if zoomOnClick property is set.
  */
 MarkerClusterer.prototype.getZoomOnClick = function () {
-    return this.zoomOnClick_;
+  return this.zoomOnClick_;
 };
-
 
 /**
  *  Sets the value of the <code>zoomOnClick</code> property.
@@ -6906,9 +8594,8 @@ MarkerClusterer.prototype.getZoomOnClick = function () {
  *  @param {boolean} zoomOnClick The value of the zoomOnClick property.
  */
 MarkerClusterer.prototype.setZoomOnClick = function (zoomOnClick) {
-    this.zoomOnClick_ = zoomOnClick;
+  this.zoomOnClick_ = zoomOnClick;
 };
-
 
 /**
  * Returns the value of the <code>averageCenter</code> property.
@@ -6916,9 +8603,8 @@ MarkerClusterer.prototype.setZoomOnClick = function (zoomOnClick) {
  * @return {boolean} True if averageCenter property is set.
  */
 MarkerClusterer.prototype.getAverageCenter = function () {
-    return this.averageCenter_;
+  return this.averageCenter_;
 };
-
 
 /**
  *  Sets the value of the <code>averageCenter</code> property.
@@ -6926,9 +8612,8 @@ MarkerClusterer.prototype.getAverageCenter = function () {
  *  @param {boolean} averageCenter The value of the averageCenter property.
  */
 MarkerClusterer.prototype.setAverageCenter = function (averageCenter) {
-    this.averageCenter_ = averageCenter;
+  this.averageCenter_ = averageCenter;
 };
-
 
 /**
  * Returns the value of the <code>ignoreHidden</code> property.
@@ -6936,9 +8621,8 @@ MarkerClusterer.prototype.setAverageCenter = function (averageCenter) {
  * @return {boolean} True if ignoreHidden property is set.
  */
 MarkerClusterer.prototype.getIgnoreHidden = function () {
-    return this.ignoreHidden_;
+  return this.ignoreHidden_;
 };
-
 
 /**
  *  Sets the value of the <code>ignoreHidden</code> property.
@@ -6946,9 +8630,8 @@ MarkerClusterer.prototype.getIgnoreHidden = function () {
  *  @param {boolean} ignoreHidden The value of the ignoreHidden property.
  */
 MarkerClusterer.prototype.setIgnoreHidden = function (ignoreHidden) {
-    this.ignoreHidden_ = ignoreHidden;
+  this.ignoreHidden_ = ignoreHidden;
 };
-
 
 /**
  * Returns the value of the <code>enableRetinaIcons</code> property.
@@ -6956,9 +8639,8 @@ MarkerClusterer.prototype.setIgnoreHidden = function (ignoreHidden) {
  * @return {boolean} True if enableRetinaIcons property is set.
  */
 MarkerClusterer.prototype.getEnableRetinaIcons = function () {
-    return this.enableRetinaIcons_;
+  return this.enableRetinaIcons_;
 };
-
 
 /**
  *  Sets the value of the <code>enableRetinaIcons</code> property.
@@ -6966,9 +8648,8 @@ MarkerClusterer.prototype.getEnableRetinaIcons = function () {
  *  @param {boolean} enableRetinaIcons The value of the enableRetinaIcons property.
  */
 MarkerClusterer.prototype.setEnableRetinaIcons = function (enableRetinaIcons) {
-    this.enableRetinaIcons_ = enableRetinaIcons;
+  this.enableRetinaIcons_ = enableRetinaIcons;
 };
-
 
 /**
  * Returns the value of the <code>imageExtension</code> property.
@@ -6976,9 +8657,8 @@ MarkerClusterer.prototype.setEnableRetinaIcons = function (enableRetinaIcons) {
  * @return {string} The value of the imageExtension property.
  */
 MarkerClusterer.prototype.getImageExtension = function () {
-    return this.imageExtension_;
+  return this.imageExtension_;
 };
-
 
 /**
  *  Sets the value of the <code>imageExtension</code> property.
@@ -6986,9 +8666,8 @@ MarkerClusterer.prototype.getImageExtension = function () {
  *  @param {string} imageExtension The value of the imageExtension property.
  */
 MarkerClusterer.prototype.setImageExtension = function (imageExtension) {
-    this.imageExtension_ = imageExtension;
+  this.imageExtension_ = imageExtension;
 };
-
 
 /**
  * Returns the value of the <code>imagePath</code> property.
@@ -6996,9 +8675,8 @@ MarkerClusterer.prototype.setImageExtension = function (imageExtension) {
  * @return {string} The value of the imagePath property.
  */
 MarkerClusterer.prototype.getImagePath = function () {
-    return this.imagePath_;
+  return this.imagePath_;
 };
-
 
 /**
  *  Sets the value of the <code>imagePath</code> property.
@@ -7006,9 +8684,8 @@ MarkerClusterer.prototype.getImagePath = function () {
  *  @param {string} imagePath The value of the imagePath property.
  */
 MarkerClusterer.prototype.setImagePath = function (imagePath) {
-    this.imagePath_ = imagePath;
+  this.imagePath_ = imagePath;
 };
-
 
 /**
  * Returns the value of the <code>imageSizes</code> property.
@@ -7016,9 +8693,8 @@ MarkerClusterer.prototype.setImagePath = function (imagePath) {
  * @return {Array} The value of the imageSizes property.
  */
 MarkerClusterer.prototype.getImageSizes = function () {
-    return this.imageSizes_;
+  return this.imageSizes_;
 };
-
 
 /**
  *  Sets the value of the <code>imageSizes</code> property.
@@ -7026,9 +8702,8 @@ MarkerClusterer.prototype.getImageSizes = function () {
  *  @param {Array} imageSizes The value of the imageSizes property.
  */
 MarkerClusterer.prototype.setImageSizes = function (imageSizes) {
-    this.imageSizes_ = imageSizes;
+  this.imageSizes_ = imageSizes;
 };
-
 
 /**
  * Returns the value of the <code>calculator</code> property.
@@ -7036,9 +8711,8 @@ MarkerClusterer.prototype.setImageSizes = function (imageSizes) {
  * @return {function} the value of the calculator property.
  */
 MarkerClusterer.prototype.getCalculator = function () {
-    return this.calculator_;
+  return this.calculator_;
 };
-
 
 /**
  * Sets the value of the <code>calculator</code> property.
@@ -7047,9 +8721,8 @@ MarkerClusterer.prototype.getCalculator = function () {
  *  of the calculator property.
  */
 MarkerClusterer.prototype.setCalculator = function (calculator) {
-    this.calculator_ = calculator;
+  this.calculator_ = calculator;
 };
-
 
 /**
  * Returns the value of the <code>batchSizeIE</code> property.
@@ -7057,9 +8730,8 @@ MarkerClusterer.prototype.setCalculator = function (calculator) {
  * @return {number} the value of the batchSizeIE property.
  */
 MarkerClusterer.prototype.getBatchSizeIE = function () {
-    return this.batchSizeIE_;
+  return this.batchSizeIE_;
 };
-
 
 /**
  * Sets the value of the <code>batchSizeIE</code> property.
@@ -7067,9 +8739,8 @@ MarkerClusterer.prototype.getBatchSizeIE = function () {
  *  @param {number} batchSizeIE The value of the batchSizeIE property.
  */
 MarkerClusterer.prototype.setBatchSizeIE = function (batchSizeIE) {
-    this.batchSizeIE_ = batchSizeIE;
+  this.batchSizeIE_ = batchSizeIE;
 };
-
 
 /**
  * Returns the value of the <code>clusterClass</code> property.
@@ -7077,9 +8748,8 @@ MarkerClusterer.prototype.setBatchSizeIE = function (batchSizeIE) {
  * @return {string} the value of the clusterClass property.
  */
 MarkerClusterer.prototype.getClusterClass = function () {
-    return this.clusterClass_;
+  return this.clusterClass_;
 };
-
 
 /**
  * Sets the value of the <code>clusterClass</code> property.
@@ -7087,9 +8757,8 @@ MarkerClusterer.prototype.getClusterClass = function () {
  *  @param {string} clusterClass The value of the clusterClass property.
  */
 MarkerClusterer.prototype.setClusterClass = function (clusterClass) {
-    this.clusterClass_ = clusterClass;
+  this.clusterClass_ = clusterClass;
 };
-
 
 /**
  *  Returns the array of markers managed by the clusterer.
@@ -7097,9 +8766,8 @@ MarkerClusterer.prototype.setClusterClass = function (clusterClass) {
  *  @return {Array} The array of markers managed by the clusterer.
  */
 MarkerClusterer.prototype.getMarkers = function () {
-    return this.markers_;
+  return this.markers_;
 };
-
 
 /**
  *  Returns the number of markers managed by the clusterer.
@@ -7107,9 +8775,8 @@ MarkerClusterer.prototype.getMarkers = function () {
  *  @return {number} The number of markers.
  */
 MarkerClusterer.prototype.getTotalMarkers = function () {
-    return this.markers_.length;
+  return this.markers_.length;
 };
-
 
 /**
  * Returns the current array of clusters formed by the clusterer.
@@ -7117,9 +8784,8 @@ MarkerClusterer.prototype.getTotalMarkers = function () {
  * @return {Array} The array of clusters formed by the clusterer.
  */
 MarkerClusterer.prototype.getClusters = function () {
-    return this.clusters_;
+  return this.clusters_;
 };
-
 
 /**
  * Returns the number of clusters formed by the clusterer.
@@ -7127,9 +8793,8 @@ MarkerClusterer.prototype.getClusters = function () {
  * @return {number} The number of clusters formed by the clusterer.
  */
 MarkerClusterer.prototype.getTotalClusters = function () {
-    return this.clusters_.length;
+  return this.clusters_.length;
 };
-
 
 /**
  * Adds a marker to the clusterer. The clusters are redrawn unless
@@ -7139,12 +8804,11 @@ MarkerClusterer.prototype.getTotalClusters = function () {
  * @param {boolean} [opt_nodraw] Set to <code>true</code> to prevent redrawing.
  */
 MarkerClusterer.prototype.addMarker = function (marker, opt_nodraw) {
-    this.pushMarkerTo_(marker);
-    if (!opt_nodraw) {
-        this.redraw_();
-    }
+  this.pushMarkerTo_(marker);
+  if (!opt_nodraw) {
+    this.redraw_();
+  }
 };
-
 
 /**
  * Adds an array of markers to the clusterer. The clusters are redrawn unless
@@ -7154,17 +8818,16 @@ MarkerClusterer.prototype.addMarker = function (marker, opt_nodraw) {
  * @param {boolean} [opt_nodraw] Set to <code>true</code> to prevent redrawing.
  */
 MarkerClusterer.prototype.addMarkers = function (markers, opt_nodraw) {
-    var key;
-    for (key in markers) {
-        if (markers.hasOwnProperty(key)) {
-            this.pushMarkerTo_(markers[key]);
-        }
+  var key;
+  for (key in markers) {
+    if (markers.hasOwnProperty(key)) {
+      this.pushMarkerTo_(markers[key]);
     }
-    if (!opt_nodraw) {
-        this.redraw_();
-    }
+  }
+  if (!opt_nodraw) {
+    this.redraw_();
+  }
 };
-
 
 /**
  * Pushes a marker to the clusterer.
@@ -7172,20 +8835,19 @@ MarkerClusterer.prototype.addMarkers = function (markers, opt_nodraw) {
  * @param {google.maps.Marker} marker The marker to add.
  */
 MarkerClusterer.prototype.pushMarkerTo_ = function (marker) {
-    // If the marker is draggable add a listener so we can update the clusters on the dragend:
-    if (marker.getDraggable()) {
-        var cMarkerClusterer = this;
-        google.maps.event.addListener(marker, "dragend", function () {
-            if (cMarkerClusterer.ready_) {
-                this.isAdded = false;
-                cMarkerClusterer.repaint();
-            }
-        });
-    }
-    marker.isAdded = false;
-    this.markers_.push(marker);
+  // If the marker is draggable add a listener so we can update the clusters on the dragend:
+  if (marker.getDraggable()) {
+    var cMarkerClusterer = this;
+    google.maps.event.addListener(marker, "dragend", function () {
+      if (cMarkerClusterer.ready_) {
+        this.isAdded = false;
+        cMarkerClusterer.repaint();
+      }
+    });
+  }
+  marker.isAdded = false;
+  this.markers_.push(marker);
 };
-
 
 /**
  * Removes a marker from the cluster.  The clusters are redrawn unless
@@ -7197,15 +8859,14 @@ MarkerClusterer.prototype.pushMarkerTo_ = function (marker) {
  * @return {boolean} True if the marker was removed from the clusterer.
  */
 MarkerClusterer.prototype.removeMarker = function (marker, opt_nodraw) {
-    var removed = this.removeMarker_(marker);
+  var removed = this.removeMarker_(marker);
 
-    if (!opt_nodraw && removed) {
-        this.repaint();
-    }
+  if (!opt_nodraw && removed) {
+    this.repaint();
+  }
 
-    return removed;
+  return removed;
 };
-
 
 /**
  * Removes an array of markers from the cluster. The clusters are redrawn unless
@@ -7217,21 +8878,20 @@ MarkerClusterer.prototype.removeMarker = function (marker, opt_nodraw) {
  * @return {boolean} True if markers were removed from the clusterer.
  */
 MarkerClusterer.prototype.removeMarkers = function (markers, opt_nodraw) {
-    var i, r;
-    var removed = false;
+  var i, r;
+  var removed = false;
 
-    for (i = 0; i < markers.length; i++) {
-        r = this.removeMarker_(markers[i]);
-        removed = removed || r;
-    }
+  for (i = 0; i < markers.length; i++) {
+    r = this.removeMarker_(markers[i]);
+    removed = removed || r;
+  }
 
-    if (!opt_nodraw && removed) {
-        this.repaint();
-    }
+  if (!opt_nodraw && removed) {
+    this.repaint();
+  }
 
-    return removed;
+  return removed;
 };
-
 
 /**
  * Removes a marker and returns true if removed, false if not.
@@ -7240,60 +8900,57 @@ MarkerClusterer.prototype.removeMarkers = function (markers, opt_nodraw) {
  * @return {boolean} Whether the marker was removed or not
  */
 MarkerClusterer.prototype.removeMarker_ = function (marker) {
-    var i;
-    var index = -1;
-    if (this.markers_.indexOf) {
-        index = this.markers_.indexOf(marker);
-    } else {
-        for (i = 0; i < this.markers_.length; i++) {
-            if (marker === this.markers_[i]) {
-                index = i;
-                break;
-            }
-        }
+  var i;
+  var index = -1;
+  if (this.markers_.indexOf) {
+    index = this.markers_.indexOf(marker);
+  } else {
+    for (i = 0; i < this.markers_.length; i++) {
+      if (marker === this.markers_[i]) {
+        index = i;
+        break;
+      }
     }
+  }
 
-    if (index === -1) {
-        // Marker is not in our list of markers, so do nothing:
-        return false;
-    }
+  if (index === -1) {
+    // Marker is not in our list of markers, so do nothing:
+    return false;
+  }
 
-    marker.setMap(null);
-    this.markers_.splice(index, 1); // Remove the marker from the list of managed markers
-    return true;
+  marker.setMap(null);
+  this.markers_.splice(index, 1); // Remove the marker from the list of managed markers
+  return true;
 };
-
 
 /**
  * Removes all clusters and markers from the map and also removes all markers
  *  managed by the clusterer.
  */
 MarkerClusterer.prototype.clearMarkers = function () {
-    this.resetViewport_(true);
-    this.markers_ = [];
+  this.resetViewport_(true);
+  this.markers_ = [];
 };
-
 
 /**
  * Recalculates and redraws all the marker clusters from scratch.
  *  Call this after changing any properties.
  */
 MarkerClusterer.prototype.repaint = function () {
-    var oldClusters = this.clusters_.slice();
-    this.clusters_ = [];
-    this.resetViewport_(false);
-    this.redraw_();
+  var oldClusters = this.clusters_.slice();
+  this.clusters_ = [];
+  this.resetViewport_(false);
+  this.redraw_();
 
-    // Remove the old clusters.
-    // Do it in a timeout to prevent blinking effect.
-    setTimeout(function () {
-        var i;
-        for (i = 0; i < oldClusters.length; i++) {
-            oldClusters[i].remove();
-        }
-    }, 0);
+  // Remove the old clusters.
+  // Do it in a timeout to prevent blinking effect.
+  setTimeout(function () {
+    var i;
+    for (i = 0; i < oldClusters.length; i++) {
+      oldClusters[i].remove();
+    }
+  }, 0);
 };
-
 
 /**
  * Returns the current bounds extended by the grid size.
@@ -7303,42 +8960,44 @@ MarkerClusterer.prototype.repaint = function () {
  * @ignore
  */
 MarkerClusterer.prototype.getExtendedBounds = function (bounds) {
-    var projection = this.getProjection();
+  var projection = this.getProjection();
 
-    // Turn the bounds into latlng.
-    var tr = new google.maps.LatLng(bounds.getNorthEast().lat(),
-            bounds.getNorthEast().lng());
-    var bl = new google.maps.LatLng(bounds.getSouthWest().lat(),
-            bounds.getSouthWest().lng());
+  // Turn the bounds into latlng.
+  var tr = new google.maps.LatLng(
+    bounds.getNorthEast().lat(),
+    bounds.getNorthEast().lng()
+  );
+  var bl = new google.maps.LatLng(
+    bounds.getSouthWest().lat(),
+    bounds.getSouthWest().lng()
+  );
 
-    // Convert the points to pixels and the extend out by the grid size.
-    var trPix = projection.fromLatLngToDivPixel(tr);
-    trPix.x += this.gridSize_;
-    trPix.y -= this.gridSize_;
+  // Convert the points to pixels and the extend out by the grid size.
+  var trPix = projection.fromLatLngToDivPixel(tr);
+  trPix.x += this.gridSize_;
+  trPix.y -= this.gridSize_;
 
-    var blPix = projection.fromLatLngToDivPixel(bl);
-    blPix.x -= this.gridSize_;
-    blPix.y += this.gridSize_;
+  var blPix = projection.fromLatLngToDivPixel(bl);
+  blPix.x -= this.gridSize_;
+  blPix.y += this.gridSize_;
 
-    // Convert the pixel points back to LatLng
-    var ne = projection.fromDivPixelToLatLng(trPix);
-    var sw = projection.fromDivPixelToLatLng(blPix);
+  // Convert the pixel points back to LatLng
+  var ne = projection.fromDivPixelToLatLng(trPix);
+  var sw = projection.fromDivPixelToLatLng(blPix);
 
-    // Extend the bounds to contain the new bounds.
-    bounds.extend(ne);
-    bounds.extend(sw);
+  // Extend the bounds to contain the new bounds.
+  bounds.extend(ne);
+  bounds.extend(sw);
 
-    return bounds;
+  return bounds;
 };
-
 
 /**
  * Redraws all the clusters.
  */
 MarkerClusterer.prototype.redraw_ = function () {
-    this.createClusters_(0);
+  this.createClusters_(0);
 };
-
 
 /**
  * Removes all clusters from the map. The markers are also removed from the map
@@ -7348,23 +9007,22 @@ MarkerClusterer.prototype.redraw_ = function () {
  *  from the map.
  */
 MarkerClusterer.prototype.resetViewport_ = function (opt_hide) {
-    var i, marker;
-    // Remove all the clusters
-    for (i = 0; i < this.clusters_.length; i++) {
-        this.clusters_[i].remove();
-    }
-    this.clusters_ = [];
+  var i, marker;
+  // Remove all the clusters
+  for (i = 0; i < this.clusters_.length; i++) {
+    this.clusters_[i].remove();
+  }
+  this.clusters_ = [];
 
-    // Reset the markers to not be added and to be removed from the map.
-    for (i = 0; i < this.markers_.length; i++) {
-        marker = this.markers_[i];
-        marker.isAdded = false;
-        if (opt_hide) {
-            marker.setMap(null);
-        }
+  // Reset the markers to not be added and to be removed from the map.
+  for (i = 0; i < this.markers_.length; i++) {
+    marker = this.markers_[i];
+    marker.isAdded = false;
+    if (opt_hide) {
+      marker.setMap(null);
     }
+  }
 };
-
 
 /**
  * Calculates the distance between two latlng locations in km.
@@ -7375,17 +9033,19 @@ MarkerClusterer.prototype.resetViewport_ = function (opt_hide) {
  * @see http://www.movable-type.co.uk/scripts/latlong.html
  */
 MarkerClusterer.prototype.distanceBetweenPoints_ = function (p1, p2) {
-    var R = 6371; // Radius of the Earth in km
-    var dLat = (p2.lat() - p1.lat()) * Math.PI / 180;
-    var dLon = (p2.lng() - p1.lng()) * Math.PI / 180;
-    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(p1.lat() * Math.PI / 180) * Math.cos(p2.lat() * Math.PI / 180) *
-                    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = R * c;
-    return d;
+  var R = 6371; // Radius of the Earth in km
+  var dLat = ((p2.lat() - p1.lat()) * Math.PI) / 180;
+  var dLon = ((p2.lng() - p1.lng()) * Math.PI) / 180;
+  var a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((p1.lat() * Math.PI) / 180) *
+      Math.cos((p2.lat() * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c;
+  return d;
 };
-
 
 /**
  * Determines if a marker is contained in a bounds.
@@ -7395,9 +9055,8 @@ MarkerClusterer.prototype.distanceBetweenPoints_ = function (p1, p2) {
  * @return {boolean} True if the marker is in the bounds.
  */
 MarkerClusterer.prototype.isMarkerInBounds_ = function (marker, bounds) {
-    return bounds.contains(marker.getPosition());
+  return bounds.contains(marker.getPosition());
 };
-
 
 /**
  * Adds a marker to a cluster, or creates a new cluster.
@@ -7405,30 +9064,29 @@ MarkerClusterer.prototype.isMarkerInBounds_ = function (marker, bounds) {
  * @param {google.maps.Marker} marker The marker to add.
  */
 MarkerClusterer.prototype.addToClosestCluster_ = function (marker) {
-    var i, d, cluster, center;
-    var distance = 40000; // Some large number
-    var clusterToAddTo = null;
-    for (i = 0; i < this.clusters_.length; i++) {
-        cluster = this.clusters_[i];
-        center = cluster.getCenter();
-        if (center) {
-            d = this.distanceBetweenPoints_(center, marker.getPosition());
-            if (d < distance) {
-                distance = d;
-                clusterToAddTo = cluster;
-            }
-        }
+  var i, d, cluster, center;
+  var distance = 40000; // Some large number
+  var clusterToAddTo = null;
+  for (i = 0; i < this.clusters_.length; i++) {
+    cluster = this.clusters_[i];
+    center = cluster.getCenter();
+    if (center) {
+      d = this.distanceBetweenPoints_(center, marker.getPosition());
+      if (d < distance) {
+        distance = d;
+        clusterToAddTo = cluster;
+      }
     }
+  }
 
-    if (clusterToAddTo && clusterToAddTo.isMarkerInClusterBounds(marker)) {
-        clusterToAddTo.addMarker(marker);
-    } else {
-        cluster = new Cluster(this);
-        cluster.addMarker(marker);
-        this.clusters_.push(cluster);
-    }
+  if (clusterToAddTo && clusterToAddTo.isMarkerInClusterBounds(marker)) {
+    clusterToAddTo.addMarker(marker);
+  } else {
+    cluster = new Cluster(this);
+    cluster.addMarker(marker);
+    this.clusters_.push(cluster);
+  }
 };
-
 
 /**
  * Creates the clusters. This is done in batches to avoid timeout errors
@@ -7438,71 +9096,75 @@ MarkerClusterer.prototype.addToClosestCluster_ = function (marker) {
  *  markers to be added to clusters.
  */
 MarkerClusterer.prototype.createClusters_ = function (iFirst) {
-    var i, marker;
-    var mapBounds;
-    var cMarkerClusterer = this;
-    if (!this.ready_) {
-        return;
+  var i, marker;
+  var mapBounds;
+  var cMarkerClusterer = this;
+  if (!this.ready_) {
+    return;
+  }
+
+  // Cancel previous batch processing if we're working on the first batch:
+  if (iFirst === 0) {
+    /**
+     * This event is fired when the <code>MarkerClusterer</code> begins
+     *  clustering markers.
+     * @name MarkerClusterer#clusteringbegin
+     * @param {MarkerClusterer} mc The MarkerClusterer whose markers are being clustered.
+     * @event
+     */
+    google.maps.event.trigger(this, "clusteringbegin", this);
+
+    if (typeof this.timerRefStatic !== "undefined") {
+      clearTimeout(this.timerRefStatic);
+      delete this.timerRefStatic;
     }
+  }
 
-    // Cancel previous batch processing if we're working on the first batch:
-    if (iFirst === 0) {
-        /**
-         * This event is fired when the <code>MarkerClusterer</code> begins
-         *  clustering markers.
-         * @name MarkerClusterer#clusteringbegin
-         * @param {MarkerClusterer} mc The MarkerClusterer whose markers are being clustered.
-         * @event
-         */
-        google.maps.event.trigger(this, "clusteringbegin", this);
+  // Get our current map view bounds.
+  // Create a new bounds object so we don't affect the map.
+  //
+  // See Comments 9 & 11 on Issue 3651 relating to this workaround for a Google Maps bug:
+  if (this.getMap().getZoom() > 3) {
+    mapBounds = new google.maps.LatLngBounds(
+      this.getMap().getBounds().getSouthWest(),
+      this.getMap().getBounds().getNorthEast()
+    );
+  } else {
+    mapBounds = new google.maps.LatLngBounds(
+      new google.maps.LatLng(85.02070771743472, -178.48388434375),
+      new google.maps.LatLng(-85.08136444384544, 178.00048865625)
+    );
+  }
+  var bounds = this.getExtendedBounds(mapBounds);
 
-        if (typeof this.timerRefStatic !== "undefined") {
-            clearTimeout(this.timerRefStatic);
-            delete this.timerRefStatic;
-        }
+  var iLast = Math.min(iFirst + this.batchSize_, this.markers_.length);
+
+  for (i = iFirst; i < iLast; i++) {
+    marker = this.markers_[i];
+    if (!marker.isAdded && this.isMarkerInBounds_(marker, bounds)) {
+      if (!this.ignoreHidden_ || (this.ignoreHidden_ && marker.getVisible())) {
+        this.addToClosestCluster_(marker);
+      }
     }
+  }
 
-    // Get our current map view bounds.
-    // Create a new bounds object so we don't affect the map.
-    //
-    // See Comments 9 & 11 on Issue 3651 relating to this workaround for a Google Maps bug:
-    if (this.getMap().getZoom() > 3) {
-        mapBounds = new google.maps.LatLngBounds(this.getMap().getBounds().getSouthWest(),
-                this.getMap().getBounds().getNorthEast());
-    } else {
-        mapBounds = new google.maps.LatLngBounds(new google.maps.LatLng(85.02070771743472, -178.48388434375), new google.maps.LatLng(-85.08136444384544, 178.00048865625));
-    }
-    var bounds = this.getExtendedBounds(mapBounds);
+  if (iLast < this.markers_.length) {
+    this.timerRefStatic = setTimeout(function () {
+      cMarkerClusterer.createClusters_(iLast);
+    }, 0);
+  } else {
+    delete this.timerRefStatic;
 
-    var iLast = Math.min(iFirst + this.batchSize_, this.markers_.length);
-
-    for (i = iFirst; i < iLast; i++) {
-        marker = this.markers_[i];
-        if (!marker.isAdded && this.isMarkerInBounds_(marker, bounds)) {
-            if (!this.ignoreHidden_ || (this.ignoreHidden_ && marker.getVisible())) {
-                this.addToClosestCluster_(marker);
-            }
-        }
-    }
-
-    if (iLast < this.markers_.length) {
-        this.timerRefStatic = setTimeout(function () {
-            cMarkerClusterer.createClusters_(iLast);
-        }, 0);
-    } else {
-        delete this.timerRefStatic;
-
-        /**
-         * This event is fired when the <code>MarkerClusterer</code> stops
-         *  clustering markers.
-         * @name MarkerClusterer#clusteringend
-         * @param {MarkerClusterer} mc The MarkerClusterer whose markers are being clustered.
-         * @event
-         */
-        google.maps.event.trigger(this, "clusteringend", this);
-    }
+    /**
+     * This event is fired when the <code>MarkerClusterer</code> stops
+     *  clustering markers.
+     * @name MarkerClusterer#clusteringend
+     * @param {MarkerClusterer} mc The MarkerClusterer whose markers are being clustered.
+     * @event
+     */
+    google.maps.event.trigger(this, "clusteringend", this);
+  }
 };
-
 
 /**
  * Extends an object's prototype by another's.
@@ -7513,15 +9175,14 @@ MarkerClusterer.prototype.createClusters_ = function (iFirst) {
  * @ignore
  */
 MarkerClusterer.prototype.extend = function (obj1, obj2) {
-    return (function (object) {
-        var property;
-        for (property in object.prototype) {
-            this.prototype[property] = object.prototype[property];
-        }
-        return this;
-    }).apply(obj1, [obj2]);
+  return function (object) {
+    var property;
+    for (property in object.prototype) {
+      this.prototype[property] = object.prototype[property];
+    }
+    return this;
+  }.apply(obj1, [obj2]);
 };
-
 
 /**
  * The default function for determining the label text and style
@@ -7534,24 +9195,23 @@ MarkerClusterer.prototype.extend = function (obj1, obj2) {
  * @ignore
  */
 MarkerClusterer.CALCULATOR = function (markers, numStyles) {
-    var index = 0;
-    var title = "";
-    var count = markers.length.toString();
+  var index = 0;
+  var title = "";
+  var count = markers.length.toString();
 
-    var dv = count;
-    while (dv !== 0) {
-        dv = parseInt(dv / 10, 10);
-        index++;
-    }
+  var dv = count;
+  while (dv !== 0) {
+    dv = parseInt(dv / 10, 10);
+    index++;
+  }
 
-    index = Math.min(index, numStyles);
-    return {
-        text: count,
-        index: index,
-        title: title
-    };
+  index = Math.min(index, numStyles);
+  return {
+    text: count,
+    index: index,
+    title: title,
+  };
 };
-
 
 /**
  * The number of markers to process in one batch.
@@ -7561,7 +9221,6 @@ MarkerClusterer.CALCULATOR = function (markers, numStyles) {
  */
 MarkerClusterer.BATCH_SIZE = 2000;
 
-
 /**
  * The number of markers to process in one batch (IE only).
  *
@@ -7570,15 +9229,14 @@ MarkerClusterer.BATCH_SIZE = 2000;
  */
 MarkerClusterer.BATCH_SIZE_IE = 500;
 
-
 /**
  * The default root name for the marker cluster images.
  *
  * @type {string}
  * @constant
  */
-MarkerClusterer.IMAGE_PATH = "http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclustererplus/images/m";
-
+MarkerClusterer.IMAGE_PATH =
+  "http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclustererplus/images/m";
 
 /**
  * The default extension name for the marker cluster images.
@@ -7588,7 +9246,6 @@ MarkerClusterer.IMAGE_PATH = "http://google-maps-utility-library-v3.googlecode.c
  */
 MarkerClusterer.IMAGE_EXTENSION = "png";
 
-
 /**
  * The default array of sizes for the marker cluster images.
  *
@@ -7597,17 +9254,16 @@ MarkerClusterer.IMAGE_EXTENSION = "png";
  */
 MarkerClusterer.IMAGE_SIZES = [53, 56, 66, 78, 90];
 
-if (typeof String.prototype.trim !== 'function') {
-    /**
-     * IE hack since trim() doesn't exist in all browsers
-     * @return {string} The string with removed whitespace
-     */
-    String.prototype.trim = function() {
-        return this.replace(/^\s+|\s+$/g, '');
-    }
+if (typeof String.prototype.trim !== "function") {
+  /**
+   * IE hack since trim() doesn't exist in all browsers
+   * @return {string} The string with removed whitespace
+   */
+  String.prototype.trim = function () {
+    return this.replace(/^\s+|\s+$/g, "");
+  };
 }
-
-;/**
+/**
  * 1.1.9-patched
  * @name MarkerWithLabel for V3
  * @version 1.1.8 [February 26, 2013]
@@ -7762,7 +9418,10 @@ MarkerLabel_.prototype.onAdd = function () {
       }
     }),
     google.maps.event.addDomListener(this.eventDiv_, "mouseout", function (e) {
-      if ((me.marker_.getDraggable() || me.marker_.getClickable()) && !cDraggingLabel) {
+      if (
+        (me.marker_.getDraggable() || me.marker_.getClickable()) &&
+        !cDraggingLabel
+      ) {
         this.style.cursor = me.marker_.getCursor();
         google.maps.event.trigger(me.marker_, "mouseout", e);
       }
@@ -7786,13 +9445,19 @@ MarkerLabel_.prototype.onAdd = function () {
         google.maps.event.trigger(me.marker_, "mouseup", mEvent);
       }
       if (cDraggingLabel) {
-        if (cRaiseEnabled) { // Lower the marker & label
-          position = me.getProjection().fromLatLngToDivPixel(me.marker_.getPosition());
+        if (cRaiseEnabled) {
+          // Lower the marker & label
+          position = me
+            .getProjection()
+            .fromLatLngToDivPixel(me.marker_.getPosition());
           position.y += cRaiseOffset;
-          me.marker_.setPosition(me.getProjection().fromDivPixelToLatLng(position));
+          me.marker_.setPosition(
+            me.getProjection().fromDivPixelToLatLng(position)
+          );
           // This is not the same bouncing style as when the marker portion is dragged,
           // but it will have to do:
-          try { // Will fail if running Google Maps API earlier than V3.3
+          try {
+            // Will fail if running Google Maps API earlier than V3.3
             me.marker_.setAnimation(google.maps.Animation.BOUNCE);
             setTimeout(cStopBounce, 1406);
           } catch (e) {}
@@ -7805,42 +9470,53 @@ MarkerLabel_.prototype.onAdd = function () {
         google.maps.event.trigger(me.marker_, "dragend", mEvent);
       }
     }),
-    google.maps.event.addListener(me.marker_.getMap(), "mousemove", function (mEvent) {
-      var position;
-      if (cMouseIsDown) {
-        if (cDraggingLabel) {
-          // Change the reported location from the mouse position to the marker position:
-          mEvent.latLng = new google.maps.LatLng(mEvent.latLng.lat() - cLatOffset, mEvent.latLng.lng() - cLngOffset);
-          position = me.getProjection().fromLatLngToDivPixel(mEvent.latLng);
-          if (cRaiseEnabled) {
-            me.crossDiv_.style.left = position.x + "px";
-            me.crossDiv_.style.top = position.y + "px";
-            me.crossDiv_.style.display = "";
-            position.y -= cRaiseOffset;
+    google.maps.event.addListener(
+      me.marker_.getMap(),
+      "mousemove",
+      function (mEvent) {
+        var position;
+        if (cMouseIsDown) {
+          if (cDraggingLabel) {
+            // Change the reported location from the mouse position to the marker position:
+            mEvent.latLng = new google.maps.LatLng(
+              mEvent.latLng.lat() - cLatOffset,
+              mEvent.latLng.lng() - cLngOffset
+            );
+            position = me.getProjection().fromLatLngToDivPixel(mEvent.latLng);
+            if (cRaiseEnabled) {
+              me.crossDiv_.style.left = position.x + "px";
+              me.crossDiv_.style.top = position.y + "px";
+              me.crossDiv_.style.display = "";
+              position.y -= cRaiseOffset;
+            }
+            me.marker_.setPosition(
+              me.getProjection().fromDivPixelToLatLng(position)
+            );
+            if (cRaiseEnabled) {
+              // Don't raise the veil; this hack needed to make MSIE act properly
+              me.eventDiv_.style.top = position.y + cRaiseOffset + "px";
+            }
+            google.maps.event.trigger(me.marker_, "drag", mEvent);
+          } else {
+            // Calculate offsets from the click point to the marker position:
+            cLatOffset = mEvent.latLng.lat() - me.marker_.getPosition().lat();
+            cLngOffset = mEvent.latLng.lng() - me.marker_.getPosition().lng();
+            cSavedZIndex = me.marker_.getZIndex();
+            cStartPosition = me.marker_.getPosition();
+            cStartCenter = me.marker_.getMap().getCenter();
+            cRaiseEnabled = me.marker_.get("raiseOnDrag");
+            cDraggingLabel = true;
+            me.marker_.setZIndex(1000000); // Moves the marker & label to the foreground during a drag
+            mEvent.latLng = me.marker_.getPosition();
+            google.maps.event.trigger(me.marker_, "dragstart", mEvent);
           }
-          me.marker_.setPosition(me.getProjection().fromDivPixelToLatLng(position));
-          if (cRaiseEnabled) { // Don't raise the veil; this hack needed to make MSIE act properly
-            me.eventDiv_.style.top = (position.y + cRaiseOffset) + "px";
-          }
-          google.maps.event.trigger(me.marker_, "drag", mEvent);
-        } else {
-          // Calculate offsets from the click point to the marker position:
-          cLatOffset = mEvent.latLng.lat() - me.marker_.getPosition().lat();
-          cLngOffset = mEvent.latLng.lng() - me.marker_.getPosition().lng();
-          cSavedZIndex = me.marker_.getZIndex();
-          cStartPosition = me.marker_.getPosition();
-          cStartCenter = me.marker_.getMap().getCenter();
-          cRaiseEnabled = me.marker_.get("raiseOnDrag");
-          cDraggingLabel = true;
-          me.marker_.setZIndex(1000000); // Moves the marker & label to the foreground during a drag
-          mEvent.latLng = me.marker_.getPosition();
-          google.maps.event.trigger(me.marker_, "dragstart", mEvent);
         }
       }
-    }),
+    ),
     google.maps.event.addDomListener(document, "keydown", function (e) {
       if (cDraggingLabel) {
-        if (e.keyCode === 27) { // Esc key
+        if (e.keyCode === 27) {
+          // Esc key
           cRaiseEnabled = false;
           me.marker_.setPosition(cStartPosition);
           me.marker_.getMap().setCenter(cStartCenter);
@@ -7850,7 +9526,8 @@ MarkerLabel_.prototype.onAdd = function () {
     }),
     google.maps.event.addDomListener(this.eventDiv_, "click", function (e) {
       if (me.marker_.getDraggable() || me.marker_.getClickable()) {
-        if (cIgnoreClick) { // Ignore the click reported when a label drag ends
+        if (cIgnoreClick) {
+          // Ignore the click reported when a label drag ends
           cIgnoreClick = false;
         } else {
           google.maps.event.trigger(me.marker_, "click", e);
@@ -7877,7 +9554,8 @@ MarkerLabel_.prototype.onAdd = function () {
           // ensure it appears above all other markers. Also set the label's z-index
           // to 1000000 (plus or minus 1 depending on whether the label is supposed
           // to be above or below the marker).
-          me.labelDiv_.style.zIndex = 1000000 + (this.get("labelInBackground") ? -1 : +1);
+          me.labelDiv_.style.zIndex =
+            1000000 + (this.get("labelInBackground") ? -1 : +1);
         }
       }
     }),
@@ -7888,33 +9566,57 @@ MarkerLabel_.prototype.onAdd = function () {
         }
       }
     }),
-    google.maps.event.addListener(this.marker_, "position_changed", function () {
-      me.setPosition();
-    }),
+    google.maps.event.addListener(
+      this.marker_,
+      "position_changed",
+      function () {
+        me.setPosition();
+      }
+    ),
     google.maps.event.addListener(this.marker_, "zindex_changed", function () {
       me.setZIndex();
     }),
     google.maps.event.addListener(this.marker_, "visible_changed", function () {
       me.setVisible();
     }),
-    google.maps.event.addListener(this.marker_, "labelvisible_changed", function () {
-      me.setVisible();
-    }),
+    google.maps.event.addListener(
+      this.marker_,
+      "labelvisible_changed",
+      function () {
+        me.setVisible();
+      }
+    ),
     google.maps.event.addListener(this.marker_, "title_changed", function () {
       me.setTitle();
     }),
-    google.maps.event.addListener(this.marker_, "labelcontent_changed", function () {
-      me.setContent();
-    }),
-    google.maps.event.addListener(this.marker_, "labelanchor_changed", function () {
-      me.setAnchor();
-    }),
-    google.maps.event.addListener(this.marker_, "labelclass_changed", function () {
-      me.setStyles();
-    }),
-    google.maps.event.addListener(this.marker_, "labelstyle_changed", function () {
-      me.setStyles();
-    })
+    google.maps.event.addListener(
+      this.marker_,
+      "labelcontent_changed",
+      function () {
+        me.setContent();
+      }
+    ),
+    google.maps.event.addListener(
+      this.marker_,
+      "labelanchor_changed",
+      function () {
+        me.setAnchor();
+      }
+    ),
+    google.maps.event.addListener(
+      this.marker_,
+      "labelclass_changed",
+      function () {
+        me.setStyles();
+      }
+    ),
+    google.maps.event.addListener(
+      this.marker_,
+      "labelstyle_changed",
+      function () {
+        me.setStyles();
+      }
+    ),
   ];
 };
 
@@ -8009,15 +9711,23 @@ MarkerLabel_.prototype.setMandatoryStyles = function () {
   this.labelDiv_.style.position = "absolute";
   this.labelDiv_.style.overflow = "hidden";
   // Make sure the opacity setting causes the desired effect on MSIE:
-  if (typeof this.labelDiv_.style.opacity !== "undefined" && this.labelDiv_.style.opacity !== "") {
-    this.labelDiv_.style.MsFilter = "\"progid:DXImageTransform.Microsoft.Alpha(opacity=" + (this.labelDiv_.style.opacity * 100) + ")\"";
-    this.labelDiv_.style.filter = "alpha(opacity=" + (this.labelDiv_.style.opacity * 100) + ")";
+  if (
+    typeof this.labelDiv_.style.opacity !== "undefined" &&
+    this.labelDiv_.style.opacity !== ""
+  ) {
+    this.labelDiv_.style.MsFilter =
+      '"progid:DXImageTransform.Microsoft.Alpha(opacity=' +
+      this.labelDiv_.style.opacity * 100 +
+      ')"';
+    this.labelDiv_.style.filter =
+      "alpha(opacity=" + this.labelDiv_.style.opacity * 100 + ")";
   }
 
   this.eventDiv_.style.position = this.labelDiv_.style.position;
   this.eventDiv_.style.overflow = this.labelDiv_.style.overflow;
   this.eventDiv_.style.opacity = 0.01; // Don't use 0; DIV won't be clickable on MSIE
-  this.eventDiv_.style.MsFilter = "\"progid:DXImageTransform.Microsoft.Alpha(opacity=1)\"";
+  this.eventDiv_.style.MsFilter =
+    '"progid:DXImageTransform.Microsoft.Alpha(opacity=1)"';
   this.eventDiv_.style.filter = "alpha(opacity=1)"; // For MSIE
 
   this.setAnchor();
@@ -8042,7 +9752,9 @@ MarkerLabel_.prototype.setAnchor = function () {
  * @private
  */
 MarkerLabel_.prototype.setPosition = function (yOffset) {
-  var position = this.getProjection().fromLatLngToDivPixel(this.marker_.getPosition());
+  var position = this.getProjection().fromLatLngToDivPixel(
+    this.marker_.getPosition()
+  );
   if (typeof yOffset === "undefined") {
     yOffset = 0;
   }
@@ -8061,9 +9773,10 @@ MarkerLabel_.prototype.setPosition = function (yOffset) {
  * @private
  */
 MarkerLabel_.prototype.setZIndex = function () {
-  var zAdjust = (this.marker_.get("labelInBackground") ? -1 : +1);
+  var zAdjust = this.marker_.get("labelInBackground") ? -1 : +1;
   if (typeof this.marker_.getZIndex() === "undefined") {
-    this.labelDiv_.style.zIndex = parseInt(this.labelDiv_.style.top, 10) + zAdjust;
+    this.labelDiv_.style.zIndex =
+      parseInt(this.labelDiv_.style.top, 10) + zAdjust;
     this.eventDiv_.style.zIndex = this.labelDiv_.style.zIndex;
   } else {
     this.labelDiv_.style.zIndex = this.marker_.getZIndex() + zAdjust;
@@ -8142,7 +9855,8 @@ MarkerLabel_.prototype.setVisible = function () {
 function MarkerWithLabel(opt_options) {
   opt_options = opt_options || {};
   opt_options.labelContent = opt_options.labelContent || "";
-  opt_options.labelAnchor = opt_options.labelAnchor || new google.maps.Point(0, 0);
+  opt_options.labelAnchor =
+    opt_options.labelAnchor || new google.maps.Point(0, 0);
   opt_options.labelClass = opt_options.labelClass || "markerLabels";
   opt_options.labelStyle = opt_options.labelStyle || {};
   opt_options.labelInBackground = opt_options.labelInBackground || false;
@@ -8161,11 +9875,23 @@ function MarkerWithLabel(opt_options) {
   if (typeof opt_options.optimized === "undefined") {
     opt_options.optimized = false;
   }
-  opt_options.crossImage = opt_options.crossImage || "http" + (document.location.protocol === "https:" ? "s" : "") + "://maps.gstatic.com/intl/en_us/mapfiles/drag_cross_67_16.png";
-  opt_options.handCursor = opt_options.handCursor || "http" + (document.location.protocol === "https:" ? "s" : "") + "://maps.gstatic.com/intl/en_us/mapfiles/closedhand_8_8.cur";
+  opt_options.crossImage =
+    opt_options.crossImage ||
+    "http" +
+      (document.location.protocol === "https:" ? "s" : "") +
+      "://maps.gstatic.com/intl/en_us/mapfiles/drag_cross_67_16.png";
+  opt_options.handCursor =
+    opt_options.handCursor ||
+    "http" +
+      (document.location.protocol === "https:" ? "s" : "") +
+      "://maps.gstatic.com/intl/en_us/mapfiles/closedhand_8_8.cur";
   opt_options.optimized = false; // Optimized rendering is not supported
 
-  this.label = new MarkerLabel_(this, opt_options.crossImage, opt_options.handCursor); // Bind the label to the marker
+  this.label = new MarkerLabel_(
+    this,
+    opt_options.crossImage,
+    opt_options.handCursor
+  ); // Bind the label to the marker
 
   // Call the parent constructor. It calls Marker.setValues to initialize, so all
   // the new parameters are conveniently saved and can be accessed with get/set.
@@ -8181,7 +9907,6 @@ inherits(MarkerWithLabel, google.maps.Marker);
  * @private
  */
 MarkerWithLabel.prototype.setMap = function (theMap) {
-
   // Call the inherited function...
   google.maps.Marker.prototype.setMap.apply(this, arguments);
 

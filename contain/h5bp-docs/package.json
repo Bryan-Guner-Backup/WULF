@@ -1,0 +1,19 @@
+{
+  "name": "h5bp-docs",
+  "description": "h5bp documentation generator",
+  "version": "0.1.3",
+  "main": "./lib/h5bp.js",
+  "bin": "./bin/h5bp-cli.js",
+  "engines": {
+    "node": "> 0.4"
+  },
+  "dependencies": {
+    "findit": "0.1.0",
+    "marked": "0.3.2",
+    "connect": "1.5.1",
+    "mustache": "0.8.1",
+    "optimist": "0.2.5",
+    "seq": "0.3.5",
+    "wordwrap": "0.0.2"
+  }
+}

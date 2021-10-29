@@ -1,0 +1,38 @@
+listen:
+  listen: '0.0.0.0'
+  port: 9000
+
+webserver:
+  https: false
+
+database:
+  hostname: 'localhost'
+  port: 5432
+
+smtp:
+  hostname: null
+  port: 1025
+  tls: false
+  disable_starttls: true
+  from_address: 'test-admin@localhost'
+  username: null
+  password: null
+
+log:
+  level: 'debug'
+
+signup:
+  enabled: true
+
+transcoding:
+  enabled: true
+  threads: 2
+  resolutions:
+    240p: true
+    360p: true
+    480p: true
+    720p: true
+    1080p: true
+
+instance:
+  default_nsfw_policy: 'display'

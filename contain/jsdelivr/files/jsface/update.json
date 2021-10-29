@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "jsface",
-  "repo": "tnhu/jsface",
-  "files": {
-    "basePath": "dist/"
-  }
-}

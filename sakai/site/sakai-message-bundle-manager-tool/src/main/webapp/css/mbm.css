@@ -1,0 +1,11 @@
+.portletBody    h3 {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+.dataTables_wrapper {
+	margin-top: 20px;
+}
+
+.alert {
+    margin-top: 20px;
+}

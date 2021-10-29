@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "WOW",
-  "repo": "matthieua/WOW",
-  "files": {
-    "basePath": "dist/",
-	"include": ["wow.min.js"]
-  }
-}

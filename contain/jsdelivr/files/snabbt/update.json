@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "snabbt.js",
-  "repo": "daniel-lundin/snabbt.js",
-  "files": {
-    "include": ["snabbt.min.js"]
-  }
-}

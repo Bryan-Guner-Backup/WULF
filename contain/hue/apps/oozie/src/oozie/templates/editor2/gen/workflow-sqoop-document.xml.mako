@@ -1,1 +1,0 @@
-workflow-sqoop.xml.mako

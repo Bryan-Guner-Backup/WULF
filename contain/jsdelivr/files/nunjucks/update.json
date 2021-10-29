@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "nunjucks",
-  "repo": "mozilla/nunjucks",
-  "files": {
-    "basePath": "browser/",
-    "include": ["*.min.js"]
-  }
-}

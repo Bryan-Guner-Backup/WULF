@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "webcomponentsjs",
-  "repo": "webcomponents/webcomponentsjs",
-  "files": {
-    "include": ["webcomponents.min.js", "webcomponents-lite.min.js"]
-  }
-}

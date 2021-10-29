@@ -1,0 +1,14 @@
+{
+  "name": "war-is-a-racket.surge.sh",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo Its all good!",
+    "build": "madoko war-is-a-racket.md && mv out/war-is-a-racket.html out/index.html && sed -i -e 's/<title>&lt;h1&gt;/<title>/g' out/index.html && sed -i -e 's/&lt;\\/h1&gt;<\\/title>/<\\/title>/g' out/index.html"
+  },
+  "devDependencies": {
+    "madoko": "^1.0.1"
+  },
+  "author": "Mixed",
+  "license": "UNLICENSED"
+}

@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "select2",
-  "repo": "select2/select2",
-  "files": {
-    "basePath": "dist/"
-  }
-}

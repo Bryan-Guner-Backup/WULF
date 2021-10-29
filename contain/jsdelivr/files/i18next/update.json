@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "i18next",
-  "repo": "i18next/i18next",
-  "files": {
-	"include": ["*.min.js"]
-  }
-}

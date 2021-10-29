@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "lunr.js",
-  "repo": "olivernn/lunr.js",
-  "files": {
-    "include": ["lunr.min.js"]
-  }
-}

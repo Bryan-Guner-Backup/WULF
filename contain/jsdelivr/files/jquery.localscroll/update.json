@@ -1,8 +1,0 @@
-{
-  "packageManager": "bower",
-  "name": "jquery.localScroll",
-  "repo": "flesler/jquery.localScroll",
-  "files": {
-      "include": ["jquery.localScroll.min.js", "jquery.localScroll.js"]
-  }
-}

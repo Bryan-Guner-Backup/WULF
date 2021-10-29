@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "hammerjs",
-  "repo": "hammerjs/hammer.js",
-  "files": {
-    "include": ["hammer.js", "hammer.min.js", "hammer.min.map"]
-  }
-}

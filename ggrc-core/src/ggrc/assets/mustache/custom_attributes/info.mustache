@@ -1,0 +1,36 @@
+{{!
+    Copyright (C) 2016 Google Inc.
+    Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+}}
+
+<custom-attributes instance="instance">
+    {{#if instance.custom_attribute_definitions.length}}
+      <div class="row-fluid wrap-row">
+      {{#items}}
+        <div class="span6">
+          <div data-custom-attribute="{{id}}" data-type="{{attribute_type}}">
+            <inline-edit
+              instance="instance"
+              ca-id="cad.id"
+              {{#if cav.attribute_object}}
+              value="cav.attribute_object"
+              {{else}}
+              value="cav.attribute_value"
+              {{/if}}
+              values="cad.values"
+              title="cad.title"
+              label="cad.label"
+              type="{{type}}"
+              mandatory="cad.mandatory"
+              placeholder="cad.placeholder"
+              helptext="cad.helptext"
+              {{^is_allowed 'update' instance context='for'}}
+                readonly
+              {{/is_allowed}}
+            ></inline-edit>
+          </div>
+        </div>
+      {{/items}}
+      </div>
+    {{/if}}
+</custom-attributes>

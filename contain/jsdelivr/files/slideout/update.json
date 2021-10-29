@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "slideout",
-  "repo": "Mango/slideout",
-  "files": {
-    "basePath": "dist/"
-  }
-}

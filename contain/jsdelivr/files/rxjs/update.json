@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "rxjs",
-  "repo": "Reactive-Extensions/RxJS",
-  "files": {
-    "basePath": "dist/",
-    "include": ["*.js"]
-  }
-}

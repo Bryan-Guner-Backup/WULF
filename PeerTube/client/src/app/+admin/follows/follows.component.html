@@ -1,0 +1,13 @@
+<div class="admin-sub-header">
+  <div i18n class="form-sub-title">Manage follows</div>
+
+  <tabset #followsMenuTabs>
+    <tab *ngFor="let link of links">
+      <ng-template tabHeading>
+        <a class="tab-link" [routerLink]="link.path">{{ link.title }}</a>
+      </ng-template>
+    </tab>
+  </tabset>
+</div>
+
+<router-outlet></router-outlet>

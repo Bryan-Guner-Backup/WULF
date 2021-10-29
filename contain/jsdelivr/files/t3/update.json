@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "t3",
-  "repo": "box/t3js",
-  "files": {
-    "basePath": "dist/",
-    "include": ["t3.min.js"]
-  }
-}

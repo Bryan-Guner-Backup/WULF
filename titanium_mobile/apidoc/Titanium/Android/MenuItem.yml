@@ -1,0 +1,308 @@
+---
+name: Titanium.Android.MenuItem
+summary: The Titanium binding of an Android menu item.
+description: |
+    As of Release 3.3.0, the Menu and MenuItem APIs are used to create action items for the action bar.
+    Prior to Release 3.3.0, the APIs could also be used to customize the Options Menu.
+
+    In JavaScript, use the Menu's [add()](Titanium.Android.Menu.add) method to create
+    new action items.
+
+    In Alloy you can define **`<MenuItem>`** elements inside a `<Menu>` element.
+
+        <Menu id="menu" platform="android">
+            <MenuItem id="saveitem" title="Save" icon="item1.png" onClick="doSave" />
+            <MenuItem id="closeitem" title="Close" icon="item1.png" onClick="doClose" />
+        </Menu>
+
+    Action items can appear in either the action bar or the action bar's
+    overflow menu.  To determine how an action item is displayed, set
+    [showAsAction](Titanium.Android.MenuItem.showAsAction).
+
+    You can optionally customize the look of action items using the
+    [actionView](Titanium.Android.MenuItem.actionView) property.
+
+    See the <Titanium.Android.Menu> reference page for additional code examples.
+
+    Further Reading:
+
+      * [Android Developers: MenuItem](http://developer.android.com/reference/android/view/MenuItem.html)
+
+extends: Titanium.Proxy
+platforms: [android]
+createable: false
+since: "1.5"
+methods:
+
+    # hasSubMenu exists but is not useful at present, because we don't support submenus.
+
+  - name: collapseActionView
+    summary: Collapse the action view associated with this menu item.
+    description: |
+        This is an action-bar specific API. Prior to Release 3.3.0, this API only works
+        on devices running Android 4.0 (API level 14) and greater.
+    since: "3.0.0"
+
+  - name: expandActionView
+    summary: Expand the action view associated with this menu item.
+    description: |
+        This is an action-bar specific API. Prior to Release 3.3.0, this API only works
+        on devices running Android 3.0 (API level 11) and greater.
+    since: "3.0.0"
+
+  - name: isActionViewExpanded
+    summary: |
+        Returns the [actionViewExpanded](Titanium.Android.MenuItem.actionViewExpanded) state of the menu item.
+    description: |
+        This is an action-bar specific API. Prior to Release 3.3.0, this API only works
+        on devices running Android 4.0 (API level 14) and greater.
+    returns:
+        type: Boolean
+
+  - name: isCheckable
+    summary: |
+        Returns the [checkable](Titanium.Android.MenuItem.checkable) state of the menu item.
+    returns:
+        type: Boolean
+
+  - name: isChecked
+    summary: Returns the [checked](Titanium.Android.MenuItem.checked) state of the menu item.
+    returns:
+        type: Boolean
+
+  - name: isEnabled
+    summary: Returns the [enabled](Titanium.Android.MenuItem.enabled) state of the menu item.
+    returns:
+        type: Boolean
+
+  - name: isVisible
+    summary: Returns the [visible](Titanium.Android.MenuItem.visible) state of the menu item.
+    returns:
+        type: Boolean
+
+  - name: setCheckable
+    summary: Sets the [checkable](Titanium.Android.MenuItem.checkable) state of the menu item.
+    parameters:
+      - name: checkable
+        summary: True enable checking and unchecking this item, false to disable it.
+        type: Boolean
+
+  - name: setChecked
+    summary: Sets the [checked](Titanium.Android.MenuItem.checked) state of the menu item.
+    parameters:
+      - name: enabled
+        summary: True to check the item, false to uncheck it.
+        type: Boolean
+
+  - name: setEnabled
+    summary: Sets the [enabled](Titanium.Android.MenuItem.enabled) state of the menu item.
+    parameters:
+      - name: enabled
+        summary: True to enable item, false to disable it.
+        type: Boolean
+
+  - name: setVisible
+    summary: Sets the [visible](Titanium.Android.MenuItem.visible) state of the menu item.
+    parameters:
+      - name: visible
+        summary: True to show the item, false to hide it.
+        type: Boolean
+
+events:
+  - name: click
+    summary: Fired when the user clicks the menu item.
+
+  - name: expand
+    summary: Fired when the action view has been expanded.
+    description: |
+        This is an action-bar specific API. Prior to Release 3.3.0, this API only works
+        on devices running Android 4.0 (API level 14) and greater.
+    since: "3.0.0"
+
+  - name: collapse
+    summary: Fired when the action view has been collapsed.
+    description: |
+        This is an action-bar specific API. Prior to Release 3.3.0, this API only works
+        on devices running Android 4.0 (API level 14) and greater.
+    since: "3.0.0"
+
+properties:
+
+  - name: actionView
+    summary: Custom view that replaces the default menu item button.
+    description: |
+        This is an action-bar specific API. Prior to Release 3.3.0, this API only works
+        on devices running Android 3.0 (API level 11) and greater.
+
+        In order to display the custom view, set the item's
+        [showAsAction](Titanium.Android.MenuItem.showAsAction) property to either
+        `Titanium.Android.SHOW_AS_ACTION_ALWAYS` or
+        `Titanium.Android.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW`.
+
+        Since Alloy 1.6.0, you can specify this property using the `<ActionView>` element as a child
+        of the `<MenuItem>` element, for example:
+
+            <Alloy>
+                <Window>
+                    <Menu>
+                        <MenuItem showAsAction="Ti.Android.SHOW_AS_ACTION_ALWAYS" title="Search">
+                            <ActionView>
+                                <SearchView ns="Ti.UI.Android" hintText="Type Something"/>
+                            </ActionView>
+                        </MenuItem>
+                    </Menu>
+                </Window>
+            </Alloy>
+
+    type: Titanium.UI.View
+    since: "3.0.0"
+
+  - name: actionViewExpanded
+    summary: True if this menu item's action view has been expanded.
+    description: |
+        This is an action-bar specific API. Prior to Release 3.3.0, this API only works
+        on devices running Android 4.0 (API level 14) and greater.
+    type: Boolean
+    since: "3.0.0"
+    permission: read-only
+    # this property uses non-standard accessors, listed in the "methods" section.
+    accessors: false
+
+  - name: checkable
+    summary: Determines if the item can be checked.
+    description: |
+        Note that check marks are not supported in the icon menus (main
+        options menu shown when fewer than six options are included).
+        Check marks are discouraged in expanded menus (available when
+        six or more options menu items are defined).
+    type: Boolean
+    default: false
+    # this property uses non-standard accessors, listed in the "methods" section.
+    accessors: false
+
+  - name: checked
+    summary: Determines if the item is checked.
+    description: |
+        Note that check marks are not supported in the icon menus (main
+        options menu shown when fewer than six options are included).
+        Check marks are discouraged in expanded menus (available when
+        six or more options menu items are defined).
+    type: Boolean
+    default: false
+    # this property uses non-standard accessors, listed in the "methods" section.
+    accessors: false
+
+  - name: enabled
+    summary: Determines if the item is enabled.
+    type: Boolean
+    default: true
+    # this property uses non-standard accessors, listed in the "methods" section.
+    accessors: false
+
+  - name: groupId
+    summary: Group ID for this item.
+    description: |
+        Items that share a group ID may be operated on as a group using
+        the menu's [setGroupEnabled](Titanium.Android.Menu.setGroupEnabled) and
+        [setGroupVisible](Titanium.Android.Menu.setGroupVisible) methods.
+    type: Number
+    permission: read-only
+    availability: creation
+
+  - name: icon
+    summary: Icon to display for the this menu item.
+    description: |
+        Icons are not displayed in expanded menus.
+
+        Icons can be specified as a local image URI or an Android resource ID.
+    type: [Number, String]
+    permission: write-only
+
+  - name: itemId
+    summary: Item ID for this item.
+    type: Number
+    permission: read-only
+    availability: creation
+
+  - name: order
+    summary: Integer used for controlling the category and sort order for menu items.
+    description: |
+        The lower bits of this value control the order of the menu item related to other
+        menu items within its category. A menu item with a given value will be displayed
+        before any items with higher values.
+
+        The upper bits of the value control the category. These can be set to the values
+        defined by the `CATEGORY` constants in the Android `Menu` class,
+        These values are not exposed as constants in Titanium.
+
+        See also:
+
+        *   [getOrder](http://developer.android.com/reference/android/view/MenuItem.html#getOrder())
+            in the Android Developer Reference.
+
+        *   [Menu](http://developer.android.com/reference/android/view/Menu.html) in the
+            Android Developer Reference for definitions of the `CATEGORY` values.
+    type: Number
+    permission: read-only
+    availability: creation
+
+  - name: showAsAction
+    summary: A set of flags that controls how this item appears in the action bar.
+    description: |
+        This is an action-bar specific API. Prior to Release 3.3.0, this property only works
+        on devices running Android 3.0 (API level 11) and greater.
+
+        You may set one or more flags (by OR'ing them together) to control how
+        this menu item should be placed inside the action bar.
+
+        To control if your item should be displayed as an action button or
+        placed in the overflow menu set one of these flags:
+          <Titanium.Android.SHOW_AS_ACTION_ALWAYS>,
+          <Titanium.Android.SHOW_AS_ACTION_IF_ROOM>,
+          or <Titanium.Android.SHOW_AS_ACTION_NEVER>.
+
+        If you only wish to display the text label even if the item
+        has an icon set the <Titanium.Android.SHOW_AS_ACTION_WITH_TEXT> flag.
+        Note that the `SHOW_AS_ACTION_WITH_TEXT` setting is only a hint to the system --
+        the text may or may not be shown depending on the width of the screen. For
+        example, text may not be shown on phones in portrait mode. In addition if the
+        application can be displayed in both portrait and landscape mode, whether or not
+        the text is displayed depends on the device's orientation _when the application
+        launches_. (This is true of both Titanium applications and native Android
+        applications.) For this reason, using `SHOW_AS_ACTION_WITH_TEXT` is not recommended
+        for applications that support both orientions.
+
+        If you want to guarantee that text and icon are always visible, you can create a
+        button with the text and image, and specify it as the item's `actionView`.
+
+        You may specify if your action view is collapsible by setting this property to
+        <Titanium.Android.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW>.
+
+        For a collapsible item, the item button (icon and/or text) is displayed when the item is
+        collapsed, and the action view is displayed when the item is expanded.
+
+        If `SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW` is **not** specified, any `actionView`
+        specified is displayed _instead of_ the item's icon and/or text.
+
+    type: Number
+    since: "3.0.0"
+    constants: Titanium.Android.SHOW_AS_ACTION_*
+    permission: write-only
+
+  - name: title
+    summary: Title of the item.
+    type: String
+
+  - name: titleCondensed
+    summary: Shortened version of the item's title.
+    description: |
+        If both `title` and `titleCondensed` are specified, `titleCondensed` is used in the
+        icon menus, and the `title` is used in the extended menus.
+    type: String
+
+  - name: visible
+    summary: Determines whether the menu item is visible.
+    type: Boolean
+    default: true
+    # this property uses non-standard accessors, listed in the "methods" section.
+    accessors: false

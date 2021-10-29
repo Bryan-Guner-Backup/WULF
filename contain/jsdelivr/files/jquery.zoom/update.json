@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "jquery.zoom",
-  "repo": "jackmoore/zoom",
-  "files": {
-	"include": ["jquery.zoom.js","jquery.zoom.min.js","grab.cur","grabbed.cur"]
-  }
-}

@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "angular.xeditable",
-  "repo": "vitalets/angular-xeditable",
-  "files": {
-    "basePath": "dist/"
-  }
-}

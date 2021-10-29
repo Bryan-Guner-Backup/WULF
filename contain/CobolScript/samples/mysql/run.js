@@ -1,1 +1,0 @@
-var cobs = require('../..'),    fs = require('fs');    function runFile(filename) {    cobs.compileProgramFile(filename).run(cobs.getRuntime({ require: require }));};process.argv.forEach(function(val) {    if (val.slice(-4) == ".cob")        runFile(val);});

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>uMatrix — About</title>
+<link rel="stylesheet" type="text/css" href="css/common.css">
+<link rel="stylesheet" type="text/css" href="css/dashboard-common.css">
+<style>
+ul {
+    list-style-type: none;
+}
+</style>
+</head>
+
+<body>
+
+<h2>uMatrix <span id="aboutVersion"></span></h2>
+<ul>
+    <li><span id="aboutStorageUsed"></span><br>
+    <li>&nbsp;
+    <li><span data-i18n="aboutChangelog"></span><br>
+    <li><a href="https://github.com/gorhill/uMatrix/wiki"><span data-i18n="aboutDoc"></span></a><br>
+    <li><span data-i18n="aboutPermissions"></span><br>
+    <li><a href="https://github.com/gorhill/uMatrix" data-i18n="aboutCode"></a><br>
+    <li><a href="https://github.com/gorhill/uMatrix/issues" data-i18n="aboutIssues"></a><br>
+    <li><span data-i18n="aboutContributors"></span>
+        <ul>
+            <li><span data-i18n="aboutCodeContributors"></span> <a href="https://github.com/gorhill/uMatrix/graphs/contributors">uMatrix, <a href="https://github.com/gorhill/httpswitchboard/graphs/contributors">HTTP Switchboard</a>
+            <li><span data-i18n="aboutIssueContributors"></span> <a href="https://github.com/gorhill/uMatrix/issues?q=is%3Aissue">uMatrix</a>, <a href="https://github.com/gorhill/httpswitchboard/issues?q=is%3Aissue">HTTP Switchboard</a>
+            <li><span data-i18n="aboutTranslationContributors"></span> <a href="https://github.com/gorhill/uMatrix/wiki/Translation-work-contributors">Crowdin</a>
+        </ul>
+</ul>
+
+<h2 data-i18n="aboutUserDataHeader"></h2>
+<div>
+    <p><button type="button" id="backupUserDataButton" data-i18n="aboutBackupButton"></button>
+    <button type="button" id="restoreUserDataButton" data-i18n="aboutRestoreButton"></button>
+    <input id="restoreFilePicker" type="file" accept="text/plain" style="display:none;">
+    <p style="margin-left: 2em;" data-i18n="aboutOr">
+    <p><button type="button" id="resetUserDataButton" data-i18n="aboutResetButton"></button>
+</div>
+
+<span style="display: none;" data-i18n="aboutStorageUsed"></span>
+<span style="display: none;" data-i18n="aboutBackupFilename"></span>
+<span style="display: none;" data-i18n="aboutRestoreConfirm"></span>
+<span style="display: none;" data-i18n="aboutRestoreError"></span>
+<span style="display: none;" data-i18n="aboutResetConfirm"></span>
+
+
+<script src="js/vapi-common.js"></script>
+<script src="js/vapi-client.js"></script>
+<script src="js/udom.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/dashboard-common.js"></script>
+<script src="js/about.js"></script>
+
+</body>
+</html>

@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "ractive-load",
-  "repo": "ractivejs/ractive-load",
-  "files": {
-	"basePath": "dist/",
-	"include": ["*.min.*"]
-  }
-}

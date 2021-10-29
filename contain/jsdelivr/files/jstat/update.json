@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "jstat",
-  "repo": "jstat/jstat",
-  "files": {
-    "basePath": "dist/",
-    "include": ["jstat.min.js"]
-  }
-}

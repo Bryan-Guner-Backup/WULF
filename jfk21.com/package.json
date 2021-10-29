@@ -1,0 +1,24 @@
+{
+  "name": "jfk21-com",
+  "version": "0.0.1",
+  "description": "Content of jfk21.com",
+  "scripts": {
+    "test": "exit 0",
+    "build": "madoko content/index.md --odir=site/"
+  },
+  "devDependencies": {
+    "madoko": "^1.0.1"
+  },
+  "main": "null",
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jfknow/jfk21.com.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/jfknow/jfk21.com/issues"
+  },
+  "homepage": "https://github.com/jfknow/jfk21.com#readme"
+}

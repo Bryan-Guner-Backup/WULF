@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "jquery.gray",
-  "repo": "karlhorky/gray",
-  "files": {
-    "include": ["css/gray.min.css", "js/jquery.gray.min.js"]
-  }
-}

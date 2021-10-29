@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "blazy",
-  "repo": "dinbror/blazy",
-  "files": {
-    "include": ["blazy.min.js"]
-  }
-}

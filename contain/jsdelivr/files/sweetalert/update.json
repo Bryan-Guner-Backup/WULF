@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "sweetalert",
-  "repo": "t4t5/sweetalert",
-  "files": {
-    "basePath": "dist/",
-    "include": ["sweetalert.min.js", "sweetalert.css"]
-  }
-}

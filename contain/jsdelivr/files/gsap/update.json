@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "GreenSock-JS",
-  "repo": "greensock/GreenSock-JS",
-  "files": {
-    "basePath": "src/minified"
-  }
-}

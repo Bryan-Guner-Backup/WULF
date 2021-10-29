@@ -1,4 +1,0 @@
-website([
-  website: 'arewedistributedyet.com',
-  record: '_dnslink'
-])

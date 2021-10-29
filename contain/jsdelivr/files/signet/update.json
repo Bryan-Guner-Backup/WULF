@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "signet",
-  "repo": "HubSpot/signet",
-  "files": {
-    "include": ["signet.js" ,"signet.min.js"]
-  }
-}

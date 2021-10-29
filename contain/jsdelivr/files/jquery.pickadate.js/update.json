@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "pickadate.js",
-  "repo": "amsul/pickadate.js",
-  "files": {
-    "basePath": "lib/",
-    "include": ["*.min.js", "./css/*.css"]
-  }
-}

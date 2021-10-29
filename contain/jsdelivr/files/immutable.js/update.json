@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "immutable.js",
-  "repo": "facebook/immutable-js",
-  "files": {
-    "basePath": "dist/",
-    "include": ["immutable.min.js", "immutable.d.ts"]
-  }
-}

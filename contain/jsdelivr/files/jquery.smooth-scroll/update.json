@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "jquery-smooth-scroll",
-  "repo": "kswedberg/jquery-smooth-scroll",
-  "files": {
-    "include": ["*.min.js"]
-  }
-}

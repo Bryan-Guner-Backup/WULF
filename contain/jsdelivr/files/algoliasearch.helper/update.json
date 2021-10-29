@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "algoliasearch.helper",
-  "repo": "algolia/algoliasearch-helper-js",
-  "files": {
-    "basePath": "dist/"
-  }
-}

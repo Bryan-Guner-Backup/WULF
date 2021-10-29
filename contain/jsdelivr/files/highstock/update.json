@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "highstock",
-  "repo": "highslide-software/highstock-release",
-  "files": {
-    "exclude": ["README.md", "bower.json", "package.json"]
-  }
-}

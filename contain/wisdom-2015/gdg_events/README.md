@@ -1,4 +1,0 @@
-# GDG Events
-
-
-

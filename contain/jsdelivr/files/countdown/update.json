@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "countdown",
-  "repo": "kbwood/countdown",
-  "files": {
-    "include": [ "*.js", "*.css" ]
-  }
-}

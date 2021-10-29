@@ -1,0 +1,1 @@
+var cobs = require('../..'),    fs = require('fs');function runFile(filename) {    cobs.compileTemplateFile(filename).run(cobs.getRuntime());};process.argv.forEach(function(val) {    if (val.slice(-5) == ".cobt")        runFile(val);});

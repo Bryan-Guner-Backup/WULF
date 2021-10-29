@@ -1,9 +1,0 @@
-{
-	"packageManager": "github",
-	"name": "raven",
-	"repo": "getsentry/raven-js",
-	"files": {
-		"basePath": "dist",
-		"include": ["raven.min.js", "raven.min.map"]
-	}
-}

@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "jquery.geocomplete",
-  "repo": "ubilabs/geocomplete",
-  "files": {
-	"include": ["jquery.geocomplete.min.js"]
-  }
-}

@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "mobile-detect.js",
-  "repo": "hgoebl/mobile-detect.js",
-  "files": {
-    "include": ["mobile-detect.min.js", "mobile-detect.js", "mobile-detect-modernizr.js"]
-  }
-}

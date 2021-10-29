@@ -1,0 +1,129 @@
+<style type="text/css" media="screen">
+#main
+{
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.all {
+  height: 100%;
+}
+
+.edcon {
+  float: left;
+  width: 50%;
+  height: 100%;
+}
+
+.footer {
+  display: none;
+}
+
+</style>
+
+<div id="loading">Loading...</div>
+<div class="all" style="display: none">
+
+  <div class="edcon" id="hjson">{
+
+  // Live demo.
+  // Type either into the Hjson or JSON input
+  // to convert to the other format.
+  // Reload to reset.
+
+  # comments are useful
+  # specify rate in requests/second
+  "rate": 1000
+
+  // maybe you prefer js style comments
+  /* or if you feel old fashioned */
+
+  # key names do not need to be placed in quotes
+  key: "value"
+
+  # you don't need quotes for strings
+  text: look ma, no quotes!
+
+  # note that for quoteless strings everything up
+  # to the next line is part of the string!
+
+  # commas are optional
+  commas:
+  {
+    one: 1
+    two: 2
+  }
+
+  # trailing commas are allowed
+  trailing:
+  {
+    one: 1,
+    two: 2,
+  }
+
+  # multiline string
+  haiku:
+    '''
+    JSON I love you.
+    But you strangle my expression.
+    This is so much better.
+    '''
+
+  # Obviously you can always use standard JSON syntax as well:
+  favNumbers: [ 1, 2, 3, 6, 42 ]
+}
+  </div>
+  <div class="edcon" id="json"></div>
+</div>
+
+<script src="js/hjson.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+  var locked, orgText;
+  var hjson=ace.edit("hjson");
+  hjson.setTheme("ace/theme/monokai");
+  hjson.on("change", changeHjson);
+  hjson.on("paste", changeHjson);
+
+  var json=ace.edit("json");
+  json.setTheme("ace/theme/monokai");
+  json.on("change", changeJson);
+  json.on("paste", changeJson);
+
+  function changeHjson()
+  {
+    if (locked) return;
+    var text=hjson.getSession().getValue();
+    try { text=JSON.stringify(Hjson.parse(text), null, "  "); }
+    catch (e) { text=e.toString(); }
+    locked=true;
+    json.getSession().setValue(text);
+    locked=false;
+  }
+
+  function changeJson()
+  {
+    if (locked) return;
+    var text=json.getSession().getValue();
+    try { text=Hjson.stringify(JSON.parse(text)); }
+    catch (e) { text=e.toString(); }
+    locked=true;
+    hjson.getSession().setValue(text);
+    locked=false;
+  }
+
+  function reset()
+  {
+    locked=false;
+    hjson.getSession().setValue(orgText);
+  }
+
+  orgText=hjson.getSession().getValue();
+  changeHjson();
+
+  $("#loading").hide();
+  $(".all").show();
+</script>

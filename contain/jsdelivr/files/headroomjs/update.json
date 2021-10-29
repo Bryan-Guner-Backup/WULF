@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "headroomjs",
-  "repo": "WickyNilliams/headroom.js",
-  "files": {
-    "basePath": "dist",
-    "include": ["*.min.js"]
-  }
-}

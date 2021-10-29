@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "Caret.js",
-  "repo": "ichord/Caret.js",
-  "files": {
-    "basePath": "dist/",
-    "include": ["jquery.caret.min.js"]
-  }
-}

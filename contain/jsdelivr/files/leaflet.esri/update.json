@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "leaflet.esri",
-  "repo": "esri/esri-leaflet",
-  "files": {
-    "basePath": "dist/",
-    "exclude": ["README.md"]
-  }
-}

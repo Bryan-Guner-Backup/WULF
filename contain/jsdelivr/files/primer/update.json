@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "primer",
-  "repo": "primer/primer",
-  "files": {
-    "basePath": "css/",
-    "include": ["primer.css"]
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "rivets",
-  "repo": "mikeric/rivets",
-  "files": {
-    "basePath": "dist/",
-    "include": ["rivets.min.js"]
-  }
-}

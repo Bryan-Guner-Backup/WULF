@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "js-data-http",
-  "repo": "js-data/js-data-http",
-  "files": {
-    "basePath": "dist/",
-    "include": ["js-data-http.min.js"]
-  }
-}

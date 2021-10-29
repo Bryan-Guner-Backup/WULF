@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "anchorjs",
-  "repo": "bryanbraun/anchorjs",
-  "files": {
-    "include": ["anchor.min.js"]
-  }
-}

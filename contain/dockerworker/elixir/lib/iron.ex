@@ -1,2 +1,0 @@
-defmodule Iron do
-end

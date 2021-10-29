@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "bootstrap-hover-dropdown",
-  "repo": "CWSpear/bootstrap-hover-dropdown",
-  "files": {
-    "include": ["bootstrap-hover-dropdown.min.js"]
-  }
-}

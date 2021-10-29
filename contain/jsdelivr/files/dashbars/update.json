@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "dashbars",
-  "repo": "pismute/dashbars",
-  "files": {
-    "basePath": "dist/",
-    "include": ["dashbars.js", "dashbars.min.js"]
-  }
-}

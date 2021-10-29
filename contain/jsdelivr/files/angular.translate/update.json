@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "angular.translate",
-  "repo": "angular-translate/bower-angular-translate",
-  "files": {
-    "include": ["angular-translate.min.js"]
-  }
-}

@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "dll.js",
-  "repo": "thednp/dll.js",
-  "files": {
-    "basePath": "dist/"
-  }
-}

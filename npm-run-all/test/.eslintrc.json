@@ -1,0 +1,8 @@
+{
+    "extends": "mysticatea/mocha",
+    "rules": {
+        "node/no-unsupported-features": ["error", {
+            "ignores": ["asyncAwait"]
+        }]
+    }
+}

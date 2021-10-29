@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "bootstrap.datatables",
-  "repo": "Jowin/Datatables-Bootstrap3",
-  "files": {
-  	"basePath": "BS3/assets/"
-  }
-}

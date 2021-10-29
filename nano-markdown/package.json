@@ -1,0 +1,39 @@
+{
+  "name": "nano-markdown",
+  "version": "1.2.0",
+  "description": "A minimal markdown to html converter",
+  "main": "index.js",
+  "scripts": {
+    "build": "grunt",
+    "test": "mocha --reporter spec -u tdd",
+    "test-cov": "istanbul cover node_modules/mocha/bin/_mocha -- --reporter dot -u tdd",
+    "test-travis": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter dot -u tdd"
+  },
+  "devDependencies": {
+    "colors": "0",
+    "core-assert": "0",
+    "nano-timer": "1",
+    "nano-json": "1",
+    "istanbul": "0",
+    "mocha": "2",
+    "grunt": ">= 0.4.5",
+    "gzip-js": ">= 0.3.1",
+    "grunt-contrib-uglify": ">= 0.2.2",
+    "grunt-compare-size": ">= 0.0.0",
+    "colors": ">= 0.6.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Holixus/nano-markdown.git"
+  },
+  "keywords": [
+    "markdown",
+    "html"
+  ],
+  "author": "Vladimir Antonov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Holixus/nano-markdown/issues"
+  },
+  "homepage": "https://github.com/Holixus/nano-markdown"
+}

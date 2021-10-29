@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "jsy",
-  "repo": "labidiaymen/jsy",
-  "files": {
-    "include": ["jsy.min.js"]
-  }
-}

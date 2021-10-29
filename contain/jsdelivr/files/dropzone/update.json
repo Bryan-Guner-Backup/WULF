@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "dropzone.js",
-  "repo": "enyo/dropzone",
-  "files": {
-    "basePath": "dist/min/"
-  }
-}

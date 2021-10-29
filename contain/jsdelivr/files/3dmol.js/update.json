@@ -1,9 +1,0 @@
-{
-	"packageManager": "github",
-	"name": "3Dmol.js",
-	"repo": "dkoes/3Dmol.js",
-	"files": {
-		"basePath": "release/",
-		"include": ["3Dmol-min.js", "3Dmol-nojquery-min.js"]
-	}
-}

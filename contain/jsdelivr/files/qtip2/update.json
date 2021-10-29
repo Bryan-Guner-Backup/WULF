@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "qtip2",
-  "repo": "qtip2/bower",
-  "files": {
-    "include": ["*.js", "*.css", "*.map", "./basic/**/*"]
-  }
-}

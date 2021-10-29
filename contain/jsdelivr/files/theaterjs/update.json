@@ -1,8 +1,0 @@
-{
-  "packageManager": "bower",
-  "name": "theaterjs",
-  "files": {
-    "basePath": "build/",
-    "include": ["theater.min.js"]
-  }
-}

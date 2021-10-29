@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "formstone",
-  "repo": "formstone/formstone",
-  "files": {
-    "basePath": "dist/"
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "angular-gantt",
-  "repo": "angular-gantt/angular-gantt",
-  "files": {
-    "basePath": "dist/",
-    "include": ["*.min.*"]
-  }
-}

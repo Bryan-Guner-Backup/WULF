@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "jquery.contextify",
-  "repo": "abeMedia/jquery-contextify",
-  "files": {
-    "basePath": "dist/"
-  }
-}

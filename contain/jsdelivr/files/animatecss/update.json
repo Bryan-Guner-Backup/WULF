@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "animate.css",
-  "repo": "daneden/animate.css",
-  "files": {
-    "include": ["animate.css", "animate.min.css"]
-  }
-}

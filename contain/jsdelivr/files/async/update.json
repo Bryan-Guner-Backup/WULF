@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "async",
-  "repo": "caolan/async",
-  "files": {
-    "basePath": "lib/"
-  }
-}

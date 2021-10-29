@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "jquery.dotdotdot",
-  "repo": "BeSite/jQuery.dotdotdot",
-  "files": {
-    "basePath": "src/js/",
-    "include": ["*.js"]
-  }
-}

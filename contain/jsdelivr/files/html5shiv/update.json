@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "html5shiv",
-  "repo": "aFarkas/html5shiv",
-  "files": {
-    "include": ["dist/*"]
-  }
-}

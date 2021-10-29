@@ -1,0 +1,63 @@
+//iconography.css
+
+$highlightColor: #3CD5FF;
+.copy.icon {
+  width: 8px;
+  height: 11px;
+  border: solid 1px black;
+  border-radius: 1px;
+  position: relative;
+  &:before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: -3px;
+    top: -3px;
+    width: 8px;
+    height: 11px;
+    border-top: solid 1px black;
+    border-left: solid 1px black;
+    border-radius: 1px 0 0 0;
+  }
+}
+.search.icon {
+  width: 12px; 
+  height: 12px;
+  border: solid 1px black;
+  border-radius: 100%;
+  transform: rotate(-45deg);
+  position: relative;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 5px;
+    height: 6px;
+    width: 1px;
+    background-color: black;
+  }
+}
+.close.icon {
+  width: 21px;
+  height: 21px; 
+  &:before,
+  &:after {
+    content: "";
+    display: block;
+    width: 21px; 
+    height: 1px;
+    background-color: black;
+    position: absolute;
+    top: 10px;
+    transform: rotate(45deg);
+  }
+  &:before {
+    transform: rotate(-45deg);
+  }
+}
+
+@import 'icons/I/*';
+@import 'icons/C/*';
+@import 'icons/S/*';
+@import 'icons/O/*';
+@import 'icons/N/*';

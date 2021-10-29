@@ -1,0 +1,24 @@
+[
+  {
+    "symbol": "ADBE",
+    "end_date": "2015-05-29",
+    "amend": "False",
+    "period_focus": "Q2",
+    "fiscal_year": 2015,
+    "doc_type": "10-Q",
+    "revenues": 1162158000,
+    "op_income": 193617000,
+    "net_income": 147493000,
+    "eps_basic": 0.3,
+    "eps_diluted": 0.29,
+    "dividend": 0,
+    "assets": 11165383000,
+    "cur_assets": 4178397000,
+    "cur_liab": 1937033000,
+    "cash": 956147000,
+    "equity": 6610103000,
+    "cash_flow_op": 654499000,
+    "cash_flow_inv": -737280000,
+    "cash_flow_fin": -66827000
+  }
+]

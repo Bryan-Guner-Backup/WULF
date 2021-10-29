@@ -1,0 +1,17 @@
+/*
+ * Copyright (C) 2016 Google Inc.
+ * Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+ */
+
+.spinner {
+  display: inline-block;
+}
+
+.spinner-size {
+  &__large {
+    font-size: 2em;
+  }
+  &__huge {
+    font-size: 3em;
+  }
+}

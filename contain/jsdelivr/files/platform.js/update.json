@@ -1,7 +1,0 @@
-{
-  "packageManager": "npm",
-  "name": "platform",
-  "files": {
-    "include": ["platform.js"]
-  }
-}

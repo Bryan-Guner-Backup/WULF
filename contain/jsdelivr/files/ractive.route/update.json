@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "ractive-route",
-  "repo": "MartinKolarik/ractive-route",
-  "files": {
-    "include": ["ractive-route.js", "ractive-route.min.js", "ractive-route.min.map"]
-  }
-}

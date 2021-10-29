@@ -1,4 +1,0 @@
-# libutl
-
-Utility Library
-

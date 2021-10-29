@@ -1,0 +1,24 @@
+[
+  {
+    "symbol": "DIT",
+    "end_date": "2015-12-31",
+    "amend": "False",
+    "period_focus": "Q1",
+    "fiscal_year": 2016,
+    "doc_type": "10-Q",
+    "revenues": 322008249,
+    "op_income": 2549821,
+    "net_income": 1306445,
+    "eps_basic": 2.09,
+    "eps_diluted": 1.85,
+    "dividend": 0,
+    "assets": 106734352,
+    "cur_assets": 83469531,
+    "cur_liab": 24209460,
+    "cash": 344467,
+    "equity": 61385272,
+    "cash_flow_op": 12716831,
+    "cash_flow_inv": -347565,
+    "cash_flow_fin": -12244335
+  }
+]

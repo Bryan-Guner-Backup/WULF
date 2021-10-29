@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "chart.js",
-  "repo": "nnnick/Chart.js",
-  "files": {
-    "include": ["Chart.min.js"]
-  }
-}

@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "js-sha256",
-  "repo": "emn178/js-sha256",
-  "files": {
-    "basePath": "build/"
-  }
-}

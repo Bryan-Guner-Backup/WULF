@@ -1,0 +1,31 @@
+{{!
+    Copyright (C) 2016 Google Inc.
+    Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+}}
+
+<h6 class="people-list__label">People</h6>
+<div class="side-content">
+  {{#instance.roleConflicts}}
+    <div class="centered">
+      <div class="alert alert-error">
+        <p>
+          Assignee and Verifier cannot be the same person!
+        </p>
+      </div>
+    </div>
+  {{/instance.roleConflicts}}
+
+  <ul class="label-list">
+    {{#instance.class.assignable_list}}
+      {{#if required}}
+        <li>
+          <people-group validate="validate" deferred="deferred" editable="editable" instance="instance" mapping="mapping" required="true" type="type"></people-group>
+        </li>
+      {{else}}
+        <li class="hidable">
+          <people-group deferred="deferred" editable="editable" instance="instance" mapping="mapping" type="type"></people-group>
+        </li>
+      {{/if}}
+    {{/instance}}
+  </ul>
+</div>

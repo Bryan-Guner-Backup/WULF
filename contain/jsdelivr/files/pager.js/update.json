@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "pagerjs",
-  "repo": "finnsson/pagerjs",
-  "files": {
-    "basePath": "dist/",
-    "include": ["*.min.js", "*.css"]
-  }
-}

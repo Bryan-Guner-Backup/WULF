@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "peity",
-  "repo": "benpickles/peity",
-  "files": {
-	"include": ["jquery.peity.min.js"]
-  }
-}

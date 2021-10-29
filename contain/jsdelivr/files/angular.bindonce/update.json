@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "angular.bindonce",
-  "repo": "Pasvaz/bindonce",
-  "files": {
-    "include": ["bindonce.min.js"]
-  }
-}

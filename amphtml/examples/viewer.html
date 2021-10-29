@@ -1,0 +1,369 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Viewer</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+  <link href='https://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css'>
+  <style>
+    html, body {
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'Questrial', Arial;
+    }
+
+    body, viewer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    viewer {
+      background: #eee;
+    }
+
+    header {
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50px;
+      background: #4285F4;
+      opacity: 0.7;
+      color: #fff;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 0 8px;
+    }
+
+    @media screen and (min-width: 500px) {
+      header {
+        height: 64px;
+      }
+    }
+
+    header h1 {
+      font-size: 22px;
+      flex-grow: 1;
+    }
+
+    header #visibilityToggle {
+      flex-grow: 0;
+      flex-shrink: 0;
+      padding: 8px;
+    }
+
+    .wait {
+      position: absolute;
+      z-index: 3;
+      top: 100px;
+      left: 20px;
+      font-size: 12px;
+    }
+
+    container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow-x: hidden;
+    }
+
+    viewer.natural container {
+      overflow-y: hidden;
+    }
+
+    viewer.virtual container {
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    container iframe {
+      border: 0;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
+
+    viewer.natural container iframe {
+      height: 100%;
+    }
+  </style>
+
+  <script src="./viewer-integr-messaging.js"></script>
+
+  <script>
+
+    var SENTINEL = '__AMP__';
+
+    function Viewer() {
+      this.alreadyLoaded_ = false;
+      this.stackIndex_ = 0;
+      this.viewportType_ = 'natural';  // "natural" or "virtual"
+      this.visibilityState_ = 'visible';  // "hidden", "visible"
+      this.prerenderSize_ = 1;
+
+      this.isIos_ = /iPhone|iPad|iPod/i.test(window.navigator.userAgent);
+
+      this.viewer = document.querySelector('viewer');
+      this.header = document.querySelector('header');
+      this.container = document.querySelector('container');
+      this.iframe = document.createElement('iframe');
+      this.iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin');
+
+      this.visibilityToggle_ = document.getElementById('visibilityToggle');
+      this.visibilityToggle_.onclick = function() {
+        if (this.visibilityState_ == 'visible') {
+          this.visibilityState_ = 'hidden';
+        } else {
+          this.visibilityState_ = 'visible';
+        }
+        this.messaging_.sendRequest('visibilitychange', {
+          state: this.visibilityState_,
+          prerenderSize: this.prerenderSize
+        }, true);
+        this.updateVisibilityToggle_();
+      }.bind(this);
+      this.updateVisibilityToggle_();
+
+      this.viewer.classList.add(this.viewportType_);
+
+      if (this.viewportType_ == 'natural' && !this.isIos_) {
+        this.iframe.setAttribute('scrolling', 'yes');
+      } else {
+        this.iframe.setAttribute('scrolling', 'no');
+      }
+
+      if (this.viewportType_ == 'virtual') {
+        this.container.addEventListener('scroll', this.onScroll_.bind(this));
+      }
+      window.addEventListener('resize', this.onResize_.bind(this));
+      window.addEventListener('popstate', this.onPopState_.bind(this));
+    };
+
+
+    Viewer.prototype.start = function() {
+      var params = {
+        history: 1,
+        viewportType: this.viewportType_,
+        width: this.container./*OK*/offsetWidth,
+        height: this.container./*OK*/offsetHeight,
+        paddingTop: this.header./*OK*/offsetHeight,
+        visibilityState: this.visibilityState_,
+        prerenderSize: this.prerenderSize_
+      };
+      log('Params:' + JSON.stringify(params));
+
+      var url = './everything.amp.html#' + paramsStr(params);
+      if (window.location.hash && window.location.hash.length > 1) {
+        url += '&' + window.location.hash.substring(1);
+      }
+      log('AMP URL = ' + url);
+      this.iframe.style.display = 'none';
+      this.container.appendChild(this.iframe);
+
+      // Notice that name can only be set once the IFrame is in the DOM.
+      this.iframe.contentWindow.name = SENTINEL + paramsStr(params);
+
+      this.messaging_ = new ViewerMessaging(this.iframe.contentWindow,
+          this.processRequest_.bind(this));
+
+      this.iframe.onload = this.loaded_.bind(this);
+      setTimeout(function() {
+        this.iframe.style.visibility = 'hidden';
+        if (this.viewportType_ == 'virtual') {
+          this.iframe.style.height = this.container./*OK*/offsetHeight + 'px';
+        }
+        this.iframe.style.display = '';
+        this.iframe.setAttribute('src', url);
+      }.bind(this));
+    };
+
+
+    Viewer.prototype.loaded_ = function() {
+      if (this.alreadyLoaded_) {
+        return;
+      }
+      log('AMP Loaded');
+      this.alreadyLoaded_ = true;
+
+      var waiter = document.querySelector('.wait');
+      if (waiter) {
+        waiter.parentElement.removeChild(waiter);
+      }
+
+      this.iframe.style.display = '';
+      this.iframe.style.visibility = '';
+    };
+
+
+    Viewer.prototype.documentReady_ = function() {
+      log('AMP document ready');
+      this.loaded_();
+      return Promise.resolve();
+    };
+
+
+    Viewer.prototype.documentHeight_ = function(documentHeight) {
+      log('AMP document height:', documentHeight);
+      if (this.viewportType_ == 'virtual') {
+        this.iframe.style.height = Math.max(documentHeight,
+            this.container./*OK*/offsetHeight) + 'px';
+      }
+      return Promise.resolve();
+    };
+
+
+    Viewer.prototype.onScroll_ = function() {
+      this.messaging_.sendRequest('viewport', {
+        scrollTop: this.container./*OK*/scrollTop
+      }, false);
+    };
+
+
+    Viewer.prototype.onResize_ = function() {
+      log('Resized to ', this.container./*OK*/offsetWidth,
+          this.container./*OK*/offsetHeight,
+          this.header./*OK*/offsetHeight,
+          this.container./*OK*/scrollTop);
+      this.messaging_.sendRequest('viewport', {
+        scrollTop: this.container./*OK*/scrollTop,
+        width: this.container./*OK*/offsetWidth,
+        height: this.container./*OK*/offsetHeight,
+        paddingTop: this.header./*OK*/offsetHeight
+      }, false);
+    };
+
+
+    Viewer.prototype.requestFullOverlay_ = function() {
+      log('requestFullOverlay');
+      this.header.style.opacity = 0;
+      return Promise.resolve();
+    };
+
+
+    Viewer.prototype.cancelFullOverlay_ = function() {
+      log('cancelFullOverlay');
+      this.header.style.opacity = 1;
+      return Promise.resolve();
+    };
+
+
+    Viewer.prototype.pushHistory_ = function(stackIndex) {
+      log('push history to ', stackIndex);
+      // Super trivial. Only one step allowed.
+      if (stackIndex != this.stackIndex_ + 1) {
+        throw new Error('Only one step push allowed');
+      }
+      this.stackIndex_ = stackIndex;
+      window.history.pushState({}, '');
+    };
+
+
+    Viewer.prototype.popHistory_ = function(stackIndex) {
+      log('pop history at ', stackIndex);
+      // Super trivial. Only one step allowed.
+      if (stackIndex != this.stackIndex_) {
+        throw new Error('Only one step pop allowed');
+      }
+      this.stackIndex_ = stackIndex;
+      window.history.go(-1);
+    };
+
+
+    Viewer.prototype.onPopState_ = function() {
+      // Even more trivial. Always assumes that only one step was popped in
+      // history.
+      this.stackIndex_--;
+      this.sendMessage_('historyPopped', {newStackIndex: this.stackIndex_});
+      log('history popped to ', this.stackIndex_);
+    };
+
+
+    Viewer.prototype.updateVisibilityToggle_ = function() {
+      this.visibilityToggle_.textContent = this.visibilityState_ == 'visible' ?
+          'Visible' : 'Prerendering';
+    };
+
+
+    Viewer.prototype.processRequest_ = function(type, data, awaitResponse) {
+      if (type == 'documentLoaded') {
+        return this.documentReady_();
+      }
+      if (type == 'documentResized') {
+        return this.documentHeight_(data.height);
+      }
+      if (type == 'requestFullOverlay') {
+        return this.requestFullOverlay_();
+      }
+      if (type == 'cancelFullOverlay') {
+        return this.cancelFullOverlay_();
+      }
+      if (data.type == 'pushHistory') {
+        return this.pushHistory_(data.stackIndex);
+      }
+      if (data.type == 'popHistory') {
+        return this.popHistory_(data.stackIndex);
+      }
+      return Promise.reject('request not supported: ' + type);
+    };
+
+
+    function log() {
+      var var_args = Array.prototype.slice.call(arguments, 0);
+      var_args.unshift('[VIEWER]');
+      console/*OK*/.log.apply(console, var_args);
+    }
+
+
+    function paramsStr(params) {
+      var s = '';
+      for (var k in params) {
+        var v = params[k];
+        if (v === null || v === undefined) {
+          continue;
+        }
+        if (s.length > 0) {
+          s += '&';
+        }
+        s += encodeURIComponent(k) + '=' + encodeURIComponent(v);
+      }
+      return s;
+    }
+
+
+    var viewer;
+
+    function loadAmpDoc() {
+      viewer = new Viewer();
+      viewer.start();
+    }
+
+    window.onload = loadAmpDoc;
+  </script>
+</head>
+<body>
+  <viewer>
+    <header>
+      <h1>Viewer</h1>
+      <a id="visibilityToggle">Visible</a>
+    </header>
+    <container>
+      <div class="wait">
+        Please wait, the AMP doc will appear here...
+      </div>
+    </container>
+  </viewer>
+</body>
+</html>

@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "jQuery-Paging",
-  "repo": "infusion/jQuery-Paging",
-  "files": {
-    "include": ["jquery.paging.min.js"]
-  }
-}

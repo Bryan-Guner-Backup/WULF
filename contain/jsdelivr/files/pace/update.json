@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "pace",
-  "repo": "HubSpot/pace",
-  "files": {
-    "include": ["pace.min.js", "pace.js", "./themes/**/*"]
-  }
-}

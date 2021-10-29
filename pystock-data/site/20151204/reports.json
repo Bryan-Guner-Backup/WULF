@@ -1,0 +1,24 @@
+[
+  {
+    "symbol": "ACRS",
+    "end_date": "2015-09-30",
+    "amend": "False",
+    "period_focus": "Q3",
+    "fiscal_year": 2015,
+    "doc_type": "10-Q",
+    "revenues": 0,
+    "op_income": -10640000,
+    "net_income": -11628000,
+    "eps_basic": -5.11,
+    "eps_diluted": -5.11,
+    "dividend": 0,
+    "assets": 42087000,
+    "cur_assets": 39360000,
+    "cur_liab": 1897000,
+    "cash": 25419000,
+    "equity": -38118000,
+    "cash_flow_op": -16232000,
+    "cash_flow_inv": -7463000,
+    "cash_flow_fin": 38357000
+  }
+]

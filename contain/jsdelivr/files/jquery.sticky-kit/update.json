@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "jquery.sticky-kit",
-  "repo": "leafo/sticky-kit",
-  "files": {
-    "include": ["jquery.sticky-kit.js", "jquery.sticky-kit.min.js"]
-  }
-}

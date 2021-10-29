@@ -1,8 +1,0 @@
-{
-  "packageManager": "bower",
-  "name": "jquery.serialScroll",
-  "repo": "flesler/jquery.serialScroll",
-  "files": {
-      "include": ["jquery.serialScroll.min.js"]
-  }
-}

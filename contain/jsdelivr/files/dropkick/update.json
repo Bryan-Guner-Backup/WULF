@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "dropkick",
-  "repo": "Robdel12/DropKick",
-  "files": {
-    "basePath": "production/",
-    "include": ["dropkick.min.js", "css/dropkick.css"]
-  }
-}

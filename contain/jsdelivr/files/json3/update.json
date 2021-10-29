@@ -1,8 +1,0 @@
-{
-  "packageManager": "npm",
-  "name": "json3",
-  "files": {
-    "basePath": "lib/",
-    "include": ["*.js"]
-  }
-}

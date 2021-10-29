@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "ractive-adaptors-backbone",
-  "repo": "ractivejs/ractive-adaptors-backbone",
-  "files": {
-	"basePath": "dist/",
-	"include": ["ractive-adaptors-backbone.min.js"]
-  }
-}

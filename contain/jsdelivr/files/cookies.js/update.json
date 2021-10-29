@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "cookies.js",
-  "repo": "ScottHamper/Cookies",
-  "files": {
-    "basePath": "dist/",
-	"include": ["cookies.min.js"]
-  }
-}

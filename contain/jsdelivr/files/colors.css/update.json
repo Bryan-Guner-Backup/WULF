@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "colors.css",
-  "repo": "eustasy/colors.css",
-  "files": {
-    "include": ["colors.min.css", "colors.css"]
-  }
-}

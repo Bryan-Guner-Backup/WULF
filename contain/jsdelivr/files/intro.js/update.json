@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "intro.js",
-  "repo": "usablica/intro.js",
-  "files": {
-    "basePath": "minified/"
-  }
-}

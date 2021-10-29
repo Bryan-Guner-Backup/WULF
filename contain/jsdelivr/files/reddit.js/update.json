@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "reddit.js",
-  "repo": "sahilm/reddit.js",
-  "files": {
-    "basePath": "/",
-    "include": ["reddit.min.js", "reddit.js"]
-  }
-}

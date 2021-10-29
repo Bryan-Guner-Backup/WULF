@@ -1,8 +1,0 @@
-{
-  "packageManager": "bower",
-  "name": "Autolinker.js",
-  "files": {
-    "basePath": "dist/",
-    "include": ["Autolinker.min.js"]
-  }
-}

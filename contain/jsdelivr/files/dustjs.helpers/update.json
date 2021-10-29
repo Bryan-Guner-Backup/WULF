@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "dustjs.helpers",
-  "repo": "linkedin/dustjs-helpers",
-  "files": {
-    "basePath": "dist/",
-	"include": ["dust-helpers.min.js"]
-  }
-}

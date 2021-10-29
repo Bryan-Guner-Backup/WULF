@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "js-sha512",
-  "repo": "emn178/js-sha512",
-  "files": {
-    "basePath": "build/"
-  }
-}

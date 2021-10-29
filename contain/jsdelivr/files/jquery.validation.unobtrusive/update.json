@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "jquery.validation.unobtrusive",
-  "repo": "aspnet/jquery-validation-unobtrusive",
-  "files": {
-    "include": ["jquery.validate.unobtrusive.min.js"]
-  }
-}

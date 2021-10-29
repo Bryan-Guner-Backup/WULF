@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "jquery.payment",
-  "repo": "stripe/jquery.payment",
-  "files": {
-	"basePath": "lib/",
-    "include": ["jquery.payment.js"]
-  }
-}

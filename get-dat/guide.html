@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+  <title>{{> header }}</title>
+  <link rel="stylesheet" type="text/css" href="../static/css/style.css" />
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700' rel='stylesheet' type='text/css'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/default.min.css">
+</head>
+<body>
+  <div class="wrapper">
+      {{#if index}}
+        <img width="100%" src="../static/img/datcat.jpeg" />
+        <section class="content">
+        <h1>Welcome!</h1>
+        <p>This is <strong>try-dat</strong>, a tutorial that teaches you how to work with datasets using <a href="http://dat-data.com" target="_blank">dat</a>. In this tutorial you will play around with data versioning and syncing workflows, and play with some awesome tools to publish or share data over the peer-to-peer web.</p>
+        <h4>Table of Contents</h4>
+        <div class="jumbotron-horizontal-rule"></div>
+        <ul class="toc-list">
+          {{#index}}
+            <li><a href="{{ href }}">{{ name }}</a></li>
+          {{/index}}
+        </ul>
+        <p>
+          We used to host an interactive version of Try Dat that included a web based terminal, but unfortunately someone decided to take advantage of our servers to mine Bitcoin, stealing the limited resources of our nonprofit for their private gain :(
+        </p>
+        <p>
+          What you now find here is a tutorial you can do with a friend (<b>recommended</b>) using two computers, or by yourself (still works OK but not quite as fun as with a friend) using one computer.
+        </p>
+        <p>Ok, ready to dive in? <a class="nextp button" href="{{index.0.href}}">Let's go! &raquo;</a></p>
+      </section>
+      {{/if}}
+
+      {{#if content}}
+      <section class="content">
+        <p><a href="index.html">table of contents</a></p>
+      {{{ content }}}
+        <div class="navlinks">
+        {{#if next}}
+          <a class="nextp button" href="{{ next }}.html">OK, next! &raquo;</a>
+          {{#if previous}}
+            <a class="lastp navlink" href="{{ previous }}.html">&laquo; back</a>
+          {{/if}}
+        {{/if}}
+        </div>
+      {{/if}}
+    </section>
+  </div>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+</body>
+</html>

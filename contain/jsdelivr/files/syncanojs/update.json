@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "SyncanoJS",
-  "repo": "Syncano/syncano-js",
-  "files": {
-  	"basePath": "dist/",
-    "include": ["syncano.min.js"]
-  }
-}

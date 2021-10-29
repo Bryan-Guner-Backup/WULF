@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "jsonmask",
-  "repo": "nemtsov/json-mask",
-  "files": {
-    "basePath": "build/",
-    "include": ["*.js"]
-  }
-}

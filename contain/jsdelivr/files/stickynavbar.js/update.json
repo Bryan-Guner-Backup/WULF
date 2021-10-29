@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "stickynavbar.js",
-  "repo": "jbutko/stickyNavbar.js",
-  "files": {
-  	"basePath": "/",
-    "include": ["jquery.stickyNavbar.min.js"]
-  }
-}

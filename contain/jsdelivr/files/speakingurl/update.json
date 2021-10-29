@@ -1,7 +1,0 @@
-{
-  "packageManager": "npm",
-  "name": "speakingurl",
-  "files": {
-    "include": ["speakingurl.min.js"]
-  }
-}

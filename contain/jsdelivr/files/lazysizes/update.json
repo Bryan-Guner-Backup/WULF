@@ -1,8 +1,0 @@
-{
-  "packageManager": "npm",
-  "name": "lazysizes",
-  "repo": "aFarkas/lazysizes",
-  "files": {
-    "include": ["*.min.js", "./plugins/**/*.min.js"]
-  }
-}

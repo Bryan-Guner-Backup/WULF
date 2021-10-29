@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "react-slick",
-  "repo": "akiran/react-slick",
-  "files": {
-    "basePath": "dist/",
-    "include": ["*.js"]
-  }
-}

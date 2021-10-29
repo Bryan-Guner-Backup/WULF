@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "pixi.js",
-  "repo": "GoodBoyDigital/pixi.js",
-  "files": {
-    "basePath": "bin/",
-	"include": ["pixi.js"]
-  }
-}

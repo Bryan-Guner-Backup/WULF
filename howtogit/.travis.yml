@@ -1,0 +1,11 @@
+language: node_js
+node_js: "node"
+  
+deploy:
+  provider: surge
+  domain: oleams.surge.sh
+  project: ./
+  on:
+    branch: master
+  
+  

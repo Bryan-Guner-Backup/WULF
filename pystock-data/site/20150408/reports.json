@@ -1,0 +1,24 @@
+[
+  {
+    "symbol": "ATU",
+    "end_date": "2015-02-28",
+    "amend": "False",
+    "period_focus": "Q2",
+    "fiscal_year": 2015,
+    "doc_type": "10-Q",
+    "revenues": 301005000,
+    "op_income": -56447000,
+    "net_income": -64838000,
+    "eps_basic": -1.05,
+    "eps_diluted": -1.05,
+    "dividend": 0,
+    "assets": 1636819000,
+    "cur_assets": 513231000,
+    "cur_liab": 232705000,
+    "cash": 87497000,
+    "equity": 666725000,
+    "cash_flow_op": -9619000,
+    "cash_flow_inv": -12170000,
+    "cash_flow_fin": 18393000
+  }
+]

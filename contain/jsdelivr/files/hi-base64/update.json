@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "hi-base64",
-  "repo": "emn178/hi-base64",
-  "files": {
-    "basePath": "build/"
-  }
-}

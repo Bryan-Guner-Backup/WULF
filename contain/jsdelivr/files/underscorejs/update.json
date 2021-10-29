@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "underscore.js",
-  "repo": "jashkenas/underscore",
-  "files": {
-    "include": ["underscore.js", "underscore-min.js", "underscore-min.map"]
-  }
-}

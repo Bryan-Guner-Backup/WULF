@@ -1,8 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "tether",
-  "repo": "HubSpot/tether",
-  "files": {
-    "include": ["tether.min.js"]
-  }
-}

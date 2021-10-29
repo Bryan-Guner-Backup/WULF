@@ -1,0 +1,24 @@
+[
+  {
+    "symbol": "BDL",
+    "end_date": "2015-10-03",
+    "amend": "False",
+    "period_focus": "FY",
+    "fiscal_year": 2015,
+    "doc_type": "10-K",
+    "revenues": 99121000,
+    "op_income": 7401000,
+    "net_income": 3461000,
+    "eps_basic": 1.86,
+    "eps_diluted": 1.86,
+    "dividend": 0,
+    "assets": 54622000,
+    "cur_assets": 13717000,
+    "cur_liab": 10649000,
+    "cash": 9267000,
+    "equity": 33799000,
+    "cash_flow_op": 11140000,
+    "cash_flow_inv": -4278000,
+    "cash_flow_fin": -5694000
+  }
+]

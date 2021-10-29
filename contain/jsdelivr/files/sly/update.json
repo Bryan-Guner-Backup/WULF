@@ -1,9 +1,0 @@
-{
-	"packageManager": "github",
-	"name": "sly",
-	"repo": "darsain/sly",
-	"files": {
-		"basePath": "dist/",
-		"include": [ "sly.min.js" ]
-	}
-}

@@ -1,9 +1,0 @@
-{
-  "packageManager": "github",
-  "name": "REM-unit-polyfill",
-  "repo": "chuckcarpenter/REM-unit-polyfill",
-  "files": {
-    "basePath": "js/",
-    "include": ["rem.min.js"]
-  }
-}

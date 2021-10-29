@@ -1,6 +1,0 @@
-{
-    "private": true,
-    "dependencies": {
-        "react-autosize-textarea": "^7.0.0"
-    }
-}

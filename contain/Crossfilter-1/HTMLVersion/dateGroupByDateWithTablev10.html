@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8">
+<title>Day Sales</title>
+
+<link href="dc.css" rel="stylesheet" type="text/css">
+<link href="style.css" rel="stylesheet" type="text/css" >
+
+<div id="body">
+
+
+<div id="charts">
+
+<div class="dc-data-count" >
+<h2>
+<span>
+<span class="filter-count"></span>
+selected out of
+<span class="total-count"></span>
+records |
+<a href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
+</span>
+</h2>
+</div>
+
+<div class='span4' id='dayChart'>
+
+</div>
+
+
+<div class='span4' id='dayChart2'>
+	<h3>Day of Week
+	<span>
+	<a class="reset"
+		href="javascript:dayOfWeekChart.filterAll();dc.redrawAll();"
+		style="display:none;">
+		reset
+	</a>
+	</span>
+	</h3>
+</div>
+
+<div id='dayChart3'>
+	<h3>Time of Day
+	<span>
+	<a class="reset"
+		href="javascript:hoursOfDay.filterAll();dc.redrawAll();"
+		style="display:none;">
+		reset
+	</a>
+	</span>
+	</h3>
+</div>
+
+
+<div id='dayChart4'>
+<h3>Payment Amount
+	<span>
+	<a class="reset"
+		href="javascript:paymentAmounts.filterAll();dc.redrawAll();"
+		style="display:none;">
+		reset
+	</a>
+	</span>
+	</h3>
+</div>
+
+
+<div id='dayChart5'>
+<h3>Payment type
+	<span>
+	<a class="reset"
+		href="javascript:paymentTypes.filterAll();dc.redrawAll();"
+		style="display:none;">
+		reset
+	</a>
+	</span>
+	</h3>
+	
+	
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div class='container' style='font: 12px sans-serif;'>
+
+<div class='row'>
+<div class='span6' id='dc-magnitude-chart'>
+<h4></h4>
+</div>
+<div class='span6' id='blank'>
+<h4></h4>
+</div>
+</div>
+<div id="lists">
+  <div id="Sales-list" class="list"></div>
+  <div id="Transaction-list" class="list"></div>
+</div>
+
+<aside id="card"><span id="VisaCard">-</span>  . <span id="MasterCard">-</span></aside>
+
+
+<footer>
+  
+</footer>
+
+</div>
+
+<script src="crossfilter.v1.min.js"></script>
+<script src="crossfilter.v1.js"></script>
+<script src="d3.v3.min.js"></script>
+<script src="d3.v3.js"></script>
+<script src="dc.js"></script>
+<script src="dateGroupByDateWithTablev10.js"></script>

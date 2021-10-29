@@ -4,8 +4,6 @@
  * License: MIT
  */
 
-(
-
 /**
  * @ngdoc interface
  * @name angular.Module
@@ -14,15 +12,14 @@
  * Interface for configuring angular {@link angular.module modules}.
  */
 
-function setupModuleLoader(window) {
-
-  var $injectorMinErr = minErr('$injector');
+(function setupModuleLoader(window) {
+  var $injectorMinErr = minErr("$injector");
 
   function ensure(obj, name, factory) {
     return obj[name] || (obj[name] = factory());
   }
 
-  return ensure(ensure(window, 'angular', Object), 'module', function() {
+  return ensure(ensure(window, "angular", Object), "module", function () {
     /** @type {Object.<string, angular.Module>} */
     var modules = {};
 
@@ -76,15 +73,19 @@ function setupModuleLoader(window) {
      * @returns {module} new module with the {@link angular.Module} api.
      */
     return function module(name, requires, configFn) {
-      assertNotHasOwnProperty(name, 'module');
+      assertNotHasOwnProperty(name, "module");
       if (requires && modules.hasOwnProperty(name)) {
         modules[name] = null;
       }
-      return ensure(modules, name, function() {
+      return ensure(modules, name, function () {
         if (!requires) {
-          throw $injectorMinErr('nomod', "Module '{0}' is not available! You either misspelled the module name " +
+          throw $injectorMinErr(
+            "nomod",
+            "Module '{0}' is not available! You either misspelled the module name " +
               "or forgot to load it. If registering a module ensure that you specify the dependencies as the second " +
-              "argument.", name);
+              "argument.",
+            name
+          );
         }
 
         /** @type {!Array.<Array.<*>>} */
@@ -93,7 +94,7 @@ function setupModuleLoader(window) {
         /** @type {!Array.<Function>} */
         var runBlocks = [];
 
-        var config = invokeLater('$injector', 'invoke');
+        var config = invokeLater("$injector", "invoke");
 
         /** @type {angular.Module} */
         var moduleInstance = {
@@ -120,7 +121,6 @@ function setupModuleLoader(window) {
            */
           name: name,
 
-
           /**
            * @ngdoc method
            * @name angular.Module#provider
@@ -130,7 +130,7 @@ function setupModuleLoader(window) {
            * @description
            * See {@link AUTO.$provide#provider $provide.provider()}.
            */
-          provider: invokeLater('$provide', 'provider'),
+          provider: invokeLater("$provide", "provider"),
 
           /**
            * @ngdoc method
@@ -141,7 +141,7 @@ function setupModuleLoader(window) {
            * @description
            * See {@link AUTO.$provide#factory $provide.factory()}.
            */
-          factory: invokeLater('$provide', 'factory'),
+          factory: invokeLater("$provide", "factory"),
 
           /**
            * @ngdoc method
@@ -152,7 +152,7 @@ function setupModuleLoader(window) {
            * @description
            * See {@link AUTO.$provide#service $provide.service()}.
            */
-          service: invokeLater('$provide', 'service'),
+          service: invokeLater("$provide", "service"),
 
           /**
            * @ngdoc method
@@ -163,7 +163,7 @@ function setupModuleLoader(window) {
            * @description
            * See {@link AUTO.$provide#value $provide.value()}.
            */
-          value: invokeLater('$provide', 'value'),
+          value: invokeLater("$provide", "value"),
 
           /**
            * @ngdoc method
@@ -175,7 +175,7 @@ function setupModuleLoader(window) {
            * Because the constant are fixed, they get applied before other provide methods.
            * See {@link AUTO.$provide#constant $provide.constant()}.
            */
-          constant: invokeLater('$provide', 'constant', 'unshift'),
+          constant: invokeLater("$provide", "constant", "unshift"),
 
           /**
            * @ngdoc method
@@ -208,7 +208,7 @@ function setupModuleLoader(window) {
            * See {@link ngAnimate.$animateProvider#register $animateProvider.register()} and
            * {@link ngAnimate ngAnimate module} for more information.
            */
-          animation: invokeLater('$animateProvider', 'register'),
+          animation: invokeLater("$animateProvider", "register"),
 
           /**
            * @ngdoc method
@@ -219,7 +219,7 @@ function setupModuleLoader(window) {
            * @description
            * See {@link ng.$filterProvider#register $filterProvider.register()}.
            */
-          filter: invokeLater('$filterProvider', 'register'),
+          filter: invokeLater("$filterProvider", "register"),
 
           /**
            * @ngdoc method
@@ -231,7 +231,7 @@ function setupModuleLoader(window) {
            * @description
            * See {@link ng.$controllerProvider#register $controllerProvider.register()}.
            */
-          controller: invokeLater('$controllerProvider', 'register'),
+          controller: invokeLater("$controllerProvider", "register"),
 
           /**
            * @ngdoc method
@@ -244,7 +244,7 @@ function setupModuleLoader(window) {
            * @description
            * See {@link ng.$compileProvider#directive $compileProvider.directive()}.
            */
-          directive: invokeLater('$compileProvider', 'directive'),
+          directive: invokeLater("$compileProvider", "directive"),
 
           /**
            * @ngdoc method
@@ -267,17 +267,17 @@ function setupModuleLoader(window) {
            * Use this method to register work which should be performed when the injector is done
            * loading all modules.
            */
-          run: function(block) {
+          run: function (block) {
             runBlocks.push(block);
             return this;
-          }
+          },
         };
 
         if (configFn) {
           config(configFn);
         }
 
-        return  moduleInstance;
+        return moduleInstance;
 
         /**
          * @param {string} provider
@@ -286,18 +286,15 @@ function setupModuleLoader(window) {
          * @returns {angular.Module}
          */
         function invokeLater(provider, method, insertMethod) {
-          return function() {
-            invokeQueue[insertMethod || 'push']([provider, method, arguments]);
+          return function () {
+            invokeQueue[insertMethod || "push"]([provider, method, arguments]);
             return moduleInstance;
-          }
+          };
         }
       });
     };
   });
-
-}
-
-)(window);
+})(window);
 
 /**
  * Closure compiler type information
@@ -316,4 +313,3 @@ function setupModuleLoader(window) {
  * } }
  */
 angular.Module;
-

@@ -7,11 +7,11 @@
  */
 .am-collapse {
   -webkit-animation-duration: 0.3s;
-          animation-duration: 0.3s;
+  animation-duration: 0.3s;
   -webkit-animation-timing-function: ease;
-          animation-timing-function: ease;
+  animation-timing-function: ease;
   -webkit-animation-fill-mode: backwards;
-          animation-fill-mode: backwards;
+  animation-fill-mode: backwards;
   overflow: hidden;
   opacity: 1;
 }
@@ -19,34 +19,34 @@
 .am-collapse.ng-hide-remove,
 .am-collapse.ng-move {
   -webkit-animation-name: expand;
-          animation-name: expand;
+  animation-name: expand;
 }
 .am-collapse.am-collapse-remove,
 .am-collapse.ng-hide {
   -webkit-animation-name: collapse;
-          animation-name: collapse;
+  animation-name: collapse;
 }
 .am-collapse.ng-enter {
   visibility: hidden;
   -webkit-animation-name: expand;
-          animation-name: expand;
+  animation-name: expand;
   -webkit-animation-play-state: paused;
-          animation-play-state: paused;
+  animation-play-state: paused;
 }
 .am-collapse.ng-enter.ng-enter-active {
   visibility: visible;
   -webkit-animation-play-state: running;
-          animation-play-state: running;
+  animation-play-state: running;
 }
 .am-collapse.ng-leave {
   -webkit-animation-name: collapse;
-          animation-name: collapse;
+  animation-name: collapse;
   -webkit-animation-play-state: paused;
-          animation-play-state: paused;
+  animation-play-state: paused;
 }
 .am-collapse.ng-leave.ng-leave-active {
   -webkit-animation-play-state: running;
-          animation-play-state: running;
+  animation-play-state: running;
 }
 @-webkit-keyframes expand {
   from {
@@ -82,10 +82,10 @@
 }
 .panel-collapse.am-collapse.in-remove {
   -webkit-animation-name: collapse;
-          animation-name: collapse;
+  animation-name: collapse;
   display: block;
 }
 .panel-collapse.am-collapse.in-add {
   -webkit-animation-name: expand;
-          animation-name: expand;
+  animation-name: expand;
 }

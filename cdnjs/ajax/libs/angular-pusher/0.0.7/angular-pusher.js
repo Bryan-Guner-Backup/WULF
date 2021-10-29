@@ -14,94 +14,102 @@
  * http://www.ng-newsletter.com/advent2013/#!/day/17
  */
 
-'use strict';
+"use strict";
 
-angular.module('doowb.angular-pusher', [])
+angular
+  .module("doowb.angular-pusher", [])
 
-// create a provider that loads the pusher script from a cdn
-.provider('PusherService', function () {
-  var scriptUrl = '//js.pusher.com/2.1/pusher.min.js';
-  var scriptId = 'pusher-sdk';
-  var apiKey = '';
-  var initOptions = {};
+  // create a provider that loads the pusher script from a cdn
+  .provider("PusherService", function () {
+    var scriptUrl = "//js.pusher.com/2.1/pusher.min.js";
+    var scriptId = "pusher-sdk";
+    var apiKey = "";
+    var initOptions = {};
 
-  this.setPusherUrl = function (url) {
-    scriptUrl = url || scriptUrl;
-    return this;
-  };
-
-  this.setOptions = function (options) {
-    initOptions = options || initOptions;
-    return this;
-  };
-
-  this.setToken = function (token) {
-    apiKey = token || apiKey;
-    return this;
-  };
-
-  // load the pusher api script async
-  function createScript ($document, callback, success) {
-    var tag = $document.createElement('script');
-    tag.type = 'text/javascript';
-    tag.async = true;
-    tag.id = scriptId;
-    tag.src = scriptUrl;
-
-    tag.onreadystatechange = tag.onload = function () {
-      var state = tag.readState;
-      if (!callback.done && (!state || /loaded|complete/.test(state))) {
-        callback.done = true;
-        callback();
-      }
+    this.setPusherUrl = function (url) {
+      scriptUrl = url || scriptUrl;
+      return this;
     };
 
-    $document.getElementsByTagName('head')[0].appendChild(tag);
-  }
+    this.setOptions = function (options) {
+      initOptions = options || initOptions;
+      return this;
+    };
 
-  this.$get = ['$document', '$timeout', '$q', '$rootScope', '$window',
-    function ($document, $timeout, $q, $rootScope, $window) {
-      var deferred = $q.defer();
-      var socket;
-      var pusher;
+    this.setToken = function (token) {
+      apiKey = token || apiKey;
+      return this;
+    };
 
-      function onSuccess () {
-        pusher = new $window.Pusher(apiKey, initOptions);
-      }
+    // load the pusher api script async
+    function createScript($document, callback, success) {
+      var tag = $document.createElement("script");
+      tag.type = "text/javascript";
+      tag.async = true;
+      tag.id = scriptId;
+      tag.src = scriptUrl;
 
-      var onScriptLoad = function (callback) {
-        onSuccess();
-        $timeout(function () {
-          deferred.resolve(pusher);
-        });
+      tag.onreadystatechange = tag.onload = function () {
+        var state = tag.readState;
+        if (!callback.done && (!state || /loaded|complete/.test(state))) {
+          callback.done = true;
+          callback();
+        }
       };
 
-      createScript($document[0], onScriptLoad);
-      return deferred.promise;
-    }];
+      $document.getElementsByTagName("head")[0].appendChild(tag);
+    }
 
-})
+    this.$get = [
+      "$document",
+      "$timeout",
+      "$q",
+      "$rootScope",
+      "$window",
+      function ($document, $timeout, $q, $rootScope, $window) {
+        var deferred = $q.defer();
+        var socket;
+        var pusher;
 
-.factory('Pusher', ['$rootScope', 'PusherService',
-  function ($rootScope, PusherService) {
-    return {
+        function onSuccess() {
+          pusher = new $window.Pusher(apiKey, initOptions);
+        }
 
-      subscribe: function (channelName, eventName, callback) {
-        PusherService.then(function (pusher) {
-          var channel = pusher.channel(channelName) || pusher.subscribe(channelName);
-          channel.bind(eventName, function (data) {
-            if (callback) callback(data);
-            $rootScope.$broadcast(channelName + ':' + eventName, data);
-            $rootScope.$digest();
+        var onScriptLoad = function (callback) {
+          onSuccess();
+          $timeout(function () {
+            deferred.resolve(pusher);
           });
-        });
-      },
+        };
 
-      unsubscribe: function (channelName) {
-        PusherService.then(function (pusher) {
-          pusher.unsubscribe(channelName);
-        });
-      }
-    };
-  }
-]);
+        createScript($document[0], onScriptLoad);
+        return deferred.promise;
+      },
+    ];
+  })
+
+  .factory("Pusher", [
+    "$rootScope",
+    "PusherService",
+    function ($rootScope, PusherService) {
+      return {
+        subscribe: function (channelName, eventName, callback) {
+          PusherService.then(function (pusher) {
+            var channel =
+              pusher.channel(channelName) || pusher.subscribe(channelName);
+            channel.bind(eventName, function (data) {
+              if (callback) callback(data);
+              $rootScope.$broadcast(channelName + ":" + eventName, data);
+              $rootScope.$digest();
+            });
+          });
+        },
+
+        unsubscribe: function (channelName) {
+          PusherService.then(function (pusher) {
+            pusher.unsubscribe(channelName);
+          });
+        },
+      };
+    },
+  ]);

@@ -204,12 +204,12 @@
     opacity: 0;
   }
   to {
-    opacity: .5;
+    opacity: 0.5;
   }
 }
 @keyframes fadeHalfOut {
   from {
-    opacity: .5;
+    opacity: 0.5;
   }
   to {
     opacity: 0;

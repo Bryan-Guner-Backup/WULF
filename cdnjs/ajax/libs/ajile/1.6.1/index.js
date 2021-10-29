@@ -60,21 +60,34 @@
     };
 
 //*/
-;
-(function /*Notify users of ajile's default configuration*/ (global, undefined) {
-    var console = global.console;
+(function (
+  /*Notify users of ajile's default configuration*/ global,
+  undefined
+) {
+  var console = global.console;
 
-    if (!(console && console.log)) return;
+  if (!(console && console.log)) return;
 
-    console.log ('ajile: config: <script src=".../com.iskitz.ajile.js?mvc,mvcshare"><\/script>\n\n');
-    console.log ("ajile: config: mvc        : Enables  automatically loading this page's script");
-    console.log ("ajile: config: mvcoff     : Disables automatically loading this page's script");
-    console.log ("ajile: config: mvcshare   : Enables  automatically loading <ajile's-path>/index.js");
-    console.log ("ajile: config: mvcshareoff: Disables automatically loading <ajile's-path>/index.js\n\n");
-    console.log ('ajile: config: Learn more about options at http://ajile.net/learn/api/Options.htm\n\n');
+  console.log(
+    'ajile: config: <script src=".../com.iskitz.ajile.js?mvc,mvcshare"></script>\n\n'
+  );
+  console.log(
+    "ajile: config: mvc        : Enables  automatically loading this page's script"
+  );
+  console.log(
+    "ajile: config: mvcoff     : Disables automatically loading this page's script"
+  );
+  console.log(
+    "ajile: config: mvcshare   : Enables  automatically loading <ajile's-path>/index.js"
+  );
+  console.log(
+    "ajile: config: mvcshareoff: Disables automatically loading <ajile's-path>/index.js\n\n"
+  );
+  console.log(
+    "ajile: config: Learn more about options at http://ajile.net/learn/api/Options.htm\n\n"
+  );
 
-    Ajile.EnableDebug();
-    Namespace ('com.iskitz.ajile');
-    Ajile.EnableDebug (false);
-}(this))
-;
+  Ajile.EnableDebug();
+  Namespace("com.iskitz.ajile");
+  Ajile.EnableDebug(false);
+})(this);

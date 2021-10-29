@@ -1,0 +1,39 @@
+{
+  "name": "pubsubway",
+  "version": "0.21.0",
+  "description": "PubSub extended with logic keeping a light footprint. Pubsub for modern JS apps is to get out of callback hell - take the subway in a traffic jam.",
+  "main": "js/pubsubway.js",
+  "browser": "js/pubsubway.min.js",
+  "scripts": {
+    "test": "node test/test.js",
+    "build": "uglifyjs ./js/pubsubway.js --output ./js/pubsubway.min.js"
+  },
+  "engines": {
+    "node": ">= 0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mathiasrw/PubSubway.git"
+  },
+  "keywords": [
+    "pubsub",
+    "callbackhell",
+    "publish",
+    "subscribe"
+  ],
+  "author": {
+    "name": "Mathias Rangel Wulff",
+    "email": "mathias@rawu.dk"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mathiasrw/PubSubway/issues"
+  },
+  "homepage": "https://github.com/mathiasrw/PubSubway",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "",
+    "uglify-js": "^3.3.5",
+    "utest": ""
+  }
+}

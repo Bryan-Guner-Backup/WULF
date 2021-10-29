@@ -1,0 +1,60 @@
+  </article>
+
+  <footer>
+    <a href="/">Add test</a> &middot;
+
+    {{!-- TODO: this is never added to the context, but set on session after test added
+    https://github.com/mtharrison/hapi-context-credentials/blob/master/index.js
+    --}}
+    {{#if authorSlug}}
+      <a href="/browse/{{authorSlug}}">My tests</a> &middot;
+    {{/if}}
+
+    <a href="/browse">Latest</a> &middot;
+
+    <a href="/popular">Popular</a> &middot;
+
+    <a href="/faq">FAQ</a> &middot;
+
+    <a href="/faq#donate">Donate</a> &middot;
+
+    <a href="https://twitter.com/jsperf" rel="nofollow">twitter: @jsperf</a> &middot;
+
+    <a href="https://github.com/jsperf/jsperf.com">source on GitHub</a> &middot;
+
+    <a href="http://benchmarkjs.com">Benchmark.js</a> &middot;
+
+    by <a href="https://mathiasbynens.be">@mathias</a> and <a href="/contributors">contributors</a>
+
+  </footer>
+
+  {{#if benchmark}}
+    {{#if debug}}
+      <script src="/public/_js/platform.src.js"></script>
+      <script src="/public/_js/benchmark.src.js"></script>
+      <script src="/public/_js/ui.src.js"></script>
+      <script src="/public/_js/ui.browserscope.src.js"></script>
+    {{else}}
+      <script src="/public/_js/benchmark.js"></script>
+    {{/if}}
+  {{else}}
+    {{#if mainJS}}
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.js"></script>
+
+      {{#if debug}}
+        <script src="/public/_js/beautify.js"></script>
+        <script src="/public/_js/main.src.js"></script>
+      {{else}}
+        <script src="/public/_js/main.js"></script>
+      {{/if}}
+
+    {{else}}
+      {{#if ga}}
+      <script>
+        window._gaq=[['_setAccount','UA-6065217-40'],['_trackPageview']];
+        (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.src='https://ssl.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)}(document,'script'))
+      </script>
+      {{/if}}
+    {{/if}}
+  {{/if}}
+</body>

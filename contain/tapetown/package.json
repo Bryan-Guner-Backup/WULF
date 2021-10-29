@@ -1,0 +1,40 @@
+{
+  "name": "tapetown",
+  "version": "0.0.1",
+  "description": "Testing library based on tape with support for throwing exception in tests and built in options for output formatting.",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mathiasrw/tapeline.git"
+  },
+  "keywords": [
+    "tape",
+    "exception",
+    "catch",
+    "test",
+    "testframework",
+    "testbench",
+    "TAP"
+  ],
+  "author": "M. Rangel Wulff <m@rawu.dk>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mathiasrw/tapetown/issues"
+  },
+  "homepage": "https://github.com/mathiasrw/tapetown",
+  "dependencies": {
+    "tape": "*"
+  },
+  "devDependencies": {
+    "concat-stream": "~1.4.7",
+    "cpr": "~0.3.2",
+    "falafel": "~0.3.1",
+    "mkdirp": "~0.5.0",
+    "run-series": "~1.0.2",
+    "tap": "~0.5.0",
+    "tape": "^4.0.1"
+  }
+}

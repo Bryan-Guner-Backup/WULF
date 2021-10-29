@@ -1,0 +1,99 @@
+{
+  "manifestName": { "message":
+    "JsCIN: JavaScript based Chinese Input Methods" },
+  "manifestDesc": { "message":
+    "Chinese Input Methods (XCIN/GCIN compatible) for Google ChromeOS™" },
+  "manifestImeName": { "message":
+    "JsCIN Chinese Input Methods" },
+  "manifestImeDesc": { "message":
+    "Chinese Input Methods (XCIN/GCIN compatible) for Google ChromeOS™" },
+  "menuOptions": { "message":
+    "Options" },
+
+  "imeToggleHint": { "message":
+    "<SHIFT to toggle>" },
+
+  "optionCaption": { "message":
+    "JsCIN Options" },
+  "optionInputMethodTables": { "message":
+    "Manage Input Methods:" },
+  "optionHowToEnableTables": {"message":
+    "You can drag and drop input methods listed below to set their ordering (or even hide) in menu. Click the input method item for more details." },
+  "optionEnabledTables": {"message":
+    "Enabled input methods:" },
+  "optionAvailableTables": {"message":
+    "Available input methods:" },
+  "optionAddTables": {"message":
+    "Add more input tables (*.cin or *.gtab):" },
+  "optionAddUrl": {"message":
+    "Add Input Table from URL" },
+  "optionAddFile": {"message":
+    "Add Input Table from downloaded local file" },
+  "optionAddDrive": {"message":
+    "Add Input Table from Google Drive" },
+  "optionSaveToDrive": {"message":
+    "Save to Google Drive" },
+  "optionSettingChoices": {"message":
+    "Input Method Table type:" },
+  "optionAddTable": {"message":
+    "Add Input Method Table" },
+  "optionAdd": {"message":
+    "Add" },
+  "optionCancel": {"message":
+    "Cancel" },
+  "optionBuiltin": {"message":
+    "Built-in" },
+  "optionTypeAuto": {"message":
+    "(auto detected)" },
+  "optionTableDetail": {"message":
+    "Input Method Details" },
+  "optionRemove": {"message":
+    "Remove" },
+  "optionReload": {"message":
+    "Reload" },
+  "optionBackupToDrive": {"message":
+    "Backup to Google Drive" },
+  "optionTableDetailNameHeader": {"message":
+    "Name: " },
+  "optionTableDetailSourceHeader": {"message":
+    "Source: " },
+  "optionTableDetailTypeHeader": {"message":
+    "Type: " },
+  "optionQueryKeystrokes": {"message":
+    "Display corresponding keystrokes of this input method."},
+  "optionRelatedText": {"message":
+    "Use Related Text input (press Shift + selection keys)."},
+  "optionAreYouSure": {"message":
+    "Are you sure?" },
+
+  "optionGeneral": {"message":
+    "General Settings" },
+  "optionSupportNonChromeOS": {"message":
+    "Support Non-ChromeOS environments" },
+  "optionDefaultEnabledNonCros": {"message":
+    "Default enabled on Non-ChromeOS environments" },
+  "optionPunctuations": {"message":
+    "Support quick Chinese punctuations (by Ctrl+.,';[]...)" },
+  "optionAlertChangeSupportNonChromeOS": {"message":
+    "This setting will take effect next time Chrome restarted." },
+  "optionAlert": {"message":
+    "Warning!" },
+  "optionOK": {"message":
+    "OK" },
+
+  "optionDebug": {"message":
+    "Debug and development" },
+  "optionDebugMessage": {"message":
+    "Print debug messages" },
+  "optionSelectDefaultInputModule": {"message":
+    "Select default general input module:" },
+  "optionSandbox": {"message":
+    "Testing sandbox:" },
+  "optionReloadExtensionOrRestart": {"message":
+    "Please reload extension or restart browser." },
+
+  "crossQueryAuxText": {"message":
+    "Look up: "},
+
+  "dummy": {"message": "" }
+}

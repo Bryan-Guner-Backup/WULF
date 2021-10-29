@@ -5,41 +5,48 @@
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
-'use strict';
+"use strict";
 
-(angular.version.minor < 3 && angular.version.dot < 14) && angular.module('ng')
+angular.version.minor < 3 &&
+  angular.version.dot < 14 &&
+  angular
+    .module("ng")
 
-.factory('$$rAF', ["$window", "$timeout", function($window, $timeout) {
+    .factory("$$rAF", [
+      "$window",
+      "$timeout",
+      function ($window, $timeout) {
+        var requestAnimationFrame =
+          $window.requestAnimationFrame ||
+          $window.webkitRequestAnimationFrame ||
+          $window.mozRequestAnimationFrame;
 
-  var requestAnimationFrame = $window.requestAnimationFrame ||
-                              $window.webkitRequestAnimationFrame ||
-                              $window.mozRequestAnimationFrame;
+        var cancelAnimationFrame =
+          $window.cancelAnimationFrame ||
+          $window.webkitCancelAnimationFrame ||
+          $window.mozCancelAnimationFrame ||
+          $window.webkitCancelRequestAnimationFrame;
 
-  var cancelAnimationFrame = $window.cancelAnimationFrame ||
-                             $window.webkitCancelAnimationFrame ||
-                             $window.mozCancelAnimationFrame ||
-                             $window.webkitCancelRequestAnimationFrame;
+        var rafSupported = !!requestAnimationFrame;
+        var raf = rafSupported
+          ? function (fn) {
+              var id = requestAnimationFrame(fn);
+              return function () {
+                cancelAnimationFrame(id);
+              };
+            }
+          : function (fn) {
+              var timer = $timeout(fn, 16.66, false); // 1000 / 60 = 16.666
+              return function () {
+                $timeout.cancel(timer);
+              };
+            };
 
-  var rafSupported = !!requestAnimationFrame;
-  var raf = rafSupported ?
-    function(fn) {
-      var id = requestAnimationFrame(fn);
-      return function() {
-        cancelAnimationFrame(id);
-      };
-    } :
-    function(fn) {
-      var timer = $timeout(fn, 16.66, false); // 1000 / 60 = 16.666
-      return function() {
-        $timeout.cancel(timer);
-      };
-    };
+        raf.supported = rafSupported;
 
-  raf.supported = rafSupported;
-
-  return raf;
-
-}]);
+        return raf;
+      },
+    ]);
 
 // .factory('$$animateReflow', function($$rAF, $document) {
 

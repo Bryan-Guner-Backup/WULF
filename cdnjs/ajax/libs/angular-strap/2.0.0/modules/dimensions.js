@@ -5,10 +5,10 @@
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
-'use strict';
-angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
-  '$document',
-  '$window',
+"use strict";
+angular.module("mgcrea.ngStrap.helpers.dimensions", []).factory("dimensions", [
+  "$document",
+  "$window",
   function ($document, $window) {
     var jqLite = angular.element;
     var fn = {};
@@ -17,9 +17,12 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
      * @param element
      * @param name
      */
-    var nodeName = fn.nodeName = function (element, name) {
-        return element.nodeName && element.nodeName.toLowerCase() === name.toLowerCase();
-      };
+    var nodeName = (fn.nodeName = function (element, name) {
+      return (
+        element.nodeName &&
+        element.nodeName.toLowerCase() === name.toLowerCase()
+      );
+    });
     /**
      * Returns the element computed style
      * @param element
@@ -50,8 +53,14 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
       return {
         width: element.offsetWidth,
         height: element.offsetHeight,
-        top: boxRect.top + (window.pageYOffset || docElement.documentElement.scrollTop) - (docElement.documentElement.clientTop || 0),
-        left: boxRect.left + (window.pageXOffset || docElement.documentElement.scrollLeft) - (docElement.documentElement.clientLeft || 0)
+        top:
+          boxRect.top +
+          (window.pageYOffset || docElement.documentElement.scrollTop) -
+          (docElement.documentElement.clientTop || 0),
+        left:
+          boxRect.left +
+          (window.pageXOffset || docElement.documentElement.scrollLeft) -
+          (docElement.documentElement.clientLeft || 0),
       };
     };
     /**
@@ -63,10 +72,12 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
     fn.position = function (element) {
       var offsetParentRect = {
           top: 0,
-          left: 0
-        }, offsetParentElement, offset;
+          left: 0,
+        },
+        offsetParentElement,
+        offset;
       // Fixed elements are offset from window (parentOffset = {top:0, left: 0}, because it is it's only offset parent
-      if (fn.css(element, 'position') === 'fixed') {
+      if (fn.css(element, "position") === "fixed") {
         // We assume that getBoundingClientRect is available when computed position is fixed
         offset = element.getBoundingClientRect();
       } else {
@@ -75,19 +86,33 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
         offset = fn.offset(element);
         // Get correct offsets
         offset = fn.offset(element);
-        if (!nodeName(offsetParentElement, 'html')) {
+        if (!nodeName(offsetParentElement, "html")) {
           offsetParentRect = fn.offset(offsetParentElement);
         }
         // Add offsetParent borders
-        offsetParentRect.top += fn.css(offsetParentElement, 'borderTopWidth', true);
-        offsetParentRect.left += fn.css(offsetParentElement, 'borderLeftWidth', true);
+        offsetParentRect.top += fn.css(
+          offsetParentElement,
+          "borderTopWidth",
+          true
+        );
+        offsetParentRect.left += fn.css(
+          offsetParentElement,
+          "borderLeftWidth",
+          true
+        );
       }
       // Subtract parent offsets and element margins
       return {
         width: element.offsetWidth,
         height: element.offsetHeight,
-        top: offset.top - offsetParentRect.top - fn.css(element, 'marginTop', true),
-        left: offset.left - offsetParentRect.left - fn.css(element, 'marginLeft', true)
+        top:
+          offset.top -
+          offsetParentRect.top -
+          fn.css(element, "marginTop", true),
+        left:
+          offset.left -
+          offsetParentRect.left -
+          fn.css(element, "marginLeft", true),
       };
     };
     /**
@@ -98,9 +123,13 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
     var offsetParent = function offsetParentElement(element) {
       var docElement = element.ownerDocument;
       var offsetParent = element.offsetParent || docElement;
-      if (nodeName(offsetParent, '#document'))
+      if (nodeName(offsetParent, "#document"))
         return docElement.documentElement;
-      while (offsetParent && !nodeName(offsetParent, 'html') && fn.css(offsetParent, 'position') === 'static') {
+      while (
+        offsetParent &&
+        !nodeName(offsetParent, "html") &&
+        fn.css(offsetParent, "position") === "static"
+      ) {
         offsetParent = offsetParent.offsetParent;
       }
       return offsetParent || docElement.documentElement;
@@ -115,9 +144,15 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
     fn.height = function (element, outer) {
       var value = element.offsetHeight;
       if (outer) {
-        value += fn.css(element, 'marginTop', true) + fn.css(element, 'marginBottom', true);
+        value +=
+          fn.css(element, "marginTop", true) +
+          fn.css(element, "marginBottom", true);
       } else {
-        value -= fn.css(element, 'paddingTop', true) + fn.css(element, 'paddingBottom', true) + fn.css(element, 'borderTopWidth', true) + fn.css(element, 'borderBottomWidth', true);
+        value -=
+          fn.css(element, "paddingTop", true) +
+          fn.css(element, "paddingBottom", true) +
+          fn.css(element, "borderTopWidth", true) +
+          fn.css(element, "borderBottomWidth", true);
       }
       return value;
     };
@@ -131,12 +166,18 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
     fn.width = function (element, outer) {
       var value = element.offsetWidth;
       if (outer) {
-        value += fn.css(element, 'marginLeft', true) + fn.css(element, 'marginRight', true);
+        value +=
+          fn.css(element, "marginLeft", true) +
+          fn.css(element, "marginRight", true);
       } else {
-        value -= fn.css(element, 'paddingLeft', true) + fn.css(element, 'paddingRight', true) + fn.css(element, 'borderLeftWidth', true) + fn.css(element, 'borderRightWidth', true);
+        value -=
+          fn.css(element, "paddingLeft", true) +
+          fn.css(element, "paddingRight", true) +
+          fn.css(element, "borderLeftWidth", true) +
+          fn.css(element, "borderRightWidth", true);
       }
       return value;
     };
     return fn;
-  }
+  },
 ]);

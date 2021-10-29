@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
 /**
  * @ngdoc overview
  * @name angular.module.ngCookies
  */
 
-
-angular.module('ngCookies', ['ng']).
+angular
+  .module("ngCookies", ["ng"])
   /**
    * @ngdoc object
    * @name angular.module.ng.$cookies
@@ -20,18 +20,22 @@ angular.module('ngCookies', ['ng']).
    *
    * @example
    */
-   factory('$cookies', ['$rootScope', '$browser', function ($rootScope, $browser) {
+  .factory("$cookies", [
+    "$rootScope",
+    "$browser",
+    function ($rootScope, $browser) {
       var cookies = {},
-          lastCookies = {},
-          lastBrowserCookies,
-          runEval = false,
-          copy = angular.copy,
-          isUndefined = angular.isUndefined;
+        lastCookies = {},
+        lastBrowserCookies,
+        runEval = false,
+        copy = angular.copy,
+        isUndefined = angular.isUndefined;
 
       //creates a poller fn that copies all cookies from the $browser to service & inits the service
-      $browser.addPollFn(function() {
+      $browser.addPollFn(function () {
         var currentCookies = $browser.cookies();
-        if (lastBrowserCookies != currentCookies) { //relies on browser.cookies() impl
+        if (lastBrowserCookies != currentCookies) {
+          //relies on browser.cookies() impl
           lastBrowserCookies = currentCookies;
           copy(currentCookies, lastCookies);
           copy(currentCookies, cookies);
@@ -48,15 +52,11 @@ angular.module('ngCookies', ['ng']).
 
       return cookies;
 
-
       /**
        * Pushes all the cookies from the service to the browser and verifies if all cookies were stored.
        */
       function push() {
-        var name,
-            value,
-            browserCookies,
-            updated;
+        var name, value, browserCookies, updated;
 
         //delete any cookies deleted in $cookies
         for (name in lastCookies) {
@@ -66,7 +66,7 @@ angular.module('ngCookies', ['ng']).
         }
 
         //update all cookies updated in $cookies
-        for(name in cookies) {
+        for (name in cookies) {
           value = cookies[name];
           if (!angular.isString(value)) {
             if (angular.isDefined(lastCookies[name])) {
@@ -81,7 +81,7 @@ angular.module('ngCookies', ['ng']).
         }
 
         //verify what was actually stored
-        if (updated){
+        if (updated) {
           updated = false;
           browserCookies = $browser.cookies();
 
@@ -98,9 +98,8 @@ angular.module('ngCookies', ['ng']).
           }
         }
       }
-    }]).
-
-
+    },
+  ])
   /**
    * @ngdoc object
    * @name angular.module.ng.$cookieStore
@@ -112,8 +111,9 @@ angular.module('ngCookies', ['ng']).
    * deserialized by angular's toJson/fromJson.
    * @example
    */
-   factory('$cookieStore', ['$cookies', function($cookies) {
-
+  .factory("$cookieStore", [
+    "$cookies",
+    function ($cookies) {
       return {
         /**
          * @ngdoc method
@@ -126,7 +126,7 @@ angular.module('ngCookies', ['ng']).
          * @param {string} key Id to use for lookup.
          * @returns {Object} Deserialized cookie value.
          */
-        get: function(key) {
+        get: function (key) {
           return angular.fromJson($cookies[key]);
         },
 
@@ -141,7 +141,7 @@ angular.module('ngCookies', ['ng']).
          * @param {string} key Id for the `value`.
          * @param {Object} value Value to be stored.
          */
-        put: function(key, value) {
+        put: function (key, value) {
           $cookies[key] = angular.toJson(value);
         },
 
@@ -155,9 +155,9 @@ angular.module('ngCookies', ['ng']).
          *
          * @param {string} key Id of the key-value pair to delete.
          */
-        remove: function(key) {
+        remove: function (key) {
           delete $cookies[key];
-        }
+        },
       };
-
-    }]);
+    },
+  ]);
